@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,19 +20,29 @@ export default {
 		},
 		extend: {
 			colors: {
+				primary: {
+					DEFAULT: '#005bab', // Healthcare blue
+					foreground: '#FFFFFF',
+					light: '#0080c5',
+					dark: '#003b6f'
+				},
+				secondary: {
+					DEFAULT: '#00a0b0', // Teal accent color
+					foreground: '#FFFFFF'
+				},
+				accent: {
+					DEFAULT: '#2ec5ce', // Lighter teal for accents
+					foreground: '#FFFFFF'
+				},
+				success: {
+					DEFAULT: '#4caf50',
+					foreground: '#FFFFFF' 
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
-				},
-				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
-				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
@@ -39,10 +50,6 @@ export default {
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
 					foreground: 'hsl(var(--muted-foreground))'
-				},
-				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',

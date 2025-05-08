@@ -1,12 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Header from '@/components/Header';
+import AppointmentSection from '@/components/AppointmentSection';
+import SpecialtiesSection from '@/components/SpecialtiesSection';
+import ExpertHelpSection from '@/components/ExpertHelpSection';
+import HospitalNetworkSection from '@/components/HospitalNetworkSection';
+import PatientStorySection from '@/components/PatientStorySection';
+import HealthBlogsSection from '@/components/HealthBlogsSection';
+import AwardsSection from '@/components/AwardsSection';
+import TechnologySection from '@/components/TechnologySection';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-grow">
+        <AppointmentSection />
+        <SpecialtiesSection />
+        <ExpertHelpSection />
+        <TechnologySection />
+        <HospitalNetworkSection />
+        <PatientStorySection />
+        <HealthBlogsSection />
+        <AwardsSection />
+      </main>
+      <Footer />
     </div>
   );
 };
