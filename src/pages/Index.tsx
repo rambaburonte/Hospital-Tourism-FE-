@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Header from '@/components/Header';
+import HeroBanner from '@/components/HeroBanner';
 import AppointmentSection from '@/components/AppointmentSection';
 import SpecialtiesSection from '@/components/SpecialtiesSection';
 import ExpertHelpSection from '@/components/ExpertHelpSection';
@@ -16,6 +17,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
+        <HeroBanner />
         <AppointmentSection />
         <SpecialtiesSection />
         <ExpertHelpSection />
