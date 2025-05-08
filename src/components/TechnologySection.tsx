@@ -10,8 +10,8 @@ const TechnologySection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
             <img 
-              src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-              alt="Medical Technology" 
+              src="/lovable-uploads/d255c6d0-9b7b-486a-972b-65a7adbf62e4.png"
+              alt="Medical Technology - Heart model" 
               className="rounded-lg shadow-lg"
             />
           </div>
