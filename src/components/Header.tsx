@@ -19,7 +19,7 @@ const Header = () => {
             Locate a Hospital Near You | Write to Us | Emergency: 1800 XXX XXXX
           </div>
           <div className="hidden md:flex space-x-4 text-xs md:text-sm">
-            <span onClick={() => navigate('/contact')} className="cursor-pointer hover:underline">
+            <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:underline">
               Contact Us
             </span>
             <span onClick={() => navigate('/blog')} className="cursor-pointer hover:underline">

@@ -64,7 +64,7 @@ const AboutPage: React.FC = () => {
 
   return (
     <>
-      <Header />
+      
       <div className="bg-gray-50">
         {/* Hero Section with Stats */}
         <section className="relative bg-gradient-to-r from-indigo-700 to-indigo-500 text-white py-16 px-6 lg:px-20">
@@ -268,7 +268,7 @@ const AboutPage: React.FC = () => {
         {/* Contact Information */}
      
       </div>
-      <Footer />
+   
     </>
   );
 };
