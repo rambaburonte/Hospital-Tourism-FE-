@@ -236,7 +236,7 @@ const Header = () => {
             <nav className="hidden md:flex space-x-6">
               <Link to="/" className="text-gray-700 hover:text-primary font-medium">Home</Link>
               <Link to="/specialties" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
-              <Link to="/hospitals" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</Link>
+              <Link to="/HospitalList" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</Link>
               <Link to="/doctors" className="text-gray-700 hover:text-primary font-medium">Doctors</Link>
               <Link to="/patient-care" className="text-gray-700 hover:text-primary font-medium">Patient Care</Link>
               <Link to="/about" className="text-gray-700 hover:text-primary font-medium">About Us</Link>
