@@ -42,8 +42,10 @@ const Header = () => {
               <nav className="hidden md:flex space-x-6">
                 <a href="#" className="text-gray-700 hover:text-primary font-medium">Home</a>
                 <a href="#" className="text-gray-700 hover:text-primary font-medium">Specialties</a>
-                <a href="#" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</a>
+                {/* <a href="#" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</a> */}
+                <a href="/pages/hospitals" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</a>
                 <a href="#" className="text-gray-700 hover:text-primary font-medium">Doctors</a>
+
                 <a href="#" className="text-gray-700 hover:text-primary font-medium">Patient Care</a>
                 <a href="#" className="text-gray-700 hover:text-primary font-medium">About Us</a>
               </nav>
