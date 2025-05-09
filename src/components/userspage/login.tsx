@@ -13,7 +13,7 @@ export default function Login() {
   };
 
   const handleSignUp = () => {
-    navigate("/registor"); // Redirects to signup page
+    navigate("/register"); // Redirects to signup page
   };
 
   return (
