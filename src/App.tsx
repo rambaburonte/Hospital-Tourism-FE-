@@ -16,6 +16,7 @@ import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
 import ContactUsPage from "./pages/cotactus";
+import ScrollToTop from "./ScrollToTop";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -24,6 +25,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+      <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
