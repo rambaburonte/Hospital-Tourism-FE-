@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  Search,
+  User,
+  Phone,
+  Hotel,
+  Plane,
+  Clock,
+  Pill,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 
 const AppointmentSection = () => {
   // State for input fields
@@ -168,6 +179,158 @@ const AppointmentSection = () => {
         description: "Advanced healthcare services in Hyderabad.",
       },
     ],
+    "Hotel Booking": [
+      {
+        name: "Taj Palace",
+        details: "Delhi NCR, 5-star luxury",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Luxury hotel with premium amenities near medical centers.",
+      },
+      {
+        name: "The Oberoi",
+        details: "Mumbai, Maharashtra, 5-star",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Elegant stay with sea views, close to Max Hospital Mumbai.",
+      },
+      {
+        name: "Hyatt Regency",
+        details: "Pune, Maharashtra, 4-star",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Comfortable stay with easy access to medical facilities.",
+      },
+      {
+        name: "ITC Grand Chola",
+        details: "Chennai, Tamil Nadu, 5-star",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Opulent hotel with wellness spa, near Max Hospital Chennai.",
+      },
+      {
+        name: "The Leela Palace",
+        details: "Bangalore, Karnataka, 5-star",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Luxurious stay with proximity to healthcare services.",
+      },
+      {
+        name: "Novotel",
+        details: "Hyderabad, Telangana, 4-star",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Modern hotel with excellent facilities for medical tourists.",
+      },
+    ],
+    "Travel Booking": [
+      {
+        name: "Flight to Delhi",
+        details: "Direct, 3 hours",
+        image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Direct flight to Delhi for medical travel.",
+      },
+      {
+        name: "Flight to Mumbai",
+        details: "Direct, 2 hours",
+        image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Convenient flight to Mumbai for healthcare visits.",
+      },
+      {
+        name: "Flight to Pune",
+        details: "Direct, 2.5 hours",
+        image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Travel to Pune for medical consultations.",
+      },
+      {
+        name: "Flight to Chennai",
+        details: "Direct, 3.5 hours",
+        image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Flight to Chennai for hospital visits.",
+      },
+      {
+        name: "Flight to Bangalore",
+        details: "Direct, 3 hours",
+        image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Direct flight to Bangalore for medical tourism.",
+      },
+      {
+        name: "Flight to Hyderabad",
+        details: "Direct, 2.5 hours",
+        image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Travel to Hyderabad for healthcare services.",
+      },
+    ],
+    "Appointment Booking": [
+      {
+        name: "Cardiology Checkup",
+        details: "Max Hospital Delhi NCR",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Schedule a heart checkup with top cardiologists.",
+      },
+      {
+        name: "Neurology Consultation",
+        details: "Max Hospital Mumbai",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Book a session with a neurologist for expert care.",
+      },
+      {
+        name: "Pediatric Visit",
+        details: "Max Hospital Pune",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Arrange a child health checkup with a pediatrician.",
+      },
+      {
+        name: "Oncology Screening",
+        details: "Max Hospital Chennai",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Schedule a cancer screening with specialists.",
+      },
+      {
+        name: "Dermatology Appointment",
+        details: "Max Hospital Bangalore",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Book a skin health consultation with a dermatologist.",
+      },
+      {
+        name: "Orthopedic Consultation",
+        details: "Max Hospital Hyderabad",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Schedule a bone and joint checkup with an orthopedist.",
+      },
+    ],
+    "Pharmacy": [
+      {
+        name: "Max Pharmacy Delhi",
+        details: "Delhi NCR, 24/7 service",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Order medicines with home delivery in Delhi NCR.",
+      },
+      {
+        name: "Max Pharmacy Mumbai",
+        details: "Mumbai, Maharashtra",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Reliable pharmacy services in Mumbai.",
+      },
+      {
+        name: "Max Pharmacy Pune",
+        details: "Pune, Maharashtra",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Get your prescriptions delivered in Pune.",
+      },
+      {
+        name: "Max Pharmacy Chennai",
+        details: "Chennai, Tamil Nadu",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Pharmacy services with quick delivery in Chennai.",
+      },
+      {
+        name: "Max Pharmacy Bangalore",
+        details: "Bangalore, Karnataka",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Order medicines online in Bangalore.",
+      },
+      {
+        name: "Max Pharmacy Hyderabad",
+        details: "Hyderabad, Telangana",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "24/7 pharmacy support in Hyderabad.",
+      },
+    ],
   };
 
   // Map services to their respective routes
@@ -176,6 +339,10 @@ const AppointmentSection = () => {
     "Book a Test": "/tests",
     "Spa & Physiotherapy": "/spa-physiotherapy",
     "Locate Hospital": "/hospitals",
+    "Hotel Booking": "/hotels",
+    "Travel Booking": "/travel",
+    "Appointment Booking": "/appointments",
+    "Pharmacy": "/pharmacy",
   };
 
   // Handle service card click
@@ -231,7 +398,7 @@ const AppointmentSection = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 mt-10">
             <div
               onClick={() => handleServiceClick("Find a Doctor")}
               className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
@@ -287,6 +454,62 @@ const AppointmentSection = () => {
                 <p className="text-sm font-semibold text-gray-800">Locate Hospital</p>
               </div>
             </div>
+            
+            <div
+              onClick={() => handleServiceClick("Hotel Booking")}
+              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                selectedService === "Hotel Booking" ? "border-indigo-500 bg-indigo-50" : ""
+              }`}
+            >
+              <div className="p-6 flex flex-col items-center justify-center">
+                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
+                  <Hotel className="h-7 w-7 text-indigo-600" />
+                </div>
+                <p className="text-sm font-semibold text-gray-800">Hotel Booking</p>
+              </div>
+            </div>
+            
+            <div
+              onClick={() => handleServiceClick("Travel Booking")}
+              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                selectedService === "Travel Booking" ? "border-indigo-500 bg-indigo-50" : ""
+              }`}
+            >
+              <div className="p-6 flex flex-col items-center justify-center">
+                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
+                  <Plane className="h-7 w-7 text-indigo-600" />
+                </div>
+                <p className="text-sm font-semibold text-gray-800">Travel Booking</p>
+              </div>
+            </div>
+            
+            <div
+              onClick={() => handleServiceClick("Appointment Booking")}
+              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                selectedService === "Appointment Booking" ? "border-indigo-500 bg-indigo-50" : ""
+              }`}
+            >
+              <div className="p-6 flex flex-col items-center justify-center">
+                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
+                  <Clock className="h-7 w-7 text-indigo-600" />
+                </div>
+                <p className="text-sm font-semibold text-gray-800">Appointment Booking</p>
+              </div>
+            </div>
+            
+            <div
+              onClick={() => handleServiceClick("Pharmacy")}
+              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                selectedService === "Pharmacy" ? "border-indigo-500 bg-indigo-50" : ""
+              }`}
+            >
+              <div className="p-6 flex flex-col items-center justify-center">
+                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
+                  <Pill className="h-7 w-7 text-indigo-600" />
+                </div>
+                <p className="text-sm font-semibold text-gray-800">Pharmacy</p>
+              </div>
+            </div>
           </div>
 
           {/* Display Top 6 Items for the Selected Service */}
@@ -328,5 +551,6 @@ const AppointmentSection = () => {
     </section>
   );
 };
+
 
 export default AppointmentSection;
