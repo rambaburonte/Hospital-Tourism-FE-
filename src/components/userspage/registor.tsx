@@ -1,50 +1,51 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
-import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react';
 import 'react-phone-input-2/lib/style.css';
-
-export default function register() {
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+export default function RegisterPage() {
   const navigate = useNavigate();
+  const countries = countryList().getData();
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    country: '',
-    phone: '',
     password: '',
     confirmPassword: '',
+    mobile: '',
+    country: null as any,
   });
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const countries = countryList().getData();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSelectChange = (selectedOption: any) => {
-    setFormData({ ...formData, country: selectedOption.label });
+  const handleCountryChange = (value: any) => {
+    setFormData({ ...formData, country: value });
   };
 
   const handlePhoneChange = (value: string) => {
-    setFormData({ ...formData, phone: value });
+    setFormData({ ...formData, mobile: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Implement registration logic here
+    // TODO: Add validation and API call
     navigate('/login');
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-xl">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+   
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+         <Header/>
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create your account
+        </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Already have an account?{' '}
           <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
@@ -53,146 +54,104 @@ export default function register() {
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
-        <div className="bg-white py-10 px-6 shadow-lg rounded-xl">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* First Name & Last Name */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">First Name</label>
-                <div className="mt-1 relative">
-                  <User className="absolute left-3 top-2.5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="John"
-                    required
-                    className="pl-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                  />
-                </div>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full border px-3 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                <div className="mt-1 relative">
-                  <User className="absolute left-3 top-2.5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Doe"
-                    required
-                    className="pl-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email Address</label>
-              <div className="mt-1 relative">
-                <Mail className="absolute left-3 top-2.5 text-gray-400" />
                 <input
-                  type="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  required
-                  className="pl-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  value={formData.email}
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
                   onChange={handleChange}
+                  required
+                  className="mt-1 block w-full border px-3 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             </div>
 
-            {/* Country */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full border px-3 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700">Country</label>
               <Select
                 options={countries}
-                onChange={handleSelectChange}
-                className="mt-1"
-                placeholder="Select a country"
+                value={formData.country}
+                onChange={handleCountryChange}
+                placeholder="Select your country"
               />
             </div>
 
-            {/* Mobile Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
-              <div className="mt-1 relative">
-                <Phone className="absolute left-3 top-2.5 text-gray-400 z-10" />
-                <PhoneInput
-                  country={'us'}
-                  value={formData.phone}
-                  onChange={handlePhoneChange}
-                  inputStyle={{ paddingLeft: '45px', width: '100%' }}
-                  buttonStyle={{ borderTopLeftRadius: '0.375rem', borderBottomLeftRadius: '0.375rem' }}
-                />
-              </div>
+              <PhoneInput
+                country={'us'}
+                value={formData.mobile}
+                onChange={handlePhoneChange}
+                enableSearch
+                inputClass="!w-full !h-10 !pl-12 !border !border-gray-300 !rounded-md"
+                buttonClass="!border-gray-300"
+              />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Password</label>
-              <div className="mt-1 relative">
-                <Lock className="absolute left-3 top-2.5 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  placeholder="••••••••"
-                  required
-                  className="pl-10 pr-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-gray-500"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full border px-3 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
-              <div className="mt-1 relative">
-                <Lock className="absolute left-3 top-2.5 text-gray-400" />
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  placeholder="••••••••"
-                  required
-                  className="pl-10 pr-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-2.5 text-gray-500"
-                >
-                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full border px-3 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
             </div>
 
-            {/* Submit */}
-            <div>
-              <button
-                type="submit"
-                className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
-              >
-                Create Account
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+            >
+              Create Account
+            </button>
           </form>
         </div>
       </div>
+      <br></br>
+      <br></br>
+      <Footer/>
     </div>
   );
 }
