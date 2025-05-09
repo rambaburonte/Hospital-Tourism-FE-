@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Menu, Search, Phone, X, User } from 'lucide-react';
+import { Menu, Search, Phone, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
-
 import { useNavigate, Link } from 'react-router-dom';
 
 const Header = () => {
@@ -20,12 +19,10 @@ const Header = () => {
             Locate a Hospital Near You | Write to Us | Emergency: 1800 XXX XXXX
           </div>
           <div className="hidden md:flex space-x-4 text-xs md:text-sm">
-            <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:underline">
-              Contact Us
+            <span onClick={() => navigate('/login')} className="cursor-pointer hover:underline">
+              Patient Portal Login
             </span>
-            <span onClick={() => navigate('/blog')} className="cursor-pointer hover:underline">
-              Blog
-            </span>
+            <span className="cursor-pointer hover:underline">Doctor Login</span>
           </div>
         </div>
       </div>
@@ -47,8 +44,8 @@ const Header = () => {
           {!isMobile && (
             <nav className="hidden md:flex space-x-6">
               <Link to="/" className="text-gray-700 hover:text-primary font-medium">Home</Link>
-              <Link to="/specialties" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
-              <Link to="/HospitalList" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</Link>
+              <Link to="/specialities" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
+              <Link to="/hospitals" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</Link>
               <Link to="/doctors" className="text-gray-700 hover:text-primary font-medium">Doctors</Link>
               <Link to="/patient-care" className="text-gray-700 hover:text-primary font-medium">Patient Care</Link>
               <Link to="/about" className="text-gray-700 hover:text-primary font-medium">About Us</Link>
@@ -56,7 +53,7 @@ const Header = () => {
           )}
         </div>
 
-        {/* Right Actions */}
+        {/* Actions */}
         <div className="flex items-center space-x-3">
           {!isMobile && (
             <div className="flex items-center border rounded-full px-3 py-1.5">
@@ -68,20 +65,15 @@ const Header = () => {
               />
             </div>
           )}
-
-
-          <Button className="bg-primary hover:bg-primary-dark text-white">
-            Book Appointment
-          </Button>
           <Button
             variant="outline"
             className="hidden md:flex text-primary border-primary hover:bg-primary hover:text-white"
-            onClick={() => navigate('/login')}
           >
-            <User className="mr-2 h-4 w-4" /> Login
+            <Phone className="mr-2 h-4 w-4" /> Contact
           </Button>
-          
-
+          <Button className="bg-primary hover:bg-primary-dark text-white">
+            Book Appointment
+          </Button>
           {isMobile && (
             <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -95,7 +87,7 @@ const Header = () => {
         <div className="container mx-auto px-4 py-4 bg-white border-t">
           <nav className="flex flex-col space-y-4">
             <Link to="/" className="text-gray-700 hover:text-primary font-medium">Home</Link>
-            <Link to="/specialities" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
+            <Link to="/specialties" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
             <Link to="/hospitals" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</Link>
             <Link to="/doctors" className="text-gray-700 hover:text-primary font-medium">Doctors</Link>
             <Link to="/patient-care" className="text-gray-700 hover:text-primary font-medium">Patient Care</Link>
