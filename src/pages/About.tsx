@@ -97,66 +97,45 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* Our Story with Expansion and Map */}
-        <section className="py-12 px-6 lg:px-20 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Our Story</h2>
-            <div className="flex flex-col lg:flex-row gap-8">
-              <div className="lg:w-2/3">
-                <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                  Max Healthcare Institute Limited is one of India’s largest healthcare organizations. We operate 22 facilities
-                  (5,000+ beds), 30+ specialties, and 5,000+ clinicians across the NCR Delhi, Haryana, Punjab, Uttarakhand,
-                  Maharashtra, and Uttar Pradesh. Almost 85% of our bed capacity is in Metro/Tier 1 cities.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                  Apart from hospitals, Max Healthcare also operates a homecare business and pathology business under brand names
-                  Max@Home and Max Labs respectively. Max@Home offers health and wellness services at home while Max Labs
-                  provides Pathology Services outside our hospital network.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Max Healthcare is promoted and led by Abhy Soi as its Chairman and Managing Director. The amalgamated company was formed
-                  subsequent to the acquisition of a 49.7% stake in Max Healthcare by Radiant Life Care in 2019.
-                </p>
-              </div>
-              <div className="lg:w-1/3 bg-gray-100 p-4 rounded-lg">
-                <div className="text-center">
-                  <p className="text-lg font-medium text-gray-800 mb-2">Our Presence</p>
-                  <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                    {/* Embedded Google Map */}
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d23504.888780368106!2d78.3938281240379!3d17.433783331510444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1746787425633!5m2!1sen!2sin" 
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Max Healthcare Locations in India"
-                    />
-                    {/* Location Markers (Overlay) */}
-                    <div className="absolute top-4 left-8 bg-white px-2 py-1 rounded shadow z-10">
-                      <p className="text-sm font-medium text-indigo-700">NCR: 586</p>
-                    </div>
-                    <div className="absolute top-6 left-12 bg-white px-2 py-1 rounded shadow z-10">
-                      <p className="text-sm font-medium text-indigo-700">BLK: 538</p>
-                    </div>
-                    <div className="absolute bottom-12 right-8 bg-white px-2 py-1 rounded shadow z-10">
-                      <p className="text-sm font-medium text-indigo-700">Mumbai: 450</p>
-                    </div>
-                    <div className="absolute bottom-10 right-4 bg-white px-2 py-1 rounded shadow z-10">
-                      <p className="text-sm font-medium text-indigo-700">Pune: 320</p>
-                    </div>
-                    <div className="absolute bottom-4 left-12 bg-white px-2 py-1 rounded shadow z-10">
-                      <p className="text-sm font-medium text-indigo-700">Chennai: 280</p>
-                    </div>
-                    <div className="absolute bottom-6 left-16 bg-white px-2 py-1 rounded shadow z-10">
-                      <p className="text-sm font-medium text-indigo-700">Bangalore: 410</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+       <section className="py-12 px-6 lg:px-20 bg-white">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Our Story</h2>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Text Content */}
+          <div className="lg:w-2/3">
+            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+              Max Healthcare Institute Limited is one of India’s largest healthcare organizations. We operate 22 facilities
+              (5,000+ beds), 30+ specialties, and 5,000+ clinicians across the NCR Delhi, Haryana, Punjab, Uttarakhand,
+              Maharashtra, and Uttar Pradesh. Almost 85% of our bed capacity is in Metro/Tier 1 cities.
+            </p>
+            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+              Apart from hospitals, Max Healthcare also operates a homecare business and pathology business under brand names
+              Max@Home and Max Labs respectively. Max@Home offers health and wellness services at home while Max Labs
+              provides Pathology Services outside our hospital network.
+            </p>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Max Healthcare is promoted and led by Abhy Soi as its Chairman and Managing Director. The amalgamated company was formed
+              subsequent to the acquisition of a 49.7% stake in Max Healthcare by Radiant Life Care in 2019.
+            </p>
           </div>
-        </section>
+
+          {/* Map Image */}
+         <div className="lg:w-1/3 p-4 rounded-lg">
+  <div className="text-center">
+    <p className="text-lg font-medium text-gray-800 mb-4">Our Presence</p>
+    <div className="rounded-xl overflow-hidden shadow-lg border border-gray-200">
+      <img
+        src="/lovable-uploads/d255c6d0-9b7b-486a-972b-65a7adbf62e4.png"
+        alt="Service Map Overview"
+        className="w-full h-72 object-cover" // Increased height from h-48 to h-72
+      />
+    </div>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </section>
 
         {/* Why Choose Max Healthcare */}
         <section className="py-12 px-6 lg:px-20">
