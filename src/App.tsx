@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import Login from "./components/userspage/login";
 import Registor from "./components/userspage/registor";
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import HomePage from "./pages/Index";
@@ -16,6 +15,7 @@ import Specialities from "./pages/Specialities";
 import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
+import ContactUsPage from "./pages/cotactus";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -34,9 +34,9 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/specialities" element={<Specialities />} />
           <Route path="/doctors" element={<AllDoctorsPage />} />
-<Route path="/PatientProfile" element={<PatientProfile/>}/>
+          <Route path="/PatientProfile" element={<PatientProfile/>}/>
           <Route path='/register' element={<Registor/>}/>
-
+          <Route path="/ContactUsPage" element={<ContactUsPage/>}/>
         </Routes>
         <Footer />
       </BrowserRouter>
