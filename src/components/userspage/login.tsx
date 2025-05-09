@@ -13,12 +13,12 @@ export default function Login() {
   };
 
   const handleSignUp = () => {
-    navigate("/registor"); // Redirects to signup page
+    navigate("/register"); // Redirects to signup page
   };
 
   return (
     <>
-      <Header />
+     
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
           <h2 className="text-2xl font-semibold text-center mb-6 text-blue-700">
@@ -68,7 +68,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <Footer />
+     
     </>
   );
 }

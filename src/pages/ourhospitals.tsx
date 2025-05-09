@@ -1,5 +1,5 @@
 import React from 'react';
-import HospitalCard from '../components/HospitalCard';
+import HospitalCard from '@/components/HospitalCard';
 
 interface Hospital {
   id: number;
