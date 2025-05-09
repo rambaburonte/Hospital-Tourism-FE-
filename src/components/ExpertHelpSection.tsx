@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
-
+import { Link } from 'react-router-dom';
 const ExpertHelpSection = () => {
   return (
     <section className="py-12 bg-secondary/10">
@@ -16,9 +16,11 @@ const ExpertHelpSection = () => {
                 Get personalized advice from our specialists who are leaders in their field.
               </p>
               <div className="mt-6">
-                <Button className="bg-secondary hover:bg-secondary/90 text-white">
-                  Find a Doctor <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to="/doctors">
+  <Button className="bg-secondary hover:bg-secondary/90 text-white">
+    Find a Doctor <ArrowRight className="ml-2 h-4 w-4" />
+  </Button>
+</Link>
               </div>
             </div>
           </div>

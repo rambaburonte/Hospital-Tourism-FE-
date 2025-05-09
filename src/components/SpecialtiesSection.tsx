@@ -1,17 +1,16 @@
-
 import React from 'react';
-import { Heart, Brain, Check, ArrowRight } from 'lucide-react';
+import { Heart, Brain, Bone, Radiation, Stethoscope, Baby, Droplet, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 
 const specialtiesList = [
   { icon: <Heart className="h-6 w-6 text-primary" />, title: "Cardiology", description: "Heart & Vascular Care" },
   { icon: <Brain className="h-6 w-6 text-primary" />, title: "Neurology", description: "Brain & Nervous System" },
-  { icon: <Check className="h-6 w-6 text-primary" />, title: "Orthopedics", description: "Joint & Bone Care" },
-  { icon: <Check className="h-6 w-6 text-primary" />, title: "Oncology", description: "Cancer Care" },
-  { icon: <Check className="h-6 w-6 text-primary" />, title: "Gastroenterology", description: "Digestive Disorders" },
-  { icon: <Check className="h-6 w-6 text-primary" />, title: "Pediatrics", description: "Children's Health" },
-  { icon: <Check className="h-6 w-6 text-primary" />, title: "Gynecology", description: "Women's Health" },
-  { icon: <Check className="h-6 w-6 text-primary" />, title: "Urology", description: "Urinary System" },
+  { icon: <Bone className="h-6 w-6 text-primary" />, title: "Orthopedics", description: "Joint & Bone Care" },
+  { icon: <Radiation className="h-6 w-6 text-primary" />, title: "Oncology", description: "Cancer Care" },
+  { icon: <Stethoscope className="h-6 w-6 text-primary" />, title: "Gastroenterology", description: "Digestive Disorders" },
+  { icon: <Baby className="h-6 w-6 text-primary" />, title: "Pediatrics", description: "Children's Health" },
+  { icon: <Heart className="h-6 w-6 text-primary" />, title: "Gynecology", description: "Women's Health" },
+  { icon: <Droplet className="h-6 w-6 text-primary" />, title: "Urology", description: "Urinary System" },
 ];
 
 const SpecialtiesSection = () => {
