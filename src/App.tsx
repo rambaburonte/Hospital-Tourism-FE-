@@ -16,7 +16,6 @@ import Specialities from "./pages/Specialities";
 import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
-import ContactUsPage from "./pages/cotactus";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -35,8 +34,9 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/specialities" element={<Specialities />} />
           <Route path="/doctors" element={<AllDoctorsPage />} />
-          <Route path="/PatientProfile" element={<PatientProfile />} />
-          <Route path="/ContactUsPage" element={<ContactUsPage/>}/>
+<Route path="/PatientProfile" element={<PatientProfile/>}/>
+          <Route path='/register' element={<Registor/>}/>
+
         </Routes>
         <Footer />
       </BrowserRouter>
