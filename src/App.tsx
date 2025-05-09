@@ -8,12 +8,13 @@ import NotFound from "./pages/NotFound";
 import Login from "./components/userspage/login";
 import Registor from "./components/userspage/registor";
 
-import Userdashboard from "./components/userspage/userboard";
+
 import HomePage from "./pages/Index";
 import AboutPage from "./pages/About";
 import Specialities from "./pages/Specialities"
-
+import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
+import PatientProfile from "./components/userspage/userprofile";
 
 const queryClient = new QueryClient();
 
@@ -34,9 +35,13 @@ const App = () => (
           <Route path="/specialities" element={<Specialities />} />
 
           <Route path="/login" element={<Login/>}/>
+
           <Route path='/registor' element={<Registor/>}/>
            <Route path='/dashboard' element={<Userdashboard/>}/>
           <Route path="/doctors" element={<AllDoctorsPage />} />
+
+<Route path="/PatientProfile" element={<PatientProfile/>}/>
+          <Route path='/register' element={<Registor/>}/>
 
         </Routes>
       </BrowserRouter>

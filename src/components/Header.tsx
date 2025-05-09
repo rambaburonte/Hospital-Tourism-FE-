@@ -191,6 +191,7 @@ import { Menu, Search, Phone, X, User } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
+
 import { useNavigate, Link } from 'react-router-dom';
 
 const Header = () => {
@@ -243,7 +244,7 @@ const Header = () => {
           )}
         </div>
 
-        {/* Actions */}
+        {/* Right Actions */}
         <div className="flex items-center space-x-3">
           {!isMobile && (
             <div className="flex items-center border rounded-full px-3 py-1.5">
@@ -256,6 +257,7 @@ const Header = () => {
             </div>
           )}
 
+
           <Button className="bg-primary hover:bg-primary-dark text-white">
             Book Appointment
           </Button>
@@ -267,6 +269,7 @@ const Header = () => {
             <User className="mr-2 h-4 w-4" /> Login
           </Button>
           
+
           {isMobile && (
             <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -280,7 +283,7 @@ const Header = () => {
         <div className="container mx-auto px-4 py-4 bg-white border-t">
           <nav className="flex flex-col space-y-4">
             <Link to="/" className="text-gray-700 hover:text-primary font-medium">Home</Link>
-            <Link to="/specialties" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
+            <Link to="/specialities" className="text-gray-700 hover:text-primary font-medium">Specialties</Link>
             <Link to="/hospitals" className="text-gray-700 hover:text-primary font-medium">Our Hospitals</Link>
             <Link to="/doctors" className="text-gray-700 hover:text-primary font-medium">Doctors</Link>
             <Link to="/patient-care" className="text-gray-700 hover:text-primary font-medium">Patient Care</Link>
