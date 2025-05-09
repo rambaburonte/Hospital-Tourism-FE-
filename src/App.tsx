@@ -5,7 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-
+import Login from "./components/userspage/login";
+import Registor from "./components/userspage/registor";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -18,6 +19,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
+          <Route path="/login" element={<Login/>}/>
+          <Route path='/registor' element={<Registor/>}/>
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

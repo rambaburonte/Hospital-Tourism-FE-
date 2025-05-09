@@ -4,11 +4,12 @@ import { Menu, Search, Phone, User, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const navigate = useNavigate();
   return (
     <header className="bg-white shadow-sm header">
       {/* Top bar */}
@@ -18,7 +19,10 @@ const Header = () => {
             Locate a Hospital Near You | Write to Us | Emergency: 1800 XXX XXXX
           </div>
           <div className="hidden md:flex space-x-4 text-xs md:text-sm">
-            <span>Patient Portal Login</span>
+          <span onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>
+             Patient Portal Login
+          </span>
+
             <span>Doctor Login</span>
           </div>
         </div>
