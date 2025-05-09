@@ -127,7 +127,6 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
 
-  // Handle scroll effect for header shadow
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -138,7 +137,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`bg-white dark:bg-gray-900 transition-shadow duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 transition-shadow duration-300 ${
         isScrolled ? 'shadow-md' : 'shadow-sm'
       } border-b-2 border-green-200 dark:border-green-800`}
     >
@@ -171,7 +170,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Main Header */}
-      <div className="container mx-auto py-4 px-4 sm:px-6 flex justify-between items-center">
+      <div className="container mx-auto py-4 px-4 sm:px-6 flex justify-between items-center bg-white dark:bg-gray-900">
         <div className="flex items-center space-x-6">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
