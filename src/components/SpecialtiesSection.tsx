@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Brain, Bone, Radiation, Stethoscope, Baby, Female, Droplet, ArrowRight } from 'lucide-react';
+import { Heart, Brain, Bone, Radiation, Stethoscope, Baby, Droplet, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 
 const specialtiesList = [
@@ -9,7 +9,7 @@ const specialtiesList = [
   { icon: <Radiation className="h-6 w-6 text-primary" />, title: "Oncology", description: "Cancer Care" },
   { icon: <Stethoscope className="h-6 w-6 text-primary" />, title: "Gastroenterology", description: "Digestive Disorders" },
   { icon: <Baby className="h-6 w-6 text-primary" />, title: "Pediatrics", description: "Children's Health" },
-  { icon: <Female className="h-6 w-6 text-primary" />, title: "Gynecology", description: "Women's Health" },
+  { icon: <Heart className="h-6 w-6 text-primary" />, title: "Gynecology", description: "Women's Health" },
   { icon: <Droplet className="h-6 w-6 text-primary" />, title: "Urology", description: "Urinary System" },
 ];
 

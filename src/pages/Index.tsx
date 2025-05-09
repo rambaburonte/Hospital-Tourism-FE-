@@ -15,7 +15,7 @@ import Footer from '@/components/Footer';
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+
       <main className="flex-grow">
         <HeroBanner />
         <AppointmentSection />
@@ -27,7 +27,7 @@ const Index = () => {
         <HealthBlogsSection />
         <AwardsSection />
       </main>
-      <Footer />
+
     </div>
   );
 };
