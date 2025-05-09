@@ -1,30 +1,9 @@
-<<<<<<< HEAD
 
-import React from 'react';
-import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-=======
 import React, { useState } from 'react';
-import {
-  Calendar,
-  MapPin,
-  Search,
-  User,
-  Phone,
-  Hotel,
-  Plane,
-  Clock,
-  Pill,
-} from 'lucide-react';
+import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
 import { Link } from 'react-router-dom';
->>>>>>> 6867f72 (Your commit message here)
-
 
 const AppointmentSection = () => {
-<<<<<<< HEAD
-=======
   // State for input fields
   const [doctorSearch, setDoctorSearch] = useState('');
   const [location, setLocation] = useState('');
@@ -361,7 +340,6 @@ const AppointmentSection = () => {
     setSelectedService(selectedService === service ? null : service);
   };
 
->>>>>>> 6867f72 (Your commit message here)
   return (
     <section className="bg-slate-50 py-12">
       <div className="container mx-auto px-4 md:px-6">
@@ -369,149 +347,196 @@ const AppointmentSection = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
             Schedule Your Appointment Online
           </h2>
-          
-<<<<<<< HEAD
-          <div className="bg-white rounded-lg shadow-md p-6 appointment-card">
+
+          <div className="bg-white rounded-lg shadow-md p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <Input 
-                  type="text" 
-                  placeholder="Search for Doctor" 
-                  className="pl-10 pr-4 py-2 w-full"
+                <input
+                  type="text"
+                  placeholder="Search for Doctor"
+                  value={doctorSearch}
+                  onChange={(e) => setDoctorSearch(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  aria-label="Search for a doctor"
                 />
               </div>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <Input 
-                  type="text" 
-                  placeholder="Choose Location" 
-                  className="pl-10 pr-4 py-2 w-full"
-                />
+                <select
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  aria-label="Choose a location"
+                >
+                  <option value="">Choose Location</option>
+                  <option value="Delhi NCR">Delhi NCR</option>
+                  <option value="Mumbai, Maharashtra">Mumbai, Maharashtra</option>
+                  <option value="Pune, Maharashtra">Pune, Maharashtra</option>
+                  <option value="Chennai, Tamil Nadu">Chennai, Tamil Nadu</option>
+                  <option value="Bangalore, Karnataka">Bangalore, Karnataka</option>
+                  <option value="Hyderabad, Telangana">Hyderabad, Telangana</option>
+                </select>
               </div>
               <div className="flex justify-end">
-                <Button className="bg-primary hover:bg-primary-dark text-white w-full">
+                <button
+                  onClick={handleBookAppointment}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg w-full shadow-md transition-all duration-300"
+                  aria-label="Book an appointment"
+                >
                   Book an Appointment
-                </Button>
-=======
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 mt-10">
-            <div
-              onClick={() => handleServiceClick("Find a Doctor")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Find a Doctor" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <User className="h-7 w-7 text-indigo-600" />
-                </div>
-                <p className="text-sm font-semibold text-gray-800">Find a Doctor</p>
->>>>>>> 6867f72 (Your commit message here)
+                </button>
               </div>
             </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-              <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="mb-2 bg-slate-100 p-3 rounded-full">
-                    <User className="h-6 w-6 text-primary" />
+
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mt-8">
+              <div
+                onClick={() => handleServiceClick("Find a Doctor")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Find a Doctor" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <User className="h-6 w-6 text-indigo-600" />
                   </div>
-                  <p className="text-sm font-medium">Find a Doctor</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="mb-2 bg-slate-100 p-3 rounded-full">
-                    <Calendar className="h-6 w-6 text-primary" />
-                  </div>
-                  <p className="text-sm font-medium">Book a Test</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="mb-2 bg-slate-100 p-3 rounded-full">
-                    <Phone className="h-6 w-6 text-primary" />
-                  </div>
-                  <p className="text-sm font-medium">Teleconsult</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="mb-2 bg-slate-100 p-3 rounded-full">
-                    <MapPin className="h-6 w-6 text-primary" />
-                  </div>
-                  <p className="text-sm font-medium">Locate Hospital</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="mb-2 bg-slate-100 p-3 rounded-full">
-                    <Search className="h-6 w-6 text-primary" />
-                  </div>
-                  <p className="text-sm font-medium">Health Check</p>
-                </CardContent>
-              </Card>
-            </div>
-            
-            <div
-              onClick={() => handleServiceClick("Hotel Booking")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Hotel Booking" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <Hotel className="h-7 w-7 text-indigo-600" />
+                  <p className="text-sm font-medium text-gray-800">Find a Doctor</p>
                 </div>
-                <p className="text-sm font-semibold text-gray-800">Hotel Booking</p>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Book a Test")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Book a Test" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <Calendar className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Book a Test</p>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Spa & Physiotherapy")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Spa & Physiotherapy" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <Phone className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Spa & Physiotherapy</p>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Locate Hospital")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Locate Hospital" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <MapPin className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Locate Hospital</p>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Hotel Booking")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Hotel Booking" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <Hotel className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Hotel Booking</p>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Travel Booking")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Travel Booking" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <Plane className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Travel Booking</p>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Appointment Booking")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Appointment Booking" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <Clock className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Appointment Booking</p>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleServiceClick("Pharmacy")}
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
+                  selectedService === "Pharmacy" ? "border-indigo-500 bg-indigo-50" : ""
+                }`}
+              >
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
+                    <Pill className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">Pharmacy</p>
+                </div>
               </div>
             </div>
-            
-            <div
-              onClick={() => handleServiceClick("Travel Booking")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Travel Booking" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <Plane className="h-7 w-7 text-indigo-600" />
+
+            {/* Display Top 6 Items for the Selected Service */}
+            {selectedService && (
+              <div className="mt-12">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  {selectedService}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {serviceData[selectedService].slice(0, 6).map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-40 object-cover rounded-lg mb-4"
+                      />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
+                      <p className="text-gray-600 text-sm mb-2">{item.details}</p>
+                      <p className="text-gray-500 text-xs italic">{item.description}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-sm font-semibold text-gray-800">Travel Booking</p>
-              </div>
-            </div>
-            
-            <div
-              onClick={() => handleServiceClick("Appointment Booking")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Appointment Booking" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <Clock className="h-7 w-7 text-indigo-600" />
+                {/* Explore More Link */}
+                <div className="mt-8 text-center">
+                  <Link
+                    to={serviceRoutes[selectedService]}
+                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                  >
+                    Explore More
+                  </Link>
                 </div>
-                <p className="text-sm font-semibold text-gray-800">Appointment Booking</p>
               </div>
-            </div>
-            
-            <div
-              onClick={() => handleServiceClick("Pharmacy")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Pharmacy" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <Pill className="h-7 w-7 text-indigo-600" />
-                </div>
-                <p className="text-sm font-semibold text-gray-800">Pharmacy</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -519,9 +544,4 @@ const AppointmentSection = () => {
   );
 };
 
-<<<<<<< HEAD
 export default AppointmentSection;
-=======
-
-export default AppointmentSection;
->>>>>>> 6867f72 (Your commit message here)
