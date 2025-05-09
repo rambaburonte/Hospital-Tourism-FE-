@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./components/userspage/login";
 import Registor from "./components/userspage/registor";
 import Userdashboard from   "./components/userspage/userboard";
+import AllDoctorsPage from "./pages/AllDoctorsPage";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -23,7 +24,7 @@ const App = () => (
           <Route path="/login" element={<Login/>}/>
           <Route path='/registor' element={<Registor/>}/>
            <Route path='/dashboard' element={<Userdashboard/>}/>
-          
+          <Route path="/doctors" element={<AllDoctorsPage />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
