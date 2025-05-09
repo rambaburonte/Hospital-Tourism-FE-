@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./components/userspage/login";
 import Registor from "./components/userspage/registor";
+import Userdashboard from   "./components/userspage/userboard";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -21,6 +22,8 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<Login/>}/>
           <Route path='/registor' element={<Registor/>}/>
+           <Route path='/dashboard' element={<Userdashboard/>}/>
+          
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

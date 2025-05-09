@@ -2,12 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
 export default function Login() {
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // TODO: Implement login logic here
+    // Add authentication logic here if needed
+    navigate("/dashboard");
   };
 
   const handleSignUp = () => {
@@ -19,7 +21,9 @@ export default function Login() {
       <Header />
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
-          <h2 className="text-2xl font-semibold text-center mb-6 text-blue-700">Patient Portal Login</h2>
+          <h2 className="text-2xl font-semibold text-center mb-6 text-blue-700">
+            Patient Portal Login
+          </h2>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Email</label>
@@ -30,7 +34,7 @@ export default function Login() {
                 required
               />
             </div>
-            <div className="mb-4">
+            <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700">Password</label>
               <input
                 type="password"
@@ -39,6 +43,7 @@ export default function Login() {
                 required
               />
             </div>
+
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition"
@@ -46,6 +51,7 @@ export default function Login() {
               Login
             </button>
           </form>
+
           <div className="text-center mt-4 space-y-2">
             <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
               Forgot password?
@@ -62,7 +68,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 }
