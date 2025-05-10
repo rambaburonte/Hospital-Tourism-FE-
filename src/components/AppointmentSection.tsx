@@ -1014,7 +1014,7 @@ const AppointmentSection = () => {
   };
 
   const handleCategoryClick = (categoryName: string) => {
-    navigate(`/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}`);
+    navigate(`/pharmacy?category=${encodeURIComponent(categoryName)}`);
   };
 
   return (
