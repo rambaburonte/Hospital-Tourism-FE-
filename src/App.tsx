@@ -18,6 +18,7 @@ import PatientProfile from "./components/userspage/userprofile";
 import ContactUsPage from "./pages/cotactus";
 import ScrollToTop from "./ScrollToTop";
 import OurHospitals from "./pages/ourhospitals";
+import PharmacyCategoryPage from "./components/pharmaMedicine";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/ContactUsPage" element={<ContactUsPage />} />
             <Route path="/OurHospitals" element={<OurHospitals />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
           </Routes>
         </div>
 
