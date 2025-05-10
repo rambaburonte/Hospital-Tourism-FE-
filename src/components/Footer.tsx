@@ -43,10 +43,10 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <h3 className="text-lg font-bold mb-4">Max Healthcare</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm hover:text-accent footer-link">About Us</a></li>
+              <li><a href="/about" className="text-sm hover:text-accent footer-link">About Us</a></li>
               <li><a href="#" className="text-sm hover:text-accent footer-link">Leadership</a></li>
               <li><a href="#" className="text-sm hover:text-accent footer-link">Careers</a></li>
-              <li><a href="#" className="text-sm hover:text-accent footer-link">Contact Us</a></li>
+              <li><a href="/ContactUsPage" className="text-sm hover:text-accent footer-link">Contact Us</a></li>
               <li><a href="#" className="text-sm hover:text-accent footer-link">Investor Relations</a></li>
               <li><a href="#" className="text-sm hover:text-accent footer-link">Media</a></li>
             </ul>
