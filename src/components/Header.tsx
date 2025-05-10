@@ -24,7 +24,9 @@ const Header: React.FC = () => {
     { to: '/specialities', label: 'Specialties' },
     { to: '/OurHospitals', label: 'Our Hospitals' },
     { to: '/doctors', label: 'Doctors' },
+   
     { to: '/about', label: 'About Us' },
+     { to: '/tours', label: 'Packages' },
   ];
 
   return (
