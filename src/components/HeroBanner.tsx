@@ -838,7 +838,6 @@ const HeroBanner = () => {
         </Carousel>
       </AspectRatio>
     </div>
-
     {/* Video Section */}
     <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
       <AspectRatio ratio={16 / 10.5}>
@@ -854,7 +853,6 @@ const HeroBanner = () => {
     </div>
   </div>
 </section>
-
   );
 };
 

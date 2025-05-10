@@ -1,6 +1,4 @@
 import React from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
 
 export default function Userdashboard() {
@@ -82,8 +80,6 @@ export default function Userdashboard() {
           </div>
         </div>
       </main>
-
-      
     </div>
   );
 }

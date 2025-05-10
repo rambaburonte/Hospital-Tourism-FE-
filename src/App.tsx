@@ -29,7 +29,25 @@ const App = () => (
       <BrowserRouter>
       <ScrollToTop />
         <Header />
-        <Routes>
+
+        {/* Apply top padding to avoid header overlap */}
+        <div className="pt-32">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />           
+            <Route path="/register" element={<Registor />} /> {/* Consider removing one */}
+            <Route path="/dashboard" element={<Userdashboard />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/specialities" element={<Specialities />} />
+            <Route path="/doctors" element={<AllDoctorsPage />} />
+            <Route path="/PatientProfile" element={<PatientProfile />} />
+            <Route path="/contact-us" element={<ContactUsPage />} />
+            <Route path="/hospital-list" element={<HospitalList />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+
+        {/* <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registor" element={<Registor />} />
@@ -42,7 +60,8 @@ const App = () => (
           <Route path='/register' element={<Registor/>}/>
           <Route path="/ContactUsPage" element={<ContactUsPage/>}/>
           <Route path="/HospitalList" element={<HospitalList/>}/>
-        </Routes>
+        </Routes> */}
+
         <Footer />
       </BrowserRouter>
     </TooltipProvider>
