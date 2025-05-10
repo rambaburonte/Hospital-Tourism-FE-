@@ -20,8 +20,7 @@ import ScrollToTop from "./ScrollToTop";
 import OurHospitals from "./pages/ourhospitals";
 import PharmacyCategoryPage from "./components/pharmaMedicine";
 import TranslatorList from "./pages/TranslatorList";
-
-
+import ServiceListingPage from "./pages/SpaPhysiotherpy"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -48,6 +47,7 @@ const App = () => (
             <Route path="/ContactUsPage" element={<ContactUsPage />} />
             <Route path="/OurHospitals" element={<OurHospitals />} />
             <Route path="/translatorList" element={<TranslatorList/>} />
+            <Route path="/ServiceListingPage" element={<ServiceListingPage/>}/>
             <Route path="*" element={<NotFound />} />
             <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
           </Routes>
