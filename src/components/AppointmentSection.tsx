@@ -1,328 +1,327 @@
+
+// import React from 'react';
+// import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Card, CardContent } from "@/components/ui/card";
+
+// const AppointmentSection = () => {
+//   return (
+//     <section className="bg-slate-50 py-12">
+//       <div className="container mx-auto px-4 md:px-6">
+//         <div className="max-w-5xl mx-auto">
+//           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+//             Schedule Your Appointment Online
+//           </h2>
+          
+//           <div className="bg-white rounded-lg shadow-md p-6 appointment-card">
+//             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+//               <div className="relative">
+//                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+//                 <Input 
+//                   type="text" 
+//                   placeholder="Search for Doctor" 
+//                   className="pl-10 pr-4 py-2 w-full"
+//                 />
+//               </div>
+//               <div className="relative">
+//                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+//                 <Input 
+//                   type="text" 
+//                   placeholder="Choose Location" 
+//                   className="pl-10 pr-4 py-2 w-full"
+//                 />
+//               </div>
+//               <div className="flex justify-end">
+//                 <Button className="bg-primary hover:bg-primary-dark text-white w-full">
+//                   Book an Appointment
+//                 </Button>
+//               </div>
+//             </div>
+            
+//             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
+//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
+//                 <CardContent className="p-4 flex flex-col items-center justify-center">
+//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
+//                     <User className="h-6 w-6 text-primary" />
+//                   </div>
+//                   <p className="text-sm font-medium">Find a Doctor</p>
+//                 </CardContent>
+//               </Card>
+              
+//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
+//                 <CardContent className="p-4 flex flex-col items-center justify-center">
+//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
+//                     <Calendar className="h-6 w-6 text-primary" />
+//                   </div>
+//                   <p className="text-sm font-medium">Book a Test</p>
+//                 </CardContent>
+//               </Card>
+              
+//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
+//                 <CardContent className="p-4 flex flex-col items-center justify-center">
+//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
+//                     <Phone className="h-6 w-6 text-primary" />
+//                   </div>
+//                   <p className="text-sm font-medium">Teleconsult</p>
+//                 </CardContent>
+//               </Card>
+              
+//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
+//                 <CardContent className="p-4 flex flex-col items-center justify-center">
+//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
+//                     <MapPin className="h-6 w-6 text-primary" />
+//                   </div>
+//                   <p className="text-sm font-medium">Locate Hospital</p>
+//                 </CardContent>
+//               </Card>
+              
+//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
+//                 <CardContent className="p-4 flex flex-col items-center justify-center">
+//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
+//                     <Search className="h-6 w-6 text-primary" />
+//                   </div>
+//                   <p className="text-sm font-medium">Health Check</p>
+//                 </CardContent>
+//               </Card>
+//             </div>
+
+//             {/* Display Top 6 Items for the Selected Service */}
+//             {selectedService && (
+//               <div className="mt-12">
+//                 <h3 className="text-2xl font-bold text-gray-900 mb-6">
+//                   {selectedService}
+//                 </h3>
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+//                   {serviceData[selectedService].slice(0, 6).map((item, index) => (
+//                     <div
+//                       key={index}
+//                       className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+//                     >
+//                       <img
+//                         src={item.image}
+//                         alt={item.name}
+//                         className="w-full h-40 object-cover rounded-lg mb-4"
+//                       />
+//                       <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
+//                       <p className="text-gray-600 text-sm mb-2">{item.details}</p>
+//                       <p className="text-gray-500 text-xs italic">{item.description}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+//                 {/* Explore More Link */}
+//                 <div className="mt-8 text-center">
+//                   <Link
+//                     to={serviceRoutes[selectedService]}
+//                     className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+//                   >
+//                     Explore More
+//                   </Link>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+
+//           {/* Display Top 6 Items for the Selected Service */}
+//           {selectedService && (
+//             <div className="mt-12">
+//               <h3 className="text-2xl font-bold text-gray-900 mb-6">
+//                 {selectedService}
+//               </h3>
+//               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+//                 {serviceData[selectedService].slice(0, 6).map((item, index) => (
+//                   <div
+//                     key={index}
+//                     className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+//                   >
+//                     <img
+//                       src={item.image}
+//                       alt={item.name}
+//                       className="w-full h-40 object-cover rounded-lg mb-4"
+//                     />
+//                     <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
+//                     <p className="text-gray-600 text-sm mb-2">{item.details}</p>
+//                     <p className="text-gray-500 text-xs italic">{item.description}</p>
+//                   </div>
+//                 ))}
+//               </div>
+//               {/* Explore More Link */}
+//               <div className="mt-8 text-center">
+//                 <Link
+//                   to={serviceRoutes[selectedService]}
+//                   className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+//                 >
+//                   Explore More
+//                 </Link>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default AppointmentSection;
 import React, { useState } from 'react';
-import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+
+// Dummy service data for demonstration
+const serviceData = {
+  'Find a Doctor': [
+    {
+      image: 'https://via.placeholder.com/300x200',
+      name: 'Dr. John Doe',
+      details: 'Cardiologist, 10+ years exp',
+      description: 'Available Mon-Fri, 9 AM - 5 PM',
+    },
+    // Add up to 6 items or more
+  ],
+  'Book a Test': [
+    {
+      image: 'https://via.placeholder.com/300x200',
+      name: 'Blood Test',
+      details: 'Includes CBC, Glucose, etc.',
+      description: 'Home sample collection available',
+    },
+  ],
+  Teleconsult: [
+    {
+      image: 'https://via.placeholder.com/300x200',
+      name: 'Online Psychiatry',
+      details: 'Mental health support via video call',
+      description: 'Confidential & private',
+    },
+  ],
+  'Locate Hospital': [
+    {
+      image: 'https://via.placeholder.com/300x200',
+      name: 'Sunrise Hospital',
+      details: 'Multi-specialty care',
+      description: '24/7 Emergency available',
+    },
+  ],
+  'Health Check': [
+    {
+      image: 'https://via.placeholder.com/300x200',
+      name: 'Full Body Checkup',
+      details: '40+ tests included',
+      description: 'Results in 24 hours',
+    },
+  ],
+};
+
+// Dummy route links for each service
+const serviceRoutes = {
+  'Find a Doctor': '/doctors',
+  'Book a Test': '/tests',
+  Teleconsult: '/teleconsult',
+  'Locate Hospital': '/hospitals',
+  'Health Check': '/checkups',
+};
 
 const AppointmentSection = () => {
-  // State for input fields
-  const [doctorSearch, setDoctorSearch] = useState('');
-  const [location, setLocation] = useState('');
-  // State to track the selected service
-  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState('');
 
-  // Placeholder handler for booking an appointment
-  const handleBookAppointment = () => {
-    console.log('Booking appointment:', { doctorSearch, location });
-  };
-
-  // Sample data for each service category (6 items with images and descriptions)
-  const serviceData: Record<string, { name: string; details: string; image: string; description: string }[]> = {
-    "Find a Doctor": [
-      {
-        name: "Dr. Anjali Sharma",
-        details: "Cardiologist, 15+ years experience",
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Specializes in heart conditions with a focus on preventive care.",
-      },
-      {
-        name: "Dr. Rohan Gupta",
-        details: "Neurologist, 12+ years experience",
-        image: "https://images.unsplash.com/photo-1612349317154-3c9b2e5b7d5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Expert in treating neurological disorders like epilepsy and migraines.",
-      },
-      {
-        name: "Dr. Priya Kapoor",
-        details: "Pediatrician, 10+ years experience",
-        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Dedicated to child healthcare with a gentle approach.",
-      },
-      {
-        name: "Dr. Sameer Patil",
-        details: "Oncologist, 18+ years experience",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Leads advanced cancer treatments with a focus on patient care.",
-      },
-      {
-        name: "Dr. Neha Reddy",
-        details: "Dermatologist, 8+ years experience",
-        image: "https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Specializes in skin health, including acne and anti-aging treatments.",
-      },
-      {
-        name: "Dr. Vikram Singh",
-        details: "Orthopedist, 14+ years experience",
-        image: "https://images.unsplash.com/photo-1612349317154-3c9b2e5b7d5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Focuses on bone and joint issues, specializing in sports injuries.",
-      },
-    ],
-    "Book a Test": [
-      {
-        name: "Blood Test",
-        details: "Complete Blood Count (CBC)",
-        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Comprehensive test to evaluate overall health and detect disorders.",
-      },
-      {
-        name: "MRI Scan",
-        details: "Brain and Spine Imaging",
-        image: "https://images.unsplash.com/photo-1580983561371-7f4b242d8e83?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Detailed imaging for diagnosing brain and spine conditions.",
-      },
-      {
-        name: "ECG",
-        details: "Electrocardiogram for Heart",
-        image: "https://images.unsplash.com/photo-1576765974102-b766b7cc8c67?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Measures heart activity to detect cardiac issues.",
-      },
-      {
-        name: "Ultrasound",
-        details: "Abdominal Ultrasound",
-        image: "https://images.unsplash.com/photo-1576089866232-0c7451e3e04c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Non-invasive imaging for abdominal organ evaluation.",
-      },
-      {
-        name: "Lipid Profile",
-        details: "Cholesterol and Triglycerides",
-        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Assesses heart health by measuring cholesterol levels.",
-      },
-      {
-        name: "X-Ray",
-        details: "Chest X-Ray",
-        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Imaging to diagnose conditions affecting the chest and lungs.",
-      },
-    ],
-    "Spa & Physiotherapy": [
-      {
-        name: "Therapeutic Massage",
-        details: "Relieves muscle tension",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Relaxing massage to ease stress and muscle pain.",
-      },
-      {
-        name: "Physiotherapy Session",
-        details: "Post-surgery recovery",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Tailored sessions to aid recovery and improve mobility.",
-      },
-      {
-        name: "Aromatherapy",
-        details: "Stress relief and relaxation",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Uses essential oils to promote mental and physical well-being.",
-      },
-      {
-        name: "Hydrotherapy",
-        details: "Joint pain relief",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Water-based therapy to alleviate joint discomfort.",
-      },
-      {
-        name: "Yoga Therapy",
-        details: "Improves flexibility and strength",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Guided yoga sessions for physical and mental health.",
-      },
-      {
-        name: "Acupuncture",
-        details: "Pain management",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Traditional therapy to relieve chronic pain and stress.",
-      },
-    ],
-    "Locate Hospital": [
-      {
-        name: "Max Super Speciality Hospital",
-        details: "Delhi NCR, 586 beds",
-        image: "https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Leading hospital with advanced medical facilities in Delhi NCR.",
-      },
-      {
-        name: "Max Hospital Mumbai",
-        details: "Mumbai, Maharashtra, 450 beds",
-        image: "https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "State-of-the-art healthcare services in Mumbai.",
-      },
-      {
-        name: "Max Hospital Pune",
-        details: "Pune, Maharashtra, 320 beds",
-        image: "https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Comprehensive care with a focus on patient comfort in Pune.",
-      },
-      {
-        name: "Max Hospital Chennai",
-        details: "Chennai, Tamil Nadu, 280 beds",
-        image: "https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Trusted hospital offering specialized treatments in Chennai.",
-      },
-      {
-        name: "Max Hospital Bangalore",
-        details: "Bangalore, Karnataka, 410 beds",
-        image: "https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Modern healthcare facility serving Bangalore and beyond.",
-      },
-      {
-        name: "Max Hospital Hyderabad",
-        details: "Hyderabad, Telangana, 380 beds",
-        image: "https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Advanced healthcare services in Hyderabad.",
-      },
-    ],
-  };
-
-  // Map services to their respective routes
-  const serviceRoutes: Record<string, string> = {
-    "Find a Doctor": "/doctors",
-    "Book a Test": "/tests",
-    "Spa & Physiotherapy": "/spa-physiotherapy",
-    "Locate Hospital": "/hospitals",
-  };
-
-  // Handle service card click
-  const handleServiceClick = (service: string) => {
-    setSelectedService(selectedService === service ? null : service);
+  const handleCardClick = (serviceName) => {
+    setSelectedService(serviceName);
   };
 
   return (
-    <section className="bg-gray-50 py-16 px-6 lg:px-20">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-10">
-          Schedule Your Appointment Online
-        </h2>
-        
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
-              <input
-                type="text"
-                placeholder="Search for Doctor"
-                value={doctorSearch}
-                onChange={(e) => setDoctorSearch(e.target.value)}
-                className="pl-12 pr-4 py-3 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
-                aria-label="Search for a doctor"
-              />
-            </div>
-            <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
-              <select
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="pl-12 pr-4 py-3 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
-                aria-label="Choose a location"
-              >
-                <option value="">Choose Location</option>
-                <option value="Delhi NCR">Delhi NCR</option>
-                <option value="Mumbai, Maharashtra">Mumbai, Maharashtra</option>
-                <option value="Pune, Maharashtra">Pune, Maharashtra</option>
-                <option value="Chennai, Tamil Nadu">Chennai, Tamil Nadu</option>
-                <option value="Bangalore, Karnataka">Bangalore, Karnataka</option>
-                <option value="Hyderabad, Telangana">Hyderabad, Telangana</option>
-              </select>
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={handleBookAppointment}
-                className="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-semibold py-3 px-6 rounded-lg w-full shadow-md transition-all duration-300"
-                aria-label="Book an appointment"
-              >
-                Book an Appointment
-              </button>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
-            <div
-              onClick={() => handleServiceClick("Find a Doctor")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Find a Doctor" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <User className="h-7 w-7 text-indigo-600" />
-                </div>
-                <p className="text-sm font-semibold text-gray-800">Find a Doctor</p>
-              </div>
-            </div>
-            
-            <div
-              onClick={() => handleServiceClick("Book a Test")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Book a Test" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <Calendar className="h-7 w-7 text-indigo-600" />
-                </div>
-                <p className="text-sm font-semibold text-gray-800">Book a Test</p>
-              </div>
-            </div>
-            
-            <div
-              onClick={() => handleServiceClick("Spa & Physiotherapy")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Spa & Physiotherapy" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <Phone className="h-7 w-7 text-indigo-600" />
-                </div>
-                <p className="text-sm font-semibold text-gray-800">Spa & Physiotherapy</p>
-              </div>
-            </div>
-            
-            <div
-              onClick={() => handleServiceClick("Locate Hospital")}
-              className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                selectedService === "Locate Hospital" ? "border-indigo-500 bg-indigo-50" : ""
-              }`}
-            >
-              <div className="p-6 flex flex-col items-center justify-center">
-                <div className="mb-3 bg-gray-100 p-4 rounded-full shadow-sm">
-                  <MapPin className="h-7 w-7 text-indigo-600" />
-                </div>
-                <p className="text-sm font-semibold text-gray-800">Locate Hospital</p>
-              </div>
-            </div>
-          </div>
+    <section className="bg-slate-50 py-12">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+            Schedule Your Appointment Online
+          </h2>
 
-          {/* Display Top 6 Items for the Selected Service */}
-          {selectedService && (
-            <div className="mt-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                {selectedService}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {serviceData[selectedService].slice(0, 6).map((item, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                    />
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
-                    <p className="text-gray-600 text-sm mb-2">{item.details}</p>
-                    <p className="text-gray-500 text-xs italic">{item.description}</p>
-                  </div>
-                ))}
+          <div className="bg-white rounded-lg shadow-md p-6 appointment-card">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Search for Doctor"
+                  className="pl-10 pr-4 py-2 w-full"
+                />
               </div>
-              {/* Explore More Link */}
-              <div className="mt-8 text-center">
-                <Link
-                  to={serviceRoutes[selectedService]}
-                  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
-                >
-                  Explore More
-                </Link>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Choose Location"
+                  className="pl-10 pr-4 py-2 w-full"
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button className="bg-primary hover:bg-primary-dark text-white w-full">
+                  Book an Appointment
+                </Button>
               </div>
             </div>
-          )}
+
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
+              {[
+                { icon: <User className="h-6 w-6 text-primary" />, name: 'Find a Doctor' },
+                { icon: <Calendar className="h-6 w-6 text-primary" />, name: 'Book a Test' },
+                { icon: <Phone className="h-6 w-6 text-primary" />, name: 'Teleconsult' },
+                { icon: <MapPin className="h-6 w-6 text-primary" />, name: 'Locate Hospital' },
+                { icon: <Search className="h-6 w-6 text-primary" />, name: 'Health Check' },
+              ].map((item, index) => (
+                <Card
+                  key={index}
+                  onClick={() => handleCardClick(item.name)}
+                  className="border border-gray-200 text-center specialty-icon hover:border-primary cursor-pointer"
+                >
+                  <CardContent className="p-4 flex flex-col items-center justify-center">
+                    <div className="mb-2 bg-slate-100 p-3 rounded-full">
+                      {item.icon}
+                    </div>
+                    <p className="text-sm font-medium">{item.name}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Display Top 6 Items for the Selected Service */}
+            {selectedService && serviceData[selectedService] && (
+              <div className="mt-12">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  {selectedService}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {serviceData[selectedService].slice(0, 6).map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-40 object-cover rounded-lg mb-4"
+                      />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
+                      <p className="text-gray-600 text-sm mb-2">{item.details}</p>
+                      <p className="text-gray-500 text-xs italic">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+                {/* Explore More Link */}
+                <div className="mt-8 text-center">
+                  <Link
+                    to={serviceRoutes[selectedService]}
+                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                  >
+                    Explore More
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
