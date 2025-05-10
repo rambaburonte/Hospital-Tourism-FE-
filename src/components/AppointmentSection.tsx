@@ -1152,7 +1152,7 @@ const AppointmentSection = () => {
                   className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg w-full shadow-md transition-all duration-300"
                   aria-label="Book an appointment"
                 >
-                  Translator Booking
+                  Book an Appointment
                 </button>
               </div>
             </div>
@@ -1282,10 +1282,10 @@ const AppointmentSection = () => {
                     // Display Pharmacy Categories
                     pharmacyCategories.map((category, index) => (
                       <div
-                        key={index}
-                        onClick={() => handleCategoryClick(category.name)}
-                        className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-                      >
+  key={index}
+  onClick={() => handleCategoryClick(category.name)}
+  className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+>
                         <img
                           src={category.image}
                           alt={category.name}
@@ -1316,9 +1316,12 @@ const AppointmentSection = () => {
                 </div>
                 {/* Explore More Link */}
                 <div className="mt-8 text-center">
-                  <div>
+                  <Link
+                    to={serviceRoutes[selectedService]}
+                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                  >
                     Explore More
-                  </div>
+                  </Link>
                 </div>
               </div>
             )}
