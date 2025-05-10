@@ -24,9 +24,8 @@ const Header: React.FC = () => {
     { to: '/specialities', label: 'Specialties' },
     { to: '/OurHospitals', label: 'Our Hospitals' },
     { to: '/doctors', label: 'Doctors' },
-   
     { to: '/about', label: 'About Us' },
-     { to: '/tours', label: 'Packages' },
+    { to: '/tours', label: 'Packages' },
   ];
 
   return (
@@ -49,7 +48,6 @@ const Header: React.FC = () => {
           <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
             <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
             <span onClick={() => navigate('/blog')} className="cursor-pointer hover:text-green-200">Blog</span>
-            
           </div>
         </div>
       </div>
@@ -107,13 +105,15 @@ const Header: React.FC = () => {
             Book Appointment
           </Button>
 
-          <Button
-            variant="outline"
-            className="hidden md:flex text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
-            onClick={() => navigate('/login')}
-          >
-            <User className="mr-2 h-4 w-4" /> Login
-          </Button>
+          {!isMobile && (
+            <Button
+              variant="outline"
+              className="text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+              onClick={() => navigate('/login')}
+            >
+              <User className="mr-2 h-4 w-4" /> Login
+            </Button>
+          )}
 
           {isMobile && (
             <Button
@@ -154,6 +154,16 @@ const Header: React.FC = () => {
                 className="pl-10 pr-4 py-2 w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
               />
             </div>
+            <Button
+              variant="outline"
+              className="text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate('/login');
+              }}
+            >
+              <User className="mr-2 h-4 w-4" /> Login
+            </Button>
           </nav>
         </div>
       )}
