@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Plane, Clock, Heart, Search } from 'lucide-react';
+import { Plane, Clock, Heart } from 'lucide-react';
 
 // Define the type for tour plan items
 interface TourPlan {
@@ -12,10 +12,8 @@ interface TourPlan {
   route: string;
 }
 
-const TourPlans = () => {
+const TopTourPlans = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // Sample tour plan data
@@ -61,24 +59,17 @@ const TourPlans = () => {
     'Spa & Physiotherapy': <Heart className="h-6 w-6 text-indigo-600" />,
   };
 
-  // Memoized filtered tour plans
-  const filteredTourPlans = useMemo(() => {
-    return tourPlans.filter((plan) => {
-      const matchesSearch = plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           plan.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || plan.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchTerm, selectedCategory]);
+  // Memoized tour plans
+  const memoizedTourPlans = useMemo(() => tourPlans, []);
 
-  // Auto-scrolling logic for carousel (always shows all 4 plans)
+  // Auto-scrolling logic
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % tourPlans.length);
+      setCurrentSlide((prev) => (prev + 1) % memoizedTourPlans.length);
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [tourPlans.length]);
+  }, [memoizedTourPlans.length]);
 
   // Scroll to the current slide
   useEffect(() => {
@@ -107,12 +98,12 @@ const TourPlans = () => {
               aria-label="Top tour plans auto-scrolling carousel"
             >
               <div className="flex w-full">
-                {tourPlans.map((plan, index) => (
+                {memoizedTourPlans.map((plan, index) => (
                   <div
                     key={index}
                     className="w-full flex-none"
                     role="group"
-                    aria-label={`Slide ${index + 1} of ${tourPlans.length}`}
+                    aria-label={`Slide ${index + 1} of ${memoizedTourPlans.length}`}
                   >
                     <div className="relative w-full h-64 sm:h-96">
                       <img
@@ -135,94 +126,56 @@ const TourPlans = () => {
             </div>
           </div>
 
-          {/* Search and Sort Controls */}
-          <div className="mb-8 flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search tour plans..."
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
-                aria-label="Search tour plans"
-              />
-            </div>
-            <div className="relative w-full sm:w-48">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-4 pr-8 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 appearance-none bg-white"
-                aria-label="Filter by category"
-              >
-                <option value="All">All Categories</option>
-                <option value="Travel Booking">Travel Booking</option>
-                <option value="Appointment Booking">Appointment Booking</option>
-                <option value="Spa & Physiotherapy">Spa & Physiotherapy</option>
-              </select>
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
           {/* Medical Tour Plans Section with Scaling Cards */}
           <div>
-          
+           
 
-            {filteredTourPlans.length === 0 ? (
-              <p className="text-center text-gray-600">No tour plans found.</p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {filteredTourPlans.map((plan, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                    role="article"
-                    aria-label={plan.name}
-                  >
-                    <img
-                      src={plan.image}
-                      alt={plan.name}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                    />
-                    <div className="flex items-center mb-2">
-                      <div className="bg-slate-100 p-3 rounded-full shadow-sm mr-3">
-                        {categoryIcons[plan.category]}
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-800">
-                        {plan.name}
-                      </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {memoizedTourPlans.slice(0, 4).map((plan, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  role="article"
+                  aria-label={plan.name}
+                >
+                  <img
+                    src={plan.image}
+                    alt={plan.name}
+                    className="w-full h-40 object-cover rounded-lg mb-4"
+                  />
+                  <div className="flex items-center mb-2">
+                    <div className="bg-slate-100 p-3 rounded-full shadow-sm mr-3">
+                      {categoryIcons[plan.category]}
                     </div>
-                    <p className="text-gray-600 text-sm mb-2">
-                      {plan.details}
-                    </p>
-                    <p className="text-gray-500 text-xs italic mb-4">
-                      {plan.description}
-                    </p>
-                    <Link
-                      to={plan.route}
-                      className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
-                      aria-label={`Book Now ${plan.name}`}
-                    >
-                      Book Now
-                    </Link>
+                    <h4 className="text-lg font-semibold text-gray-800">
+                      {plan.name}
+                    </h4>
                   </div>
-                ))}
-              </div>
-            )}
+                  <p className="text-gray-600 text-sm mb-2">
+                    {plan.details}
+                  </p>
+                  <p className="text-gray-500 text-xs italic mb-4">
+                    {plan.description}
+                  </p>
+                  <Link
+                    to={plan.route}
+                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
+                    aria-label={`Book Now ${plan.name}`}
+                  >
+                    Book Now
+                  </Link>
+                </div>
+              ))}
+            </div>
 
             <div className="mt-12 text-center">
-            <Link
-  to="/tours"
-  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
-  aria-label="Explore More"
->
-  Explore More
-</Link>
-
+              <Link
+                to="/tours"
+                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                aria-label="Explore More"
+              >
+                Explore More
+              </Link>
             </div>
           </div>
         </div>
@@ -231,4 +184,4 @@ const TourPlans = () => {
   );
 };
 
-export default TourPlans;
+export default TopTourPlans;
