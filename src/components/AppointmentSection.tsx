@@ -1,173 +1,8 @@
 
-
-// import React from 'react';
-// import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Card, CardContent } from "@/components/ui/card";
-
-// const AppointmentSection = () => {
-//   return (
-//     <section className="bg-slate-50 py-12">
-//       <div className="container mx-auto px-4 md:px-6">
-//         <div className="max-w-5xl mx-auto">
-//           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
-//             Schedule Your Appointment Online
-//           </h2>
-          
-//           <div className="bg-white rounded-lg shadow-md p-6 appointment-card">
-//             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-//               <div className="relative">
-//                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-//                 <Input 
-//                   type="text" 
-//                   placeholder="Search for Doctor" 
-//                   className="pl-10 pr-4 py-2 w-full"
-//                 />
-//               </div>
-//               <div className="relative">
-//                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-//                 <Input 
-//                   type="text" 
-//                   placeholder="Choose Location" 
-//                   className="pl-10 pr-4 py-2 w-full"
-//                 />
-//               </div>
-//               <div className="flex justify-end">
-//                 <Button className="bg-primary hover:bg-primary-dark text-white w-full">
-//                   Book an Appointment
-//                 </Button>
-//               </div>
-//             </div>
-            
-//             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-//                 <CardContent className="p-4 flex flex-col items-center justify-center">
-//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
-//                     <User className="h-6 w-6 text-primary" />
-//                   </div>
-//                   <p className="text-sm font-medium">Find a Doctor</p>
-//                 </CardContent>
-//               </Card>
-              
-//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-//                 <CardContent className="p-4 flex flex-col items-center justify-center">
-//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
-//                     <Calendar className="h-6 w-6 text-primary" />
-//                   </div>
-//                   <p className="text-sm font-medium">Book a Test</p>
-//                 </CardContent>
-//               </Card>
-              
-//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-//                 <CardContent className="p-4 flex flex-col items-center justify-center">
-//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
-//                     <Phone className="h-6 w-6 text-primary" />
-//                   </div>
-//                   <p className="text-sm font-medium">Teleconsult</p>
-//                 </CardContent>
-//               </Card>
-              
-//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-//                 <CardContent className="p-4 flex flex-col items-center justify-center">
-//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
-//                     <MapPin className="h-6 w-6 text-primary" />
-//                   </div>
-//                   <p className="text-sm font-medium">Locate Hospital</p>
-//                 </CardContent>
-//               </Card>
-              
-//               <Card className="border border-gray-200 text-center specialty-icon hover:border-primary">
-//                 <CardContent className="p-4 flex flex-col items-center justify-center">
-//                   <div className="mb-2 bg-slate-100 p-3 rounded-full">
-//                     <Search className="h-6 w-6 text-primary" />
-//                   </div>
-//                   <p className="text-sm font-medium">Health Check</p>
-//                 </CardContent>
-//               </Card>
-//             </div>
-
-//             {/* Display Top 6 Items for the Selected Service */}
-//             {selectedService && (
-//               <div className="mt-12">
-//                 <h3 className="text-2xl font-bold text-gray-900 mb-6">
-//                   {selectedService}
-//                 </h3>
-//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//                   {serviceData[selectedService].slice(0, 6).map((item, index) => (
-//                     <div
-//                       key={index}
-//                       className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-//                     >
-//                       <img
-//                         src={item.image}
-//                         alt={item.name}
-//                         className="w-full h-40 object-cover rounded-lg mb-4"
-//                       />
-//                       <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
-//                       <p className="text-gray-600 text-sm mb-2">{item.details}</p>
-//                       <p className="text-gray-500 text-xs italic">{item.description}</p>
-//                     </div>
-//                   ))}
-//                 </div>
-//                 {/* Explore More Link */}
-//                 <div className="mt-8 text-center">
-//                   <Link
-//                     to={serviceRoutes[selectedService]}
-//                     className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
-//                   >
-//                     Explore More
-//                   </Link>
-//                 </div>
-//               </div>
-//             )}
-//           </div>
-
-//           {/* Display Top 6 Items for the Selected Service */}
-//           {selectedService && (
-//             <div className="mt-12">
-//               <h3 className="text-2xl font-bold text-gray-900 mb-6">
-//                 {selectedService}
-//               </h3>
-//               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//                 {serviceData[selectedService].slice(0, 6).map((item, index) => (
-//                   <div
-//                     key={index}
-//                     className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-//                   >
-//                     <img
-//                       src={item.image}
-//                       alt={item.name}
-//                       className="w-full h-40 object-cover rounded-lg mb-4"
-//                     />
-//                     <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
-//                     <p className="text-gray-600 text-sm mb-2">{item.details}</p>
-//                     <p className="text-gray-500 text-xs italic">{item.description}</p>
-//                   </div>
-//                 ))}
-//               </div>
-//               {/* Explore More Link */}
-//               <div className="mt-8 text-center">
-//                 <Link
-//                   to={serviceRoutes[selectedService]}
-//                   className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
-//                 >
-//                   Explore More
-//                 </Link>
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default AppointmentSection;
-
 // import React, { useState } from 'react';
 // import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
-// import { Link } from 'react-router-dom';
+// import { Link, useNavigate } from 'react-router-dom';
+
 
 // const AppointmentSection = () => {
 //   // State for input fields
@@ -175,6 +10,9 @@
 //   const [location, setLocation] = useState('');
 //   // State to track the selected service
 //   const [selectedService, setSelectedService] = useState<string | null>(null);
+
+//   // Navigation hook
+//   const navigate = useNavigate();
 
 //   // Placeholder handler for booking an appointment
 //   const handleBookAppointment = () => {
@@ -411,36 +249,43 @@
 //         description: "Travel to Hyderabad for healthcare services.",
 //       },
 //     ],
-//     "Appointment Booking": [
+//     "Translators": [
 //       {
-//         name: "Cardiology Checkup",
-//         details: "Max Hospital Delhi NCR",
-//         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-//         description: "Schedule a heart checkup with top cardiologists.",
+//         name: "Francis R. Jones",
+//         details: "Poetry Translation, 30+ years experience",
+//         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Francis_R_Jones.jpg/220px-Francis_R_Jones.jpg",
+//         description: "Expert in translating Dutch and South Slavic poetry.",
 //       },
 //       {
-//         name: "Neurology Consultation",
-//         details: "Max Hospital Mumbai",
-//         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-//         description: "Book a session with a neurologist for expert care.",
+//         name: "Ineke Crezee",
+//         details: "Healthcare & Legal Interpretation, 25+ years experience",
+//         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Ineke_Crezee.jpg/220px-Ineke_Crezee.jpg",
+//         description: "Specialist in healthcare interpreting and translator education.",
 //       },
 //       {
-//         name: "Pediatric Visit",
-//         details: "Max Hospital Pune",
-//         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-//         description: "Arrange a child health checkup with a pediatrician.",
+//         name: "Maria Gonzalez",
+//         details: "Legal & Business Translation, 15 years experience",
+//         image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//         description: "Provides certified translations for legal and business documents.",
 //       },
 //       {
-//         name: "Oncology Screening",
-//         details: "Max Hospital Chennai",
-//         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-//         description: "Schedule a cancer screening with specialists.",
+//         name: "Kenji Tanaka",
+//         details: "Technical & IT Translation, 10 years experience",
+//         image: "https://images.unsplash.com/photo-1612349317154-3c9b2e5b7d5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//         description: "Expert in translating technical manuals and IT documents.",
 //       },
 //       {
-//         name: "Dermatology Appointment",
-//         details: "Max Hospital Bangalore",
-//         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-//         description: "Book a skin health consultation with a dermatologist.",
+//         name: "Amina El-Sayed",
+//         details: "Medical & Pharmaceutical Translation, 12 years experience",
+//         image: "https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//         description: "Specializes in medical translations for pharmaceutical companies.",
+//       },
+//       {
+
+//         name: "Liu Wei",
+//         details: "Marketing & Advertising Translation, 8 years experience",
+//         image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//         description: "Translates marketing materials to appeal to Chinese audiences.",
 //       },
 //       {
 //         name: "Orthopedic Consultation",
@@ -469,35 +314,71 @@
 //         description: "Get your prescriptions delivered in Pune.",
 //       },
 //       {
-//         name: "Max Pharmacy Chennai",
+//         name: "Personalcare & skincare",
 //         details: "Chennai, Tamil Nadu",
 //         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
 //         description: "Pharmacy services with quick delivery in Chennai.",
 //       },
 //       {
-//         name: "Max Pharmacy Bangalore",
-//         details: "Bangalore, Karnataka",
+//         name: " healthfood&drinks",
+//         details: "Taking care of ur health",
 //         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
 //         description: "Order medicines online in Bangalore.",
 //       },
 //       {
-//         name: "Max Pharmacy Hyderabad",
-//         details: "Hyderabad, Telangana",
+//         name: "General medicine",
+//         details: "Medicine at ur hand",
 //         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
 //         description: "24/7 pharmacy support in Hyderabad.",
+
 //       },
 //     ],
+//     // Pharmacy service data is replaced by pharmacyCategories below
 //   };
+
+//   // Pharmacy categories data
+//   const pharmacyCategories = [
+//     {
+//       name: "Summer Essentials",
+//       description: "Sunscreens, hydration supplements, and cooling products for summer.",
+//       image: "https://images.unsplash.com/photo-1620916566398-51f495e90a35?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//       route: "/pharmacy/summer-essentials",
+//     },
+//     {
+//       name: "Vitamins & Supplements",
+//       description: "Multivitamins, immunity boosters, and dietary supplements.",
+//       image: "https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//       route: "/pharmacy/vitamins-supplements",
+//     },
+//     {
+//       name: "Sports Nutrition",
+//       description: "Protein powders, energy bars, and recovery supplements.",
+//       image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//       route: "/pharmacy/sports-nutrition",
+//     },
+//     {
+//       name: "Personal Care & Skincare",
+//       description: "Moisturizers, cleansers, and specialized skincare products.",
+//       image: "https://images.unsplash.com/photo-1556227709-3d3f91f54604?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//       route: "/pharmacy/personal-care-skincare",
+//     },
+//     {
+//       name: "Health Food & Drinks",
+//       description: "Nutritional shakes, herbal teas, and healthy snacks.",
+//       image: "https://images.unsplash.com/photo-1496412705862-e0088f16f791?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+//       route: "/pharmacy/health-food-drinks",
+//     },
+//   ];
 
 //   // Map services to their respective routes
 //   const serviceRoutes: Record<string, string> = {
 //     "Find a Doctor": "/doctors",
 //     "Book a Test": "/tests",
-//     "Spa & Physiotherapy": "/spa-physiotherapy",
-//     "Locate Hospital": "/hospitals",
+//     "Spa & Physiotherapy": "/ServiceListingPage",
+//     "Locate Hospital": "/OurHospitals",
 //     "Hotel Booking": "/hotels",
 //     "Travel Booking": "/travel",
-//     "Appointment Booking": "/appointments",
+//     "Appointment Booking": "/translatorList",
 //     "Pharmacy": "/pharmacy",
 //   };
 
@@ -505,6 +386,12 @@
 //   const handleServiceClick = (service: string) => {
 //     setSelectedService(selectedService === service ? null : service);
 //   };
+
+//  const handleCategoryClick = (categoryName: string) => {
+//   navigate(`/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}`);
+// };
+
+
 
 //   return (
 //     <section className="bg-slate-50 py-12">
@@ -641,7 +528,7 @@
 //               </div>
 
 //               <div
-//                 onClick={() => handleServiceClick("Appointment Booking")}
+//                 onClick={() => handleServiceClick("Translators")}
 //                 className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
 //                   selectedService === "Appointment Booking" ? "border-indigo-500 bg-indigo-50" : ""
 //                 }`}
@@ -650,7 +537,7 @@
 //                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
 //                     <Clock className="h-6 w-6 text-indigo-600" />
 //                   </div>
-//                   <p className="text-sm font-medium text-gray-800">Appointment Booking</p>
+//                   <p className="text-sm font-medium text-gray-800">Translators</p>
 //                 </div>
 //               </div>
 
@@ -669,28 +556,48 @@
 //               </div>
 //             </div>
 
-//             {/* Display Top 6 Items for the Selected Service */}
+//             {/* Display Content for the Selected Service */}
 //             {selectedService && (
 //               <div className="mt-12">
 //                 <h3 className="text-2xl font-bold text-gray-900 mb-6">
 //                   {selectedService}
 //                 </h3>
 //                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//                   {serviceData[selectedService].slice(0, 6).map((item, index) => (
-//                     <div
-//                       key={index}
-//                       className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-//                     >
-//                       <img
-//                         src={item.image}
-//                         alt={item.name}
-//                         className="w-full h-40 object-cover rounded-lg mb-4"
-//                       />
-//                       <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
-//                       <p className="text-gray-600 text-sm mb-2">{item.details}</p>
-//                       <p className="text-gray-500 text-xs italic">{item.description}</p>
-//                     </div>
-//                   ))}
+//                   {selectedService === "Pharmacy" ? (
+//                     // Display Pharmacy Categories
+//                     pharmacyCategories.map((category, index) => (
+//                       <div
+//   key={index}
+//   onClick={() => handleCategoryClick(category.name)}
+//   className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+// >
+//                         <img
+//                           src={category.image}
+//                           alt={category.name}
+//                           className="w-full h-40 object-cover rounded-lg mb-4"
+//                         />
+//                         <h4 className="text-lg font-semibold text-gray-800 mb-2">{category.name}</h4>
+//                         <p className="text-gray-500 text-sm">{category.description}</p>
+//                       </div>
+//                     ))
+//                   ) : (
+//                     // Display Other Service Items
+//                     serviceData[selectedService].slice(0, 6).map((item, index) => (
+//                       <div
+//                         key={index}
+//                         className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+//                       >
+//                         <img
+//                           src={item.image}
+//                           alt={item.name}
+//                           className="w-full h-40 object-cover rounded-lg mb-4"
+//                         />
+//                         <h4 className="text-lg font-semibold text-gray-800 mb-2">{item.name}</h4>
+//                         <p className="text-gray-600 text-sm mb-2">{item.details}</p>
+//                         <p className="text-gray-500 text-sm italic">{item.description}</p>
+//                       </div>
+//                     ))
+//                   )}
 //                 </div>
 //                 {/* Explore More Link */}
 //                 <div className="mt-8 text-center">
@@ -714,10 +621,15 @@
 
 
 
+
 import React, { useState } from 'react';
 import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
+
+
+
+
 
 
 const AppointmentSection = () => {
@@ -970,7 +882,7 @@ const AppointmentSection = () => {
         name: "Francis R. Jones",
         details: "Poetry Translation, 30+ years experience",
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Francis_R_Jones.jpg/220px-Francis_R_Jones.jpg",
-        description: "Expert in translating Dutch and South Slavic poetry.",
+        description: "Expert in translating Dutch and South Slav poetry.",
       },
       {
         name: "Ineke Crezee",
@@ -997,17 +909,10 @@ const AppointmentSection = () => {
         description: "Specializes in medical translations for pharmaceutical companies.",
       },
       {
-
         name: "Liu Wei",
         details: "Marketing & Advertising Translation, 8 years experience",
         image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         description: "Translates marketing materials to appeal to Chinese audiences.",
-      },
-      {
-        name: "Orthopedic Consultation",
-        details: "Max Hospital Hyderabad",
-        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-        description: "Schedule a bone and joint checkup with an orthopedist.",
       },
     ],
     "Pharmacy": [
@@ -1036,7 +941,7 @@ const AppointmentSection = () => {
         description: "Pharmacy services with quick delivery in Chennai.",
       },
       {
-        name: " healthfood&drinks",
+        name: "Healthfood & drinks",
         details: "Taking care of ur health",
         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         description: "Order medicines online in Bangalore.",
@@ -1046,10 +951,8 @@ const AppointmentSection = () => {
         details: "Medicine at ur hand",
         image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         description: "24/7 pharmacy support in Hyderabad.",
-
       },
     ],
-    // Pharmacy service data is replaced by pharmacyCategories below
   };
 
   // Pharmacy categories data
@@ -1101,7 +1004,7 @@ const AppointmentSection = () => {
     "Locate Hospital": "/OurHospitals",
     "Hotel Booking": "/hotels",
     "Travel Booking": "/travel",
-    "Appointment Booking": "/translatorList",
+    "Translators": "/translatorList", // Updated to reflect Translators
     "Pharmacy": "/pharmacy",
   };
 
@@ -1110,11 +1013,9 @@ const AppointmentSection = () => {
     setSelectedService(selectedService === service ? null : service);
   };
 
- const handleCategoryClick = (categoryName: string) => {
-  navigate(`/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}`);
-};
-
-
+  const handleCategoryClick = (categoryName: string) => {
+    navigate(`/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}`);
+  };
 
   return (
     <section className="bg-slate-50 py-12">
@@ -1158,7 +1059,7 @@ const AppointmentSection = () => {
                 <button
                   onClick={handleBookAppointment}
                   className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg w-full shadow-md transition-all duration-300"
-                  aria-label="Book an appointment"
+                  aria-label="Book an appointment or translator"
                 >
                   Book an Appointment
                 </button>
@@ -1194,7 +1095,8 @@ const AppointmentSection = () => {
                 </div>
               </div>
 
-              <div
+
+                 <div
                 onClick={() => handleServiceClick("Spa & Physiotherapy")}
                 className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
                   selectedService === "Spa & Physiotherapy" ? "border-indigo-500 bg-indigo-50" : ""
@@ -1202,11 +1104,12 @@ const AppointmentSection = () => {
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Phone className="h-6 w-6 text-indigo-600" />
+                    <MapPin className="h-6 w-6 text-indigo-600" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Spa & Physiotherapy</p>
                 </div>
               </div>
+              
 
               <div
                 onClick={() => handleServiceClick("Locate Hospital")}
@@ -1253,13 +1156,12 @@ const AppointmentSection = () => {
               <div
                 onClick={() => handleServiceClick("Translators")}
                 className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Appointment Booking" ? "border-indigo-500 bg-indigo-50" : ""
+                  selectedService === "Translators" ? "border-indigo-500 bg-indigo-50" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
                     <PaperAirplaneIcon className="h-6 w-6 text-indigo-600" />
-
                   </div>
                   <p className="text-sm font-medium text-gray-800">Translators</p>
                 </div>
@@ -1283,18 +1185,16 @@ const AppointmentSection = () => {
             {/* Display Content for the Selected Service */}
             {selectedService && (
               <div className="mt-12">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  {selectedService}
-                </h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">{selectedService}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {selectedService === "Pharmacy" ? (
                     // Display Pharmacy Categories
                     pharmacyCategories.map((category, index) => (
                       <div
-  key={index}
-  onClick={() => handleCategoryClick(category.name)}
-  className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
->
+                        key={index}
+                        onClick={() => handleCategoryClick(category.name)}
+                        className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                      >
                         <img
                           src={category.image}
                           alt={category.name}
