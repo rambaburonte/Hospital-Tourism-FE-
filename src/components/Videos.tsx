@@ -18,62 +18,67 @@ const VideoSection = () => {
   const [selectedVideo, setSelectedVideo] = useState(playlist[0]);
 
   return (
-    <div className="bg-blue-50 py-8 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
-        {/* Main Video */}
-        <div className="flex-1">
-          <div className="rounded-xl overflow-hidden shadow-lg aspect-video">
-            <iframe
-              className="w-full h-full"
-              src={`https://www.youtube.com/embed/${selectedVideo.videoId}?rel=0`}
-              title={selectedVideo.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+    <div className="bg-blue-50 py-6 px-3 md:px-6">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-900 mb-4">
+          Real Patients, Real Stories
+        </h1>
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Main Video */}
+          <div className="flex-1 lg:max-w-[calc(100%-20rem)]">
+            <div className="rounded-lg overflow-hidden shadow-md aspect-video">
+              <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/${selectedVideo.videoId}?rel=0`}
+                title={selectedVideo.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="mt-2">
+              <h2 className="text-lg font-bold text-blue-900 leading-tight">{selectedVideo.title}</h2>
+              <p className="text-[0.65rem] text-blue-600 mt-0.5">
+                {selectedVideo.doctor}, {selectedVideo.location} • {selectedVideo.date}
+              </p>
+            </div>
           </div>
-          <div className="mt-3">
-            <h2 className="text-xl font-bold text-blue-900 leading-tight">{selectedVideo.title}</h2>
-            <p className="text-xs text-blue-600 mt-1">
-              {selectedVideo.doctor}, {selectedVideo.location} • {selectedVideo.date}
-            </p>
-          </div>
-        </div>
 
-        {/* Playlist */}
-        <div className="w-full lg:w-80 aspect-video bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
-          <div className="flex justify-between items-center sticky top-0 bg-blue-50 z-10 px-3 py-2 border-b border-blue-100">
-            <h2 className="text-base font-semibold text-blue-900">Real Patients, Real Stories</h2>
-            <a href="/success-stories" className="text-blue-600 hover:underline text-xs">
-              View all
-            </a>
-          </div>
-          <div className="flex-1 overflow-y-auto custom-scroll px-3 py-1">
-            {playlist.map((video) => (
-              <div
-                key={video.id}
-                onClick={() => setSelectedVideo(video)}
-                onKeyDown={(e) => e.key === "Enter" && setSelectedVideo(video)}
-                tabIndex={0}
-                aria-label={`Select video: ${video.title}`}
-                className={`flex gap-2 p-2 rounded-lg cursor-pointer transition-all duration-150 hover:bg-blue-100 ${
-                  selectedVideo.id === video.id ? "bg-blue-200" : ""
-                }`}
-              >
-                <div className="relative w-20 h-12 rounded-md overflow-hidden">
-                  <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" />
-                  <FaPlayCircle
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
-                    size={20}
-                  />
+          {/* Playlist */}
+          <div className="w-full lg:w-80 aspect-video bg-white rounded-lg shadow-md overflow-hidden flex flex-col mt-4 lg:mt-0">
+            <div className="flex justify-between items-center sticky top-0 bg-blue-50 z-10 px-2 py-1.5 border-b border-blue-100">
+              <h2 className="text-sm font-semibold text-blue-900">More Stories</h2>
+              <a href="/success-stories" className="text-blue-600 hover:underline text-[0.65rem]">
+                View all
+              </a>
+            </div>
+            <div className="flex-1 overflow-y-auto custom-scroll px-2 py-0.5">
+              {playlist.map((video) => (
+                <div
+                  key={video.id}
+                  onClick={() => setSelectedVideo(video)}
+                  onKeyDown={(e) => e.key === "Enter" && setSelectedVideo(video)}
+                  tabIndex={0}
+                  aria-label={`Select video: ${video.title}`}
+                  className={`flex gap-1.5 p-1.5 rounded-md cursor-pointer transition-all duration-100 hover:bg-blue-100 hover:scale-[1.02] ${
+                    selectedVideo.id === video.id ? "bg-blue-200" : ""
+                  }`}
+                >
+                  <div className="relative w-20 h-11.25 rounded-md overflow-hidden border border-gray-200">
+                    <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" />
+                    <FaPlayCircle
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
+                      size={20}
+                    />
+                  </div>
+                  <div className="text-[0.65rem] flex-1">
+                    <h3 className="font-semibold leading-tight line-clamp-2">{video.title}</h3>
+                    <p className="text-gray-600 mt-0.5">{video.doctor}, {video.location}</p>
+                    <p className="text-gray-400">{video.date}</p>
+                  </div>
                 </div>
-                <div className="text-xs flex-1">
-                  <h3 className="font-semibold leading-tight line-clamp-2">{video.title}</h3>
-                  <p className="text-gray-600 mt-0.5">{video.doctor}, {video.location}</p>
-                  <p className="text-gray-400">{video.date}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -83,15 +88,15 @@ const VideoSection = () => {
           scroll-behavior: smooth;
         }
         .custom-scroll::-webkit-scrollbar {
-          width: 5px;
+          width: 4px;
         }
         .custom-scroll::-webkit-scrollbar-track {
           background: #e5e7eb;
-          border-radius: 8px;
+          border-radius: 6px;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
           background: #3b82f6;
-          border-radius: 8px;
+          border-radius: 6px;
         }
         .custom-scroll::-webkit-scrollbar-thumb:hover {
           background: #2563eb;
