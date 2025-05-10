@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const hospitals = [
   {
@@ -76,9 +77,11 @@ const HospitalNetworkSection = () => {
         </div>
         
         <div className="mt-8 text-center">
-          <Button className="bg-primary hover:bg-primary-dark">
-            View All Hospitals <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/HospitalList">
+  <Button className="bg-primary hover:bg-primary-dark">
+    View All Hospitals <ArrowRight className="ml-2 h-4 w-4" />
+  </Button>
+</Link>
         </div>
       </div>
     </section>
