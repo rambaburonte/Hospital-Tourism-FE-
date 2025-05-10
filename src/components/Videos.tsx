@@ -44,14 +44,14 @@ const VideoSection = () => {
                 <span>{selectedVideo.date}</span>
               </div>
               <div className="mt-4">
-                <a 
+                {/* <a 
                   href={`https://www.youtube.com/watch?v=${selectedVideo.videoId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm"
                 >
                   Watch on YouTube <FaExternalLinkAlt size={12} />
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
