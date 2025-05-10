@@ -626,11 +626,8 @@ import React, { useState } from 'react';
 import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
-
-
-
-
-
+import { FaSpa } from 'react-icons/fa'; // For Font Awesome Spa icon
+import { TbPhysotherapist } from 'react-icons/tb'; // For Tabler Physiotherapist icon
 
 const AppointmentSection = () => {
   // State for input fields
@@ -1014,7 +1011,7 @@ const AppointmentSection = () => {
   };
 
   const handleCategoryClick = (categoryName: string) => {
-    navigate(`/pharmacy?category=${encodeURIComponent(categoryName)}`);
+    navigate(`/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}`);
   };
 
   return (
@@ -1104,7 +1101,9 @@ const AppointmentSection = () => {
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <MapPin className="h-6 w-6 text-indigo-600" />
+                   <FaSpa className="h-6 w-6 text-indigo-600" />
+<TbPhysotherapist className="h-6 w-6 text-indigo-600" />
+
                   </div>
                   <p className="text-sm font-medium text-gray-800">Spa & Physiotherapy</p>
                 </div>
