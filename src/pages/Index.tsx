@@ -12,6 +12,8 @@ import AwardsSection from '@/components/AwardsSection';
 import TechnologySection from '@/components/TechnologySection';
 import TopTourPlans from '@/components/Tourplans';
 import Footer from '@/components/Footer';
+import VideoSection from '@/components/Videos';
+
 
 const Index = () => {
   return (
@@ -24,9 +26,11 @@ const Index = () => {
         <ExpertHelpSection />
         <TechnologySection />
         <HospitalNetworkSection />
+      
+        {/* <PatientStorySection /> */}
        
-        <PatientStorySection />
           <TopTourPlans/>
+            <VideoSection/>
         <HealthBlogsSection />
        
         <AwardsSection />
