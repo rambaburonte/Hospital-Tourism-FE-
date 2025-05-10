@@ -729,8 +729,6 @@
 
 
 
-// 
-
 
 // import React, { useEffect, useState, useCallback } from 'react';
 // import {
@@ -1483,7 +1481,19 @@
 
 
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+
+import  {  useRef } from "react";
 
 const medicalImages = [
   {
@@ -1531,55 +1541,72 @@ const HeroBanner = () => {
   }, []);
 
   return (
-    <section className="w-full min-h-screen bg-white text-gray-900 flex items-center justify-center">
-      <div className="w-full max-w-[1440px] grid grid-cols-1 md:grid-cols-2 min-h-screen">
-
-        {/* Left: Scrolling Large Images with Text */}
-        <div className="bg-gray-50 px-6 py-12 flex flex-col justify-center">
-          <h2 className="text-5xl font-bold mb-4 leading-tight">
-            Excellence in Healthcare
-          </h2>
-          <p className="text-xl text-gray-600 mb-10">
-            Providing comprehensive care with cutting-edge technology
-          </p>
-          <div
-            className="overflow-x-auto flex space-x-6 scrollbar-hide"
-            ref={scrollRef}
-          >
-            {medicalImages.map((img) => (
-              <div
-                key={img.id}
-                className="flex-shrink-0 w-[600px] h-[400px] rounded-xl overflow-hidden shadow-xl"
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+   <section className="w-full py-16 bg-gradient-to-br from-white to-gray-100">
+  <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-10 items-center">
+    
+    {/* Image Carousel */}
+    <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
+      <AspectRatio ratio={16 / 9}>
+        <Carousel className="w-full h-full" opts={{ loop: true, align: "start" }} setApi={setApi}>
+          <CarouselContent>
+            {bannerImages.map((image) => (
+              <CarouselItem key={image.id}>
+                <div className="relative w-full h-full overflow-hidden rounded-xl hover:scale-105 transition-transform duration-500 ease-in-out">
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover brightness-75 transition-transform duration-500 ease-in-out"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <div className="text-center text-white px-6 backdrop-blur-md">
+                      <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-3xl md:text-4xl font-bold leading-tight drop-shadow-md"
+                      >
+                        Excellence in Healthcare
+                      </motion.h2>
+                      <motion.p 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="mt-2 text-sm md:text-base"
+                      >
+                        Providing comprehensive care with cutting-edge technology
+                      </motion.p>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        className="mt-4 px-5 py-2 bg-white text-gray-800 rounded-md shadow-md hover:bg-gray-100 transition"
+                      >
+                        Learn More
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
             ))}
-          </div>
-        </div>
-
-        {/* Right: Video Section */}
-        <div className="bg-green-900 text-white flex flex-col justify-center px-6 py-12">
-          <h3 className="text-4xl font-bold mb-4">Explore Our Facilities</h3>
-          <p className="text-lg text-gray-300 mb-6">
-            A virtual tour of our advanced medical centers and technologies.
-          </p>
-          <div className="rounded-xl overflow-hidden shadow-2xl">
-            <video
-              src="https://www.w3schools.com/html/mov_bbb.mp4"
-              controls
-              autoPlay
-              loop
-              muted
-              className="w-full h-[400px] object-cover"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </AspectRatio>
+    </div>
+    {/* Video Section */}
+    <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
+      <AspectRatio ratio={16 / 10.5}>
+        <video
+          src="https://www.w3schools.com/html/mov_bbb.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover rounded-xl shadow-lg border border-gray-200"
+        />
+      </AspectRatio>
+    </div>
+  </div>
+</section>
   );
 };
 

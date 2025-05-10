@@ -16,6 +16,9 @@ import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
 import ContactUsPage from "./pages/cotactus";
+import ScrollToTop from "./ScrollToTop";
+import HospitalList from "./pages/HospitalList";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -24,20 +27,41 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+      <ScrollToTop />
         <Header />
-        <Routes>
+
+        {/* Apply top padding to avoid header overlap */}
+        <div className="pt-32">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />           
+            <Route path="/register" element={<Registor />} /> {/* Consider removing one */}
+            <Route path="/dashboard" element={<Userdashboard />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/specialities" element={<Specialities />} />
+            <Route path="/doctors" element={<AllDoctorsPage />} />
+            <Route path="/PatientProfile" element={<PatientProfile />} />
+            <Route path="/contact-us" element={<ContactUsPage />} />
+            <Route path="/hospital-list" element={<HospitalList />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+
+        {/* <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registor" element={<Registor />} />
           <Route path="/dashboard" element={<Userdashboard />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/specialities" element={<Specialities />} />
+          <Route path="/specialties" element={<Specialities />} />
           <Route path="/doctors" element={<AllDoctorsPage />} />
           <Route path="/PatientProfile" element={<PatientProfile/>}/>
           <Route path='/register' element={<Registor/>}/>
           <Route path="/ContactUsPage" element={<ContactUsPage/>}/>
-        </Routes>
+          <Route path="/HospitalList" element={<HospitalList/>}/>
+        </Routes> */}
+
         <Footer />
       </BrowserRouter>
     </TooltipProvider>
