@@ -717,6 +717,7 @@
 import React, { useState } from 'react';
 import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 
 
 const AppointmentSection = () => {
@@ -1083,6 +1084,13 @@ const AppointmentSection = () => {
       image: "https://images.unsplash.com/photo-1496412705862-e0088f16f791?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       route: "/pharmacy/health-food-drinks",
     },
+    {
+  name: "General Medicines",
+  description: "Over-the-counter and prescription medications for common ailments.",
+  image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+  route: "/pharmacy/general-medicines",
+}
+
   ];
 
   // Map services to their respective routes
@@ -1250,7 +1258,8 @@ const AppointmentSection = () => {
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Clock className="h-6 w-6 text-indigo-600" />
+                    <PaperAirplaneIcon className="h-6 w-6 text-indigo-600" />
+
                   </div>
                   <p className="text-sm font-medium text-gray-800">Translators</p>
                 </div>
