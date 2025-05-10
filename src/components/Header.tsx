@@ -522,7 +522,6 @@ const Header: React.FC = () => {
     { to: '/specialities', label: 'Specialties' },
     { to: '/OurHospitals', label: 'Our Hospitals' },
     { to: '/doctors', label: 'Doctors' },
-    { to: '/patient-care', label: 'Patient Care' },
     { to: '/about', label: 'About Us' },
   ];
 
@@ -598,7 +597,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-3">
             {!isMobile && (
               <div className="relative flex items-center border border-gray-300 dark:border-gray-600 rounded-full px-3 py-1.5 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md hover:border-green-300 dark:hover:border-green-700">
                 <Search className="h-4 w-4 text-gray-500 dark:text-gray-400" />
