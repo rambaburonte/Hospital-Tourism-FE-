@@ -17,7 +17,7 @@ import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
 import ContactUsPage from "./pages/cotactus";
 import ScrollToTop from "./ScrollToTop";
-import HospitalList from "./pages/HospitalList";
+import OurHospitals from "./pages/ourhospitals";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +41,8 @@ const App = () => (
             <Route path="/specialities" element={<Specialities />} />
             <Route path="/doctors" element={<AllDoctorsPage />} />
             <Route path="/PatientProfile" element={<PatientProfile />} />
-            <Route path="/contact-us" element={<ContactUsPage />} />
-            <Route path="/hospital-list" element={<HospitalList />} />
+            <Route path="/ContactUsPage" element={<ContactUsPage />} />
+            <Route path="/OurHospitals" element={<OurHospitals />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
