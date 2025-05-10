@@ -1,139 +1,220 @@
 import { useState } from "react";
-import { FaPlayCircle, FaExternalLinkAlt } from "react-icons/fa";
+import { Card, CardContent } from "@/components/ui/card";
+import { Globe, Mail, Phone, Briefcase, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-const playlist = [
-  { id: "1", title: "Zynlogic – Medical Travel & Patient Experience", doctor: "Zynlogic Healthcare Team", location: "India", date: "May 10, 2025", videoId: "_wAvp9E73Ac", thumbnail: "https://img.youtube.com/vi/_wAvp9E73Ac/hqdefault.jpg" },
-  { id: "2", title: "Mrs. Lakshmi's Recovery From High CO2 Levels", doctor: "Dr. Vivek Kumar Verma", location: "Dehradun", date: "May 1, 2025", videoId: "UOIgF9VPy8Y", thumbnail: "https://img.youtube.com/vi/UOIgF9VPy8Y/hqdefault.jpg" },
-  { id: "3", title: "Surgery for Ewing Sarcoma of Humerus", doctor: "Dr. Neeraj Godara", location: "Dwarka", date: "Apr 30, 2025", videoId: "NRCXdk-1pZg", thumbnail: "https://img.youtube.com/vi/NRCXdk-1pZg/hqdefault.jpg" },
-  { id: "4", title: "Advanced Spine Surgery Patient Testimonial", doctor: "Dr. Priya Sharma", location: "Hyderabad", date: "Apr 28, 2025", videoId: "jQIqmrvm_qo", thumbnail: "https://img.youtube.com/vi/jQIqmrvm_qo/hqdefault.jpg" },
-  { id: "5", title: "Knee Replacement Success Story", doctor: "Dr. Anil Mehta", location: "Mumbai", date: "Apr 26, 2025", videoId: "jvLea1g0NvU", thumbnail: "https://img.youtube.com/vi/jvLea1g0NvU/hqdefault.jpg" },
-  { id: "6", title: "Heart Valve Replacement – International Patient Review", doctor: "Dr. Ramesh Kumar", location: "Chennai", date: "Apr 24, 2025", videoId: "dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" },
-  { id: "7", title: "Pediatric Liver Transplant Recovery Story", doctor: "Dr. Sneha Patil", location: "Pune", date: "Apr 22, 2025", videoId: "z8r92htR6I4", thumbnail: "https://img.youtube.com/vi/z8r92htR6I4/hqdefault.jpg" },
-  { id: "8", title: "Medical Travel from Kenya – Patient Experience", doctor: "Global Coordination Team", location: "Delhi NCR", date: "Apr 20, 2025", videoId: "6hc5bTzIvCM", thumbnail: "https://img.youtube.com/vi/6hc5bTzIvCM/hqdefault.jpg" },
-  { id: "9", title: "Hip Surgery Testimonial by Elderly Patient", doctor: "Dr. Manish Bajaj", location: "Bangalore", date: "Apr 18, 2025", videoId: "vlDzYIIOYmM", thumbnail: "https://img.youtube.com/vi/vlDzYIIOYmM/hqdefault.jpg" },
-  { id: "10", title: "International Patient – Breast Cancer Treatment Journey", doctor: "Dr. Nandita Iyer", location: "Kolkata", date: "Apr 15, 2025", videoId: "tgbNymZ7vqY", thumbnail: "https://img.youtube.com/vi/tgbNymZ7vqY/hqdefault.jpg" },
+const translators = [
+  {
+    id: 1,
+    name: "Sofia Rodriguez",
+    languages: ["Spanish", "English"],
+    experience: { years: 8, specialization: "Medical Translation" },
+    email: "sofia.rodriguez@example.com",
+    phone: "+34 600 123 456",
+    country: "Spain",
+    avatar: "https://i.pravatar.cc/150?u=sofia",
+    rating: 4.8,
+  },
+  {
+    id: 2,
+    name: "Kenji Nakamura",
+    languages: ["Japanese", "English"],
+    experience: { years: 10, specialization: "Technical Translation" },
+    email: "kenji.nakamura@example.com",
+    phone: "+81 90 1234 5678",
+    country: "Japan",
+    avatar: "https://i.pravatar.cc/150?u=kenji",
+    rating: 4.9,
+  },
+  {
+    id: 3,
+    name: "Fatima Al-Mansour",
+    languages: ["Arabic", "French"],
+    experience: { years: 6, specialization: "Legal Translation" },
+    email: "fatima.mansour@example.com",
+    phone: "+971 50 987 6543",
+    country: "UAE",
+    avatar: "https://i.pravatar.cc/150?u=fatima",
+    rating: 4.7,
+  },
+  {
+    id: 4,
+    name: "Jean Dupont",
+    languages: ["French", "Spanish"],
+    experience: { years: 12, specialization: "Literary Translation" },
+    email: "jean.dupont@example.com",
+    phone: "+33 6 12 34 56 78",
+    country: "France",
+    avatar: "https://i.pravatar.cc/150?u=jean",
+    rating: 4.6,
+  },
+  {
+    id: 5,
+    name: "Liu Wei",
+    languages: ["Mandarin", "English"],
+    experience: { years: 9, specialization: "Business Translation" },
+    email: "liu.wei@example.com",
+    phone: "+86 138 0000 0000",
+    country: "China",
+    avatar: "https://i.pravatar.cc/150?u=liu",
+    rating: 4.8,
+  },
+  {
+    id: 6,
+    name: "Priya Sharma",
+    languages: ["Hindi", "English"],
+    experience: { years: 7, specialization: "Medical Translation" },
+    email: "priya.sharma@example.com",
+    phone: "+91 98765 43210",
+    country: "India",
+    avatar: "https://i.pravatar.cc/150?u=priya",
+    rating: 4.7,
+  },
 ];
 
-const VideoSection = () => {
-  const [selectedVideo, setSelectedVideo] = useState(playlist[0]);
+const TranslatorList = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState("All");
+
+  const filteredTranslators =
+    selectedLanguage === "All"
+      ? translators
+      : translators.filter((t) => t.languages.includes(selectedLanguage));
+
+  const languages = [
+    "All",
+    ...new Set(translators.flatMap((t) => t.languages)),
+  ].sort();
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <Star
+          key={i}
+          className={`h-4 w-4 ${
+            i <= Math.round(rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+          }`}
+        />
+      );
+    }
+    return stars;
+  };
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white py-8 px-4 md:px-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 py-12 px-6 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6 text-center">Patient Success Stories</h2>
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Main Video Player */}
-          <div className="flex-1">
-            <div className="rounded-lg overflow-hidden shadow-xl aspect-video bg-black">
-              <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/${selectedVideo.videoId}?rel=0&autoplay=1`}
-                title={selectedVideo.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="mt-4">
-              <h2 className="text-xl font-bold text-blue-900 leading-tight">{selectedVideo.title}</h2>
-              <div className="flex items-center gap-2 mt-2 text-sm text-blue-600">
-                <span>{selectedVideo.doctor}</span>
-                <span className="text-blue-300">•</span>
-                <span>{selectedVideo.location}</span>
-                <span className="text-blue-300">•</span>
-                <span>{selectedVideo.date}</span>
-              </div>
-              <div className="mt-4">
-                <a 
-                  href={`https://www.youtube.com/watch?v=${selectedVideo.videoId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm"
-                >
-                  Watch on YouTube <FaExternalLinkAlt size={12} />
-                </a>
-              </div>
-            </div>
-          </div>
+        <h1 className="text-3xl font-bold text-center text-blue-900 mb-10 tracking-tight">
+          Meet Our Expert Translators
+        </h1>
 
-          {/* Playlist Sidebar */}
-          <div className="w-full lg:w-96 bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center sticky top-0 bg-gradient-to-r from-blue-600 to-blue-500 z-10 px-4 py-3">
-              <h2 className="text-lg font-semibold text-white">More Patient Stories</h2>
-              <a 
-                href="/success-stories" 
-                className="text-white hover:text-blue-100 text-sm flex items-center gap-1"
-              >
-                View all <FaExternalLinkAlt size={10} />
-              </a>
-            </div>
-            <div className="flex-1 overflow-y-auto custom-scroll px-2 py-2">
-              {playlist.map((video) => (
-                <div
-                  key={video.id}
-                  onClick={() => setSelectedVideo(video)}
-                  onKeyDown={(e) => e.key === "Enter" && setSelectedVideo(video)}
-                  tabIndex={0}
-                  aria-label={`Select video: ${video.title}`}
-                  className={`flex gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-blue-50 mb-2 ${
-                    selectedVideo.id === video.id ? "bg-blue-100 border-l-4 border-blue-500" : ""
-                  }`}
-                >
-                  <div className="relative flex-shrink-0 w-24 h-14 rounded-md overflow-hidden">
-                    <img 
-                      src={video.thumbnail} 
-                      alt={video.title} 
-                      className="w-full h-full object-cover" 
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                      <FaPlayCircle
-                        className="text-white opacity-90 hover:opacity-100 transition-opacity"
-                        size={16}
-                      />
+        <div className="mb-8 flex justify-center">
+          <Select
+            onValueChange={setSelectedLanguage}
+            defaultValue="All"
+            aria-label="Filter by language"
+          >
+            <SelectTrigger className="w-full sm:w-64 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all focus:ring-2 focus:ring-blue-500">
+              <SelectValue placeholder="Select Language" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl shadow-lg bg-white">
+              {languages.map((lang) => (
+                <SelectItem key={lang} value={lang} className="hover:bg-blue-50">
+                  {lang}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredTranslators.map((translator, index) => (
+            <Card
+              key={translator.id}
+              className="shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-2xl transform hover:-translate-y-1"
+              style={{ animation: `fadeIn 0.3s ease-in ${index * 0.1}s both` }}
+            >
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={translator.avatar}
+                    alt={`${translator.name} avatar`}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-blue-100"
+                    onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+                  />
+                  <div>
+                    <h2 className="text-lg font-semibold text-blue-900">{translator.name}</h2>
+                    <p className="text-sm text-gray-600">{translator.country}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      {renderStars(translator.rating)}
+                      <span className="text-sm text-gray-500 ml-2">({translator.rating})</span>
                     </div>
-                    {selectedVideo.id === video.id && (
-                      <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1 rounded">
-                        Playing
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm leading-tight line-clamp-2 text-gray-800">
-                      {video.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 mt-1 truncate">
-                      {video.doctor}, {video.location}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">{video.date}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+                <div className="text-sm text-gray-700 flex flex-col gap-3">
+                  <p className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-blue-500" />
+                    {translator.languages.join(", ")}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Briefcase className="h-4 w-4 text-blue-500" />
+                    {translator.experience.years} years
+                    <span className="ml-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                      {translator.experience.specialization}
+                    </span>
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-blue-500" />
+                    {translator.email}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-blue-500" />
+                    {translator.phone}
+                  </p>
+                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="default"
+                        size="lg"
+                        className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-all rounded-lg"
+                        aria-label={`Contact ${translator.name}`}
+                      >
+                        Contact
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Contact {translator.name} for translation services</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
       <style jsx>{`
-        .custom-scroll {
-          scroll-behavior: smooth;
-        }
-        .custom-scroll::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-          background: #93c5fd;
-          border-radius: 10px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-          background: #60a5fa;
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>
   );
 };
 
-export default VideoSection;
+export default TranslatorList;

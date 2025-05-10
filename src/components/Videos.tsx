@@ -45,7 +45,7 @@ const VideoSection = () => {
           </div>
 
           {/* Playlist */}
-          <div className="w-full lg:w-80 aspect-video bg-white rounded-lg shadow-md overflow-hidden flex flex-col mt-4 lg:mt-0">
+          <div className="w-full lg:w-80 aspect-video bg-white rounded-lg shadow-md overflow-hidden flex flex-col mt-3 lg:mt-0">
             <div className="flex justify-between items-center sticky top-0 bg-blue-50 z-10 px-2 py-1.5 border-b border-blue-100">
               <h2 className="text-sm font-semibold text-blue-900">More Stories</h2>
               <a href="/success-stories" className="text-blue-600 hover:underline text-[0.65rem]">
