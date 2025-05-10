@@ -224,6 +224,7 @@ const serviceRoutes = {
   'Health Check': '/checkups',
 };
 
+
 const AppointmentSection = () => {
   const [selectedService, setSelectedService] = useState('');
 
