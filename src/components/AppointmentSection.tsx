@@ -1,4 +1,5 @@
 
+
 // import React from 'react';
 // import { Calendar, MapPin, Search, User, Phone } from 'lucide-react';
 // import { Button } from "@/components/ui/button";
@@ -712,6 +713,7 @@
 // export default AppointmentSection;
 
 
+
 import React, { useState } from 'react';
 import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -994,10 +996,56 @@ const AppointmentSection = () => {
         description: "Specializes in medical translations for pharmaceutical companies.",
       },
       {
+
         name: "Liu Wei",
         details: "Marketing & Advertising Translation, 8 years experience",
         image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         description: "Translates marketing materials to appeal to Chinese audiences.",
+      },
+      {
+        name: "Orthopedic Consultation",
+        details: "Max Hospital Hyderabad",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Schedule a bone and joint checkup with an orthopedist.",
+      },
+    ],
+    "Pharmacy": [
+      {
+        name: "Max Pharmacy Delhi",
+        details: "Delhi NCR, 24/7 service",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Order medicines with home delivery in Delhi NCR.",
+      },
+      {
+        name: "Max Pharmacy Mumbai",
+        details: "Mumbai, Maharashtra",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Reliable pharmacy services in Mumbai.",
+      },
+      {
+        name: "Max Pharmacy Pune",
+        details: "Pune, Maharashtra",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Get your prescriptions delivered in Pune.",
+      },
+      {
+        name: "Personalcare & skincare",
+        details: "Chennai, Tamil Nadu",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Pharmacy services with quick delivery in Chennai.",
+      },
+      {
+        name: " healthfood&drinks",
+        details: "Taking care of ur health",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "Order medicines online in Bangalore.",
+      },
+      {
+        name: "General medicine",
+        details: "Medicine at ur hand",
+        image: "https://images.unsplash.com/photo-1580281658626-ee379fecb6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+        description: "24/7 pharmacy support in Hyderabad.",
+
       },
     ],
     // Pharmacy service data is replaced by pharmacyCategories below
@@ -1041,11 +1089,11 @@ const AppointmentSection = () => {
   const serviceRoutes: Record<string, string> = {
     "Find a Doctor": "/doctors",
     "Book a Test": "/tests",
-    "Spa & Physiotherapy": "/spa-physiotherapy",
-    "Locate Hospital": "/hospitals",
+    "Spa & Physiotherapy": "/ServiceListingPage",
+    "Locate Hospital": "/OurHospitals",
     "Hotel Booking": "/hotels",
     "Travel Booking": "/travel",
-    "Appointment Booking": "/translators",
+    "Appointment Booking": "/translatorList",
     "Pharmacy": "/pharmacy",
   };
 
@@ -1234,10 +1282,10 @@ const AppointmentSection = () => {
                     // Display Pharmacy Categories
                     pharmacyCategories.map((category, index) => (
                       <div
-  key={index}
-  onClick={() => handleCategoryClick(category.name)}
-  className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
->
+                        key={index}
+                        onClick={() => handleCategoryClick(category.name)}
+                        className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                      >
                         <img
                           src={category.image}
                           alt={category.name}
@@ -1268,12 +1316,9 @@ const AppointmentSection = () => {
                 </div>
                 {/* Explore More Link */}
                 <div className="mt-8 text-center">
-                  <Link
-                    to={serviceRoutes[selectedService]}
-                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
-                  >
+                  <div>
                     Explore More
-                  </Link>
+                  </div>
                 </div>
               </div>
             )}

@@ -41,14 +41,14 @@ const Header: React.FC = () => {
             <Phone className="h-4 w-4 text-green-200" />
             <span>Emergency: 1800 XXX XXXX</span>
             <span>|</span>
-            <span className="cursor-pointer hover:text-green-200" onClick={() => navigate('/hospitals')}>
+            <span className="cursor-pointer hover:text-green-200" onClick={() => navigate('/OurHospitals')}>
               Locate a Hospital
             </span>
           </div>
           <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
             <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
             <span onClick={() => navigate('/blog')} className="cursor-pointer hover:text-green-200">Blog</span>
-            <span className="cursor-pointer hover:text-green-200">Doctor Login</span>
+            
           </div>
         </div>
       </div>

@@ -19,6 +19,8 @@ import ContactUsPage from "./pages/cotactus";
 import ScrollToTop from "./ScrollToTop";
 import OurHospitals from "./pages/ourhospitals";
 import PharmacyCategoryPage from "./components/pharmaMedicine";
+import TranslatorList from "./pages/TranslatorList";
+
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,7 @@ const App = () => (
         {/* Apply top padding to avoid header overlap */}
         <div className="pt-32">
           <Routes>
+
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />           
             <Route path="/register" element={<Registor />} /> {/* Consider removing one */}
@@ -44,6 +47,7 @@ const App = () => (
             <Route path="/PatientProfile" element={<PatientProfile />} />
             <Route path="/ContactUsPage" element={<ContactUsPage />} />
             <Route path="/OurHospitals" element={<OurHospitals />} />
+            <Route path="/translatorList" element={<TranslatorList/>} />
             <Route path="*" element={<NotFound />} />
             <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
           </Routes>
