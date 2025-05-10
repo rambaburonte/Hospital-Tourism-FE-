@@ -418,7 +418,8 @@ const AppointmentSection = () => {
                 </div>
               </div>
 
-              <div
+
+                 <div
                 onClick={() => handleServiceClick("Spa & Physiotherapy")}
                 className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
                   selectedService === "Spa & Physiotherapy" ? "border-indigo-500 bg-indigo-50" : ""
@@ -426,11 +427,12 @@ const AppointmentSection = () => {
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Phone className="h-6 w-6 text-indigo-600" />
+                    <MapPin className="h-6 w-6 text-indigo-600" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Spa & Physiotherapy</p>
                 </div>
               </div>
+              
 
               <div
                 onClick={() => handleServiceClick("Locate Hospital")}
