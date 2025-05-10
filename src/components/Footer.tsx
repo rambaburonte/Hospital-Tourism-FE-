@@ -100,7 +100,9 @@ const Footer = () => {
               <a href="#" className="text-xs hover:text-accent footer-link">Privacy Policy</a>
               <a href="#" className="text-xs hover:text-accent footer-link">Terms & Conditions</a>
               <a href="#" className="text-xs hover:text-accent footer-link">Sitemap</a>
+
             </div>
+            <p className="text-sm mb-4 md:mb-0">Developed by Zynlogic.</p>
           </div>
         </div>
       </div>
