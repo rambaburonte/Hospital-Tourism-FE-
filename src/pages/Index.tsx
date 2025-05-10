@@ -10,6 +10,7 @@ import PatientStorySection from '@/components/PatientStorySection';
 import HealthBlogsSection from '@/components/HealthBlogsSection';
 import AwardsSection from '@/components/AwardsSection';
 import TechnologySection from '@/components/TechnologySection';
+import TopTourPlans from '@/components/Tourplans';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -23,9 +24,13 @@ const Index = () => {
         <ExpertHelpSection />
         <TechnologySection />
         <HospitalNetworkSection />
+       
         <PatientStorySection />
+          <TopTourPlans/>
         <HealthBlogsSection />
+       
         <AwardsSection />
+      
       </main>
 
     </div>
