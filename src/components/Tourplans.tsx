@@ -170,13 +170,12 @@ const TopTourPlans = () => {
 
             <div className="mt-12 text-center">
               <Link
-  to="/tourpackages"
-  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
-  aria-label="Explore More"
->
-  Explore More
-</Link>
-
+                to="/tours"
+                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                aria-label="Explore More"
+              >
+                Explore More
+              </Link>
             </div>
           </div>
         </div>
