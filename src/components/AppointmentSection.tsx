@@ -328,7 +328,7 @@ const AppointmentSection = () => {
     "Find a Doctor": "/doctors",
     "Book a Test": "/tests",
     "Spa & Physiotherapy": "/ServiceListingPage",
-    "Locate Hospital": "/hospitals",
+    "Locate Hospital": "/OurHospitals",
     "Hotel Booking": "/hotels",
     "Travel Booking": "/travel",
     "Appointment Booking": "/appointments",
