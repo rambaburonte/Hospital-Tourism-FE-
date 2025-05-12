@@ -22,6 +22,7 @@ import PharmacyCategoryPage from "./components/pharmaMedicine";
 import TranslatorList from "./pages/TranslatorList";
 import ServiceListingPage from "./pages/SpaPhysiotherpy"
 import TourPlans from "./pages/Tourplans";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -50,9 +51,9 @@ const App = () => (
             <Route path="/translatorList" element={<TranslatorList/>} />
             <Route path="/ServiceListingPage" element={<ServiceListingPage/>}/>
             <Route path="*" element={<NotFound />} />
-            <Route path="/pharmacy" element={<PharmacyCategoryPage/>} />
+            <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
             <Route path="/tours" element={<TourPlans/>} />
-            
+        
           </Routes>
         </div>
 
