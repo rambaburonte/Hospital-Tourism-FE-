@@ -129,12 +129,12 @@ const Header: React.FC = () => {
             <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
               <span onClick={() => navigate('/blog')} className="cursor-pointer hover:text-green-200">Blog</span>
-               <span
+               {/* <span
                 onClick={handleRedirect}
                 className="cursor-pointer text-lg font-semibold text-gray-700 dark:text-gray-200"
               >
                  <FaRobot />
-              </span>
+              </span> */}
             </div>
           </div>
         </div>
