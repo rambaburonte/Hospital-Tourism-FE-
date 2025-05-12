@@ -1,5 +1,5 @@
-
-import React from 'react';
+// src/pages/Index.tsx
+import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import HeroBanner from '@/components/HeroBanner';
 import AppointmentSection from '@/components/AppointmentSection';
@@ -14,11 +14,22 @@ import TopTourPlans from '@/components/Tourplans';
 import Footer from '@/components/Footer';
 import VideoSection from '@/components/Videos';
 
-
 const Index = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://embed.tawk.to/6821a62df3613e190ca8896c/1ir1n28q5';
+    script.async = true;
+    script.charset = 'UTF-8';
+    script.setAttribute('crossorigin', '*');
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
-
       <main className="flex-grow">
         <HeroBanner />
         <AppointmentSection />
@@ -26,17 +37,13 @@ const Index = () => {
         <ExpertHelpSection />
         <TechnologySection />
         <HospitalNetworkSection />
-      
         {/* <PatientStorySection /> */}
-       
-          <TopTourPlans/>
-            <VideoSection/>
+        <TopTourPlans />
+        <VideoSection />
         <HealthBlogsSection />
-       
         <AwardsSection />
-      
       </main>
-
+      <Footer />
     </div>
   );
 };
