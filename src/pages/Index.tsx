@@ -43,7 +43,7 @@ const Index = () => {
         <HealthBlogsSection />
         <AwardsSection />
       </main>
-      <Footer />
+
     </div>
   );
 };
