@@ -43,7 +43,11 @@ const Index = () => {
         <HealthBlogsSection />
         <AwardsSection />
       </main>
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> b48ae0f6ee4f3757b712133997439714739c1e37
     </div>
   );
 };
