@@ -380,7 +380,7 @@ const AppointmentSection = () => {
     "Hotel Booking": "/hotels",
     "Travel Booking": "/travel",
     "Translators": "/translatorList", // Updated to reflect Translators
-    "Pharmacy": "/pharmacy",
+    "Pharmacy": "/PharmacyCategoryPage",
   };
 
   // Handle service card click
