@@ -1,3 +1,4 @@
+// src/pages/Index.tsx
 import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import HeroBanner from '@/components/HeroBanner';
@@ -16,13 +17,12 @@ import VideoSection from '@/components/Videos';
 const Index = () => {
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://embed.tawk.to/6821a62df3613e190ca8896c/1ir1n28q5'; // 🔁 Replace with your actual script URL
+    script.src = 'https://embed.tawk.to/6821a62df3613e190ca8896c/1ir1n28q5';
     script.async = true;
     script.charset = 'UTF-8';
     script.setAttribute('crossorigin', '*');
     document.body.appendChild(script);
 
-    // Optional: clean up the script on unmount
     return () => {
       document.body.removeChild(script);
     };
@@ -43,6 +43,7 @@ const Index = () => {
         <HealthBlogsSection />
         <AwardsSection />
       </main>
+      <Footer />
     </div>
   );
 };
