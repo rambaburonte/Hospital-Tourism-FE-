@@ -190,7 +190,10 @@ const PatientProfile: React.FC = () => {
     const newErrors: Partial<Record<keyof Patient, string>> = {};
     Object.keys(patient).forEach((key) => {
       if (key !== 'avatar' && key !== 'timestamp' && key !== 'prescriptions') {
-        newErrors[key as keyof Patient] = validateField(key as keyof Patient, patient[key as keyof Patient]);
+        const value = patient[key as keyof Patient];
+        if (typeof value === 'string') {
+          newErrors[key as keyof Patient] = validateField(key as keyof Patient, value);
+        }
       }
     });
     setErrors(newErrors);
@@ -208,13 +211,13 @@ const PatientProfile: React.FC = () => {
           <div className="flex flex-col items-center space-y-6">
             <div className="relative group">
               <img
-                className="w-40 h-40 rounded-full object-cover border-4 border-blue-500 dark:border-blue-400 shadow-lg transition-transform duration-300 group-hover:scale-105"
+                className="w-40 h-40 rounded-full object-cover border-4 border-[#499E14] dark:border-[#5cb91d] shadow-lg transition-transform duration-300 group-hover:scale-105"
                 src={patient.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(patient.name)}&size=150&background=0D8ABC&color=fff`}
                 alt="Patient avatar"
                 aria-label="Patient profile picture"
               />
               {editing && (
-                <label className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors duration-200">
+                <label className="absolute bottom-2 right-2 bg-[#499E14] text-white p-2 rounded-full cursor-pointer hover:bg-[#3a7e10] transition-colors duration-200">
                   <input
                     type="file"
                     accept="image/*"
@@ -251,7 +254,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.name}
                     onChange={handleChange}
                     placeholder="Enter full name"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                     aria-invalid={errors.name ? 'true' : 'false'}
                     aria-describedby={errors.name ? 'name-error' : undefined}
                   />
@@ -265,7 +268,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.email}
                     onChange={handleChange}
                     placeholder="Enter email"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                     aria-invalid={errors.email ? 'true' : 'false'}
                     aria-describedby={errors.email ? 'email-error' : undefined}
                   />
@@ -279,7 +282,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.phone}
                     onChange={handleChange}
                     placeholder="Enter phone number"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                     aria-invalid={errors.phone ? 'true' : 'false'}
                     aria-describedby={errors.phone ? 'phone-error' : undefined}
                   />
@@ -293,7 +296,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.dob}
                     onChange={handleChange}
                     placeholder="YYYY-MM-DD"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                     aria-invalid={errors.dob ? 'true' : 'false'}
                     aria-describedby={errors.dob ? 'dob-error' : undefined}
                   />
@@ -307,7 +310,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.bloodType}
                     onChange={handleChange}
                     placeholder="Enter blood type (e.g., O+)"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                   />
                 </div>
                 <div className="space-y-1">
@@ -318,7 +321,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.allergies}
                     onChange={handleChange}
                     placeholder="Enter allergies (if any)"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                   />
                 </div>
                 <div className="space-y-1 sm:col-span-2">
@@ -329,7 +332,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.medicalHistory}
                     onChange={handleChange}
                     placeholder="Enter medical history"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                     rows={4}
                   />
                 </div>
@@ -341,7 +344,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.emergencyContact}
                     onChange={handleChange}
                     placeholder="Enter emergency contact"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                     aria-invalid={errors.emergencyContact ? 'true' : 'false'}
                     aria-describedby={errors.emergencyContact ? 'emergencyContact-error' : undefined}
                   />
@@ -355,7 +358,7 @@ const PatientProfile: React.FC = () => {
                     value={patient.address}
                     onChange={handleChange}
                     placeholder="Enter address"
-                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-[#499E14] focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
@@ -364,7 +367,7 @@ const PatientProfile: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-600 dark:text-gray-200">
                   <div>
                     <p className="font-semibold text-gray-700 dark:text-gray-300">Email</p>
-                    <p><a href={`mailto:${patient.email}`} className="hover:underline text-blue-500 dark:text-blue-400">{patient.email}</a></p>
+                    <p><a href={`mailto:${patient.email}`} className="hover:underline text-[#499E14] dark:text-[#5cb91d]">{patient.email}</a></p>
                   </div>
                   <div>
                     <p className="font-semibold text-gray-700 dark:text-gray-300">Phone</p>
@@ -400,7 +403,7 @@ const PatientProfile: React.FC = () => {
 
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <button
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none shadow-md"
+                className="px-8 py-3 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635] focus:outline-none shadow-md"
                 onClick={() => setEditing(!editing)}
                 aria-label={editing ? 'Cancel editing' : 'Edit profile'}
               >
@@ -424,7 +427,7 @@ const PatientProfile: React.FC = () => {
                 type="checkbox"
                 checked={darkMode}
                 onChange={() => setDarkMode(!darkMode)}
-                className="w-5 h-5 accent-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-5 h-5 accent-[#499E14] rounded focus:ring-2 focus:ring-[#499E14]"
                 aria-label="Toggle dark mode"
               />
               <span className="text-sm">{darkMode ? 'Dark Mode' : 'Light Mode'}</span>
@@ -462,7 +465,7 @@ const PatientProfile: React.FC = () => {
                 type="file"
                 accept="image/png,image/jpeg,application/pdf"
                 onChange={handlePrescriptionUpload}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#499E14] file:text-white hover:file:bg-[#3a7e10]"
                 aria-label="Upload prescription file"
               />
               {fileError && <p className="text-red-500 text-xs mt-2">{fileError}</p>}
@@ -498,7 +501,7 @@ const PatientProfile: React.FC = () => {
                               href={prescription.fileUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline dark:text-blue-400"
+                              className="text-[#499E14] hover:underline dark:text-[#5cb91d]"
                               aria-label={`View ${prescription.fileName}`}
                             >
                               View PDF
@@ -550,9 +553,9 @@ const PatientProfile: React.FC = () => {
                 {patientHistory.map((history, index) => (
                   <div
                     key={index}
-                    className="relative bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md border-l-4 border-blue-500 dark:border-blue-400 animate-fade-in"
+                    className="relative bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md border-l-4 border-[#499E14] dark:border-[#5cb91d] animate-fade-in"
                   >
-                    <div className="absolute -left-2 top-6 w-4 h-4 bg-blue-500 dark:bg-blue-400 rounded-full" />
+                    <div className="absolute -left-2 top-6 w-4 h-4 bg-[#499E14] dark:bg-[#5cb91d] rounded-full" />
                     <div className="flex justify-between items-center">
                       <h3 className="text-lg font-medium text-gray-900 dark:text-white">Version {index + 1}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -579,7 +582,7 @@ const PatientProfile: React.FC = () => {
                                   href={p.fileUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-blue-500 hover:underline dark:text-blue-400"
+                                  className="text-[#499E14] hover:underline dark:text-[#5cb91d]"
                                 >
                                   {p.fileName}
                                 </a>{' '}

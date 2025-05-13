@@ -191,7 +191,7 @@ const HealthBlogsSection = () => {
             </h2>
             <button
               onClick={handleViewAll}
-              className="text-blue-600 font-medium hover:text-blue-800 flex items-center transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-[#499E14] font-medium hover:text-[#3a7e10] flex items-center transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#499E14]"
               aria-label="View all health blogs"
             >
               View All <ArrowRight className="ml-2 h-5 w-5" />
@@ -204,9 +204,9 @@ const HealthBlogsSection = () => {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-5 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 ${
                   selectedCategory === category
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                    ? 'bg-[#499E14] text-white shadow-md'
+                    : 'bg-gray-200 text-gray-700 hover:bg-[#f0f8e8] hover:text-[#499E14]'
+                } focus:outline-none focus:ring-2 focus:ring-[#499E14]`}
                 aria-label={`Filter by ${category}`}
               >
                 {category}
@@ -230,7 +230,7 @@ const HealthBlogsSection = () => {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" aria-hidden="true"></div>
-                  <span className="absolute top-4 left-4 bg-gradient-to-r from-blue-400 to-blue-600 text-white px-4 py-1.5 text-sm font-medium rounded-full shadow-sm">
+                  <span className="absolute top-4 left-4 bg-gradient-to-r from-[#5ab81a] to-[#499E14] text-white px-4 py-1.5 text-sm font-medium rounded-full shadow-sm">
                     {blog.category}
                   </span>
                 </div>
@@ -243,7 +243,7 @@ const HealthBlogsSection = () => {
                   </p>
                   <span
                     onClick={() => navigate('/blogs')}
-                    className="text-blue-600 text-sm md:text-base font-medium hover:text-blue-800 flex items-center cursor-pointer transition-colors duration-300"
+                    className="text-[#499E14] text-sm md:text-base font-medium hover:text-[#3a7e10] flex items-center cursor-pointer transition-colors duration-300"
                     aria-label={`Read more about ${blog.title}`}
                   >
                     Read More <ArrowRight className="ml-2 h-4 w-4" />

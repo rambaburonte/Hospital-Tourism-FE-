@@ -13,35 +13,35 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 203 100% 34%; /* #005bab - Max Healthcare Blue */
+    --primary: 93 76% 35%; /* #499E14 - Green */
     --primary-foreground: 0 0% 98%; /* Near-white for contrast */
 
-    --secondary: 184 100% 34%; /* #00a0b0 - Max Healthcare Teal */
+    --secondary: 93 76% 25%; /* Darker green for secondary */
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 203 40% 96%; /* Lighter blue for muted backgrounds */
+    --muted: 93 40% 96%; /* Lighter green for muted backgrounds */
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 184 60% 48%; /* Slightly lighter teal for accents */
+    --accent: 93 60% 48%; /* Slightly lighter green for accents */
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%; /* Keep red for errors */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 203 31.8% 91.4%; /* Light blue border */
-    --input: 203 31.8% 91.4%;
-    --ring: 203 100% 34%; /* Blue for focus rings */
+    --border: 93 31.8% 91.4%; /* Light green border */
+    --input: 93 31.8% 91.4%;
+    --ring: 93 76% 35%; /* Green for focus rings */
 
     --radius: 0.5rem;
 
-    --sidebar-background: 203 40% 98%; /* Light blue sidebar */
+    --sidebar-background: 93 40% 98%; /* Light green sidebar */
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 203 100% 34%; /* Blue for sidebar primary */
+    --sidebar-primary: 93 76% 35%; /* Green for sidebar primary */
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 184 40% 95%; /* Light teal accent */
-    --sidebar-accent-foreground: 184 100% 34%; /* Teal text */
-    --sidebar-border: 203 20% 91%;
-    --sidebar-ring: 203 100% 34%; /* Blue ring */
+    --sidebar-accent: 93 40% 95%; /* Light green accent */
+    --sidebar-accent-foreground: 93 76% 35%; /* Green text */
+    --sidebar-border: 93 20% 91%;
+    --sidebar-ring: 93 76% 35%; /* Green ring */
   }
 
   .dark {
@@ -54,33 +54,33 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 203 100% 34%; /* Blue in dark mode */
+    --primary: 93 76% 35%; /* Green in dark mode */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 184 100% 34%; /* Teal in dark mode */
+    --secondary: 93 76% 25%; /* Darker green in dark mode */
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 203 32.6% 17.5%; /* Darker blue muted */
+    --muted: 93 32.6% 17.5%; /* Darker green muted */
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 184 32.6% 17.5%; /* Darker teal accent */
+    --accent: 93 32.6% 17.5%; /* Darker green accent */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 203 32.6% 17.5%; /* Dark blue border */
-    --input: 203 32.6% 17.5%;
-    --ring: 203 100% 34%; /* Blue ring */
+    --border: 93 32.6% 17.5%; /* Dark green border */
+    --input: 93 32.6% 17.5%;
+    --ring: 93 76% 35%; /* Green ring */
 
-    --sidebar-background: 203 50% 10%; /* Dark blue sidebar */
+    --sidebar-background: 93 50% 10%; /* Dark green sidebar */
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 203 100% 34%; /* Blue */
+    --sidebar-primary: 93 76% 35%; /* Green */
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 184 40% 15%; /* Dark teal */
+    --sidebar-accent: 93 40% 15%; /* Dark green */
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 203 30% 15%;
-    --sidebar-ring: 203 100% 34%;
+    --sidebar-border: 93 30% 15%;
+    --sidebar-ring: 93 76% 35%;
   }
 }
 
@@ -95,27 +95,27 @@
   }
 }
 
-/* Retain Max Healthcare custom classes */
-.max-healthcare-blue {
-  color: #005bab;
+/* Custom color classes */
+.max-healthcare-green {
+  color: #499E14;
 }
 
 .max-healthcare-teal {
-  color: #00a0b0;
+  color: #3a7e10;
 }
 
-.max-healthcare-bg-blue {
-  background-color: #005bab;
+.max-healthcare-bg-green {
+  background-color: #499E14;
 }
 
 .max-healthcare-bg-teal {
-  background-color: #00a0b0;
+  background-color: #3a7e10;
 }
 
-.max-healthcare-bg-light-blue {
-  background-color: #f0f7fc;
+.max-healthcare-bg-light-green {
+  background-color: #f0f8e8;
 }
 
 .max-healthcare-bg-light-teal {
-  background-color: #e6f7f8;
+  background-color: #e6f4e0;
 }

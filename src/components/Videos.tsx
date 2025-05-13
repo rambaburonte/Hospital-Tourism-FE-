@@ -18,9 +18,9 @@
 //   const [selectedVideo, setSelectedVideo] = useState(playlist[0]);
 
 //   return (
-//     <div className="bg-gradient-to-b from-blue-50 to-white py-8 px-4 md:px-6">
+//     <div className="bg-gradient-to-b from-[#f0f8e8] to-white py-8 px-4 md:px-6">
 //       <div className="max-w-7xl mx-auto">
-//         <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6 text-center">Patient Success Stories</h2>
+//         <h2 className="text-2xl md:text-3xl font-bold text-[#3a7e10] mb-6 text-center">Patient Success Stories</h2>
 //         <div className="flex flex-col lg:flex-row gap-6 items-start">
 //           {/* Main Video Player */}
 //           <div className="flex-1 w-full">
@@ -35,12 +35,12 @@
 //               />
 //             </div>
 //             <div className="mt-4">
-//               <h2 className="text-xl font-bold text-blue-900 leading-tight">{selectedVideo.title}</h2>
-//               <div className="flex items-center gap-2 mt-2 text-sm text-blue-600">
+//               <h2 className="text-xl font-bold text-[#3a7e10] leading-tight">{selectedVideo.title}</h2>
+//               <div className="flex items-center gap-2 mt-2 text-sm text-[#499E14]">
 //                 <span>{selectedVideo.doctor}</span>
-//                 <span className="text-blue-300">•</span>
+//                 <span className="text-[#7bc74a]">•</span>
 //                 <span>{selectedVideo.location}</span>
-//                 <span className="text-blue-300">•</span>
+//                 <span className="text-[#7bc74a]">•</span>
 //                 <span>{selectedVideo.date}</span>
 //               </div>
 //               <div className="mt-4">
@@ -158,11 +158,11 @@ const VideoSection = () => {
   const [selectedVideo, setSelectedVideo] = useState(playlist[0]);
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-b from-[#f0f8e8] to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-8 text-center relative">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#3a7e10] mb-8 text-center relative">
           Patient Success Stories
-          <span className="absolute left-1/2 -translate-x-1/2 bottom-0 h-1 w-16 bg-blue-600 rounded"></span>
+          <span className="absolute left-1/2 -translate-x-1/2 bottom-0 h-1 w-16 bg-[#499E14] rounded"></span>
         </h2>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Video Player */}
@@ -180,14 +180,14 @@ const VideoSection = () => {
               </div>
             </div>
             <div className="mt-6">
-              <h3 className="text-2xl font-bold text-blue-900 leading-tight line-clamp-2">
+              <h3 className="text-2xl font-bold text-[#3a7e10] leading-tight line-clamp-2">
                 {selectedVideo.title}
               </h3>
-              <div className="flex flex-wrap items-center gap-2 mt-3 text-sm text-blue-600">
+              <div className="flex flex-wrap items-center gap-2 mt-3 text-sm text-[#499E14]">
                 <span>{selectedVideo.doctor}</span>
-                <span className="text-blue-300">•</span>
+                <span className="text-[#7bc74a]">•</span>
                 <span>{selectedVideo.location}</span>
-                <span className="text-blue-300">•</span>
+                <span className="text-[#7bc74a]">•</span>
                 <span>{selectedVideo.date}</span>
               </div>
               <div className="mt-4">
@@ -195,7 +195,7 @@ const VideoSection = () => {
                   href={`https://www.youtube.com/watch?v=${selectedVideo.videoId}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg font-medium text-sm transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#e8f5df] text-[#3a7e10] hover:bg-[#d5ebc3] rounded-lg font-medium text-sm transition-colors"
                   aria-label={`Watch ${selectedVideo.title} on YouTube`}
                 >
                   Watch on YouTube <FaExternalLinkAlt size={12} />
@@ -206,11 +206,11 @@ const VideoSection = () => {
 
           {/* Playlist Sidebar */}
           <div className="w-full lg:w-96 bg-white rounded-xl shadow-lg flex flex-col">
-            <div className="flex justify-between items-center sticky top-0 bg-gradient-to-r from-blue-600 to-blue-500 z-10 px-4 py-3 rounded-t-xl">
+            <div className="flex justify-between items-center sticky top-0 bg-gradient-to-r from-[#499E14] to-[#3a7e10] z-10 px-4 py-3 rounded-t-xl">
               <h3 className="text-lg font-semibold text-white">More Patient Stories</h3>
               <a
                 href="/success-stories"
-                className="text-white hover:text-blue-100 text-sm flex items-center gap-1"
+                className="text-white hover:text-[#e8f5df] text-sm flex items-center gap-1"
                 aria-label="View all success stories"
               >
                 View all <FaExternalLinkAlt size={10} />
@@ -226,8 +226,8 @@ const VideoSection = () => {
                   role="button"
                   aria-label={`Select video: ${video.title}`}
                   aria-selected={selectedVideo.id === video.id}
-                  className={`flex gap-4 p-4 cursor-pointer transition-all duration-200 hover:bg-blue-50 ${
-                    selectedVideo.id === video.id ? "bg-blue-100 border-l-4 border-blue-500" : ""
+                  className={`flex gap-4 p-4 cursor-pointer transition-all duration-200 hover:bg-[#f0f8e8] ${
+                    selectedVideo.id === video.id ? "bg-[#e8f5df] border-l-4 border-[#499E14]" : ""
                   } animate-fade-in`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -244,13 +244,13 @@ const VideoSection = () => {
                       />
                     </div>
                     {selectedVideo.id === video.id && (
-                      <div className="absolute top-1 left-1 bg-blue-600 text-white text-xs font-semibold px-1.5 py-0.5 rounded">
+                      <div className="absolute top-1 left-1 bg-[#499E14] text-white text-xs font-semibold px-1.5 py-0.5 rounded">
                         Playing
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-sm leading-tight line-clamp-2 text-gray-800 hover:text-blue-600 transition-colors">
+                    <h4 className="font-semibold text-sm leading-tight line-clamp-2 text-gray-800 hover:text-[#499E14] transition-colors">
                       {video.title}
                     </h4>
                     <p className="text-xs text-gray-600 mt-1 truncate">
@@ -264,6 +264,26 @@ const VideoSection = () => {
           </div>
         </div>
       </div>
+      <style>{`
+        .custom-scroll {
+          scroll-behavior: smooth;
+        }
+        .custom-scroll::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+          background: #a3e635;
+          border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+          background: #84cc16;
+        }
+      `}</style>
     </div>
   );
 };
