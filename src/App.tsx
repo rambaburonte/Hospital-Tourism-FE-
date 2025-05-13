@@ -15,7 +15,7 @@ import Specialities from "./pages/Specialities";
 import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
-import ContactUsPage from "./pages/cotactus";
+import ContactUsPage from "./pages/contactus";
 import ScrollToTop from "./ScrollToTop";
 import OurHospitals from "./pages/ourhospitals";
 import PharmacyCategoryPage from "./components/pharmaMedicine";
