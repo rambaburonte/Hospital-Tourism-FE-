@@ -409,7 +409,7 @@ const AppointmentSection = () => {
                   placeholder="Search for Doctor"
                   value={doctorSearch}
                   onChange={(e) => setDoctorSearch(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label="Search for a doctor"
                 />
               </div>
@@ -418,7 +418,7 @@ const AppointmentSection = () => {
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label="Choose a location"
                 >
                   <option value="">Choose Location</option>
@@ -433,7 +433,7 @@ const AppointmentSection = () => {
               <div className="flex justify-end">
                 <button
                   onClick={handleBookAppointment}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg w-full shadow-md transition-all duration-300"
+                  className="bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg w-full shadow-md transition-all duration-300"
                   aria-label="Book an appointment or translator"
                 >
                   Book an Appointment
@@ -444,13 +444,13 @@ const AppointmentSection = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mt-8">
               <div
                 onClick={() => handleServiceClick("Find a Doctor")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Find a Doctor" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Find a Doctor" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <User className="h-6 w-6 text-indigo-600" />
+                    <User className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Find a Doctor</p>
                 </div>
@@ -458,13 +458,13 @@ const AppointmentSection = () => {
 
               <div
                 onClick={() => handleServiceClick("Book a Test")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Book a Test" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Book a Test" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Calendar className="h-6 w-6 text-indigo-600" />
+                    <Calendar className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Book a Test</p>
                 </div>
@@ -473,14 +473,14 @@ const AppointmentSection = () => {
 
                  <div
                 onClick={() => handleServiceClick("Spa & Physiotherapy")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Spa & Physiotherapy" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Spa & Physiotherapy" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                   <FaSpa className="h-6 w-6 text-indigo-600" />
-<TbPhysotherapist className="h-6 w-6 text-indigo-600" />
+                   <FaSpa className="h-6 w-6 text-[#499E14]" />
+<TbPhysotherapist className="h-6 w-6 text-[#499E14]" />
 
                   </div>
                   <p className="text-sm font-medium text-gray-800">Spa & Physiotherapy</p>
@@ -490,13 +490,13 @@ const AppointmentSection = () => {
 
               <div
                 onClick={() => handleServiceClick("Locate Hospital")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Locate Hospital" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Locate Hospital" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <MapPin className="h-6 w-6 text-indigo-600" />
+                    <MapPin className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Locate Hospital</p>
                 </div>
@@ -504,13 +504,13 @@ const AppointmentSection = () => {
 
               <div
                 onClick={() => handleServiceClick("Hotel Booking")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Hotel Booking" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Hotel Booking" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Hotel className="h-6 w-6 text-indigo-600" />
+                    <Hotel className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Hotel Booking</p>
                 </div>
@@ -518,13 +518,13 @@ const AppointmentSection = () => {
 
               <div
                 onClick={() => handleServiceClick("Travel Booking")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Travel Booking" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Travel Booking" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Plane className="h-6 w-6 text-indigo-600" />
+                    <Plane className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Travel Booking</p>
                 </div>
@@ -532,13 +532,13 @@ const AppointmentSection = () => {
 
               <div
                 onClick={() => handleServiceClick("Translators")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Translators" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Translators" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <PaperAirplaneIcon className="h-6 w-6 text-indigo-600" />
+                    <PaperAirplaneIcon className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Translators</p>
                 </div>
@@ -546,13 +546,13 @@ const AppointmentSection = () => {
 
               <div
                 onClick={() => handleServiceClick("Pharmacy")}
-                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-indigo-500 transition-all duration-300 cursor-pointer ${
-                  selectedService === "Pharmacy" ? "border-indigo-500 bg-indigo-50" : ""
+                className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 cursor-pointer ${
+                  selectedService === "Pharmacy" ? "border-[#499E14] bg-[#f0f8e8]" : ""
                 }`}
               >
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="mb-2 bg-slate-100 p-3 rounded-full shadow-sm">
-                    <Pill className="h-6 w-6 text-indigo-600" />
+                    <Pill className="h-6 w-6 text-[#499E14]" />
                   </div>
                   <p className="text-sm font-medium text-gray-800">Pharmacy</p>
                 </div>
@@ -604,7 +604,7 @@ const AppointmentSection = () => {
                 <div className="mt-8 text-center">
                   <Link
                     to={serviceRoutes[selectedService]}
-                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                    className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
                   >
                     Explore More
                   </Link>

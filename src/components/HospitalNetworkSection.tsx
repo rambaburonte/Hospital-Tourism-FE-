@@ -34,7 +34,7 @@ const hospitals = [
 
 const HospitalNetworkSection = () => {
   return (
-    <section className="py-12 bg-blue-50">
+    <section className="py-12 bg-[#f0f8e8]">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">Our Hospital Network</h2>

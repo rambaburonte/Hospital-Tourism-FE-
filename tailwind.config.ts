@@ -1,5 +1,6 @@
 
 import type { Config } from "tailwindcss";
+import * as tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -21,17 +22,17 @@ export default {
 		extend: {
 			colors: {
 				primary: {
-					DEFAULT: '#005bab', // Healthcare blue
+					DEFAULT: '#499E14', // Healthcare green
 					foreground: '#FFFFFF',
-					light: '#0080c5',
-					dark: '#003b6f'
+					light: '#5cb91d',
+					dark: '#3a7e10'
 				},
 				secondary: {
-					DEFAULT: '#00a0b0', // Teal accent color
+					DEFAULT: '#3a7e10', // Darker green for secondary
 					foreground: '#FFFFFF'
 				},
 				accent: {
-					DEFAULT: '#2ec5ce', // Lighter teal for accents
+					DEFAULT: '#a3e635', // Light green for accents
 					foreground: '#FFFFFF'
 				},
 				success: {
@@ -99,5 +100,5 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [tailwindcssAnimate],
 } satisfies Config;

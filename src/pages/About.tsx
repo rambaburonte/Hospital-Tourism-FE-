@@ -10,22 +10,22 @@ const AboutPage: React.FC = () => {
     {
       title: 'Compassion',
       description: 'We prioritize empathy and care in every interaction, ensuring patients feel supported.',
-      icon: <FaHeartbeat className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaHeartbeat className="text-[#499E14] text-3xl mb-4" />,
     },
     {
       title: 'Integrity',
       description: 'Our services are built on trust, transparency, and ethical practices.',
-      icon: <FaShieldAlt className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaShieldAlt className="text-[#499E14] text-3xl mb-4" />,
     },
     {
       title: 'Collaboration',
       description: 'We work closely with healthcare providers and travel partners to deliver seamless experiences.',
-      icon: <FaHandsHelping className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaHandsHelping className="text-[#499E14] text-3xl mb-4" />,
     },
     {
       title: 'Community',
       description: 'We foster a sense of belonging, connecting patients and providers globally.',
-      icon: <FaUsers className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaUsers className="text-[#499E14] text-3xl mb-4" />,
     },
   ];
 
@@ -67,7 +67,7 @@ const AboutPage: React.FC = () => {
       
       <div className="bg-gray-50">
         {/* Hero Section with Stats */}
-        <section className="relative bg-gradient-to-r from-indigo-700 to-indigo-500 text-white py-16 px-6 lg:px-20">
+        <section className="relative bg-gradient-to-r from-[#3a7e10] to-[#499E14] text-white py-16 px-6 lg:px-20">
           <div className="absolute inset-0 bg-opacity-50 bg-black" style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1585435557343-3b092031a831?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=60')`,
             backgroundSize: 'cover',
@@ -150,7 +150,7 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* Chairman's Message */}
-        <section className="py-12 px-6 lg:px-20 bg-indigo-50">
+        <section className="py-12 px-6 lg:px-20 bg-[#f0f8e8]">
           <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8">
             <div className="lg:w-1/2">
               <img
@@ -222,7 +222,7 @@ const AboutPage: React.FC = () => {
             <h2 className="text-2xl font-semibold text-gray-800 text-center mb-10">Our Journey</h2>
             <div className="relative">
               {/* Timeline Line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-indigo-200" />
+              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#d0e8b8]" />
               {journey.map((milestone, index) => (
                 <div
                   key={index}
@@ -230,14 +230,14 @@ const AboutPage: React.FC = () => {
                 >
                   <div className="w-1/2 px-4">
                     <div className="bg-white p-4 rounded-lg shadow-md">
-                      <h3 className="text-lg font-semibold text-indigo-700">{milestone.year}</h3>
+                      <h3 className="text-lg font-semibold text-[#499E14]">{milestone.year}</h3>
                       <p className="text-gray-600">{milestone.event}</p>
                     </div>
                   </div>
                   <div className="w-1/2 px-4">
                     {/* Empty space for alternating layout */}
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-indigo-600 rounded-full" />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#499E14] rounded-full" />
                 </div>
               ))}
             </div>
