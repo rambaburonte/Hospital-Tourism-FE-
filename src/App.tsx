@@ -21,6 +21,10 @@ import OurHospitals from "./pages/ourhospitals";
 import PharmacyCategoryPage from "./components/pharmaMedicine";
 import TranslatorList from "./pages/TranslatorList";
 import ServiceListingPage from "./pages/SpaPhysiotherpy"
+import TourPlans from "./pages/Tourplans";
+import HealthBlogs from "./pages/HealthBlogs";
+import BlogDetail from "./pages/BlogDetail";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -49,25 +53,13 @@ const App = () => (
             <Route path="/translatorList" element={<TranslatorList/>} />
             <Route path="/ServiceListingPage" element={<ServiceListingPage/>}/>
             <Route path="*" element={<NotFound />} />
-            <Route path="/pharmacy" element={<PharmacyCategoryPage/>} />
+            <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
+            <Route path="/tours" element={<TourPlans/>} />
+            <Route path="/health-blogs" element={<HealthBlogs/>} />
+            <Route path="/blogs" element={<BlogDetail/>} />
+           
           </Routes>
         </div>
-
-        {/* <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registor" element={<Registor />} />
-          <Route path="/dashboard" element={<Userdashboard />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/specialties" element={<Specialities />} />
-          <Route path="/doctors" element={<AllDoctorsPage />} />
-          <Route path="/PatientProfile" element={<PatientProfile/>}/>
-          <Route path='/register' element={<Registor/>}/>
-          <Route path="/ContactUsPage" element={<ContactUsPage/>}/>
-          <Route path="/HospitalList" element={<HospitalList/>}/>
-        </Routes> */}
-
         <Footer />
       </BrowserRouter>
     </TooltipProvider>
