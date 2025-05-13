@@ -58,7 +58,7 @@ const ChatBot = () => {
   return (
     
     <div className="chatbot-container p-6 sm:p-8 rounded-xl shadow-sm bg-gray-50 max-w-2xl mx-auto font-inter">
-      <h2 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-4 text-center">
+      <h2 className="text-2xl sm:text-3xl font-bold text-[#3a7e10] mb-4 text-center">
       🩺 HealthCare Virtual Assistant
     </h2>
       <div
@@ -78,7 +78,7 @@ const ChatBot = () => {
             <span
               className={`px-4 py-2 rounded-xl border max-w-md transition-colors duration-200 hover:bg-opacity-80 ${
                 message.role === 'user'
-                  ? 'bg-blue-50 text-blue-900 border-blue-200'
+                  ? 'bg-[#f0f8e8] text-[#3a7e10] border-[#a3e635]'
                   : 'bg-gray-100 text-gray-900 border-gray-200'
               }`}
             >
@@ -90,7 +90,7 @@ const ChatBot = () => {
       <div className="chatbot-input flex items-center gap-4">
         <input
           type="text"
-          className="flex-1 p-3 border border-gray-200 rounded-full bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-shadow duration-200"
+          className="flex-1 p-3 border border-gray-200 rounded-full bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3e635] transition-shadow duration-200"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your message..."
@@ -98,7 +98,7 @@ const ChatBot = () => {
         />
         <button
           onClick={sendMessage}
-          className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 hover:brightness-105 shadow-sm active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="px-6 py-2 bg-[#499E14] text-white rounded-full hover:bg-[#3a7e10] hover:brightness-105 shadow-sm active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           aria-label="Send message"
         >
           Send

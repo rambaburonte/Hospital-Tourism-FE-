@@ -207,7 +207,7 @@ const ServiceListingPage = () => {
                   placeholder={uiTranslations.searchPlaceholder[selectedLanguage]}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label={uiTranslations.searchPlaceholder[selectedLanguage]}
                 />
               </div>
@@ -216,7 +216,7 @@ const ServiceListingPage = () => {
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label={uiTranslations.locationPlaceholder[selectedLanguage]}
                 >
                   <option value="">{uiTranslations.locationPlaceholder[selectedLanguage]}</option>
@@ -233,7 +233,7 @@ const ServiceListingPage = () => {
                 <select
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value as 'en' | 'es' | 'fr')}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label="Select language"
                 >
                   <option value="en">English</option>
@@ -253,7 +253,7 @@ const ServiceListingPage = () => {
                   id="sort"
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value as 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc')}
-                  className="mt-1 w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="mt-1 w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label={uiTranslations.sortLabel[selectedLanguage]}
                 >
                   <option value="name-asc">{selectedLanguage === 'en' ? 'Name (A-Z)' : selectedLanguage === 'es' ? 'Nombre (A-Z)' : 'Nom (A-Z)'}</option>
@@ -267,21 +267,21 @@ const ServiceListingPage = () => {
                 <div className="mt-1 flex gap-2">
                   <button
                     onClick={() => setCategoryFilter('All')}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'All' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-indigo-700 hover:text-white transition-all duration-300`}
+                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'All' ? 'bg-[#499E14] text-white' : 'bg-gray-200 text-gray-700'} hover:bg-[#3a7e10] hover:text-white transition-all duration-300`}
                     aria-pressed={categoryFilter === 'All'}
                   >
                     {selectedLanguage === 'en' ? 'All' : selectedLanguage === 'es' ? 'Todos' : 'Tous'}
                   </button>
                   <button
                     onClick={() => setCategoryFilter('Spa')}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'Spa' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-indigo-700 hover:text-white transition-all duration-300`}
+                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'Spa' ? 'bg-[#499E14] text-white' : 'bg-gray-200 text-gray-700'} hover:bg-[#3a7e10] hover:text-white transition-all duration-300`}
                     aria-pressed={categoryFilter === 'Spa'}
                   >
                     Spa
                   </button>
                   <button
                     onClick={() => setCategoryFilter('Physiotherapy')}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'Physiotherapy' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-indigo-700 hover:text-white transition-all duration-300`}
+                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'Physiotherapy' ? 'bg-[#499E14] text-white' : 'bg-gray-200 text-gray-700'} hover:bg-[#3a7e10] hover:text-white transition-all duration-300`}
                     aria-pressed={categoryFilter === 'Physiotherapy'}
                   >
                     {selectedLanguage === 'en' ? 'Physiotherapy' : selectedLanguage === 'es' ? 'Fisioterapia' : 'Physiothérapie'}
@@ -331,7 +331,7 @@ const ServiceListingPage = () => {
                   <p className="text-gray-800 font-semibold mb-4">${service.price.toFixed(2)}</p>
                   <Link
                     to={`/cart?service=${encodeURIComponent(selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr)}`}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-300"
+                    className="w-full bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-300"
                     aria-label={`${uiTranslations.addToCart[selectedLanguage]} ${selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr}`}
                   >
                     {uiTranslations.addToCart[selectedLanguage]}

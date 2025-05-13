@@ -159,7 +159,7 @@ const TopTourPlans = () => {
                   </p>
                   <Link
                     to={plan.route}
-                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
+                    className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
                     aria-label={`Book Now ${plan.name}`}
                   >
                     Book Now
@@ -171,7 +171,7 @@ const TopTourPlans = () => {
             <div className="mt-12 text-center">
               <Link
                 to="/tours"
-                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
                 aria-label="Explore More"
               >
                 Explore More

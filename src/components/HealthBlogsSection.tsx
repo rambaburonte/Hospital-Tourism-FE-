@@ -130,7 +130,7 @@ const HealthBlogsSection = () => {
                 <p className="text-sm text-gray-600 mb-4">{blog.excerpt}</p>
                <span
                                    onClick={() => navigate('/blogs')}
-                                   className="text-blue-600 text-sm font-medium hover:text-blue-800 flex items-center cursor-pointer transition-colors duration-200"
+                                   className="text-[#499E14] text-sm font-medium hover:text-[#3a7e10] flex items-center cursor-pointer transition-colors duration-200"
                                  >
                                    Read More <ArrowRight className="ml-1 h-4 w-4" />
                                  </span>

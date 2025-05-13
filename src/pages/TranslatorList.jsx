@@ -109,9 +109,9 @@ const TranslatorList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 py-12 px-6 sm:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#f0f8e8] to-gray-100 py-12 px-6 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-blue-900 mb-10 tracking-tight">
+        <h1 className="text-3xl font-bold text-center text-[#3a7e10] mb-10 tracking-tight">
           Meet Our Expert Translators
         </h1>
 
@@ -121,12 +121,12 @@ const TranslatorList = () => {
             defaultValue="All"
             aria-label="Filter by language"
           >
-            <SelectTrigger className="w-full sm:w-64 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all focus:ring-2 focus:ring-blue-500">
+            <SelectTrigger className="w-full sm:w-64 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all focus:ring-2 focus:ring-[#499E14]">
               <SelectValue placeholder="Select Language" />
             </SelectTrigger>
             <SelectContent className="rounded-xl shadow-lg bg-white">
               {languages.map((lang) => (
-                <SelectItem key={lang} value={lang} className="hover:bg-blue-50">
+                <SelectItem key={lang} value={lang} className="hover:bg-[#f0f8e8]">
                   {lang}
                 </SelectItem>
               ))}
@@ -146,11 +146,11 @@ const TranslatorList = () => {
                   <img
                     src={translator.avatar}
                     alt={`${translator.name} avatar`}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-blue-100"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-[#e6f4e0]"
                     onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
                   />
                   <div>
-                    <h2 className="text-lg font-semibold text-blue-900">{translator.name}</h2>
+                    <h2 className="text-lg font-semibold text-[#3a7e10]">{translator.name}</h2>
                     <p className="text-sm text-gray-600">{translator.country}</p>
                     <div className="flex items-center gap-1 mt-1">
                       {renderStars(translator.rating)}
@@ -160,22 +160,22 @@ const TranslatorList = () => {
                 </div>
                 <div className="text-sm text-gray-700 flex flex-col gap-3">
                   <p className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-blue-500" />
+                    <Globe className="h-4 w-4 text-[#499E14]" />
                     {translator.languages.join(", ")}
                   </p>
                   <p className="flex items-center gap-2">
-                    <Briefcase className="h-4 w-4 text-blue-500" />
+                    <Briefcase className="h-4 w-4 text-[#499E14]" />
                     {translator.experience.years} years
-                    <span className="ml-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                    <span className="ml-2 inline-block bg-[#e6f4e0] text-[#3a7e10] text-xs px-2 py-1 rounded-full">
                       {translator.experience.specialization}
                     </span>
                   </p>
                   <p className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-blue-500" />
+                    <Mail className="h-4 w-4 text-[#499E14]" />
                     {translator.email}
                   </p>
                   <p className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-blue-500" />
+                    <Phone className="h-4 w-4 text-[#499E14]" />
                     {translator.phone}
                   </p>
                 </div>
@@ -185,7 +185,7 @@ const TranslatorList = () => {
                       <Button
                         variant="default"
                         size="lg"
-                        className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-all rounded-lg"
+                        className="w-full bg-[#499E14] text-white hover:bg-[#3a7e10] transition-all rounded-lg"
                         aria-label={`Contact ${translator.name}`}
                       >
                         Contact

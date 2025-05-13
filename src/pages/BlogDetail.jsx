@@ -201,15 +201,15 @@ const BlogDetail = () => {
     <nav className="text-sm sm:text-base text-gray-600 mb-10 border-b border-gray-200 pb-4">
       <ol className="flex flex-wrap gap-4 items-center">
         <li>
-          <a href="/" className="hover:text-blue-500 transition-colors duration-300 font-medium">Home</a>
+          <a href="/" className="hover:text-[#499E14] transition-colors duration-300 font-medium">Home</a>
         </li>
         <li className="text-gray-400" aria-hidden="true">/</li>
         <li>
-          <a href="/health-blogs" className="hover:text-blue-500 transition-colors duration-300 font-medium">Blogs</a>
+          <a href="/health-blogs" className="hover:text-[#499E14] transition-colors duration-300 font-medium">Blogs</a>
         </li>
         <li className="text-gray-400" aria-hidden="true">/</li>
         <li>
-          <a href="#" className="hover:text-blue-500 transition-colors duration-300 font-medium">{blog.category}</a>
+          <a href="#" className="hover:text-[#499E14] transition-colors duration-300 font-medium">{blog.category}</a>
         </li>
         <li className="text-gray-400" aria-hidden="true">/</li>
         <li className="text-gray-700 font-semibold truncate max-w-md">{blog.title}</li>
@@ -226,7 +226,7 @@ const BlogDetail = () => {
     </div>
 
     {/* Call to Action Banner */}
-    <div className="bg-blue-50 p-6 sm:p-8 rounded-xl mb-12 flex flex-col md:flex-row justify-between items-center shadow-sm transition-transform duration-300 hover:scale-[1.02] hover:brightness-105">
+    <div className="bg-[#f0f8e8] p-6 sm:p-8 rounded-xl mb-12 flex flex-col md:flex-row justify-between items-center shadow-sm transition-transform duration-300 hover:scale-[1.02] hover:brightness-105">
       <div className="text-gray-700 mb-6 md:mb-0">
         <h3 className="text-xl font-semibold mb-2 tracking-tight">Book an Appointment</h3>
         <p className="text-gray-600 text-base">Contact our specialists today</p>
@@ -234,7 +234,7 @@ const BlogDetail = () => {
       </div>
       <a
         href="tel:+919268880303"
-        className="bg-white text-blue-500 px-8 py-3 rounded-full hover:bg-blue-100 hover:brightness-105 transition-colors duration-300 font-medium text-base flex items-center shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="bg-white text-[#499E14] px-8 py-3 rounded-full hover:bg-[#f0f8e8] hover:brightness-105 transition-colors duration-300 font-medium text-base flex items-center shadow-sm focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
         aria-label="Call to book an appointment"
       >
         📞 Call Now
@@ -250,7 +250,7 @@ const BlogDetail = () => {
         loading="lazy"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true"></div>
-      <span className="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 text-sm font-medium rounded-full shadow-sm">
+      <span className="absolute top-4 left-4 bg-[#499E14] text-white px-4 py-2 text-sm font-medium rounded-full shadow-sm">
         {blog.category}
       </span>
     </div>
@@ -269,7 +269,7 @@ const BlogDetail = () => {
           href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-blue-500 transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="text-gray-600 hover:text-[#499E14] transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           aria-label="Share on LinkedIn"
         >
           🔗
@@ -278,7 +278,7 @@ const BlogDetail = () => {
           href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-blue-500 transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="text-gray-600 hover:text-[#499E14] transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           aria-label="Share on Twitter"
         >
           🐦
@@ -287,7 +287,7 @@ const BlogDetail = () => {
           href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' ' + shareUrl)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-blue-500 transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="text-gray-600 hover:text-[#499E14] transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           aria-label="Share on WhatsApp"
         >
           📲
@@ -303,7 +303,7 @@ const BlogDetail = () => {
       </p>
       <a
         href="#"
-        className="mt-4 inline-block text-blue-500 hover:text-blue-600 font-medium text-base transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="mt-4 inline-block text-[#499E14] hover:text-[#3a7e10] font-medium text-base transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
         aria-label="Meet the doctor"
       >
         Meet the Doctor
@@ -318,7 +318,7 @@ const BlogDetail = () => {
           <a
             key={index}
             href="#"
-            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
             aria-label={`Read ${related.title}`}
           >
             <div className="relative h-64">
@@ -349,7 +349,7 @@ const BlogDetail = () => {
           <a
             key={index}
             href="#"
-            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
             aria-label={`Read ${blog.title}`}
           >
             <div className="relative h-64">
@@ -380,7 +380,7 @@ const BlogDetail = () => {
           <a
             key={index}
             href="#"
-            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
             aria-label={`Read ${blog.title}`}
           >
             <div className="relative h-64">
@@ -408,7 +408,7 @@ const BlogDetail = () => {
       <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Search for Doctor or Speciality</h2>
       <div className="flex flex-col md:flex-row gap-4">
         <select
-          className="flex-1 p-3 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="flex-1 p-3 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           disabled
           aria-label="Select Location"
         >
@@ -417,7 +417,7 @@ const BlogDetail = () => {
         <input
           type="text"
           placeholder="Enter Name*"
-          className="flex-1 p-3 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="flex-1 p-3 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           disabled
         />
         <div className="flex flex-1 items-center border border-gray-200 rounded-full p-3 bg-gray-50">
@@ -430,7 +430,7 @@ const BlogDetail = () => {
           />
         </div>
         <button
-          className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-600 hover:brightness-105 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="bg-[#499E14] text-white px-8 py-3 rounded-full hover:bg-[#3a7e10] hover:brightness-105 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
           disabled
           aria-label="Get a Call Back"
         >
@@ -438,10 +438,10 @@ const BlogDetail = () => {
         </button>
       </div>
       <p className="text-sm text-gray-600 mt-4">
-        I agree to the <a href="#" className="text-blue-500 hover:text-blue-600">terms and conditions</a>
+        I agree to the <a href="#" className="text-[#499E14] hover:text-[#3a7e10]">terms and conditions</a>
       </p>
       <p className="text-sm text-gray-600 mt-2">
-        Email: <a href="mailto:digitalquery@maxhealthcare.com" className="text-blue-500 hover:text-blue-600">digitalquery@maxhealthcare.com</a>
+        Email: <a href="mailto:digitalquery@maxhealthcare.com" className="text-[#499E14] hover:text-[#3a7e10]">digitalquery@maxhealthcare.com</a>
       </p>
     </div>
 
@@ -464,7 +464,7 @@ const BlogDetail = () => {
           'Complications of Kidney Transplant',
         ].map((title, index) => (
           <li key={index}>
-            <a href="#" className="text-base hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300">{title}</a>
+            <a href="#" className="text-base hover:text-[#3a7e10] transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-[#a3e635]">{title}</a>
           </li>
         ))}
       </ul>
@@ -496,7 +496,7 @@ const BlogDetail = () => {
           'Best Pulmonologists in Sector 19 Noida',
           'Best Allergy Specialists',
         ].map((location, index) => (
-          <a key={index} href="#" className="text-base hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300">
+          <a key={index} href="#" className="text-base hover:text-[#3a7e10] transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-[#a3e635]">
             {location}
           </a>
         ))}
@@ -507,7 +507,7 @@ const BlogDetail = () => {
     <div className="max-w-3xl mx-auto mt-12">
       <a
         href="/health-blogs"
-        className="text-blue-500 hover:text-blue-600 font-medium text-base flex items-center transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="text-[#499E14] hover:text-[#3a7e10] font-medium text-base flex items-center transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#a3e635]"
         aria-label="Back to Blogs"
       >
         ← Back to Blogs

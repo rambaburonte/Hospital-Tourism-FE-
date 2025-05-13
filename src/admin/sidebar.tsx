@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,14 +12,14 @@ const Sidebar: React.FC = () => {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const menuItems: MenuItem[] = [
-    { name: 'Dashboard', icon: 'fas fa-home', path: '/admindashboard' },
+    { name: 'Dashboard', icon: 'fas fa-home', path: '/admin/admindashboard' },
     { name: 'Users', icon: 'fas fa-users', path: '/users' },
     {
       name: 'Doctors',
       icon: 'fas fa-user-md',
       subItems: [
-        { name: 'Upload', path: '/doctors/upload' },
-        { name: 'View', path: '/doctors/viewdoctors' },
+        { name: 'Upload', path: '/admin/doctors/upload' },
+        { name: 'View', path: '/admin/doctors/viewdoctors' },
       ],
     },
     {
@@ -40,63 +39,60 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-green-800 text-white flex flex-col shadow-lg">
-      <div className="p-6 text-2xl font-bold border-b border-green-700">
+    <div className="fixed top-0 left-0 h-screen w-64 bg-green-50 text-green-800 border-r border-green-100 shadow-sm">
+      <div className="p-6 text-2xl font-bold border-b border-green-100 text-green-700">
         Admin Panel
       </div>
       <nav className="flex-1 overflow-y-auto">
         {menuItems.map((item) => (
-          <div key={item.name}>
+          <div key={item.name} className="border-b border-green-100">
             {item.subItems ? (
-              <div>
+              <>
                 <button
                   onClick={() => toggleSubMenu(item.name)}
-                  className="flex items-center w-full p-4 hover:bg-green-700 transition-colors"
+                  className="flex items-center w-full p-4 hover:bg-green-100 transition-all"
                 >
-                  <i className={`${item.icon} mr-3`}></i>
-                  <span>{item.name}</span>
+                  <i className={`${item.icon} mr-3 text-green-600`}></i>
+                  <span className="font-medium">{item.name}</span>
                   <i
                     className={`fas fa-chevron-${
                       openMenus[item.name] ? 'up' : 'down'
-                    } ml-auto`}
+                    } ml-auto text-sm text-green-500`}
                   ></i>
                 </button>
                 {openMenus[item.name] && (
-                  <div className="pl-8 bg-green-900">
+                  <div className="pl-8 bg-white border-t border-green-100">
                     {item.subItems.map((subItem) => (
                       <Link
                         key={subItem.name}
                         to={subItem.path}
-                        className="flex items-center p-3 hover:bg-green-700 transition-colors"
-                        onClick={() => console.log(`Navigating to ${subItem.name}`)}
+                        className="block py-2 px-4 text-sm text-green-700 hover:bg-green-100 rounded transition"
                       >
-                        <span>{subItem.name}</span>
+                        {subItem.name}
                       </Link>
                     ))}
                   </div>
                 )}
-              </div>
+              </>
             ) : (
               <Link
                 to={item.path!}
-                className="flex items-center p-4 hover:bg-green-700 transition-colors"
-                onClick={() => console.log(`Navigating to ${item.name}`)}
+                className="flex items-center p-4 hover:bg-green-100 transition-colors"
               >
-                <i className={`${item.icon} mr-3`}></i>
-                <span>{item.name}</span>
+                <i className={`${item.icon} mr-3 text-green-600`}></i>
+                <span className="font-medium">{item.name}</span>
               </Link>
             )}
           </div>
         ))}
       </nav>
-      <div className="p-4 border-t border-green-700">
+      <div className="p-4 border-t border-green-100">
         <Link
           to="/logout"
-          className="flex items-center p-3 hover:bg-green-700 transition-colors"
-          onClick={() => console.log('Logging out')}
+          className="flex items-center text-red-600 hover:text-red-800 transition-colors"
         >
           <i className="fas fa-sign-out-alt mr-3"></i>
-          <span>Logout</span>
+          <span className="font-medium">Logout</span>
         </Link>
       </div>
     </div>
