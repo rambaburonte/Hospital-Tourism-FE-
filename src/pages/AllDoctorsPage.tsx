@@ -270,7 +270,7 @@ const AllDoctorsPage: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-blue-100 via-gray-50 to-teal-100 py-10 px-4 sm:px-8 lg:px-20 font-inter"
+      className="min-h-screen bg-gradient-to-br from-[#e6f4e0] via-gray-50 to-[#f0f8e8] py-10 px-4 sm:px-8 lg:px-20 font-inter"
       data-testid="all-doctors-page"
     >
       {showFeedback && (
@@ -312,7 +312,7 @@ const AllDoctorsPage: React.FC = () => {
               placeholder="Name, specialization, hospital"
               defaultValue={searchTerm}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-10 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200 text-sm text-gray-800 placeholder-gray-500"
+              className="w-full pl-10 pr-10 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#499E14] transition-all duration-200 text-sm text-gray-800 placeholder-gray-500"
               aria-label="Search doctors"
               aria-describedby="search-label"
               data-testid="search-input"
@@ -356,7 +356,7 @@ const AllDoctorsPage: React.FC = () => {
               id="hospital"
               value={hospitalFilter}
               onChange={(e) => setHospitalFilter(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200 text-sm text-gray-800"
+              className="w-full rounded-lg border border-gray-300 p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#499E14] transition-all duration-200 text-sm text-gray-800"
               aria-label="Filter by hospital"
               aria-describedby="hospital-label"
               data-testid="hospital-filter"
@@ -372,7 +372,7 @@ const AllDoctorsPage: React.FC = () => {
         <div className="sm:hidden mb-2">
           <button
             onClick={toggleFilterPanel}
-            className="w-full bg-blue-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-800 transition-all duration-200 text-sm font-medium"
+            className="w-full bg-[#499E14] text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#3a7e10] transition-all duration-200 text-sm font-medium"
             aria-label={isFilterOpen ? 'Hide filters' : 'Show filters'}
             data-testid="toggle-filter-panel"
           >
@@ -410,7 +410,7 @@ const AllDoctorsPage: React.FC = () => {
                 onChange={(e) =>
                   setExperienceFilter(e.target.value as 'All' | '0-5 Years' | '5-10 Years' | '10+ Years')
                 }
-                className="w-full rounded-lg border border-gray-300 p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200 text-sm text-gray-800"
+                className="w-full rounded-lg border border-gray-300 p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#499E14] transition-all duration-200 text-sm text-gray-800"
                 aria-label="Filter by experience"
                 aria-describedby="experience-label"
                 data-testid="experience-filter"
@@ -427,7 +427,7 @@ const AllDoctorsPage: React.FC = () => {
                 onClick={() => setQuickFilter(quickFilter === 'top-rated' ? '' : 'top-rated')}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
                   quickFilter === 'top-rated'
-                    ? 'bg-blue-700 text-white'
+                    ? 'bg-[#499E14] text-white'
                     : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
                 }`}
                 aria-label="Filter top-rated doctors"
@@ -439,7 +439,7 @@ const AllDoctorsPage: React.FC = () => {
                 onClick={() => setQuickFilter(quickFilter === 'available-today' ? '' : 'available-today')}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
                   quickFilter === 'available-today'
-                    ? 'bg-blue-700 text-white'
+                    ? 'bg-[#499E14] text-white'
                     : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
                 }`}
                 aria-label="Filter doctors available today"
@@ -471,7 +471,7 @@ const AllDoctorsPage: React.FC = () => {
               experienceFilter !== 'All') && (
               <button
                 onClick={clearFilters}
-                className="text-blue-700 hover:text-blue-800 text-xs font-medium transition-colors duration-200"
+                className="text-[#499E14] hover:text-[#3a7e10] text-xs font-medium transition-colors duration-200"
                 aria-label="Clear all filters"
                 data-testid="clear-filters"
               >
@@ -510,7 +510,7 @@ const AllDoctorsPage: React.FC = () => {
               </p>
               <button
                 onClick={clearFilters}
-                className="mt-4 text-blue-700 hover:text-blue-800 text-sm font-medium underline"
+                className="mt-4 text-[#499E14] hover:text-[#3a7e10] text-sm font-medium underline"
                 aria-label="Clear all filters"
               >
                 Clear Filters and Try Again
@@ -526,7 +526,7 @@ const AllDoctorsPage: React.FC = () => {
                 className="mb-12"
                 data-testid={`hospital-section-${hospital}`}
               >
-                <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6 border-l-4 border-blue-600 pl-4">
+                <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6 border-l-4 border-[#499E14] pl-4">
                   {hospital}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -535,7 +535,7 @@ const AllDoctorsPage: React.FC = () => {
                       key={doctor.id}
                       whileHover={{ scale: 1.05, boxShadow: '0 12px 24px rgba(0,0,0,0.15)' }}
                       transition={{ duration: 0.3 }}
-                      className="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-blue-600 hover:border-blue-700 transition-all duration-300"
+                      className="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-[#499E14] hover:border-[#3a7e10] transition-all duration-300"
                       data-testid={`doctor-card-${doctor.id}`}
                     >
                       <div className="p-6 flex flex-col items-center text-center relative">
@@ -565,7 +565,7 @@ const AllDoctorsPage: React.FC = () => {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => openModal(doctor)}
-                            className="bg-blue-700 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition-all duration-300 shadow-sm text-sm font-medium"
+                            className="bg-[#499E14] text-white px-5 py-2 rounded-lg hover:bg-[#3a7e10] transition-all duration-300 shadow-sm text-sm font-medium"
                             aria-label={`View profile of ${doctor.name}`}
                             data-testid={`view-profile-${doctor.id}`}
                           >
@@ -625,7 +625,7 @@ const AllDoctorsPage: React.FC = () => {
               <span className="text-sm text-gray-600">{selectedDoctor.rating}</span>
             </div>
             <p className="text-sm text-gray-600 mt-3 flex items-center justify-center gap-2">
-              <FaMapMarkerAlt className="text-blue-600" /> {selectedDoctor.hospitalName}
+              <FaMapMarkerAlt className="text-[#499E14]" /> {selectedDoctor.hospitalName}
             </p>
             <p className="text-gray-700 mt-4 text-sm text-left leading-relaxed">{selectedDoctor.bio}</p>
             <p className="text-sm text-gray-600 mt-3">

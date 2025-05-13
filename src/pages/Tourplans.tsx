@@ -201,15 +201,15 @@ const TourPlans = () => {
 
   // Map categories to their respective icons
   const categoryIcons: Record<string, JSX.Element> = {
-    'Spa & Physiotherapy': <Heart className="h-5 w-5 text-indigo-600" />,
-    'Doctor Consultation': <Stethoscope className="h-5 w-5 text-indigo-600" />,
-    'Lab Testing': <TestTube className="h-5 w-5 text-indigo-600" />,
-    'Travel with Cab': <Car className="h-5 w-5 text-indigo-600" />,
-    'Chef-Curated Meals': <ChefHat className="h-5 w-5 text-indigo-600" />,
-    'Flight-Included Travel': <Plane className="h-5 w-5 text-indigo-600" />,
-    'End-to-End Care': <Package className="h-5 w-5 text-indigo-600" />,
-    'Flight-Free Wellness': <Heart className="h-5 w-5 text-indigo-600" />,
-    'Translator-Assisted Care': <Languages className="h-5 w-5 text-indigo-600" />,
+    'Spa & Physiotherapy': <Heart className="h-5 w-5 text-[#499E14]" />,
+    'Doctor Consultation': <Stethoscope className="h-5 w-5 text-[#499E14]" />,
+    'Lab Testing': <TestTube className="h-5 w-5 text-[#499E14]" />,
+    'Travel with Cab': <Car className="h-5 w-5 text-[#499E14]" />,
+    'Chef-Curated Meals': <ChefHat className="h-5 w-5 text-[#499E14]" />,
+    'Flight-Included Travel': <Plane className="h-5 w-5 text-[#499E14]" />,
+    'End-to-End Care': <Package className="h-5 w-5 text-[#499E14]" />,
+    'Flight-Free Wellness': <Heart className="h-5 w-5 text-[#499E14]" />,
+    'Translator-Assisted Care': <Languages className="h-5 w-5 text-[#499E14]" />,
   };
 
   // Available categories
@@ -273,7 +273,7 @@ const TourPlans = () => {
               <h2 className="text-xl font-semibold text-gray-800">Filters</h2>
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300"
+                className="p-2 rounded-lg bg-[#499E14] text-white hover:bg-[#3a7e10] transition-all duration-300"
                 aria-label={isFilterOpen ? 'Close filters' : 'Open filters'}
               >
                 {isFilterOpen ? <X className="h-5 w-5" /> : <Filter className="h-5 w-5" />}
@@ -290,7 +290,7 @@ const TourPlans = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search tour plans..."
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label="Search tour plans"
                 />
               </div>
@@ -303,7 +303,7 @@ const TourPlans = () => {
                   max="5000"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-[#499E14]"
                   aria-label="Price range filter"
                 />
                 
@@ -329,7 +329,7 @@ const TourPlans = () => {
                     onClick={() => setSelectedCategory(category)}
                     className={`flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm ${
                       selectedCategory === category
-                        ? 'bg-indigo-600 text-white'
+                        ? 'bg-[#499E14] text-white'
                         : 'bg-white text-gray-800 hover:bg-gray-100 hover:scale-105'
                     }`}
                     role="tab"
@@ -348,7 +348,7 @@ const TourPlans = () => {
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
-                className="p-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 hover:bg-gray-50"
+                className="p-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:bg-gray-50"
                 aria-label="Sort tour plans"
               >
                 <option value="popularity">Sort by Popularity</option>
@@ -370,7 +370,7 @@ const TourPlans = () => {
                   {filteredTourPlans.map((plan, index) => (
                     <div
                       key={index}
-                      className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-gradient-to-r from-indigo-100 to-purple-100"
+                      className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-gradient-to-r from-[#e6f4e0] to-[#f0f8e8]"
                       role="article"
                       aria-label={plan.name}
                     >
@@ -380,7 +380,7 @@ const TourPlans = () => {
                         className="w-full h-56 object-cover rounded-xl mb-4"
                       />
                       <div className="flex items-center mb-3">
-                        <div className="bg-indigo-50 p-2 rounded-full shadow-sm mr-3">
+                        <div className="bg-[#f0f8e8] p-2 rounded-full shadow-sm mr-3">
                           {categoryIcons[plan.category]}
                         </div>
                         <h4 className="text-xl font-semibold text-gray-800">{plan.name}</h4>
@@ -389,7 +389,7 @@ const TourPlans = () => {
                         {plan.inclusions.map((inclusion, i) => (
                           <span
                             key={i}
-                            className="inline-block bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full hover:bg-indigo-200 transition-all duration-200 cursor-default"
+                            className="inline-block bg-[#e6f4e0] text-[#3a7e10] text-xs px-3 py-1 rounded-full hover:bg-[#d0e8b8] transition-all duration-200 cursor-default"
                             title={inclusion}
                           >
                             {inclusion}

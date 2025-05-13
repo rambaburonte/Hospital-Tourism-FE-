@@ -16,7 +16,7 @@ export default function Userdashboard() {
             </h1>
             <button
               onClick={() => navigate('/PatientProfile')}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none shadow-md"
+              className="px-6 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635] focus:outline-none shadow-md"
               aria-label="View patient profile"
             >
               View Profile
@@ -32,13 +32,13 @@ export default function Userdashboard() {
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Recent Activity</h2>
               <ul className="text-gray-600 dark:text-gray-300 space-y-2">
                 <li className="flex items-center">
-                  <svg className="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-[#499E14] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Updated profile on May 8, 2025
                 </li>
                 <li className="flex items-center">
-                  <svg className="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-[#499E14] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Uploaded prescription on May 5, 2025
@@ -46,7 +46,7 @@ export default function Userdashboard() {
               </ul>
               <button
                 onClick={() => navigate('/activity')}
-                className="mt-4 text-blue-500 dark:text-blue-400 hover:underline focus:outline-none"
+                className="mt-4 text-[#499E14] dark:text-[#5cb91d] hover:underline focus:outline-none"
                 aria-label="View all activity"
               >
                 View All
@@ -59,7 +59,7 @@ export default function Userdashboard() {
               <p className="text-gray-600 dark:text-gray-300">Your account is fully verified and ready to use.</p>
               <button
                 onClick={() => navigate('/settings')}
-                className="mt-4 text-blue-500 dark:text-blue-400 hover:underline focus:outline-none"
+                className="mt-4 text-[#499E14] dark:text-[#5cb91d] hover:underline focus:outline-none"
                 aria-label="Manage account settings"
               >
                 Manage Settings
@@ -71,7 +71,7 @@ export default function Userdashboard() {
               <p className="text-gray-600 dark:text-gray-300 mb-4">Need assistance? Our team is here to help with any questions or issues.</p>
               <button
                 onClick={() => navigate('/support')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300"
+                className="px-4 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
                 aria-label="Contact support"
               >
                 Contact Support

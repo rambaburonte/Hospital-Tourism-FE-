@@ -6,6 +6,15 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { FaRobot } from 'react-icons/fa';
+
+// Add type declaration for gtag
+declare global {
+  interface Window {
+    gtag: (command: string, action: string, params?: any) => void;
+    dataLayer: any[];
+  }
+}
+
 const Header: React.FC = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -116,7 +125,7 @@ const Header: React.FC = () => {
         } border-b-2 border-green-200 dark:border-green-800`}
       >
         {/* Top Bar */}
-        <div className="bg-blue-600 py-2 px-4 sm:px-6 text-white dark:bg-blue-800">
+        <div className="bg-[#499E14] py-2 px-4 sm:px-6 text-white dark:bg-[#3a7e10]">
           <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
               <Phone className="h-4 w-4 text-green-200" />
@@ -152,7 +161,7 @@ const Header: React.FC = () => {
                   e.currentTarget.src = 'https://via.placeholder.com/40?text=Logo';
                 }}
               />
-              <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">MAX</span>
+              <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">MAX</span>
              
             </Link>
             
@@ -188,7 +197,7 @@ const Header: React.FC = () => {
             )}
 
             <Button
-              className="bg-blue-600 hover:bg-green-500 text-white rounded-lg shadow-md"
+              className="bg-[#499E14] hover:bg-green-500 text-white rounded-lg shadow-md"
               onClick={() => {
                 if (typeof window.gtag === 'function') {
                   window.gtag('event', 'button_click', {
@@ -205,7 +214,7 @@ const Header: React.FC = () => {
             {!isMobile && (
               <Button
                 variant="outline"
-                className="text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+                className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
                 onClick={() => {
                   if (typeof window.gtag === 'function') {
                     window.gtag('event', 'button_click', {
@@ -253,7 +262,7 @@ const Header: React.FC = () => {
               ))}
               <Button
                 variant="outline"
-                className="text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+                className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
                 onClick={() => {
                   if (typeof window.gtag === 'function') {
                     window.gtag('event', 'button_click', {
@@ -286,7 +295,7 @@ const Header: React.FC = () => {
           <div
             className="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl max-w-lg w-full sm:w-[90%] p-6 sm:p-8 transform transition-transform duration-300 animate-zoom-in overflow-hidden"
             style={{
-              backgroundImage: 'linear-gradient(to bottom, rgba(59, 130, 246, 0.7), rgba(34, 197, 94, 0.7)), url("https://images.unsplash.com/photo-1584982751601-97dcc096659c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80")',
+              backgroundImage: 'linear-gradient(to bottom, rgba(73, 158, 20, 0.7), rgba(58, 126, 16, 0.7)), url("https://images.unsplash.com/photo-1584982751601-97dcc096659c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               border: '4px solid rgba(255, 255, 255, 0.2)',
@@ -296,7 +305,7 @@ const Header: React.FC = () => {
             aria-describedby="popup-desc"
           >
             {/* Decorative Border */}
-            <div className="absolute inset-0 border-2 border-blue-200 dark:border-blue-800 rounded-3xl pointer-events-none" />
+            <div className="absolute inset-0 border-2 border-[#d0e8b8] dark:border-[#3a7e10] rounded-3xl pointer-events-none" />
 
             {/* Medical Cross Icon */}
             <div className="flex justify-center mb-4">
@@ -338,7 +347,7 @@ const Header: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={handleLearnMoreClick}
-                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl py-3 sm:py-2.5 text-base sm:text-lg hover:shadow-lg hover:scale-105 transition-all"
+                className="flex-1 bg-[#499E14] hover:bg-[#5ab81a] text-white font-bold rounded-xl py-3 sm:py-2.5 text-base sm:text-lg hover:shadow-lg hover:scale-105 transition-all"
               >
                 Learn More
               </Button>
@@ -355,5 +364,3 @@ const Header: React.FC = () => {
     </>
   );
 };
-
-export default Header;

@@ -688,7 +688,7 @@ const PharmacyCategoryPage = () => {
               <div className="mt-6 text-right">
                 <button
                   onClick={() => navigate('/checkout', { state: { items: cart } })}
-                  className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-xl flex items-center gap-2 transition-all"
+                  className="px-6 py-2 bg-gradient-to-r from-[#5cb91d] to-[#499E14] hover:from-[#4da919] hover:to-[#3a7e10] text-white font-semibold rounded-xl flex items-center gap-2 transition-all"
                   aria-label="Proceed to checkout"
                 >
                   <ShoppingCart className="h-5 w-5" />
