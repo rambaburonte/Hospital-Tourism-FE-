@@ -440,22 +440,22 @@ const AboutPage: React.FC = () => {
     {
       title: 'Compassion',
       description: 'We prioritize empathy and care in every interaction, ensuring patients feel supported.',
-      icon: <FaHeartbeat className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaHeartbeat className="text-[#499E14] text-3xl mb-4" />,
     },
     {
       title: 'Integrity',
       description: 'Our services are built on trust, transparency, and ethical practices.',
-      icon: <FaShieldAlt className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaShieldAlt className="text-[#499E14] text-3xl mb-4" />,
     },
     {
       title: 'Collaboration',
       description: 'We work closely with healthcare providers and travel partners to deliver seamless experiences.',
-      icon: <FaHandsHelping className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaHandsHelping className="text-[#499E14] text-3xl mb-4" />,
     },
     {
       title: 'Community',
       description: 'We foster a sense of belonging, connecting patients and providers globally.',
-      icon: <FaUsers className="text-indigo-600 text-3xl mb-4" />,
+      icon: <FaUsers className="text-[#499E14] text-3xl mb-4" />,
     },
   ];
 
