@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
-const ContactPage = () => {
+// EmailJS configuration
+const EMAILJS_SERVICE_ID = 'service_ggabkft'; // Use the same service ID as registration page
+const EMAILJS_PUBLIC_KEY = '88NBTKMwuUIobxI91'; // Use the same public key as registration page
+const EMAILJS_TEMPLATE_ID = 'template_ohbqnlj'; // Using the same template ID that works in registration
+
+const ContactUsPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+
+  // Initialize EmailJS when component mounts
+  useEffect(() => {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  }, []);
 
   // Email Validation
   const isValidEmail = (email: string) => {
@@ -15,64 +26,68 @@ const ContactPage = () => {
   };
 
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
+
+    // Validate inputs
+    if (!name.trim()) {
+      setFormError('Please enter your name');
+      toast.error('Please enter your name');
+      return;
+    }
 
     if (!isValidEmail(email)) {
+      setFormError('Please enter a valid email address');
       toast.error('Please enter a valid email address!');
+      return;
+    }
+
+    if (!message.trim()) {
+      setFormError('Please enter a message');
+      toast.error('Please enter a message');
       return;
     }
 
     setIsSubmitting(true);
 
-    // Template parameters for sending to admin
-    const templateParamsAdmin = {
-      name: name,
-      email: email,
+    // Template parameters for the email
+    const templateParams = {
+      to_name: name,
+      to_email: email,
+      from_name: 'Medical Website Team',
       message: message,
+      user_email: email,
+      user_name: name,
+      date: new Date().toLocaleDateString()
     };
 
-    // Template parameters for auto-reply to the user
-    const templateParamsUser = {
-      name: name,
-      email: email,
-      message: message,
-    };
-
-    // Send email to admin
-    emailjs
-      .send(
-        'service_z6168dd', // replace with your EmailJS service ID
-        'template_85xu5sd', // replace with your admin email template ID
-        templateParamsAdmin,
-        '6LcRFfl5dGNtZEXYw' // replace with your EmailJS public key
-      )
-      .then(
-        (response) => {
-          // Send auto-reply to user
-          emailjs
-            .send(
-              'service_z6168dd', // same service ID
-              'template_sqflvg7', // replace with your auto-reply template ID
-              templateParamsUser,
-              '6LcRFfl5dGNtZEXYw' // same public key
-            )
-            .then(
-              (response) => {
-                setIsSubmitting(false);
-                toast.success('Message sent successfully!');
-              },
-              (error) => {
-                setIsSubmitting(false);
-                toast.error('Failed to send auto-reply, please try again!');
-              }
-            );
-        },
-        (error) => {
-          setIsSubmitting(false);
-          toast.error('Failed to send message, please try again!');
-        }
+    try {
+      // Send email using the working template
+      console.log('Sending email with params:', templateParams);
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams
       );
+      
+      // Both emails sent successfully
+      toast.success('Message sent successfully!');
+      
+      // Reset form
+      setName('');
+      setEmail('');
+      setMessage('');
+      
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+      }
+      toast.error('Failed to send message, please try again!');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -80,6 +95,11 @@ const ContactPage = () => {
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">Contact Us</h1>
         <div className="bg-white rounded-lg shadow-md p-6">
+          {formError && (
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+              <p className="text-red-700">{formError}</p>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-gray-700 mb-2">Name</label>
@@ -127,4 +147,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage;
+export default ContactUsPage;

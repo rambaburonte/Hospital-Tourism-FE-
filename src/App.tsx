@@ -15,7 +15,7 @@ import Specialities from "./pages/Specialities";
 import Userdashboard from "./components/userspage/userboard";
 import AllDoctorsPage from "./pages/AllDoctorsPage";
 import PatientProfile from "./components/userspage/userprofile";
-import ContactUsPage from "./pages/cotactus";
+import ContactUsPage from "./pages/contactus";
 import ScrollToTop from "./ScrollToTop";
 import OurHospitals from "./pages/ourhospitals";
 import PharmacyCategoryPage from "./components/pharmaMedicine";
@@ -24,7 +24,6 @@ import ServiceListingPage from "./pages/SpaPhysiotherpy"
 import TourPlans from "./pages/Tourplans";
 import HealthBlogs from "./pages/HealthBlogs";
 import BlogDetail from "./pages/BlogDetail";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -57,7 +56,6 @@ const App = () => (
             <Route path="/tours" element={<TourPlans/>} />
             <Route path="/health-blogs" element={<HealthBlogs/>} />
             <Route path="/blogs" element={<BlogDetail/>} />
-           
           </Routes>
         </div>
         <Footer />

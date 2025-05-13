@@ -13,12 +13,15 @@ export default function Login() {
   };
 
   const handleSignUp = () => {
-    navigate("/register"); // Redirects to signup page
+    navigate("/register");
+  };
+
+  const handleAdminLogin = () => {
+    navigate("/admindashboard");
   };
 
   return (
     <>
-     
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
           <h2 className="text-2xl font-semibold text-center mb-6 text-blue-700">
@@ -65,10 +68,17 @@ export default function Login() {
                 Sign up
               </button>
             </div>
+            <div className="mt-4">
+              <button
+                onClick={handleAdminLogin}
+                className="text-sm text-purple-600 hover:underline"
+              >
+                Admin Login
+              </button>
+            </div>
           </div>
         </div>
       </div>
-     
     </>
   );
 }
