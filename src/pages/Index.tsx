@@ -1,6 +1,6 @@
 // src/pages/Index.tsx
 import React, { useEffect } from 'react';
-import Header from '@/components/Header';
+ 
 import HeroBanner from '@/components/HeroBanner';
 import AppointmentSection from '@/components/AppointmentSection';
 import SpecialtiesSection from '@/components/SpecialtiesSection';

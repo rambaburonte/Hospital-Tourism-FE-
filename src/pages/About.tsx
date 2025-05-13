@@ -430,8 +430,7 @@
 import React from 'react';
 import { FaHeartbeat, FaHandsHelping, FaShieldAlt, FaUsers } from 'react-icons/fa';
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
 
 const AboutPage: React.FC = () => {
   const primaryColor = "#499E14";
