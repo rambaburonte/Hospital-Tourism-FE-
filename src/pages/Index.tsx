@@ -14,6 +14,7 @@ import TopTourPlans from '@/components/Tourplans';
 import Footer from '@/components/Footer';
 import VideoSection from '@/components/Videos';
 
+
 const Index = () => {
   useEffect(() => {
     const script = document.createElement('script');
@@ -32,6 +33,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
         <HeroBanner />
+     
         <AppointmentSection />
         <SpecialtiesSection />
         <ExpertHelpSection />
