@@ -1,9 +1,9 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
 import NotFound from "./pages/NotFound";
 import Login from "./components/userspage/login";
 import Registor from "./components/userspage/registor";
@@ -33,14 +33,12 @@ const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admindashboard') || location.pathname.startsWith('/doctors/upload');
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <>
       {!isAdminRoute && <Header />}
-      <div className={isAdminRoute ? '' : 'pt-32'}>
-        {children}
-      </div>
+      <div className={isAdminRoute ? "" : "pt-32"}>{children}</div>
       {!isAdminRoute && <Footer />}
     </>
   );
@@ -67,22 +65,18 @@ const App = () => (
             <Route path="/OurHospitals" element={<OurHospitals />} />
             <Route path="/translatorList" element={<TranslatorList />} />
             <Route path="/ServiceListingPage" element={<ServiceListingPage />} />
-            <Route path="*" element={<NotFound />} />
-
-            {/* <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
-            <Route path="/tours" element={<TourPlans/>} />
-            <Route path="/health-blogs" element={<HealthBlogs/>} />
-            <Route path="/blogs" element={<BlogDetail/>} /> */}
-           
-            {/* Add more routes as needed */}
-
             <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage />} />
             <Route path="/tours" element={<TourPlans />} />
             <Route path="/health-blogs" element={<HealthBlogs />} />
             <Route path="/blogs" element={<BlogDetail />} />
+
+            {/* Admin routes */}
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
-             <Route path="admin/doctors/viewdoctors" element={<VIEWDOCTORS />} />
+            <Route path="/admin/doctors/viewdoctors" element={<VIEWDOCTORS />} />
+
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </BrowserRouter>
