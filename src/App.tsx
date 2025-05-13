@@ -27,6 +27,7 @@ import BlogDetail from "./pages/BlogDetail";
 import Admindashboard from "./admin/admindashboard";
 import Uploaddoctors from "./admin/uploadoctors";
 import VIEWDOCTORS from "./admin/viewdoctors";
+import Uploadhospials from "./admin/uploadhospitals";
 
 const queryClient = new QueryClient();
 
@@ -73,7 +74,11 @@ const App = () => (
             <Route path="/blogs" element={<BlogDetail />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
-             <Route path="admin/doctors/viewdoctors" element={<VIEWDOCTORS />} />
+            <Route path="admin/doctors/viewdoctors" element={<VIEWDOCTORS />} />
+            
+            <Route path="admin/doctors/uploaddoctors" element={< Uploaddoctors/>} />
+            <Route path="admin/uploadhospital" element={<Uploadhospials />} />
+
           </Routes>
         </Layout>
       </BrowserRouter>

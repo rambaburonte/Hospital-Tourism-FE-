@@ -1,6 +1,11 @@
 import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Sidebar from './sidebar';
+import UploadHospitals from './uploadhospitals'; // ✅ Make sure the import is correct
+
+
+
+
 
 // Dummy components for routes
 const DoctorUploadForm = () => <PlaceholderContent title="Upload Doctor" />;
@@ -91,7 +96,7 @@ const AdminDashboard: React.FC = () => {
         <Route path="/users" element={<PlaceholderContent title="Users" />} />
         <Route path="/doctors/upload" element={<DoctorUploadForm />} />
         <Route path="/doctors/view" element={<ViewDoctors />} />
-        <Route path="/services/hospital" element={<PlaceholderContent title="Hospital Services" />} />
+        <Route path="/admin/uploadhospital" element={<UploadHospitals />} />
         <Route path="/services/packages" element={<PlaceholderContent title="Packages" />} />
         <Route path="/orders" element={<PlaceholderContent title="Orders" />} />
         <Route path="/settings" element={<PlaceholderContent title="Settings" />} />

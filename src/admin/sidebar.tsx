@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+interface SubItem {
+  name: string;
+  path: string;
+}
+
 interface MenuItem {
   name: string;
   icon: string;
   path?: string;
-  subItems?: { name: string; path: string }[];
+  subItems?: SubItem[];
 }
 
 const Sidebar: React.FC = () => {
@@ -26,10 +31,11 @@ const Sidebar: React.FC = () => {
       name: 'Services',
       icon: 'fas fa-briefcase-medical',
       subItems: [
-        { name: 'Hospital', path: '/services/hospital' },
         { name: 'Packages', path: '/services/packages' },
       ],
     },
+   { name: 'Hospital', icon: 'fas fa-hospital', path: '/admin/uploadhospital' },
+
     { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/orders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/settings' },
   ];
@@ -75,13 +81,15 @@ const Sidebar: React.FC = () => {
                 )}
               </>
             ) : (
-              <Link
-                to={item.path!}
-                className="flex items-center p-4 hover:bg-green-100 transition-colors"
-              >
-                <i className={`${item.icon} mr-3 text-green-600`}></i>
-                <span className="font-medium">{item.name}</span>
-              </Link>
+              item.path && (
+                <Link
+                  to={item.path}
+                  className="flex items-center p-4 hover:bg-green-100 transition-colors"
+                >
+                  <i className={`${item.icon} mr-3 text-green-600`}></i>
+                  <span className="font-medium">{item.name}</span>
+                </Link>
+              )
             )}
           </div>
         ))}
