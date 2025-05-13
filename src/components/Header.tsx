@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
+import { FaRobot } from 'react-icons/fa';
 const Header: React.FC = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -90,7 +90,11 @@ const Header: React.FC = () => {
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
   ];
-
+ 
+  const handleRedirect = () => {
+    navigate('/chat-bot');
+  };
+ 
   return (
     <>
       {/* Google Analytics Script */}
@@ -125,6 +129,12 @@ const Header: React.FC = () => {
             <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
               <span onClick={() => navigate('/blog')} className="cursor-pointer hover:text-green-200">Blog</span>
+               {/* <span
+                onClick={handleRedirect}
+                className="cursor-pointer text-lg font-semibold text-gray-700 dark:text-gray-200"
+              >
+                 <FaRobot />
+              </span> */}
             </div>
           </div>
         </div>
@@ -143,7 +153,9 @@ const Header: React.FC = () => {
                 }}
               />
               <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">MAX</span>
+             
             </Link>
+            
 
             {/* Desktop Navigation */}
             {!isMobile && (
