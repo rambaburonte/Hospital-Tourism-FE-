@@ -32,7 +32,7 @@ const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admindashboard') || location.pathname.startsWith('/doctors/upload');
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <>
@@ -71,9 +71,9 @@ const App = () => (
             <Route path="/tours" element={<TourPlans />} />
             <Route path="/health-blogs" element={<HealthBlogs />} />
             <Route path="/blogs" element={<BlogDetail />} />
-            <Route path="/doctors/upload" element={<Uploaddoctors />} />
-            <Route path="/admindashboard" element={<Admindashboard />} />
-             <Route path="/doctors/viewdoctors" element={<VIEWDOCTORS />} />
+            <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
+            <Route path="/admin/admindashboard" element={<Admindashboard />} />
+             <Route path="admin/doctors/viewdoctors" element={<VIEWDOCTORS />} />
           </Routes>
         </Layout>
       </BrowserRouter>
