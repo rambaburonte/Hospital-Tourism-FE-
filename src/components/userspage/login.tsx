@@ -17,7 +17,7 @@ export default function Login() {
   };
 
   const handleAdminLogin = () => {
-    navigate("/admindashboard");
+    navigate("/admin/admindashboard");
   };
 
   return (

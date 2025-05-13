@@ -1,81 +1,101 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom'; // Assuming react-router-dom for navigation
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Sidebar from './sidebar';
 
-interface MenuItem {
-  name: string;
-  icon: string;
-  path: string;
-}
-
-const Sidebar: React.FC = () => {
-  const menuItems: MenuItem[] = [
-    { name: 'Dashboard', icon: 'fas fa-home', path: '/' },
-    { name: 'Users', icon: 'fas fa-users', path: '/users' },
-    { name: 'Products', icon: 'fas fa-box', path: '/products' },
-    { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/orders' },
-    { name: 'Settings', icon: 'fas fa-cog', path: '/settings' },
-  ];
-
-  return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-gray-800 text-white flex flex-col">
-      <div className="p-4 text-2xl font-bold border-b border-gray-700">
-        Admin Panel
-      </div>
-      <nav className="flex-1">
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.path}
-            className="flex items-center p-4 hover:bg-gray-700 transition-colors"
-            onClick={() => console.log(`Navigating to ${item.name}`)}
-          >
-            <i className={`${item.icon} mr-3`}></i>
-            <span>{item.name}</span>
-          </Link>
-        ))}
-      </nav>
-      <div className="p-4 border-t border-gray-700">
-        <Link
-          to="/logout"
-          className="flex items-center p-2 hover:bg-gray-700 transition-colors"
-          onClick={() => console.log('Logging out')}
-        >
-          <i className="fas fa-sign-out-alt mr-3"></i>
-          <span>Logout</span>
-        </Link>
-      </div>
-    </div>
-  );
-};
+// Dummy components for routes
+const DoctorUploadForm = () => <PlaceholderContent title="Upload Doctor" />;
+const ViewDoctors = () => <PlaceholderContent title="View Doctors" />;
 
 const DashboardContent: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="ml-64 p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Total Users</h2>
-          <p className="text-3xl">1,234</p>
+    <div className="flex-1 bg-green-50 min-h-screen">
+      <header className="bg-white text-green-700 p-4 flex justify-between items-center shadow ml-64 border-b border-green-100">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <i className="fas fa-user-circle text-xl text-green-600"></i>
+            <span className="text-sm font-semibold">Admin</span>
+          </div>
+          <button
+            onClick={() => navigate('/logout')}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition"
+          >
+            <i className="fas fa-sign-out-alt mr-2"></i>Logout
+          </button>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Total Products</h2>
-          <p className="text-3xl">567</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Total Orders</h2>
-          <p className="text-3xl">789</p>
+      </header>
+
+      <div className="p-8 ml-64">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-green-700 mb-6 text-center">Overview</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <DashboardCard
+              icon="fas fa-users"
+              title="Total Users"
+              count="1,234"
+            />
+            <DashboardCard
+              icon="fas fa-user-md"
+              title="Total Doctors"
+              count="56"
+            />
+            <DashboardCard
+              icon="fas fa-shopping-cart"
+              title="Total Orders"
+              count="789"
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+const DashboardCard: React.FC<{
+  icon: string;
+  title: string;
+  count: string;
+}> = ({ icon, title, count }) => (
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition transform hover:-translate-y-1">
+    <div className="flex items-center gap-4">
+      <i className={`${icon} text-3xl text-green-500`}></i>
+      <div>
+        <h3 className="text-lg font-semibold text-green-700">{title}</h3>
+        <p className="text-2xl text-green-600 font-bold">{count}</p>
+      </div>
+    </div>
+  </div>
+);
+
+const PlaceholderContent: React.FC<{ title: string }> = ({ title }) => (
+  <div className="flex-1 p-8 bg-green-50 min-h-screen ml-64">
+    <div className="flex justify-center mb-8">
+      <h1 className="text-4xl font-bold text-green-700">{title}</h1>
+    </div>
+    <div className="max-w-3xl mx-auto">
+      <p className="text-green-600">
+        This is a placeholder for the <strong>{title}</strong> page.
+      </p>
+    </div>
+  </div>
+);
 
 const AdminDashboard: React.FC = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <DashboardContent />
+      <Routes>
+        <Route path="/" element={<DashboardContent />} />
+        <Route path="/users" element={<PlaceholderContent title="Users" />} />
+        <Route path="/doctors/upload" element={<DoctorUploadForm />} />
+        <Route path="/doctors/view" element={<ViewDoctors />} />
+        <Route path="/services/hospital" element={<PlaceholderContent title="Hospital Services" />} />
+        <Route path="/services/packages" element={<PlaceholderContent title="Packages" />} />
+        <Route path="/orders" element={<PlaceholderContent title="Orders" />} />
+        <Route path="/settings" element={<PlaceholderContent title="Settings" />} />
+      </Routes>
     </div>
   );
 };
