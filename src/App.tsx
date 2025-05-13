@@ -1,9 +1,9 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import Login from "./components/userspage/login";
 import Registor from "./components/userspage/registor";
@@ -20,11 +20,30 @@ import ScrollToTop from "./ScrollToTop";
 import OurHospitals from "./pages/ourhospitals";
 import PharmacyCategoryPage from "./components/pharmaMedicine";
 import TranslatorList from "./pages/TranslatorList";
-import ServiceListingPage from "./pages/SpaPhysiotherpy"
+import ServiceListingPage from "./pages/SpaPhysiotherpy";
 import TourPlans from "./pages/Tourplans";
 import HealthBlogs from "./pages/HealthBlogs";
 import BlogDetail from "./pages/BlogDetail";
+import Admindashboard from "./admin/admindashboard";
+import Uploaddoctors from "./admin/uploadoctors";
+import VIEWDOCTORS from "./admin/viewdoctors";
+
 const queryClient = new QueryClient();
+
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admindashboard') || location.pathname.startsWith('/doctors/upload');
+
+  return (
+    <>
+      {!isAdminRoute && <Header />}
+      <div className={isAdminRoute ? '' : 'pt-32'}>
+        {children}
+      </div>
+      {!isAdminRoute && <Footer />}
+    </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -32,16 +51,12 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-      <ScrollToTop />
-        <Header />
-
-        {/* Apply top padding to avoid header overlap */}
-        <div className="pt-32">
+        <ScrollToTop />
+        <Layout>
           <Routes>
-
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<Login />} />           
-            <Route path="/register" element={<Registor />} /> {/* Consider removing one */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registor />} />
             <Route path="/dashboard" element={<Userdashboard />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/specialities" element={<Specialities />} />
@@ -49,16 +64,18 @@ const App = () => (
             <Route path="/PatientProfile" element={<PatientProfile />} />
             <Route path="/ContactUsPage" element={<ContactUsPage />} />
             <Route path="/OurHospitals" element={<OurHospitals />} />
-            <Route path="/translatorList" element={<TranslatorList/>} />
-            <Route path="/ServiceListingPage" element={<ServiceListingPage/>}/>
+            <Route path="/translatorList" element={<TranslatorList />} />
+            <Route path="/ServiceListingPage" element={<ServiceListingPage />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage/>} />
-            <Route path="/tours" element={<TourPlans/>} />
-            <Route path="/health-blogs" element={<HealthBlogs/>} />
-            <Route path="/blogs" element={<BlogDetail/>} />
+            <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage />} />
+            <Route path="/tours" element={<TourPlans />} />
+            <Route path="/health-blogs" element={<HealthBlogs />} />
+            <Route path="/blogs" element={<BlogDetail />} />
+            <Route path="/doctors/upload" element={<Uploaddoctors />} />
+            <Route path="/admindashboard" element={<Admindashboard />} />
+             <Route path="/doctors/viewdoctors" element={<VIEWDOCTORS />} />
           </Routes>
-        </div>
-        <Footer />
+        </Layout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
