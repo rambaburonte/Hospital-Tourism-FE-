@@ -16,7 +16,7 @@ const TopTourPlans = () => {
   // Sample tour plan data combining Travel Booking, Appointment Booking, and Spa & Physiotherapy
   const tourPlans: TourPlan[] = [
     {
-      name: "Delhi Medical Travel Package",
+      name: " Medical Travel Package",
       details: "Flight + Cardiology Checkup + Spa Therapy",
       image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       description: "Includes direct flight to Delhi, a cardiology checkup at Max Hospital, and a therapeutic massage for recovery.",
