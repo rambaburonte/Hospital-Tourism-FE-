@@ -195,326 +195,326 @@ const BlogDetail = () => {
   const shareTitle = blog.title;
 
   return (
-    <section className="py-32 bg-gray-100 min-h-screen font-inter">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12 max-w-6xl">
-        {/* Breadcrumb Navigation */}
-        <nav className="text-base text-gray-500 mb-12 border-b border-gray-200 pb-6">
-          <ol className="flex flex-wrap gap-6 items-center">
-            <li>
-              <a href="/" className="hover:text-indigo-600 transition-colors duration-300 font-medium">Home</a>
-            </li>
-            <li className="text-gray-400" aria-hidden="true">/</li>
-            <li>
-              <a href="/health-blogs" className="hover:text-indigo-600 transition-colors duration-300 font-medium">Blogs</a>
-            </li>
-            <li className="text-gray-400" aria-hidden="true">/</li>
-            <li>
-              <a href="#" className="hover:text-indigo-600 transition-colors duration-300 font-medium">{blog.category}</a>
-            </li>
-            <li className="text-gray-400" aria-hidden="true">/</li>
-            <li className="text-gray-800 font-semibold truncate max-w-md">{blog.title}</li>
-          </ol>
-        </nav>
+    <section className="py-24 bg-gray-50 min-h-screen font-inter">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+    {/* Breadcrumb Navigation */}
+    <nav className="text-sm sm:text-base text-gray-600 mb-10 border-b border-gray-200 pb-4">
+      <ol className="flex flex-wrap gap-4 items-center">
+        <li>
+          <a href="/" className="hover:text-blue-500 transition-colors duration-300 font-medium">Home</a>
+        </li>
+        <li className="text-gray-400" aria-hidden="true">/</li>
+        <li>
+          <a href="/health-blogs" className="hover:text-blue-500 transition-colors duration-300 font-medium">Blogs</a>
+        </li>
+        <li className="text-gray-400" aria-hidden="true">/</li>
+        <li>
+          <a href="#" className="hover:text-blue-500 transition-colors duration-300 font-medium">{blog.category}</a>
+        </li>
+        <li className="text-gray-400" aria-hidden="true">/</li>
+        <li className="text-gray-700 font-semibold truncate max-w-md">{blog.title}</li>
+      </ol>
+    </nav>
 
-        {/* Blog Header */}
-        <div className="mb-20">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-6 leading-tight tracking-tight">{blog.title}</h1>
-          <div className="flex flex-wrap gap-8 text-base text-gray-600">
-            <p>By <strong className="text-gray-800">{blog.author}</strong> in {blog.category}</p>
-            <p>{blog.date} • {blog.readTime}</p>
-          </div>
-        </div>
-
-        {/* Call to Action Banner */}
-         <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-8 md:p-10 rounded-3xl mb-20 flex flex-col md:flex-row justify-between items-center shadow-lg transition-transform duration-500 hover:scale-[1.03] hover:brightness-110">
-          <div className="text-gray-800 mb-8 md:mb-0">
-            <h3 className="text-2xl font-bold mb-3 tracking-tight">Book an Appointment</h3>
-            <p className="text-gray-600 text-lg">Contact our specialists today</p>
-            <p className="text-3xl font-extrabold tracking-tight">+91 926 888 0303</p>
-          </div>
-          <a
-            href="tel:+919268880303"
-            className="bg-blue-50 text-blue-600 px-12 py-4 rounded-full hover:bg-blue-100 hover:brightness-110 transition-colors duration-500 font-semibold text-lg flex items-center shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-            aria-label="Call to book an appointment"
-          >
-            📞 Call Now
-          </a>
-        </div>
-<br></br><br></br>
-        {/* Blog Image */}
-        <div className="relative h-96 md:h-[600px] mb-20 rounded-2xl overflow-hidden shadow-xl transition-transform duration-300 hover:scale-[1.01]">
-          <img
-            src={blog.image}
-            alt={blog.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" aria-hidden="true"></div>
-          <span className="absolute top-6 left-6 bg-indigo-600 text-white px-6 py-3 text-base font-semibold rounded-full shadow-lg">
-            {blog.category}
-          </span>
-        </div>
-<br></br>
-        {/* Blog Content */}
-        <div
-          className="max-w-3xl mx-auto prose prose-lg prose-gray"
-          dangerouslySetInnerHTML={{ __html: blog.fullDescription }}
-        />
-
-        {/* Share Section */}
-        <div className="max-w-3xl mx-auto mt-20 border-t border-gray-200 pt-10">
-          <h3 className="text-2xl font-extrabold text-gray-800 mb-6 tracking-tight">Share This Article</h3>
-          <div className="flex gap-10">
-            <a
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-4xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              aria-label="Share on LinkedIn"
-            >
-              🔗
-            </a>
-            <a
-              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-4xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              aria-label="Share on Twitter"
-            >
-              🐦
-            </a>
-            <a
-              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' ' + shareUrl)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-4xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              aria-label="Share on WhatsApp"
-            >
-              📲
-            </a>
-          </div>
-        </div>
-
-        {/* Author Section */}
-        <div className="max-w-3xl mx-auto mt-20 bg-white p-10 rounded-2xl shadow-md transition-transform duration-300 hover:scale-[1.02] border border-gray-200">
-          <h3 className="text-2xl font-extrabold text-gray-800 mb-4 tracking-tight">Written and Verified by</h3>
-          <p className="text-gray-600 text-lg">
-            <strong className="text-gray-800">{blog.author}</strong> • 17 Years Experience • Infertility & IVF
-          </p>
-          <a
-            href="#"
-            className="mt-6 inline-block text-indigo-600 hover:text-indigo-800 font-semibold text-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            aria-label="Meet the doctor"
-          >
-            Meet the Doctor
-          </a>
-        </div>
-
-        {/* Related Blogs */}
-        <div className="max-w-4xl mx-auto mt-24">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">Related Blogs</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {relatedBlogs.map((related, index) => (
-              <a
-                key={index}
-                href="#"
-                className="bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:scale-[1.05] hover:shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                aria-label={`Read ${related.title}`}
-              >
-                <div className="relative h-56">
-                  <img
-                    src={related.image}
-                    alt={related.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" aria-hidden="true"></div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3 line-clamp-2">{related.title}</h3>
-                  <p className="text-sm text-gray-600">
-                    By {related.author} • {related.category} • {related.readTime}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Blogs by Doctor */}
-        <div className="max-w-4xl mx-auto mt-24">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">Blogs by Doctor</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {blogsByDoctor.map((blog, index) => (
-              <a
-                key={index}
-                href="#"
-                className="bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:scale-[1.05] hover:shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                aria-label={`Read ${blog.title}`}
-              >
-                <div className="relative h-56">
-                  <img
-                    src={blog.image}
-                    alt={blog.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" aria-hidden="true"></div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3 line-clamp-2">{blog.title}</h3>
-                  <p className="text-sm text-gray-600">
-                    By {blog.author} • {blog.category} • {blog.readTime}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Most Read Blogs */}
-        <div className="max-w-4xl mx-auto mt-24">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">Most Read Blogs</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {mostReadBlogs.map((blog, index) => (
-              <a
-                key={index}
-                href="#"
-                className="bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:scale-[1.05] hover:shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                aria-label={`Read ${blog.title}`}
-              >
-                <div className="relative h-56">
-                  <img
-                    src={blog.image}
-                    alt={blog.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" aria-hidden="true"></div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3 line-clamp-2">{blog.title}</h3>
-                  <p className="text-sm text-gray-600">
-                    By {blog.author} • {blog.category} • {blog.readTime}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Search Form */}
-        <div className="max-w-3xl mx-auto mt-24 bg-white p-12 rounded-2xl shadow-md transition-transform duration-300 hover:scale-[1.02] border border-gray-200">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">Search for Doctor or Speciality</h2>
-          <div className="flex flex-col md:flex-row gap-6">
-            <select
-              className="flex-1 p-4 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              disabled
-              aria-label="Select Location"
-            >
-              <option>Select Location</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Enter Name*"
-              className="flex-1 p-4 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              disabled
-            />
-            <div className="flex flex-1 items-center border border-gray-200 rounded-full p-4 bg-gray-50">
-              <span className="px-4 text-gray-600 font-medium">+91</span>
-              <input
-                type="tel"
-                placeholder="Enter mobile number*"
-                className="flex-1 border-none outline-none bg-transparent text-gray-600 focus:ring-0"
-                disabled
-              />
-            </div>
-            <button
-              className="bg-indigo-600 text-white px-12 py-4 rounded-full hover:bg-indigo-700 hover:brightness-105 transition-colors duration-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              disabled
-              aria-label="Get a Call Back"
-            >
-              Get a Call Back
-            </button>
-          </div>
-          <p className="text-sm text-gray-600 mt-6">
-            I agree to the <a href="#" className="text-indigo-600 hover:underline">terms and conditions</a>
-          </p>
-          <p className="text-sm text-gray-600 mt-3">
-            Email: <a href="mailto:digitalquery@maxhealthcare.com" className="text-indigo-600 hover:underline">digitalquery@maxhealthcare.com</a>
-          </p>
-        </div>
-
-        {/* Other Blogs */}
-        <div className="max-w-3xl mx-auto mt-24">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">Other Blogs</h2>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-gray-600">
-            {[
-              'What is PET CT Scan',
-              'Newborn Care Essentials',
-              'Healing Through Ayurveda',
-              'Lung Cancer Causes',
-              'Tips for Managing Loose Motions',
-              'Gynecomastia Symptoms',
-              '7 Ways to Keep Your Heart Healthy',
-              'Cancer-Fighting Foods',
-              'Piles and Fissure Treatment',
-              'What is Leukemia',
-              'FAQs on Autism',
-              'Complications of Kidney Transplant',
-            ].map((title, index) => (
-              <li key={index}>
-                <a href="#" className="text-lg hover:text-indigo-600 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">{title}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Specialists in Location */}
-        <div className="max-w-3xl mx-auto mt-24">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">Specialists by Location</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-gray-600">
-            {[
-              'Best Pulmonologists in India',
-              'Best Pulmonologists in Ghaziabad',
-              'Best Pulmonologists in Shalimar Bagh',
-              'Best Pulmonologists in Saket',
-              'Best Pulmonologists in Patparganj',
-              'Best Pulmonologists in Mohali',
-              'Best Pulmonologists in Gurgaon',
-              'Best Pulmonologists in Dehradun',
-              'Best Pulmonologists in Panchsheel Park',
-              'Best Pulmonologists in Noida',
-              'Best Pulmonologists in Lajpat Nagar',
-              'Best Pulmonologists in Delhi',
-              'Best Pulmonologist in Nagpur',
-              'Best Pulmonologist in Lucknow',
-              'Best Pulmonologists in Dwarka',
-              'Best Pulmonologist in Pusa Road',
-              'Best Pulmonologist in Vile Parle',
-              'Best Pulmonologists in Sector 128 Noida',
-              'Best Pulmonologists in Sector 19 Noida',
-              'Best Allergy Specialists',
-            ].map((location, index) => (
-              <a key={index} href="#" className="text-lg hover:text-indigo-600 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                {location}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Back to Blogs */}
-        <div className="max-w-3xl mx-auto mt-20">
-          <a
-            href="/health-blogs"
-            className="text-indigo-600 hover:text-indigo-800 font-semibold text-lg flex items-center transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            aria-label="Back to Blogs"
-          >
-            ← Back to Blogs
-          </a>
-        </div>
+    {/* Blog Header */}
+    <div className="mb-12">
+      <h1 className="text-3xl sm:text-4xl font-semibold text-gray-700 mb-4 leading-tight tracking-tight">{blog.title}</h1>
+      <div className="flex flex-wrap gap-6 text-sm sm:text-base text-gray-600">
+        <p>By <strong className="text-gray-700">{blog.author}</strong> in {blog.category}</p>
+        <p>{blog.date} • {blog.readTime}</p>
       </div>
-    </section>
+    </div>
+
+    {/* Call to Action Banner */}
+    <div className="bg-blue-50 p-6 sm:p-8 rounded-xl mb-12 flex flex-col md:flex-row justify-between items-center shadow-sm transition-transform duration-300 hover:scale-[1.02] hover:brightness-105">
+      <div className="text-gray-700 mb-6 md:mb-0">
+        <h3 className="text-xl font-semibold mb-2 tracking-tight">Book an Appointment</h3>
+        <p className="text-gray-600 text-base">Contact our specialists today</p>
+        <p className="text-2xl font-semibold tracking-tight">+91 926 888 0303</p>
+      </div>
+      <a
+        href="tel:+919268880303"
+        className="bg-white text-blue-500 px-8 py-3 rounded-full hover:bg-blue-100 hover:brightness-105 transition-colors duration-300 font-medium text-base flex items-center shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+        aria-label="Call to book an appointment"
+      >
+        📞 Call Now
+      </a>
+    </div>
+
+    {/* Blog Image */}
+    <div className="relative h-80 md:h-96 mb-12 rounded-xl overflow-hidden shadow-sm transition-transform duration-300 hover:scale-[1.01]">
+      <img
+        src={blog.image}
+        alt={blog.title}
+        className="w-full h-full object-cover"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true"></div>
+      <span className="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 text-sm font-medium rounded-full shadow-sm">
+        {blog.category}
+      </span>
+    </div>
+
+    {/* Blog Content */}
+    <div
+      className="max-w-3xl mx-auto prose prose-base prose-gray"
+      dangerouslySetInnerHTML={{ __html: blog.fullDescription }}
+    />
+
+    {/* Share Section */}
+    <div className="max-w-3xl mx-auto mt-12 border-t border-gray-200 pt-8">
+      <h3 className="text-xl font-semibold text-gray-700 mb-4 tracking-tight">Share This Article</h3>
+      <div className="flex gap-8">
+        <a
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-600 hover:text-blue-500 transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+          aria-label="Share on LinkedIn"
+        >
+          🔗
+        </a>
+        <a
+          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-600 hover:text-blue-500 transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+          aria-label="Share on Twitter"
+        >
+          🐦
+        </a>
+        <a
+          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' ' + shareUrl)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-600 hover:text-blue-500 transition-colors duration-300 text-3xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+          aria-label="Share on WhatsApp"
+        >
+          📲
+        </a>
+      </div>
+    </div>
+
+    {/* Author Section */}
+    <div className="max-w-3xl mx-auto mt-12 bg-white p-8 rounded-xl shadow-sm transition-transform duration-300 hover:scale-[1.02] border border-gray-100">
+      <h3 className="text-xl font-semibold text-gray-700 mb-3 tracking-tight">Written and Verified by</h3>
+      <p className="text-gray-600 text-base">
+        <strong className="text-gray-700">{blog.author}</strong> • 17 Years Experience • Infertility & IVF
+      </p>
+      <a
+        href="#"
+        className="mt-4 inline-block text-blue-500 hover:text-blue-600 font-medium text-base transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        aria-label="Meet the doctor"
+      >
+        Meet the Doctor
+      </a>
+    </div>
+
+    {/* Related Blogs */}
+    <div className="max-w-4xl mx-auto mt-16">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Related Blogs</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {relatedBlogs.map((related, index) => (
+          <a
+            key={index}
+            href="#"
+            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label={`Read ${related.title}`}
+          >
+            <div className="relative h-64">
+              <img
+                src={related.image}
+                alt={related.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true"></div>
+            </div>
+            <div className="p-5">
+              <h3 className="text-lg font-medium text-gray-700 mb-2 line-clamp-2">{related.title}</h3>
+              <p className="text-sm text-gray-600">
+                By {related.author} • {related.category} • {related.readTime}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    {/* Blogs by Doctor */}
+    <div className="max-w-4xl mx-auto mt-16">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Blogs by Doctor</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {blogsByDoctor.map((blog, index) => (
+          <a
+            key={index}
+            href="#"
+            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label={`Read ${blog.title}`}
+          >
+            <div className="relative h-64">
+              <img
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true"></div>
+            </div>
+            <div className="p-5">
+              <h3 className="text-lg font-medium text-gray-700 mb-2 line-clamp-2">{blog.title}</h3>
+              <p className="text-sm text-gray-600">
+                By {blog.author} • {blog.category} • {blog.readTime}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    {/* Most Read Blogs */}
+    <div className="max-w-4xl mx-auto mt-16">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Most Read Blogs</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {mostReadBlogs.map((blog, index) => (
+          <a
+            key={index}
+            href="#"
+            className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label={`Read ${blog.title}`}
+          >
+            <div className="relative h-64">
+              <img
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true"></div>
+            </div>
+            <div className="p-5">
+              <h3 className="text-lg font-medium text-gray-700 mb-2 line-clamp-2">{blog.title}</h3>
+              <p className="text-sm text-gray-600">
+                By {blog.author} • {blog.category} • {blog.readTime}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+<div>{/** plese cretate the doctores banars and i need to scroll or marque */}</div>
+    {/* Search Form */}
+    <div className="max-w-3xl mx-auto mt-16 bg-white p-8 rounded-xl shadow-sm transition-transform duration-300 hover:scale-[1.02] border border-gray-100">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Search for Doctor or Speciality</h2>
+      <div className="flex flex-col md:flex-row gap-4">
+        <select
+          className="flex-1 p-3 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          disabled
+          aria-label="Select Location"
+        >
+          <option>Select Location</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Enter Name*"
+          className="flex-1 p-3 border border-gray-200 rounded-full bg-gray-50 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          disabled
+        />
+        <div className="flex flex-1 items-center border border-gray-200 rounded-full p-3 bg-gray-50">
+          <span className="px-3 text-gray-600 font-medium">+91</span>
+          <input
+            type="tel"
+            placeholder="Enter mobile number*"
+            className="flex-1 border-none outline-none bg-transparent text-gray-600 focus:ring-0"
+            disabled
+          />
+        </div>
+        <button
+          className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-600 hover:brightness-105 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
+          disabled
+          aria-label="Get a Call Back"
+        >
+          Get a Call Back
+        </button>
+      </div>
+      <p className="text-sm text-gray-600 mt-4">
+        I agree to the <a href="#" className="text-blue-500 hover:text-blue-600">terms and conditions</a>
+      </p>
+      <p className="text-sm text-gray-600 mt-2">
+        Email: <a href="mailto:digitalquery@maxhealthcare.com" className="text-blue-500 hover:text-blue-600">digitalquery@maxhealthcare.com</a>
+      </p>
+    </div>
+
+    {/* Other Blogs */}
+    <div className="max-w-3xl mx-auto mt-16">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Other Blogs</h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-600">
+        {[
+          'What is PET CT Scan',
+          'Newborn Care Essentials',
+          'Healing Through Ayurveda',
+          'Lung Cancer Causes',
+          'Tips for Managing Loose Motions',
+          'Gynecomastia Symptoms',
+          '7 Ways to Keep Your Heart Healthy',
+          'Cancer-Fighting Foods',
+          'Piles and Fissure Treatment',
+          'What is Leukemia',
+          'FAQs on Autism',
+          'Complications of Kidney Transplant',
+        ].map((title, index) => (
+          <li key={index}>
+            <a href="#" className="text-base hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300">{title}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Specialists in Location */}
+    <div className="max-w-3xl mx-auto mt-16">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 tracking-tight">Specialists by Location</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-600">
+        {[
+          'Best Pulmonologists in India',
+          'Best Pulmonologists in Ghaziabad',
+          'Best Pulmonologists in Shalimar Bagh',
+          'Best Pulmonologists in Saket',
+          'Best Pulmonologists in Patparganj',
+          'Best Pulmonologists in Mohali',
+          'Best Pulmonologists in Gurgaon',
+          'Best Pulmonologists in Dehradun',
+          'Best Pulmonologists in Panchsheel Park',
+          'Best Pulmonologists in Noida',
+          'Best Pulmonologists in Lajpat Nagar',
+          'Best Pulmonologists in Delhi',
+          'Best Pulmonologist in Nagpur',
+          'Best Pulmonologist in Lucknow',
+          'Best Pulmonologists in Dwarka',
+          'Best Pulmonologist in Pusa Road',
+          'Best Pulmonologist in Vile Parle',
+          'Best Pulmonologists in Sector 128 Noida',
+          'Best Pulmonologists in Sector 19 Noida',
+          'Best Allergy Specialists',
+        ].map((location, index) => (
+          <a key={index} href="#" className="text-base hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300">
+            {location}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    {/* Back to Blogs */}
+    <div className="max-w-3xl mx-auto mt-12">
+      <a
+        href="/health-blogs"
+        className="text-blue-500 hover:text-blue-600 font-medium text-base flex items-center transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        aria-label="Back to Blogs"
+      >
+        ← Back to Blogs
+      </a>
+    </div>
+  </div>
+</section>
   );
 };
 

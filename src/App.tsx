@@ -24,7 +24,6 @@ import ServiceListingPage from "./pages/SpaPhysiotherpy"
 import TourPlans from "./pages/Tourplans";
 import HealthBlogs from "./pages/HealthBlogs";
 import BlogDetail from "./pages/BlogDetail";
-import Admindashboard from "./admin/admindashboard";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -57,7 +56,6 @@ const App = () => (
             <Route path="/tours" element={<TourPlans/>} />
             <Route path="/health-blogs" element={<HealthBlogs/>} />
             <Route path="/blogs" element={<BlogDetail/>} />
-            <Route path="/admindashboard" element={<Admindashboard></Admindashboard>}/>
           </Routes>
         </div>
         <Footer />
