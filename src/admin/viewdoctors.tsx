@@ -1,5 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Sidebar from '@/admin/Sidebar';
+import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+import { ClipLoader } from 'react-spinners';
+import debounce from 'lodash.debounce';
 
 interface Doctor {
   id: number;
@@ -10,7 +16,7 @@ interface Doctor {
   description: string;
   location: string;
   hospital: string;
-  specialty: string; // Changed from department to specialty
+  specialty: string;
 }
 
 const mockDoctors: Doctor[] = [
@@ -106,41 +112,147 @@ const mockDoctors: Doctor[] = [
 
 const ViewDoctors: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchField, setSearchField] = useState<
-    'name' | 'location' | 'hospital' | 'specialty' | 'email' | 'mobileNum' | ''
-  >('');
-  const [sortField, setSortField] = useState<
-    'name' | 'specialty' | 'location' | 'hospital' | 'rating' | ''
-  >('');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [searchName, setSearchName] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
+  const [searchHospital, setSearchHospital] = useState('');
+  const [searchSpecialty, setSearchSpecialty] = useState('');
+  const [searchRating, setSearchRating] = useState('');
+  const [isDownloading, setIsDownloading] = useState<'csv' | 'pdf' | 'excel' | null>(null);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const downloadButtonRef = useRef<HTMLButtonElement>(null);
+  const downloadMenuRef = useRef<HTMLDivElement>(null);
+  const filterPanelRef = useRef<HTMLDivElement>(null);
+
+  // Debounced search handler
+  const debouncedSetSearchQuery = useMemo(
+    () => debounce((value: string) => setSearchQuery(value), 300),
+    []
+  );
+
+  // Handle clicks outside to close dropdowns and filter panel
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        downloadButtonRef.current &&
+        downloadMenuRef.current &&
+        !downloadButtonRef.current.contains(event.target as Node) &&
+        !downloadMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsDownloadOpen(false);
+      }
+      if (
+        filterPanelRef.current &&
+        !filterPanelRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest('button[aria-label="Toggle filter options"]')
+      ) {
+        setIsFilterOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Handle keyboard navigation for download dropdown
+  const handleKeyDown = (e: React.KeyboardEvent, format: 'csv' | 'pdf' | 'excel') => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (format === 'csv') downloadCSV();
+      if (format === 'pdf') downloadPDF();
+      if (format === 'excel') downloadExcel();
+      setIsDownloadOpen(false);
+    }
+  };
+
+  // Dynamic options for each search field
+  const searchOptions = useMemo(() => {
+    try {
+      const names = [...new Set(mockDoctors.map((doctor) => doctor.name))].sort();
+      const locations = [...new Set(mockDoctors.map((doctor) => doctor.location))].sort();
+      const hospitals = [...new Set(mockDoctors.map((doctor) => doctor.hospital))].sort();
+      const specialties = [...new Set(mockDoctors.map((doctor) => doctor.specialty))].sort();
+      const ratings = [
+        '5 Star (4.5-5.0)',
+        '4 Star (3.5-4.4)',
+        '3 Star (2.5-3.4)',
+        '2 Star (1.5-2.4)',
+        '1 Star (0-1.4)',
+      ];
+
+      return {
+        name: names,
+        location: locations,
+        hospital: hospitals,
+        specialty: specialties,
+        rating: ratings,
+      };
+    } catch (err) {
+      setError('Failed to generate search options');
+      return { name: [], location: [], hospital: [], specialty: [], rating: [] };
+    }
+  }, []);
 
   const filteredAndSortedDoctors = useMemo(() => {
-    let result = [...mockDoctors];
+    try {
+      let result = [...mockDoctors];
 
-    // Search by selected field
-    if (searchQuery && searchField) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter((doctor) =>
-        doctor[searchField].toLowerCase().includes(query)
-      );
-    }
+      // Apply free-text search
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        result = result.filter(
+          (doctor) =>
+            doctor.name.toLowerCase().includes(query) ||
+            doctor.specialty.toLowerCase().includes(query) ||
+            doctor.location.toLowerCase().includes(query) ||
+            doctor.hospital.toLowerCase().includes(query)
+        );
+      }
 
-    // Sort by selected field and order
-    if (sortField) {
-      result.sort((a, b) => {
-        if (sortField === 'rating') {
-          return sortOrder === 'asc' ? a.rating - b.rating : b.rating - a.rating;
+      // Apply dropdown filters
+      if (searchName) {
+        result = result.filter((doctor) =>
+          doctor.name.toLowerCase().includes(searchName.toLowerCase())
+        );
+      }
+      if (searchLocation) {
+        result = result.filter((doctor) =>
+          doctor.location.toLowerCase() === searchLocation.toLowerCase()
+        );
+      }
+      if (searchHospital) {
+        result = result.filter((doctor) =>
+          doctor.hospital.toLowerCase() === searchHospital.toLowerCase()
+        );
+      }
+      if (searchSpecialty) {
+        result = result.filter((doctor) =>
+          doctor.specialty.toLowerCase() === searchSpecialty.toLowerCase()
+        );
+      }
+      if (searchRating) {
+        const ratingRange = searchRating.match(/(\d) Star \(([\d.]+)-([\d.]+)\)/);
+        if (ratingRange) {
+          const [, , min, max] = ratingRange.map(Number);
+          result = result.filter(
+            (doctor) => doctor.rating >= min && doctor.rating <= max
+          );
         }
-        const valueA = a[sortField].toLowerCase();
-        const valueB = b[sortField].toLowerCase();
-        return sortOrder === 'asc'
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      });
-    }
+      }
 
-    return result;
-  }, [searchQuery, searchField, sortField, sortOrder]);
+      return result;
+    } catch (err) {
+      setError('Failed to filter doctors');
+      return [];
+    }
+  }, [
+    searchQuery,
+    searchName,
+    searchLocation,
+    searchHospital,
+    searchSpecialty,
+    searchRating,
+  ]);
 
   const averageRating = useMemo(() => {
     if (filteredAndSortedDoctors.length === 0) return 0;
@@ -148,163 +260,416 @@ const ViewDoctors: React.FC = () => {
     return (total / filteredAndSortedDoctors.length).toFixed(1);
   }, [filteredAndSortedDoctors]);
 
-  const handleSortChange = (field: 'name' | 'specialty' | 'location' | 'hospital' | 'rating' | '') => {
-    if (field === sortField) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSearchName('');
+    setSearchLocation('');
+    setSearchHospital('');
+    setSearchSpecialty('');
+    setSearchRating('');
+    setError(null);
+  };
+
+  // Download CSV
+  const downloadCSV = async () => {
+    try {
+      setIsDownloading('csv');
+      const data = filteredAndSortedDoctors.map((doctor) => ({
+        Name: doctor.name,
+        Email: doctor.email,
+        Mobile: doctor.mobileNum,
+        Rating: doctor.rating,
+        Specialty: doctor.specialty,
+        Location: doctor.location,
+        Hospital: doctor.hospital,
+      }));
+
+      const csv = Papa.unparse(data);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'doctors.csv';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } catch (err) {
+      setError('Failed to download CSV');
+    } finally {
+      setIsDownloading(null);
     }
   };
 
-  const clearFilters = () => {
-    setSearchQuery('');
-    setSearchField('');
-    setSortField('');
-    setSortOrder('asc');
+  // Download LaTeX for PDF
+  const downloadPDF = async () => {
+    try {
+      setIsDownloading('pdf');
+      const rows = filteredAndSortedDoctors
+        .map((doctor) =>
+          [
+            doctor.name,
+            doctor.email,
+            doctor.mobileNum,
+            doctor.rating.toFixed(1),
+            doctor.specialty,
+            doctor.location,
+            doctor.hospital,
+          ]
+            .map((value) => value.replace(/&/g, '\\&').replace(/%/g, '\\%'))
+            .join(' & ')
+        )
+        .join(' \\\\\n');
+
+      const latexContent = `
+\\documentclass{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage{geometry}
+\\geometry{a4paper, margin=1in}
+\\usepackage{booktabs}
+\\usepackage{array}
+\\newcolumntype{L}[1]{>{\\raggedright\\arraybackslash}p{#1}}
+\\begin{document}
+\\begin{center}
+\\textbf{\\large Doctors List} \\\\
+\\vspace{0.5cm}
+Generated on \\today
+\\end{center}
+\\begin{table}[h]
+\\centering
+\\begin{tabular}{L{3cm} L{4cm} L{3cm} L{2cm} L{3cm} L{3cm} L{4cm}}
+\\toprule
+\\textbf{Name} & \\textbf{Email} & \\textbf{Mobile} & \\textbf{Rating} & \\textbf{Specialty} & \\textbf{Location} & \\textbf{Hospital} \\\\
+\\midrule
+${rows}
+\\bottomrule
+\\end{tabular}
+\\caption{List of Doctors}
+\\end{table}
+\\end{document}
+`;
+
+      const blob = new Blob([latexContent], { type: 'text/x-tex;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'doctors_table.tex';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } catch (err) {
+      setError('Failed to download PDF');
+    } finally {
+      setIsDownloading(null);
+    }
   };
+
+  // Download Excel
+  const downloadExcel = async () => {
+    try {
+      setIsDownloading('excel');
+      const data = filteredAndSortedDoctors.map((doctor) => ({
+        Name: doctor.name,
+        Email: doctor.email,
+        Mobile: doctor.mobileNum,
+        Rating: doctor.rating,
+        Specialty: doctor.specialty,
+        Location: doctor.location,
+        Hospital: doctor.hospital,
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Doctors');
+      XLSX.writeFile(workbook, 'doctors.xlsx');
+    } catch (err) {
+      setError('Failed to download Excel');
+    } finally {
+      setIsDownloading(null);
+    }
+  };
+
+  if (error) {
+    return (
+      <div className="flex">
+        <Sidebar />
+        <div className="ml-64 p-6 bg-gray-50 dark:bg-gray-900 min-h-screen w-full transition-all duration-300">
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-red-50 dark:border-red-900 text-center">
+              <p className="text-red-500 text-sm mb-4 leading-snug">{error}</p>
+              <button
+                onClick={() => {
+                  clearFilters();
+                  setIsFilterOpen(false);
+                }}
+                className="px-4 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:ring-1 hover:ring-sky-200 active:bg-sky-700 active:scale-95 transition-all duration-200 min-w-[120px] text-sm shadow-sm"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex">
       <Sidebar />
-      <div className="ml-64 p-6 bg-gray-100 min-h-screen w-full">
-        <h1 className="text-3xl font-bold mb-6">View All Doctors</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Search & Sort</h2>
+      <div className="ml-64 p-6 bg-gray-50 dark:bg-gray-900 min-h-screen w-full transition-all duration-300">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 tracking-tight">View All Doctors</h1>
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 tracking-tight">Search & Filter</h2>
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4">
-                <select
-                  value={searchField}
-                  onChange={(e) =>
-                    setSearchField(
-                      e.target.value as
-                        | 'name'
-                        | 'location'
-                        | 'hospital'
-                        | 'specialty'
-                        | 'email'
-                        | 'mobileNum'
-                        | ''
-                    )
-                  }
-                  className="w-1/2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  aria-label="Select search field"
-                >
-                  <option value="">Search by...</option>
-                  <option value="name">Name</option>
-                  <option value="location">Location</option>
-                  <option value="hospital">Hospital</option>
-                  <option value="specialty">Specialty</option>
-                  <option value="email">Email</option>
-                  <option value="mobileNum">Mobile Number</option>
-                </select>
-                <div className="relative w-1/2">
+              <div className="flex flex-col sm:flex-row items-center gap-4 max-w-md flex-wrap">
+                <div className="relative flex-1 w-full">
+                  <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:scale-105 transition-transform duration-150"></i>
                   <input
                     type="text"
-                    placeholder={
-                      searchField ? `Search by ${searchField}...` : 'Select a field first'
-                    }
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    disabled={!searchField}
-                    className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors disabled:bg-gray-100"
+                    onChange={(e) => debouncedSetSearchQuery(e.target.value)}
+                    placeholder="Search doctors by name, specialty, or location..."
+                    className="w-full pl-10 pr-10 p-2.5 border border-gray-200 dark:border-gray-600 rounded-full focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 focus:scale-[1.01] outline-none leading-snug"
                     aria-label="Search doctors"
+                    aria-describedby="search-desc"
+                    aria-controls="doctors-table"
                   />
-                  <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:text-red-500 hover:scale-105 transition-all duration-150"
                       aria-label="Clear search"
                     >
                       <i className="fas fa-times"></i>
                     </button>
                   )}
+                  <span id="search-desc" className="sr-only">Search doctors by name, specialty, or location</span>
                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <select
-                  value={sortField}
-                  onChange={(e) =>
-                    handleSortChange(
-                      e.target.value as 'name' | 'specialty' | 'location' | 'hospital' | 'rating' | ''
-                    )
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  aria-label="Select sort field"
-                >
-                  <option value="">Sort by...</option>
-                  <option value="name">Name</option>
-                  <option value="specialty">Specialty</option>
-                  <option value="location">Location</option>
-                  <option value="hospital">Hospital</option>
-                  <option value="rating">Top Rating</option>
-                </select>
-                {sortField && (
-                  <button
-                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                    className="p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-                    title={sortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'}
-                    aria-label={sortOrder === 'asc' ? 'Sort descending' : 'Sort ascending'}
-                  >
-                    <i className={`fas fa-sort-${sortOrder === 'asc' ? 'up' : 'down'}`}></i>
-                  </button>
-                )}
-              </div>
-              <div className="flex justify-between items-center">
-                <p className="text-gray-600">
-                  Showing {filteredAndSortedDoctors.length} doctors | Avg. Rating: {averageRating}/5
-                </p>
                 <button
-                  onClick={clearFilters}
-                  className="text-green-500 hover:underline"
-                  aria-label="Clear all filters"
+                  onClick={() => setIsFilterOpen(!isFilterOpen)}
+                  className="flex items-center justify-center gap-1.5 px-4 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:ring-1 hover:ring-sky-200 active:bg-sky-700 active:scale-95 transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm shadow-sm"
+                  aria-label="Toggle filter options"
+                  aria-expanded={isFilterOpen}
+                  aria-controls="filter-panel"
+                  aria-describedby="filter-desc"
                 >
-                  Clear Filters
+                  <i className="fas fa-filter text-sm hover:scale-105 transition-transform duration-150"></i>
+                  Filter
                 </button>
+                <span id="filter-desc" className="sr-only">Toggle advanced filter options for doctors</span>
+              </div>
+              {isFilterOpen && (
+                <div
+                  id="filter-panel"
+                  ref={filterPanelRef}
+                  className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-slide-in"
+                  role="region"
+                  aria-labelledby="filter-heading"
+                  aria-hidden={!isFilterOpen}
+                >
+                  <h3 id="filter-heading" className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center tracking-tight">
+                    <i className="fas fa-filter text-sky-500 dark:text-sky-300 mr-1.5 text-sm hover:scale-105 transition-transform duration-150"></i>
+                    Filters
+                  </h3>
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+                    <select
+                      value={searchName}
+                      onChange={(e) => setSearchName(e.target.value)}
+                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchName ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      aria-label="Filter by specialist"
+                      aria-describedby="specialist-desc"
+                      aria-controls="doctors-table"
+                    >
+                      <option value="" className="text-gray-500 italic text-xs">Select Specialist</option>
+                      {searchOptions.name.map((name) => (
+                        <option key={name} value={name} aria-selected={searchName === name} aria-current={searchName === name}>{name}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={searchLocation}
+                      onChange={(e) => setSearchLocation(e.target.value)}
+                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchLocation ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      aria-label="Filter by location"
+                      aria-describedby="location-desc"
+                      aria-controls="doctors-table"
+                    >
+                      <option value="" className="text-gray-500 italic text-xs">Select Location</option>
+                      {searchOptions.location.map((loc) => (
+                        <option key={loc} value={loc} aria-selected={searchLocation === loc} aria-current={searchLocation === loc}>{loc}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={searchHospital}
+                      onChange={(e) => setSearchHospital(e.target.value)}
+                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchHospital ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      aria-label="Filter by hospital"
+                      aria-describedby="hospital-desc"
+                      aria-controls="doctors-table"
+                    >
+                      <option value="" className="text-gray-500 italic text-xs">Select Hospital</option>
+                      {searchOptions.hospital.map((hos) => (
+                        <option key={hos} value={hos} aria-selected={searchHospital === hos} aria-current={searchHospital === hos}>{hos}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={searchSpecialty}
+                      onChange={(e) => setSearchSpecialty(e.target.value)}
+                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchSpecialty ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      aria-label="Filter by specialty"
+                      aria-describedby="specialty-desc"
+                      aria-controls="doctors-table"
+                    >
+                      <option value="" className="text-gray-500 italic text-xs">Select Specialty</option>
+                      {searchOptions.specialty.map((spec) => (
+                        <option key={spec} value={spec} aria-selected={searchSpecialty === spec} aria-current={searchSpecialty === spec}>{spec}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={searchRating}
+                      onChange={(e) => setSearchRating(e.target.value)}
+                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchRating ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      aria-label="Filter by rating"
+                      aria-describedby="rating-desc"
+                      aria-controls="doctors-table"
+                    >
+                      <option value="" className="text-gray-500 italic text-xs">Select Rating</option>
+                      {searchOptions.rating.map((rate) => (
+                        <option key={rate} value={rate} aria-selected={searchRating === rate} aria-current={searchRating === rate}>{rate}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    onClick={() => {
+                      clearFilters();
+                      setIsFilterOpen(false);
+                    }}
+                    className="flex items-center gap-1.5 px-4 py-2 mt-4 bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 hover:shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm"
+                    aria-label="Clear all filters"
+                  >
+                    <i className="fas fa-times text-sm text-red-500 hover:scale-105 transition-transform duration-150"></i>
+                    Clear Filters
+                  </button>
+                </div>
+              )}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4" aria-live="polite">
+                <div className="flex gap-3">
+                  <span className="inline-block bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm animate-pulse dark:bg-sky-900 dark:text-sky-300 hover:scale-102 transition-transform duration-200 leading-snug">
+                    Showing {filteredAndSortedDoctors.length} doctors
+                  </span>
+                  <span className="inline-block bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm animate-pulse dark:bg-sky-900 dark:text-sky-300 hover:scale-102 transition-transform duration-200 leading-snug">
+                    Avg. Rating: {averageRating}/5
+                  </span>
+                </div>
+                <div className="flex gap-3">
+                  <div className="relative">
+                    <button
+                      ref={downloadButtonRef}
+                      onClick={() => setIsDownloadOpen(!isDownloadOpen)}
+                      disabled={isDownloading !== null}
+                      className="flex items-center justify-center gap-1.5 px-4 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:ring-1 hover:ring-sky-200 active:bg-sky-700 active:scale-95 disabled:bg-sky-300 disabled:cursor-not-allowed transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm shadow-sm"
+                      aria-label="Download data"
+                      aria-haspopup="true"
+                      aria-expanded={isDownloadOpen}
+                      data-tooltip-id="download-tooltip"
+                      data-tooltip-content="Download data in various formats"
+                      data-tooltip-delay-show={200}
+                    >
+                      {isDownloading ? (
+                        <ClipLoader size={16} color="#0ea5e9" className="animate-pulse" />
+                      ) : (
+                        <i className="fas fa-download text-sm hover:scale-105 transition-transform duration-150"></i>
+                      )}
+                      Download
+                    </button>
+                    {isDownloadOpen && (
+                      <div
+                        ref={downloadMenuRef}
+                        className="absolute right-0 mt-1.5 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 animate-fade-in"
+                        role="menu"
+                      >
+                        <div
+                          onClick={downloadCSV}
+                          onKeyDown={(e) => handleKeyDown(e, 'csv')}
+                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
+                          role="menuitem"
+                          tabIndex={0}
+                          aria-label="Download as CSV"
+                          aria-selected={false}
+                        >
+                          <i className="fas fa-file-csv text-sm hover:scale-105 transition-transform duration-150"></i> CSV
+                        </div>
+                        <div
+                          onClick={downloadPDF}
+                          onKeyDown={(e) => handleKeyDown(e, 'pdf')}
+                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
+                          role="menuitem"
+                          tabIndex={0}
+                          aria-label="Download as LaTeX for PDF"
+                          aria-selected={false}
+                        >
+                          <i className="fas fa-file-pdf text-sm hover:scale-105 transition-transform duration-150"></i> PDF
+                        </div>
+                        <div
+                          onClick={downloadExcel}
+                          onKeyDown={(e) => handleKeyDown(e, 'excel')}
+                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
+                          role="menuitem"
+                          tabIndex={0}
+                          aria-label="Download as Excel"
+                          aria-selected={false}
+                        >
+                          <i className="fas fa-file-excel text-sm hover:scale-105 transition-transform duration-150"></i> Excel
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="mt-6">
-          {filteredAndSortedDoctors.length === 0 ? (
-            <p className="text-gray-600 text-center py-8">No doctors found.</p>
-          ) : (
-            <div className="overflow-x-auto bg-white rounded-lg shadow-md">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-green-50">
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Name</th>
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Mobile</th>
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Rating</th>
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Specialty</th>
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Location</th>
-                    <th className="p-4 text-left text-sm font-semibold text-gray-700">Hospital</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredAndSortedDoctors.map((doctor) => (
-                    <tr
-                      key={doctor.id}
-                      className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="p-4 text-gray-600">{doctor.name}</td>
-                      <td className="p-4 text-gray-600">{doctor.email}</td>
-                      <td className="p-4 text-gray-600">{doctor.mobileNum}</td>
-                      <td className="p-4 text-gray-600">{doctor.rating}/5</td>
-                      <td className="p-4 text-gray-600">{doctor.specialty}</td>
-                      <td className="p-4 text-gray-600">{doctor.location}</td>
-                      <td className="p-4 text-gray-600">{doctor.hospital}</td>
+          <div className="mt-6">
+            {filteredAndSortedDoctors.length === 0 ? (
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm text-center py-8">
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-snug">No doctors found.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                <table className="w-full border-collapse" id="doctors-table">
+                  <thead>
+                    <tr className="bg-sky-50 dark:bg-sky-900 sticky top-0 z-10">
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Name</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight hidden md:table-cell">Email</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight hidden md:table-cell">Mobile</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Rating</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Specialty</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Location</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Hospital</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {filteredAndSortedDoctors.map((doctor, index) => (
+                      <tr
+                        key={doctor.id}
+                        className={`border-b border-gray-100 dark:border-gray-600 hover:bg-sky-50 dark:hover:bg-sky-900 transition-all duration-150 ${
+                          index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : ''
+                        }`}
+                      >
+                        <td scope="row" className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug font-medium">{doctor.name}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug hidden md:table-cell">{doctor.email}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug hidden md:table-cell">{doctor.mobileNum}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug flex items-center gap-1">
+                          {doctor.rating}/5
+                          <span className="text-yellow-400 hover:animate-bounce">★</span>
+                        </td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.specialty}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.location}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.hospital}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+      <Tooltip id="download-tooltip" />
     </div>
   );
 };
