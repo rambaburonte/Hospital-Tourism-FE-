@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { Calendar, MapPin, Search, User, Phone, Hotel, Plane, Clock, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -389,7 +387,7 @@ const AppointmentSection = () => {
   };
 
   const handleCategoryClick = (categoryName: string) => {
-    navigate(`/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}`);
+    navigate('/PharmacyCategoryPage?category=${encodeURIComponent(categoryName)}');
   };
 
   return (

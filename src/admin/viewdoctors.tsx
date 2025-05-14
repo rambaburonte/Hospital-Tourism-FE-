@@ -1,11 +1,14 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import Sidebar from '@/admin/Sidebar';
+import Sidebar from '@/admin/Sidebar'; // Adjust path as needed
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { ClipLoader } from 'react-spinners';
 import debounce from 'lodash.debounce';
+import { FaSearch, FaDownload, FaFilter } from 'react-icons/fa';
 
 interface Doctor {
   id: number;
@@ -17,96 +20,33 @@ interface Doctor {
   location: string;
   hospital: string;
   specialty: string;
+  department: string;
 }
 
 const mockDoctors: Doctor[] = [
   {
     id: 1,
-    name: 'Dr. John Smith',
-    email: 'john.smith@example.com',
+    name: 'Dr. John Doe',
+    email: 'john@example.com',
     mobileNum: '1234567890',
-    rating: 4.5,
-    description: 'Expert in heart disease management with 15 years of experience.',
+    rating: 4,
+    description: 'Experienced Cardiologist',
     location: 'New York',
-    hospital: 'City Hospital',
+    hospital: 'NYC Health',
     specialty: 'Cardiology',
+    department: 'Cardiology',
   },
   {
     id: 2,
-    name: 'Dr. Emily Johnson',
-    email: 'emily.johnson@example.com',
-    mobileNum: '0987654321',
-    rating: 4.8,
-    description: 'Specialist in migraine and neurological disorders.',
-    location: 'Chicago',
-    hospital: 'General Medical Center',
-    specialty: 'Neurology',
-  },
-  {
-    id: 3,
-    name: 'Dr. Michael Brown',
-    email: 'michael.brown@example.com',
-    mobileNum: '1122334455',
-    rating: 4.2,
-    description: 'Orthopedic surgeon with expertise in sports injuries.',
+    name: 'Dr. Sarah Lee',
+    email: 'sarah@example.com',
+    mobileNum: '9876543210',
+    rating: 5,
+    description: 'Pediatric specialist',
     location: 'Los Angeles',
-    hospital: 'Sunset Clinic',
-    specialty: 'Orthopedics',
-  },
-  {
-    id: 4,
-    name: 'Dr. Sarah Davis',
-    email: 'sarah.davis@example.com',
-    mobileNum: '6677889900',
-    rating: 4.9,
-    description: 'Pediatrician focused on child development and wellness.',
-    location: 'Chicago',
-    hospital: 'Children’s Hospital',
+    hospital: 'LA Care',
     specialty: 'Pediatrics',
-  },
-  {
-    id: 5,
-    name: 'Dr. Lisa Patel',
-    email: 'lisa.patel@example.com',
-    mobileNum: '3344556677',
-    rating: 4.7,
-    description: 'Endocrinologist specializing in diabetes management.',
-    location: 'Boston',
-    hospital: 'Boston Medical Center',
-    specialty: 'Diabetology',
-  },
-  {
-    id: 6,
-    name: 'Dr. Robert Kim',
-    email: 'robert.kim@example.com',
-    mobileNum: '4455667788',
-    rating: 4.6,
-    description: 'Oncologist with expertise in cancer treatment.',
-    location: 'Houston',
-    hospital: 'MD Anderson Cancer Center',
-    specialty: 'Oncology',
-  },
-  {
-    id: 7,
-    name: 'Dr. Anna Lee',
-    email: 'anna.lee@example.com',
-    mobileNum: '5566778899',
-    rating: 4.4,
-    description: 'Gastroenterologist treating digestive disorders.',
-    location: 'San Francisco',
-    hospital: 'UCSF Medical Center',
-    specialty: 'Gastroenterology',
-  },
-  {
-    id: 8,
-    name: 'Dr. David Wong',
-    email: 'david.wong@example.com',
-    mobileNum: '7788990011',
-    rating: 4.3,
-    description: 'Pulmonologist specializing in respiratory diseases.',
-    location: 'Miami',
-    hospital: 'Miami General Hospital',
-    specialty: 'Pulmonology',
+    department: 'Pediatrics',
   },
 ];
 
@@ -117,6 +57,7 @@ const ViewDoctors: React.FC = () => {
   const [searchHospital, setSearchHospital] = useState('');
   const [searchSpecialty, setSearchSpecialty] = useState('');
   const [searchRating, setSearchRating] = useState('');
+  const [searchDepartment, setSearchDepartment] = useState('');
   const [isDownloading, setIsDownloading] = useState<'csv' | 'pdf' | 'excel' | null>(null);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -172,6 +113,7 @@ const ViewDoctors: React.FC = () => {
       const locations = [...new Set(mockDoctors.map((doctor) => doctor.location))].sort();
       const hospitals = [...new Set(mockDoctors.map((doctor) => doctor.hospital))].sort();
       const specialties = [...new Set(mockDoctors.map((doctor) => doctor.specialty))].sort();
+      const departments = [...new Set(mockDoctors.map((doctor) => doctor.department))].sort();
       const ratings = [
         '5 Star (4.5-5.0)',
         '4 Star (3.5-4.4)',
@@ -179,17 +121,10 @@ const ViewDoctors: React.FC = () => {
         '2 Star (1.5-2.4)',
         '1 Star (0-1.4)',
       ];
-
-      return {
-        name: names,
-        location: locations,
-        hospital: hospitals,
-        specialty: specialties,
-        rating: ratings,
-      };
+      return { name: names, location: locations, hospital: hospitals, specialty: specialties, department: departments, rating: ratings };
     } catch (err) {
       setError('Failed to generate search options');
-      return { name: [], location: [], hospital: [], specialty: [], rating: [] };
+      return { name: [], location: [], hospital: [], specialty: [], department: [], rating: [] };
     }
   }, []);
 
@@ -205,7 +140,8 @@ const ViewDoctors: React.FC = () => {
             doctor.name.toLowerCase().includes(query) ||
             doctor.specialty.toLowerCase().includes(query) ||
             doctor.location.toLowerCase().includes(query) ||
-            doctor.hospital.toLowerCase().includes(query)
+            doctor.hospital.toLowerCase().includes(query) ||
+            doctor.department.toLowerCase().includes(query)
         );
       }
 
@@ -230,6 +166,11 @@ const ViewDoctors: React.FC = () => {
           doctor.specialty.toLowerCase() === searchSpecialty.toLowerCase()
         );
       }
+      if (searchDepartment) {
+        result = result.filter((doctor) =>
+          doctor.department.toLowerCase() === searchDepartment.toLowerCase()
+        );
+      }
       if (searchRating) {
         const ratingRange = searchRating.match(/(\d) Star \(([\d.]+)-([\d.]+)\)/);
         if (ratingRange) {
@@ -251,6 +192,7 @@ const ViewDoctors: React.FC = () => {
     searchLocation,
     searchHospital,
     searchSpecialty,
+    searchDepartment,
     searchRating,
   ]);
 
@@ -266,6 +208,7 @@ const ViewDoctors: React.FC = () => {
     setSearchLocation('');
     setSearchHospital('');
     setSearchSpecialty('');
+    setSearchDepartment('');
     setSearchRating('');
     setError(null);
   };
@@ -280,17 +223,14 @@ const ViewDoctors: React.FC = () => {
         Mobile: doctor.mobileNum,
         Rating: doctor.rating,
         Specialty: doctor.specialty,
+        Department: doctor.department,
         Location: doctor.location,
         Hospital: doctor.hospital,
       }));
 
       const csv = Papa.unparse(data);
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'doctors.csv';
-      link.click();
-      URL.revokeObjectURL(link.href);
+      saveAs(blob, 'doctors.csv');
     } catch (err) {
       setError('Failed to download CSV');
     } finally {
@@ -298,60 +238,32 @@ const ViewDoctors: React.FC = () => {
     }
   };
 
-  // Download LaTeX for PDF
+  // Download PDF
   const downloadPDF = async () => {
     try {
       setIsDownloading('pdf');
-      const rows = filteredAndSortedDoctors
-        .map((doctor) =>
-          [
-            doctor.name,
-            doctor.email,
-            doctor.mobileNum,
-            doctor.rating.toFixed(1),
-            doctor.specialty,
-            doctor.location,
-            doctor.hospital,
-          ]
-            .map((value) => value.replace(/&/g, '\\&').replace(/%/g, '\\%'))
-            .join(' & ')
-        )
-        .join(' \\\\\n');
+      const doc = new jsPDF();
+      doc.setFontSize(12);
+      const headers = ['Name', 'Email', 'Mobile', 'Rating', 'Specialty', 'Department', 'Location', 'Hospital'];
+      const rows = filteredAndSortedDoctors.map((doctor) => [
+        doctor.name,
+        doctor.email,
+        doctor.mobileNum,
+        doctor.rating.toFixed(1),
+        doctor.specialty,
+        doctor.department,
+        doctor.location,
+        doctor.hospital,
+      ]);
 
-      const latexContent = `
-\\documentclass{article}
-\\usepackage[utf8]{inputenc}
-\\usepackage{geometry}
-\\geometry{a4paper, margin=1in}
-\\usepackage{booktabs}
-\\usepackage{array}
-\\newcolumntype{L}[1]{>{\\raggedright\\arraybackslash}p{#1}}
-\\begin{document}
-\\begin{center}
-\\textbf{\\large Doctors List} \\\\
-\\vspace{0.5cm}
-Generated on \\today
-\\end{center}
-\\begin{table}[h]
-\\centering
-\\begin{tabular}{L{3cm} L{4cm} L{3cm} L{2cm} L{3cm} L{3cm} L{4cm}}
-\\toprule
-\\textbf{Name} & \\textbf{Email} & \\textbf{Mobile} & \\textbf{Rating} & \\textbf{Specialty} & \\textbf{Location} & \\textbf{Hospital} \\\\
-\\midrule
-${rows}
-\\bottomrule
-\\end{tabular}
-\\caption{List of Doctors}
-\\end{table}
-\\end{document}
-`;
-
-      const blob = new Blob([latexContent], { type: 'text/x-tex;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'doctors_table.tex';
-      link.click();
-      URL.revokeObjectURL(link.href);
+      let y = 20;
+      doc.text('Doctors List', 10, 10);
+      doc.text(headers.join(' | '), 10, y);
+      rows.forEach((row) => {
+        y += 10;
+        doc.text(row.join(' | '), 10, y);
+      });
+      doc.save('doctors.pdf');
     } catch (err) {
       setError('Failed to download PDF');
     } finally {
@@ -369,6 +281,7 @@ ${rows}
         Mobile: doctor.mobileNum,
         Rating: doctor.rating,
         Specialty: doctor.specialty,
+        Department: doctor.department,
         Location: doctor.location,
         Hospital: doctor.hospital,
       }));
@@ -376,7 +289,8 @@ ${rows}
       const worksheet = XLSX.utils.json_to_sheet(data);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Doctors');
-      XLSX.writeFile(workbook, 'doctors.xlsx');
+      const xlsxBlob = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+      saveAs(new Blob([xlsxBlob]), 'doctors.xlsx');
     } catch (err) {
       setError('Failed to download Excel');
     } finally {
@@ -419,7 +333,7 @@ ${rows}
             <div className="flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row items-center gap-4 max-w-md flex-wrap">
                 <div className="relative flex-1 w-full">
-                  <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:scale-105 transition-transform duration-150"></i>
+                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:scale-105 transition-transform duration-150" />
                   <input
                     type="text"
                     value={searchQuery}
@@ -449,7 +363,7 @@ ${rows}
                   aria-controls="filter-panel"
                   aria-describedby="filter-desc"
                 >
-                  <i className="fas fa-filter text-sm hover:scale-105 transition-transform duration-150"></i>
+                  <FaFilter className="text-sm hover:scale-105 transition-transform duration-150" />
                   Filter
                 </button>
                 <span id="filter-desc" className="sr-only">Toggle advanced filter options for doctors</span>
@@ -464,73 +378,86 @@ ${rows}
                   aria-hidden={!isFilterOpen}
                 >
                   <h3 id="filter-heading" className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center tracking-tight">
-                    <i className="fas fa-filter text-sky-500 dark:text-sky-300 mr-1.5 text-sm hover:scale-105 transition-transform duration-150"></i>
+                    <FaFilter className="text-sky-500 dark:text-sky-300 mr-1.5 text-sm hover:scale-105 transition-transform duration-150" />
                     Filters
                   </h3>
-                  <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <select
                       value={searchName}
                       onChange={(e) => setSearchName(e.target.value)}
-                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchName ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchName ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
                       aria-label="Filter by specialist"
                       aria-describedby="specialist-desc"
                       aria-controls="doctors-table"
                     >
                       <option value="" className="text-gray-500 italic text-xs">Select Specialist</option>
                       {searchOptions.name.map((name) => (
-                        <option key={name} value={name} aria-selected={searchName === name} aria-current={searchName === name}>{name}</option>
+                        <option key={name} value={name} aria-selected={searchName === name}>{name}</option>
                       ))}
                     </select>
                     <select
                       value={searchLocation}
                       onChange={(e) => setSearchLocation(e.target.value)}
-                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchLocation ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchLocation ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
                       aria-label="Filter by location"
                       aria-describedby="location-desc"
                       aria-controls="doctors-table"
                     >
                       <option value="" className="text-gray-500 italic text-xs">Select Location</option>
                       {searchOptions.location.map((loc) => (
-                        <option key={loc} value={loc} aria-selected={searchLocation === loc} aria-current={searchLocation === loc}>{loc}</option>
+                        <option key={loc} value={loc} aria-selected={searchLocation === loc}>{loc}</option>
                       ))}
                     </select>
                     <select
                       value={searchHospital}
                       onChange={(e) => setSearchHospital(e.target.value)}
-                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchHospital ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchHospital ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
                       aria-label="Filter by hospital"
                       aria-describedby="hospital-desc"
                       aria-controls="doctors-table"
                     >
                       <option value="" className="text-gray-500 italic text-xs">Select Hospital</option>
                       {searchOptions.hospital.map((hos) => (
-                        <option key={hos} value={hos} aria-selected={searchHospital === hos} aria-current={searchHospital === hos}>{hos}</option>
+                        <option key={hos} value={hos} aria-selected={searchHospital === hos}>{hos}</option>
                       ))}
                     </select>
                     <select
                       value={searchSpecialty}
                       onChange={(e) => setSearchSpecialty(e.target.value)}
-                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchSpecialty ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchSpecialty ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
                       aria-label="Filter by specialty"
                       aria-describedby="specialty-desc"
                       aria-controls="doctors-table"
                     >
                       <option value="" className="text-gray-500 italic text-xs">Select Specialty</option>
                       {searchOptions.specialty.map((spec) => (
-                        <option key={spec} value={spec} aria-selected={searchSpecialty === spec} aria-current={searchSpecialty === spec}>{spec}</option>
+                        <option key={spec} value={spec} aria-selected={searchSpecialty === spec}>{spec}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={searchDepartment}
+                      onChange={(e) => setSearchDepartment(e.target.value)}
+                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchDepartment ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
+                      aria-label="Filter by department"
+                      aria-describedby="department-desc"
+                      aria-controls="doctors-table"
+                    >
+                      <option value="" className="text-gray-500 italic text-xs">Select Department</option>
+                      {searchOptions.department.map((dep) => (
+                        <option key={dep} value={dep} aria-selected={searchDepartment === dep}>{dep}</option>
                       ))}
                     </select>
                     <select
                       value={searchRating}
                       onChange={(e) => setSearchRating(e.target.value)}
-                      className="min-w-full sm:min-w-[140px] p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchRating ? 'bg-sky-200 dark:bg-sky-800' : ''}"
+                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchRating ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
                       aria-label="Filter by rating"
                       aria-describedby="rating-desc"
                       aria-controls="doctors-table"
                     >
                       <option value="" className="text-gray-500 italic text-xs">Select Rating</option>
                       {searchOptions.rating.map((rate) => (
-                        <option key={rate} value={rate} aria-selected={searchRating === rate} aria-current={searchRating === rate}>{rate}</option>
+                        <option key={rate} value={rate} aria-selected={searchRating === rate}>{rate}</option>
                       ))}
                     </select>
                   </div>
@@ -573,7 +500,7 @@ ${rows}
                       {isDownloading ? (
                         <ClipLoader size={16} color="#0ea5e9" className="animate-pulse" />
                       ) : (
-                        <i className="fas fa-download text-sm hover:scale-105 transition-transform duration-150"></i>
+                        <FaDownload className="text-sm hover:scale-105 transition-transform duration-150" />
                       )}
                       Download
                     </button>
@@ -590,7 +517,6 @@ ${rows}
                           role="menuitem"
                           tabIndex={0}
                           aria-label="Download as CSV"
-                          aria-selected={false}
                         >
                           <i className="fas fa-file-csv text-sm hover:scale-105 transition-transform duration-150"></i> CSV
                         </div>
@@ -600,8 +526,7 @@ ${rows}
                           className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
                           role="menuitem"
                           tabIndex={0}
-                          aria-label="Download as LaTeX for PDF"
-                          aria-selected={false}
+                          aria-label="Download as PDF"
                         >
                           <i className="fas fa-file-pdf text-sm hover:scale-105 transition-transform duration-150"></i> PDF
                         </div>
@@ -612,7 +537,6 @@ ${rows}
                           role="menuitem"
                           tabIndex={0}
                           aria-label="Download as Excel"
-                          aria-selected={false}
                         >
                           <i className="fas fa-file-excel text-sm hover:scale-105 transition-transform duration-150"></i> Excel
                         </div>
@@ -638,6 +562,7 @@ ${rows}
                       <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight hidden md:table-cell">Mobile</th>
                       <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Rating</th>
                       <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Specialty</th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Department</th>
                       <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Location</th>
                       <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Hospital</th>
                     </tr>
@@ -658,6 +583,7 @@ ${rows}
                           <span className="text-yellow-400 hover:animate-bounce">★</span>
                         </td>
                         <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.specialty}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.department}</td>
                         <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.location}</td>
                         <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.hospital}</td>
                       </tr>
