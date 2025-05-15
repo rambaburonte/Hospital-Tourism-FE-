@@ -5,6 +5,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
+
 // Public Pages
 import HomePage from './pages/Index';
 import AboutPage from './pages/About';
@@ -28,7 +29,11 @@ import PatientProfile from './components/userspage/userprofile';
 // Admin Pages
 import Admindashboard from './admin/admindashboard';
 import Uploaddoctors from './admin/uploadoctors';
-import ViewDoctors from './admin/viewdoctors'; // Corrected import name (PascalCase)
+import ViewDoctors from './admin/viewdoctors';
+import Uploadhospital from './admin/uploadhospitals';
+import DoctorDetails from './admin/doctordetails';
+import UploadTest from './admin/uploadlabtests';
+ // Corrected import name (PascalCase)
 
 // Utility Components
 import NotFound from './pages/NotFound';
@@ -84,6 +89,10 @@ const App: React.FC = () => (
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
             <Route path="/admin/doctors/viewdoctors" element={<ViewDoctors />} />
+            <Route path="/admin/uploadhospital" element={<Uploadhospital />} />
+             <Route path="/admin/uploadlabtests" element={<UploadTest />} />
+            <Route path="/admin/doctordetails/:id" element={<DoctorDetails />} />
+
 
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />

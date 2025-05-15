@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import Sidebar from '@/admin/Sidebar'; // Adjust path as needed
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '@/admin/sidebar';
+import axios from 'axios';
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -9,8 +11,28 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { ClipLoader } from 'react-spinners';
 import debounce from 'lodash.debounce';
 import { FaSearch, FaDownload, FaFilter } from 'react-icons/fa';
+import { Menu, X } from 'lucide-react';
+import Select from 'react-select';
+
+interface Hospital {
+  id: number;
+  hospital: string;
+  address: string;
+  pictureUrl: string;
+}
 
 interface Doctor {
+  id: number;
+  name: string;
+  email: string;
+  rating: number;
+  description: string;
+  department: string;
+  profilepic: string;
+  hospital: Hospital;
+}
+
+interface DisplayDoctor {
   id: number;
   name: string;
   email: string;
@@ -23,34 +45,9 @@ interface Doctor {
   department: string;
 }
 
-const mockDoctors: Doctor[] = [
-  {
-    id: 1,
-    name: 'Dr. John Doe',
-    email: 'john@example.com',
-    mobileNum: '1234567890',
-    rating: 4,
-    description: 'Experienced Cardiologist',
-    location: 'New York',
-    hospital: 'NYC Health',
-    specialty: 'Cardiology',
-    department: 'Cardiology',
-  },
-  {
-    id: 2,
-    name: 'Dr. Sarah Lee',
-    email: 'sarah@example.com',
-    mobileNum: '9876543210',
-    rating: 5,
-    description: 'Pediatric specialist',
-    location: 'Los Angeles',
-    hospital: 'LA Care',
-    specialty: 'Pediatrics',
-    department: 'Pediatrics',
-  },
-];
-
 const ViewDoctors: React.FC = () => {
+  const [doctors, setDoctors] = useState<DisplayDoctor[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchName, setSearchName] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
@@ -62,9 +59,47 @@ const ViewDoctors: React.FC = () => {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const downloadButtonRef = useRef<HTMLButtonElement>(null);
   const downloadMenuRef = useRef<HTMLDivElement>(null);
   const filterPanelRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  // Parse address to extract city
+  const parseAddress = (address: string): string => {
+    const parts = address.split(',').map((part) => part.trim());
+    return parts[1] || 'Unknown';
+  };
+
+  // Fetch doctors from API
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get<Doctor[]>('http://localhost:8080/api/doctors');
+        const mappedDoctors: DisplayDoctor[] = response.data.map((doc) => ({
+          id: doc.id,
+          name: doc.name,
+          email: doc.email,
+          mobileNum: 'N/A',
+          rating: doc.rating,
+          description: doc.description,
+          location: parseAddress(doc.hospital.address),
+          hospital: doc.hospital.hospital,
+          specialty: doc.department,
+          department: doc.department,
+        }));
+        setDoctors(mappedDoctors);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch doctors from API');
+        console.error('Fetch error:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
 
   // Debounced search handler
   const debouncedSetSearchQuery = useMemo(
@@ -109,11 +144,10 @@ const ViewDoctors: React.FC = () => {
   // Dynamic options for each search field
   const searchOptions = useMemo(() => {
     try {
-      const names = [...new Set(mockDoctors.map((doctor) => doctor.name))].sort();
-      const locations = [...new Set(mockDoctors.map((doctor) => doctor.location))].sort();
-      const hospitals = [...new Set(mockDoctors.map((doctor) => doctor.hospital))].sort();
-      const specialties = [...new Set(mockDoctors.map((doctor) => doctor.specialty))].sort();
-      const departments = [...new Set(mockDoctors.map((doctor) => doctor.department))].sort();
+      const names = [...new Set(doctors.map((doctor) => doctor.name))].sort();
+      const locations = [...new Set(doctors.map((doctor) => doctor.location))].sort();
+      const hospitals = [...new Set(doctors.map((doctor) => doctor.hospital))].sort();
+      const specialties = [...new Set(doctors.map((doctor) => doctor.specialty))].sort();
       const ratings = [
         '5 Star (4.5-5.0)',
         '4 Star (3.5-4.4)',
@@ -121,16 +155,16 @@ const ViewDoctors: React.FC = () => {
         '2 Star (1.5-2.4)',
         '1 Star (0-1.4)',
       ];
-      return { name: names, location: locations, hospital: hospitals, specialty: specialties, department: departments, rating: ratings };
+      return { name: names, location: locations, hospital: hospitals, specialty: specialties, rating: ratings };
     } catch (err) {
       setError('Failed to generate search options');
-      return { name: [], location: [], hospital: [], specialty: [], department: [], rating: [] };
+      return { name: [], location: [], hospital: [], specialty: [], rating: [] };
     }
-  }, []);
+  }, [doctors]);
 
   const filteredAndSortedDoctors = useMemo(() => {
     try {
-      let result = [...mockDoctors];
+      let result = [...doctors];
 
       // Apply free-text search
       if (searchQuery) {
@@ -140,8 +174,7 @@ const ViewDoctors: React.FC = () => {
             doctor.name.toLowerCase().includes(query) ||
             doctor.specialty.toLowerCase().includes(query) ||
             doctor.location.toLowerCase().includes(query) ||
-            doctor.hospital.toLowerCase().includes(query) ||
-            doctor.department.toLowerCase().includes(query)
+            doctor.hospital.toLowerCase().includes(query)
         );
       }
 
@@ -166,11 +199,6 @@ const ViewDoctors: React.FC = () => {
           doctor.specialty.toLowerCase() === searchSpecialty.toLowerCase()
         );
       }
-      if (searchDepartment) {
-        result = result.filter((doctor) =>
-          doctor.department.toLowerCase() === searchDepartment.toLowerCase()
-        );
-      }
       if (searchRating) {
         const ratingRange = searchRating.match(/(\d) Star \(([\d.]+)-([\d.]+)\)/);
         if (ratingRange) {
@@ -187,12 +215,12 @@ const ViewDoctors: React.FC = () => {
       return [];
     }
   }, [
+    doctors,
     searchQuery,
     searchName,
     searchLocation,
     searchHospital,
     searchSpecialty,
-    searchDepartment,
     searchRating,
   ]);
 
@@ -208,7 +236,6 @@ const ViewDoctors: React.FC = () => {
     setSearchLocation('');
     setSearchHospital('');
     setSearchSpecialty('');
-    setSearchDepartment('');
     setSearchRating('');
     setError(null);
   };
@@ -223,7 +250,6 @@ const ViewDoctors: React.FC = () => {
         Mobile: doctor.mobileNum,
         Rating: doctor.rating,
         Specialty: doctor.specialty,
-        Department: doctor.department,
         Location: doctor.location,
         Hospital: doctor.hospital,
       }));
@@ -244,14 +270,13 @@ const ViewDoctors: React.FC = () => {
       setIsDownloading('pdf');
       const doc = new jsPDF();
       doc.setFontSize(12);
-      const headers = ['Name', 'Email', 'Mobile', 'Rating', 'Specialty', 'Department', 'Location', 'Hospital'];
+      const headers = ['Name', 'Email', 'Mobile', 'Rating', 'Specialty', 'Location', 'Hospital'];
       const rows = filteredAndSortedDoctors.map((doctor) => [
         doctor.name,
         doctor.email,
         doctor.mobileNum,
         doctor.rating.toFixed(1),
         doctor.specialty,
-        doctor.department,
         doctor.location,
         doctor.hospital,
       ]);
@@ -281,7 +306,6 @@ const ViewDoctors: React.FC = () => {
         Mobile: doctor.mobileNum,
         Rating: doctor.rating,
         Specialty: doctor.specialty,
-        Department: doctor.department,
         Location: doctor.location,
         Hospital: doctor.hospital,
       }));
@@ -298,20 +322,69 @@ const ViewDoctors: React.FC = () => {
     }
   };
 
+  // Custom styles for react-select
+  const selectStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      border: '1px solid #e2e8f0',
+      borderRadius: '0.5rem',
+      padding: '0.25rem',
+      boxShadow: 'none',
+      '&:hover': { borderColor: '#4f46e5' },
+      backgroundColor: 'white',
+      minHeight: '38px',
+    }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? '#4f46e5' : state.isFocused ? '#eef2ff' : 'white',
+      color: state.isSelected ? 'white' : '#1f2937',
+      padding: '0.5rem 1rem',
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      borderRadius: '0.5rem',
+      marginTop: '0.25rem',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: '#6b7280',
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: '#1f2937',
+    }),
+  };
+
   if (error) {
     return (
-      <div className="flex">
-        <Sidebar />
-        <div className="ml-64 p-6 bg-gray-50 dark:bg-gray-900 min-h-screen w-full transition-all duration-300">
+      <div className="flex min-h-screen bg-gray-100">
+        <div
+          className={`fixed lg:static lg:w-64 bg-gradient-to-b from-white to-gray-50 h-full p-6 shadow-lg transition-transform duration-300 ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          } z-20`}
+        >
+          <Sidebar />
+        </div>
+        <button
+          className="lg:hidden fixed top-4 left-4 p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 transition-all duration-300 z-30"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          aria-label={isSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          aria-expanded={isSidebarOpen}
+        >
+          {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+        <div className="flex-1 p-6 lg:ml-64 min-h-screen bg-gray-100">
           <div className="max-w-6xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-red-50 dark:border-red-900 text-center">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-red-50 text-center animate-fade-in">
               <p className="text-red-500 text-sm mb-4 leading-snug">{error}</p>
               <button
                 onClick={() => {
                   clearFilters();
                   setIsFilterOpen(false);
+                  setError(null);
                 }}
-                className="px-4 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:ring-1 hover:ring-sky-200 active:bg-sky-700 active:scale-95 transition-all duration-200 min-w-[120px] text-sm shadow-sm"
+                className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 active:scale-95 transition-all duration-200 min-w-[120px] text-sm shadow-sm"
               >
                 Reset
               </button>
@@ -323,13 +396,23 @@ const ViewDoctors: React.FC = () => {
   }
 
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="ml-64 p-6 bg-gray-50 dark:bg-gray-900 min-h-screen w-full transition-all duration-300">
+    <div className="flex min-h-screen bg-gray-100">
+     
+        <Sidebar />
+     
+
+     
+
+      {/* Main Content */}
+      <div className="flex-1 p-6 lg:ml-64 min-h-screen bg-gray-100">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 tracking-tight">View All Doctors</h1>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 tracking-tight">Search & Filter</h2>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6 tracking-tight animate-fade-in">
+            View All Doctors
+          </h1>
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 animate-fade-in">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 tracking-tight">
+              Search & Filter
+            </h2>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row items-center gap-4 max-w-md flex-wrap">
                 <div className="relative flex-1 w-full">
@@ -339,7 +422,7 @@ const ViewDoctors: React.FC = () => {
                     value={searchQuery}
                     onChange={(e) => debouncedSetSearchQuery(e.target.value)}
                     placeholder="Search doctors by name, specialty, or location..."
-                    className="w-full pl-10 pr-10 p-2.5 border border-gray-200 dark:border-gray-600 rounded-full focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 focus:scale-[1.01] outline-none leading-snug"
+                    className="w-full pl-10 pr-10 p-2.5 border border-gray-200 rounded-full focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 focus:border-indigo-500 bg-white text-sm text-gray-800 transition-all duration-200 hover:bg-indigo-50 focus:scale-[1.01] outline-none leading-snug"
                     aria-label="Search doctors"
                     aria-describedby="search-desc"
                     aria-controls="doctors-table"
@@ -353,11 +436,13 @@ const ViewDoctors: React.FC = () => {
                       <i className="fas fa-times"></i>
                     </button>
                   )}
-                  <span id="search-desc" className="sr-only">Search doctors by name, specialty, or location</span>
+                  <span id="search-desc" className="sr-only">
+                    Search doctors by name, specialty, or location
+                  </span>
                 </div>
                 <button
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="flex items-center justify-center gap-1.5 px-4 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:ring-1 hover:ring-sky-200 active:bg-sky-700 active:scale-95 transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm shadow-sm"
+                  className="flex items-center justify-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 hover:ring-1 hover:ring-indigo-200 active:scale-95 transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm shadow-sm"
                   aria-label="Toggle filter options"
                   aria-expanded={isFilterOpen}
                   aria-controls="filter-panel"
@@ -366,107 +451,99 @@ const ViewDoctors: React.FC = () => {
                   <FaFilter className="text-sm hover:scale-105 transition-transform duration-150" />
                   Filter
                 </button>
-                <span id="filter-desc" className="sr-only">Toggle advanced filter options for doctors</span>
+                <span id="filter-desc" className="sr-only">
+                  Toggle advanced filter options for doctors
+                </span>
               </div>
               {isFilterOpen && (
                 <div
                   id="filter-panel"
                   ref={filterPanelRef}
-                  className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-slide-in"
+                  className="bg-gray-50 p-4 rounded-lg shadow-sm animate-slide-in"
                   role="region"
                   aria-labelledby="filter-heading"
                   aria-hidden={!isFilterOpen}
                 >
-                  <h3 id="filter-heading" className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center tracking-tight">
-                    <FaFilter className="text-sky-500 dark:text-sky-300 mr-1.5 text-sm hover:scale-105 transition-transform duration-150" />
+                  <h3
+                    id="filter-heading"
+                    className="text-base font-semibold text-gray-800 mb-3 flex items-center tracking-tight"
+                  >
+                    <FaFilter className="text-indigo-500 mr-1.5 text-sm hover:scale-105 transition-transform duration-150" />
                     Filters
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <select
-                      value={searchName}
-                      onChange={(e) => setSearchName(e.target.value)}
-                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchName ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
+                    <Select
+                      options={searchOptions.name.map((name) => ({
+                        value: name,
+                        label: name,
+                      }))}
+                      value={searchName ? { value: searchName, label: searchName } : null}
+                      onChange={(opt) => setSearchName(opt ? opt.value : '')}
+                      placeholder="Select Specialist"
+                      styles={selectStyles}
+                      isClearable
                       aria-label="Filter by specialist"
-                      aria-describedby="specialist-desc"
-                      aria-controls="doctors-table"
-                    >
-                      <option value="" className="text-gray-500 italic text-xs">Select Specialist</option>
-                      {searchOptions.name.map((name) => (
-                        <option key={name} value={name} aria-selected={searchName === name}>{name}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={searchLocation}
-                      onChange={(e) => setSearchLocation(e.target.value)}
-                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchLocation ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
+                      className="min-w-full"
+                    />
+                    <Select
+                      options={searchOptions.location.map((loc) => ({
+                        value: loc,
+                        label: loc,
+                      }))}
+                      value={searchLocation ? { value: searchLocation, label: searchLocation } : null}
+                      onChange={(opt) => setSearchLocation(opt ? opt.value : '')}
+                      placeholder="Select Location"
+                      styles={selectStyles}
+                      isClearable
                       aria-label="Filter by location"
-                      aria-describedby="location-desc"
-                      aria-controls="doctors-table"
-                    >
-                      <option value="" className="text-gray-500 italic text-xs">Select Location</option>
-                      {searchOptions.location.map((loc) => (
-                        <option key={loc} value={loc} aria-selected={searchLocation === loc}>{loc}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={searchHospital}
-                      onChange={(e) => setSearchHospital(e.target.value)}
-                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchHospital ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
+                      className="min-w-full"
+                    />
+                    <Select
+                      options={searchOptions.hospital.map((hos) => ({
+                        value: hos,
+                        label: hos,
+                      }))}
+                      value={searchHospital ? { value: searchHospital, label: searchHospital } : null}
+                      onChange={(opt) => setSearchHospital(opt ? opt.value : '')}
+                      placeholder="Select Hospital"
+                      styles={selectStyles}
+                      isClearable
                       aria-label="Filter by hospital"
-                      aria-describedby="hospital-desc"
-                      aria-controls="doctors-table"
-                    >
-                      <option value="" className="text-gray-500 italic text-xs">Select Hospital</option>
-                      {searchOptions.hospital.map((hos) => (
-                        <option key={hos} value={hos} aria-selected={searchHospital === hos}>{hos}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={searchSpecialty}
-                      onChange={(e) => setSearchSpecialty(e.target.value)}
-                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchSpecialty ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
+                      className="min-w-full"
+                    />
+                    <Select
+                      options={searchOptions.specialty.map((spec) => ({
+                        value: spec,
+                        label: spec,
+                      }))}
+                      value={searchSpecialty ? { value: searchSpecialty, label: searchSpecialty } : null}
+                      onChange={(opt) => setSearchSpecialty(opt ? opt.value : '')}
+                      placeholder="Select Specialty"
+                      styles={selectStyles}
+                      isClearable
                       aria-label="Filter by specialty"
-                      aria-describedby="specialty-desc"
-                      aria-controls="doctors-table"
-                    >
-                      <option value="" className="text-gray-500 italic text-xs">Select Specialty</option>
-                      {searchOptions.specialty.map((spec) => (
-                        <option key={spec} value={spec} aria-selected={searchSpecialty === spec}>{spec}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={searchDepartment}
-                      onChange={(e) => setSearchDepartment(e.target.value)}
-                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchDepartment ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
-                      aria-label="Filter by department"
-                      aria-describedby="department-desc"
-                      aria-controls="doctors-table"
-                    >
-                      <option value="" className="text-gray-500 italic text-xs">Select Department</option>
-                      {searchOptions.department.map((dep) => (
-                        <option key={dep} value={dep} aria-selected={searchDepartment === dep}>{dep}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={searchRating}
-                      onChange={(e) => setSearchRating(e.target.value)}
-                      className={`min-w-full p-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-sky-400 focus:ring-offset-1 focus:border-sky-400 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 transition-all duration-200 hover:bg-sky-50 dark:hover:bg-gray-700 hover:shadow-sm leading-snug ${searchRating ? 'bg-sky-200 dark:bg-sky-800' : ''}`}
+                      className="min-w-full"
+                    />
+                    <Select
+                      options={searchOptions.rating.map((rate) => ({
+                        value: rate,
+                        label: rate,
+                      }))}
+                      value={searchRating ? { value: searchRating, label: searchRating } : null}
+                      onChange={(opt) => setSearchRating(opt ? opt.value : '')}
+                      placeholder="Select Rating"
+                      styles={selectStyles}
+                      isClearable
                       aria-label="Filter by rating"
-                      aria-describedby="rating-desc"
-                      aria-controls="doctors-table"
-                    >
-                      <option value="" className="text-gray-500 italic text-xs">Select Rating</option>
-                      {searchOptions.rating.map((rate) => (
-                        <option key={rate} value={rate} aria-selected={searchRating === rate}>{rate}</option>
-                      ))}
-                    </select>
+                      className="min-w-full"
+                    />
                   </div>
                   <button
                     onClick={() => {
                       clearFilters();
                       setIsFilterOpen(false);
                     }}
-                    className="flex items-center gap-1.5 px-4 py-2 mt-4 bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 hover:shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm"
+                    className="flex items-center gap-1.5 px-4 py-2 mt-4 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 hover:shadow-sm active:scale-95 transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm"
                     aria-label="Clear all filters"
                   >
                     <i className="fas fa-times text-sm text-red-500 hover:scale-105 transition-transform duration-150"></i>
@@ -476,10 +553,10 @@ const ViewDoctors: React.FC = () => {
               )}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4" aria-live="polite">
                 <div className="flex gap-3">
-                  <span className="inline-block bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm animate-pulse dark:bg-sky-900 dark:text-sky-300 hover:scale-102 transition-transform duration-200 leading-snug">
+                  <span className="inline-block bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm leading-snug">
                     Showing {filteredAndSortedDoctors.length} doctors
                   </span>
-                  <span className="inline-block bg-sky-100 text-sky-800 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm animate-pulse dark:bg-sky-900 dark:text-sky-300 hover:scale-102 transition-transform duration-200 leading-snug">
+                  <span className="inline-block bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm leading-snug">
                     Avg. Rating: {averageRating}/5
                   </span>
                 </div>
@@ -489,7 +566,7 @@ const ViewDoctors: React.FC = () => {
                       ref={downloadButtonRef}
                       onClick={() => setIsDownloadOpen(!isDownloadOpen)}
                       disabled={isDownloading !== null}
-                      className="flex items-center justify-center gap-1.5 px-4 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:ring-1 hover:ring-sky-200 active:bg-sky-700 active:scale-95 disabled:bg-sky-300 disabled:cursor-not-allowed transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm shadow-sm"
+                      className="flex items-center justify-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 hover:ring-1 hover:ring-indigo-200 active:scale-95 disabled:bg-indigo-300 disabled:cursor-not-allowed transition-all duration-200 w-full sm:w-auto min-w-[120px] text-sm shadow-sm"
                       aria-label="Download data"
                       aria-haspopup="true"
                       aria-expanded={isDownloadOpen}
@@ -498,7 +575,7 @@ const ViewDoctors: React.FC = () => {
                       data-tooltip-delay-show={200}
                     >
                       {isDownloading ? (
-                        <ClipLoader size={16} color="#0ea5e9" className="animate-pulse" />
+                        <ClipLoader size={16} color="#ffffff" className="animate-pulse" />
                       ) : (
                         <FaDownload className="text-sm hover:scale-105 transition-transform duration-150" />
                       )}
@@ -507,38 +584,41 @@ const ViewDoctors: React.FC = () => {
                     {isDownloadOpen && (
                       <div
                         ref={downloadMenuRef}
-                        className="absolute right-0 mt-1.5 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 animate-fade-in"
+                        className="absolute top-full right-0 mt-2 min-w-[120px] bg-white rounded-md shadow-lg z-50 animate-fade-in"
                         role="menu"
                       >
                         <div
                           onClick={downloadCSV}
                           onKeyDown={(e) => handleKeyDown(e, 'csv')}
-                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
+                          className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
                           role="menuitem"
                           tabIndex={0}
                           aria-label="Download as CSV"
                         >
-                          <i className="fas fa-file-csv text-sm hover:scale-105 transition-transform duration-150"></i> CSV
+                          <i className="fas fa-file-csv text-sm hover:scale-105 transition-transform duration-150"></i>
+                          CSV
                         </div>
                         <div
                           onClick={downloadPDF}
                           onKeyDown={(e) => handleKeyDown(e, 'pdf')}
-                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
+                          className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
                           role="menuitem"
                           tabIndex={0}
                           aria-label="Download as PDF"
                         >
-                          <i className="fas fa-file-pdf text-sm hover:scale-105 transition-transform duration-150"></i> PDF
+                          <i className="fas fa-file-pdf text-sm hover:scale-105 transition-transform duration-150"></i>
+                          PDF
                         </div>
                         <div
                           onClick={downloadExcel}
                           onKeyDown={(e) => handleKeyDown(e, 'excel')}
-                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-sky-100 dark:hover:bg-sky-800 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-1"
+                          className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 cursor-pointer flex items-center gap-1.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
                           role="menuitem"
                           tabIndex={0}
                           aria-label="Download as Excel"
                         >
-                          <i className="fas fa-file-excel text-sm hover:scale-105 transition-transform duration-150"></i> Excel
+                          <i className="fas fa-file-excel text-sm hover:scale-105 transition-transform duration-150"></i>
+                          Excel
                         </div>
                       </div>
                     )}
@@ -548,44 +628,79 @@ const ViewDoctors: React.FC = () => {
             </div>
           </div>
           <div className="mt-6">
-            {filteredAndSortedDoctors.length === 0 ? (
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm text-center py-8">
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-snug">No doctors found.</p>
+            {isLoading ? (
+              <div className="bg-white rounded-xl shadow-sm text-center py-8 animate-fade-in">
+                <ClipLoader size={40} color="#4f46e5" className="animate-pulse" />
+                <p className="text-gray-600 text-sm mt-4 leading-snug">Loading doctors...</p>
+              </div>
+            ) : filteredAndSortedDoctors.length === 0 ? (
+              <div className="bg-white rounded-xl shadow-sm text-center py-8 animate-fade-in">
+                <p className="text-gray-600 text-sm leading-snug">No doctors found.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+              <div className="overflow-x-auto bg-white rounded-xl shadow-sm animate-fade-in">
                 <table className="w-full border-collapse" id="doctors-table">
                   <thead>
-                    <tr className="bg-sky-50 dark:bg-sky-900 sticky top-0 z-10">
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Name</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight hidden md:table-cell">Email</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight hidden md:table-cell">Mobile</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Rating</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Specialty</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Department</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Location</th>
-                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Hospital</th>
+                    <tr className="bg-indigo-50 sticky top-0 z-10">
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight">
+                        Name
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight hidden md:table-cell">
+                        Email
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight hidden md:table-cell">
+                        Mobile
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight">
+                        Rating
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight">
+                        Specialty
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight">
+                        Location
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight">
+                        Hospital
+                      </th>
+                      <th scope="col" className="p-4 text-left text-sm font-semibold text-gray-700 tracking-tight">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredAndSortedDoctors.map((doctor, index) => (
                       <tr
                         key={doctor.id}
-                        className={`border-b border-gray-100 dark:border-gray-600 hover:bg-sky-50 dark:hover:bg-sky-900 transition-all duration-150 ${
-                          index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : ''
+                        className={`border-b border-gray-100 hover:bg-indigo-50 transition-all duration-150 ${
+                          index % 2 === 0 ? 'bg-gray-50' : ''
                         }`}
                       >
-                        <td scope="row" className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug font-medium">{doctor.name}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug hidden md:table-cell">{doctor.email}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug hidden md:table-cell">{doctor.mobileNum}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug flex items-center gap-1">
-                          {doctor.rating}/5
+                        <td scope="row" className="p-4 text-gray-600 text-sm leading-snug font-medium">
+                          {doctor.name}
+                        </td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug hidden md:table-cell">
+                          {doctor.email}
+                        </td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug hidden md:table-cell">
+                          {doctor.mobileNum}
+                        </td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug flex items-center gap-1">
+                          {doctor.rating.toFixed(1)}/5
                           <span className="text-yellow-400 hover:animate-bounce">★</span>
                         </td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.specialty}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.department}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.location}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300 text-sm leading-snug">{doctor.hospital}</td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug">{doctor.specialty}</td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug">{doctor.location}</td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug">{doctor.hospital}</td>
+                        <td className="p-4 text-gray-600 text-sm leading-snug">
+                          <button
+                            onClick={() => navigate(`/admin/doctordetails/${doctor.id}`)}
+                            className="px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 active:scale-95 transition-all duration-200 text-xs shadow-sm"
+                            aria-label={`View details for ${doctor.name}`}
+                          >
+                            View
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -596,6 +711,24 @@ const ViewDoctors: React.FC = () => {
         </div>
       </div>
       <Tooltip id="download-tooltip" />
+      <style>
+        {`
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-in {
+            animation: fade-in 1s ease-out;
+          }
+          @keyframes slide-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-slide-in {
+            animation: slide-in 0.3s ease-out;
+          }
+        `}
+      </style>
     </div>
   );
 };

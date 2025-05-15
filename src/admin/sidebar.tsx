@@ -34,10 +34,21 @@ const Sidebar: React.FC = () => {
         { name: 'Packages', path: '/services/packages' },
       ],
     },
+
+     {
+      name: 'Lab Tests',
+      icon: 'fas fa-briefcase-medical',
+      subItems: [
+        { name: 'upload', path: '/admin/uploadlabtests' },
+        { name: 'view', path: '/admin/viewlabtests' },
+      ],
+    },
    { name: 'Hospital', icon: 'fas fa-hospital', path: '/admin/uploadhospital' },
+ 
 
     { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/orders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/settings' },
+    
   ];
 
   const toggleSubMenu = (name: string) => {
