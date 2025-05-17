@@ -1,38 +1,35 @@
-// ... imports and interfaces remain the same
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-const UploadHospitals: React.FC = () => {
+interface LocationOption {
+  label: string;
+  value: number;
+  city: string;
+  state: string;
+  country: string;
+}
+
+const UploadTranslators: React.FC = () => {
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<LocationOption | null>(null);
-  const [hospitalName, setHospitalName] = useState('');
-  const [hospitalDescription, setHospitalDescription] = useState('');
-  const [hospitalImage, setHospitalImage] = useState('');
+
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState('');
   const [rating, setRating] = useState('');
-  const [customAddress, setCustomAddress] = useState('');
+  const [languages, setLanguages] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     fetchLocations();
   }, []);
 
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => setMessage(''), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
-
   const fetchLocations = async () => {
     try {
       const res = await axios.get('http://localhost:8080/api/locations');
-      const data = res.data;
-      const formatted = data.map((loc: any) => ({
+      const formatted = res.data.map((loc: any) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,
         city: loc.city,
@@ -45,59 +42,43 @@ const UploadHospitals: React.FC = () => {
     }
   };
 
-  const isCustomAddressValid = (addr: string) => {
-    return /^[^ ]+$/.test(addr) && /^[A-Z0-9,]+$/.test(addr.toUpperCase());
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedLocation || !hospitalName || !hospitalDescription || !hospitalImage || !rating || !customAddress) {
+    if (!selectedLocation || !name || !description || !image || !rating || !languages) {
       setMessage('All fields are required');
       return;
     }
 
-    if (!isCustomAddressValid(customAddress)) {
-      setMessage('Custom address must be ALL CAPS, use commas only, and contain NO spaces');
-      return;
-    }
-
-    const formattedAddress =
-      `${selectedLocation.city},${selectedLocation.state},${selectedLocation.country}`.toUpperCase() +
-      ',' +
-      customAddress;
-
     try {
-      const res = await axios.post('http://localhost:8080/api/hospitals', {
-        hositalName: hospitalName,
-        hospitalDescription,
-        hospitalImage,
-        rating,
-        address: formattedAddress,
-        location: {
-          locationId: selectedLocation.value,
-        },
+      const res = await axios.post('http://localhost:8080/api/translators/add', {
+        translatorName: name,
+        translatorDescription: description,
+        translatorImage: image,
+        translatorRating: rating,
+        translatorLanguages: languages,
+        locationId: selectedLocation.value,
       });
 
       if (res.status === 200 || res.status === 201) {
-        setMessage('Hospital uploaded successfully!');
+        setMessage('Translator uploaded successfully!');
         handleReset();
       } else {
-        setMessage('Failed to upload hospital');
+        setMessage('Failed to upload translator');
       }
     } catch (err) {
       console.error(err);
-      setMessage('An error occurred while uploading hospital');
+      setMessage('An error occurred while uploading translator');
     }
   };
 
   const handleReset = () => {
     setSelectedLocation(null);
-    setHospitalName('');
-    setHospitalDescription('');
-    setHospitalImage('');
+    setName('');
+    setDescription('');
+    setImage('');
     setRating('');
-    setCustomAddress('');
+    setLanguages('');
     setMessage('');
   };
 
@@ -106,7 +87,7 @@ const UploadHospitals: React.FC = () => {
       <Sidebar />
       <div className="flex-1 p-6 md:p-10 lg:ml-64">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center">Upload Hospital</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center">Upload Translator</h1>
 
           <div className="bg-white p-8 rounded-xl shadow-md border border-gray-200">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -114,7 +95,7 @@ const UploadHospitals: React.FC = () => {
               <div>
                 <label className="block font-medium text-gray-700 mb-2">Select Location</label>
                 <Select
-                  options={locations.sort((a, b) => a.label.localeCompare(b.label))}
+                  options={locations}
                   value={selectedLocation}
                   onChange={(opt) => setSelectedLocation(opt)}
                   placeholder="Choose a location"
@@ -125,11 +106,11 @@ const UploadHospitals: React.FC = () => {
               {selectedLocation && (
                 <>
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">Hospital Name</label>
+                    <label className="block font-medium text-gray-700 mb-1">Translator Name</label>
                     <input
                       type="text"
-                      value={hospitalName}
-                      onChange={(e) => setHospitalName(e.target.value)}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -138,8 +119,8 @@ const UploadHospitals: React.FC = () => {
                   <div>
                     <label className="block font-medium text-gray-700 mb-1">Description</label>
                     <textarea
-                      value={hospitalDescription}
-                      onChange={(e) => setHospitalDescription(e.target.value)}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -149,8 +130,8 @@ const UploadHospitals: React.FC = () => {
                     <label className="block font-medium text-gray-700 mb-1">Image URL</label>
                     <input
                       type="url"
-                      value={hospitalImage}
-                      onChange={(e) => setHospitalImage(e.target.value)}
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -163,20 +144,19 @@ const UploadHospitals: React.FC = () => {
                       value={rating}
                       onChange={(e) => setRating(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
+                      placeholder="e.g. 4.5"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">
-                      Additional Address Info (ALL CAPS, no spaces, comma separated)
-                    </label>
+                    <label className="block font-medium text-gray-700 mb-1">Languages (comma-separated)</label>
                     <input
                       type="text"
-                      value={customAddress}
-                      onChange={(e) => setCustomAddress(e.target.value)}
+                      value={languages}
+                      onChange={(e) => setLanguages(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
-                      placeholder="BLOCK-5,SECTOR-10"
+                      placeholder="e.g. Hindi, English, Telugu"
                       required
                     />
                   </div>
@@ -216,5 +196,4 @@ const UploadHospitals: React.FC = () => {
   );
 };
 
-export default UploadHospitals;
-
+export default UploadTranslators;

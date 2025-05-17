@@ -33,6 +33,13 @@ import ViewDoctors from './admin/viewdoctors';
 import Uploadhospital from './admin/uploadhospitals';
 import DoctorDetails from './admin/doctordetails';
 import UploadTest from './admin/uploadlabtests';
+import Uploadloacation from './admin/businessLocation';
+import Uploaddiagnostics from './admin/uploadDiagnostics';
+import Uploadlabtests from './admin/uploadlabtests';
+import UploadTranslators from './admin/uploadTranslators';
+import UploadChefs from './admin/uploadChefs';
+import UploadPhysios from './admin/uploadPhysio';
+import UploadCenters from './admin/upoladCenters';
  // Corrected import name (PascalCase)
 
 // Utility Components
@@ -92,6 +99,13 @@ const App: React.FC = () => (
             <Route path="/admin/uploadhospital" element={<Uploadhospital />} />
              <Route path="/admin/uploadlabtests" element={<UploadTest />} />
             <Route path="/admin/doctordetails/:id" element={<DoctorDetails />} />
+            <Route path="/admin/businessLocations" element={<Uploadloacation/>} />
+             <Route path="/admin/uploadDiagnostics" element={<Uploaddiagnostics/>} />
+              <Route path="/admin/uploadlabtests" element={<Uploadlabtests/>} />
+               <Route path="/admin/uploadTanslators" element={<UploadTranslators/>} />
+                <Route path="/admin/uploadchefs" element={<UploadChefs/>} />
+                 <Route path="/admin/uploadPhysios" element={<UploadPhysios/>} />
+              <Route path="/admin/uploadCenters" element={<UploadCenters/>} />
 
 
             {/* 404 Route */}

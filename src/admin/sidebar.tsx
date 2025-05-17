@@ -36,14 +36,54 @@ const Sidebar: React.FC = () => {
     },
 
      {
-      name: 'Lab Tests',
+      name: 'Diogonostics',
       icon: 'fas fa-briefcase-medical',
       subItems: [
-        { name: 'upload', path: '/admin/uploadlabtests' },
-        { name: 'view', path: '/admin/viewlabtests' },
+        { name: 'uploadDioagnostics', path: '/admin/uploadDiagnostics' },
+        { name: 'uploadLabtests', path: '/admin/uploadlabtests' },
+        { name: 'viewDiagnostics', path: '/admin/viewdiagnostics' },
+        
+
       ],
     },
+       {
+      name: 'Translators',
+      icon: 'fas fa-briefcase-medical',
+      subItems: [
+        { name: 'upload', path: '/admin/uploadTanslators' },
+        { name: 'view', path: '/admin/viewTranslators' },
+      ],
+    },
+         {
+      name: 'Personalized_chefs',
+      icon: 'fas fa-briefcase-chefs',
+      subItems: [
+        { name: 'upload', path: '/admin/uploadchefs' },
+        { name: 'view', path: '/admin/viewchefs' },
+      ],
+    },
+           {
+      name: 'Physios',
+      icon: 'fas fa-briefcase-chefs',
+      subItems: [
+        { name: 'upload', path: '/admin/uploadPhysios' },
+        { name: 'view', path: '/admin/viewphysios' },
+      ],
+    },
+        {
+      name: 'SpaServices',
+      icon: 'fas fa-briefcase-chefs',
+      subItems: [
+        { name: 'UploadSpacenters', path: '/admin/uploadCenters' },
+        { name: 'UploadServies', path: '/admin/uploadServices' },
+         { name: 'ViwSpaCenters', path: '/admin/viewcenters' },
+      ],
+    },
+
+
+
    { name: 'Hospital', icon: 'fas fa-hospital', path: '/admin/uploadhospital' },
+    { name: 'BusinessLocation', icon: 'fas fa-location', path: '/admin/businessLocations' },
  
 
     { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/orders' },
