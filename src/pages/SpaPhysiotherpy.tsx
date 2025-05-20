@@ -1,348 +1,215 @@
-import React, { useState, useMemo } from 'react';
-import { MapPin, Search, Languages } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { MapPin, Search, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-// Define the type for service items
-interface ServiceItem {
-  name: string;
-  details: string;
-  image: string;
-  description: string;
-  name_es: string;
-  details_es: string;
-  description_es: string;
-  name_fr: string;
-  details_fr: string;
-  description_fr: string;
-  price: number;
-  category: 'Spa' | 'Physiotherapy';
+interface SpaItem {
+  spaId: number;
+  spaName: string;
+  spaDescription: string | null;
+  spaImage: string | null;
+  rating: string | null;
+  address: string | null;
+  locationId: number | null;
 }
 
-// Define the type for translators
-interface Translator {
-  name: string;
-  availability_date: string;
+interface PhysioItem {
+  physioId: number;
+  physioName: string;
+  physioDescription: string;
+  physioImage: string;
+  rating: string;
+  address: string;
+  price: string;
+  location: any;
 }
 
-const ServiceListingPage = () => {
-  // State for input fields
-  const [searchQuery, setSearchQuery] = useState('');
-  const [location, setLocation] = useState('');
+const ServiceListingPage: React.FC = () => {
+  const [spaData, setSpaData] = useState<SpaItem[]>([]);
+  const [spaSearch, setSpaSearch] = useState('');
+  const [spaSort, setSpaSort] = useState<'name-asc' | 'name-desc' | 'rating-desc'>('name-asc');
+  const [spaRating, setSpaRating] = useState<number | null>(null);
+  const [spaLocation, setSpaLocation] = useState('');
+
+  const [physioData, setPhysioData] = useState<PhysioItem[]>([]);
+  const [physioSearch, setPhysioSearch] = useState('');
+  const [physioSort, setPhysioSort] = useState<'name-asc' | 'name-desc' | 'rating-desc'>('name-asc');
+  const [physioRating, setPhysioRating] = useState<number | null>(null);
+  const [physioLocation, setPhysioLocation] = useState('');
+
   const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'es' | 'fr'>('en');
-  const [sortOption, setSortOption] = useState<'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'>('name-asc');
-  const [categoryFilter, setCategoryFilter] = useState<'All' | 'Spa' | 'Physiotherapy'>('All');
 
-  // Mock translator data
-  const translators: Translator[] = [
-    { name: 'Maria Gonzalez', availability_date: '2025-06-01' },
-    { name: 'Pierre Dubois', availability_date: '2025-06-05' },
-    { name: 'Anita Sharma', availability_date: '2025-06-10' },
-  ];
+  const getTranslatedText = (en: string, es: string, fr: string) =>
+    selectedLanguage === 'en' ? en : selectedLanguage === 'es' ? es : fr || en;
 
-  // Translation map for UI text
-  const uiTranslations: Record<string, { en: string; es: string; fr: string }> = {
-    title: {
-      en: 'Explore Spa & Physiotherapy Services',
-      es: 'Explora Servicios de Spa y Fisioterapia',
-      fr: 'Découvrez les Services de Spa et Physiothérapie',
-    },
-    searchPlaceholder: {
-      en: 'Search Services',
-      es: 'Buscar Servicios',
-      fr: 'Rechercher des Services',
-    },
-    locationPlaceholder: {
-      en: 'Choose Location',
-      es: 'Elegir Ubicación',
-      fr: 'Choisir un Emplacement',
-    },
-    translatorsTitle: {
-      en: 'Available Translators',
-      es: 'Traductores Disponibles',
-      fr: 'Traducteurs Disponibles',
-    },
-    availableFrom: {
-      en: 'Available from',
-      es: 'Disponible desde',
-      fr: 'Disponible à partir de',
-    },
-    sortLabel: {
-      en: 'Sort By',
-      es: 'Ordenar Por',
-      fr: 'Trier Par',
-    },
-    categoryLabel: {
-      en: 'Filter by Category',
-      es: 'Filtrar por Categoría',
-      fr: 'Filtrer par Catégorie',
-    },
-    addToCart: {
-      en: 'Add to Cart',
-      es: 'Añadir al Carrito',
-      fr: 'Ajouter au Panier',
-    },
-  };
+  useEffect(() => {
+    axios.get('http://localhost:8080/spaCenter/all')
+      .then(res => setSpaData(res.data))
+      .catch(err => console.error('Failed to fetch spa data:', err));
 
-  // Service data with unique images
-  const services: ServiceItem[] = [
-    {
-      name: 'Therapeutic Massage',
-      details: 'Relieves muscle tension',
-      image: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      description: 'Relaxing massage to ease stress and muscle pain.',
-      name_es: 'Masaje Terapéutico',
-      details_es: 'Alivia la tensión muscular',
-      description_es: 'Masaje relajante para aliviar el estrés y el dolor muscular.',
-      name_fr: 'Massage Thérapeutique',
-      details_fr: 'Soulage la tension musculaire',
-      description_fr: 'Massage relaxant pour soulager le stress et les douleurs musculaires.',
-      price: 80,
-      category: 'Spa',
-    },
-    {
-      name: 'Physiotherapy Session',
-      details: 'Post-surgery recovery',
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      description: 'Tailored sessions to aid recovery and improve mobility.',
-      name_es: 'Sesión de Fisioterapia',
-      details_es: 'Recuperación post-cirugía',
-      description_es: 'Sesiones personalizadas para ayudar en la recuperación y mejorar la movilidad.',
-      name_fr: 'Séance de Physiothérapie',
-      details_fr: 'Récupération post-chirurgicale',
-      description_fr: 'Séances personnalisées pour aider à la récupération et améliorer la mobilité.',
-      price: 100,
-      category: 'Physiotherapy',
-    },
-    {
-      name: 'Aromatherapy',
-      details: 'Stress relief and relaxation',
-      image: 'https://images.unsplash.com/photo-1517649763966-506a2083f781?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      description: 'Uses essential oils to promote mental and physical well-being.',
-      name_es: 'Aromaterapia',
-      details_es: 'Alivio del estrés y relajación',
-      description_es: 'Utiliza aceites esenciales para promover el bienestar mental y físico.',
-      name_fr: 'Aromathérapie',
-      details_fr: 'Soulagement du stress et relaxation',
-      description_fr: 'Utilise des huiles essentielles pour promouvoir le bien-être mental et physique.',
-      price: 70,
-      category: 'Spa',
-    },
-    {
-      name: 'Hydrotherapy',
-      details: 'Joint pain relief',
-      image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      description: 'Water-based therapy to alleviate joint discomfort.',
-      name_es: 'Hidroterapia',
-      details_es: 'Alivio del dolor articular',
-      description_es: 'Terapia basada en agua para aliviar las molestias articulares.',
-      name_fr: 'Hydrothérapie',
-      details_fr: 'Soulagement des douleurs articulaires',
-      description_fr: 'Thérapie à base d’eau pour soulager les inconforts articulaires.',
-      price: 90,
-      category: 'Physiotherapy',
-    },
-    {
-      name: 'Yoga Therapy',
-      details: 'Improves flexibility and strength',
-      image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      description: 'Guided yoga sessions for physical and mental health.',
-      name_es: 'Terapia de Yoga',
-      details_es: 'Mejora la flexibilidad y la fuerza',
-      description_es: 'Sesiones de yoga guiadas para la salud física y mental.',
-      name_fr: 'Thérapie par le Yoga',
-      details_fr: 'Améliore la flexibilité et la force',
-      description_fr: 'Séances de yoga guidées pour la santé physique et mentale.',
-      price: 60,
-      category: 'Spa',
-    },
-    {
-      name: 'Acupuncture',
-      details: 'Pain management',
-      image: 'https://images.unsplash.com/photo-1595733750589-7e1c7eb7b3ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      description: 'Traditional therapy to relieve chronic pain and stress.',
-      name_es: 'Acupuntura',
-      details_es: 'Manejo del dolor',
-      description_es: 'Terapia tradicional para aliviar el dolor crónico y el estrés.',
-      name_fr: 'Acupuncture',
-      details_fr: 'Gestion de la douleur',
-      description_fr: 'Thérapie traditionnelle pour soulager la douleur chronique et le stress.',
-      price: 120,
-      category: 'Physiotherapy',
-    },
-  ];
+    axios.get('http://localhost:8080/physio')
+      .then(res => setPhysioData(res.data))
+      .catch(err => console.error('Failed to fetch physio data:', err));
+  }, []);
 
-  // Memoized filtered and sorted services
-  const filteredServices = useMemo(() => {
-    return services
-      .filter((service) => {
-        const name = selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr;
-        return name.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredSpas = useMemo(() => {
+    return spaData
+      .filter(spa => {
+        const matchesSearch = spa.spaName.toLowerCase().includes(spaSearch.toLowerCase());
+        const matchesRating = spaRating ? parseFloat(spa.rating || '0') >= spaRating : true;
+        const matchesLocation = spaLocation ? (spa.address || '').toLowerCase().includes(spaLocation.toLowerCase()) : true;
+        return matchesSearch && matchesRating && matchesLocation;
       })
-      .filter((service) => categoryFilter === 'All' || service.category === categoryFilter)
       .sort((a, b) => {
-        if (sortOption === 'price-asc') return a.price - b.price;
-        if (sortOption === 'price-desc') return b.price - a.price;
-        const nameA = (selectedLanguage === 'en' ? a.name : selectedLanguage === 'es' ? a.name_es : a.name_fr).toLowerCase();
-        const nameB = (selectedLanguage === 'en' ? b.name : selectedLanguage === 'es' ? b.name_es : b.name_fr).toLowerCase();
-        if (sortOption === 'name-asc') return nameA.localeCompare(nameB);
-        return nameB.localeCompare(nameA);
+        if (spaSort === 'rating-desc') return parseFloat(b.rating || '0') - parseFloat(a.rating || '0');
+        const nameA = a.spaName.toLowerCase();
+        const nameB = b.spaName.toLowerCase();
+        return spaSort === 'name-asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
       });
-  }, [searchQuery, selectedLanguage, categoryFilter, sortOption]);
+  }, [spaData, spaSearch, spaRating, spaLocation, spaSort]);
 
-  return (
-    <section className="bg-slate-50 py-12 min-h-screen">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-8">
-            {uiTranslations.title[selectedLanguage]}
-          </h2>
+  const filteredPhysios = useMemo(() => {
+    return physioData
+      .filter(physio => {
+        const matchesSearch = physio.physioName.toLowerCase().includes(physioSearch.toLowerCase());
+        const matchesRating = physioRating ? parseFloat(physio.rating || '0') >= physioRating : true;
+        const matchesLocation = physioLocation ? (physio.address || '').toLowerCase().includes(physioLocation.toLowerCase()) : true;
+        return matchesSearch && matchesRating && matchesLocation;
+      })
+      .sort((a, b) => {
+        if (physioSort === 'rating-desc') return parseFloat(b.rating || '0') - parseFloat(a.rating || '0');
+        const nameA = a.physioName.toLowerCase();
+        const nameB = b.physioName.toLowerCase();
+        return physioSort === 'name-asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+      });
+  }, [physioData, physioSearch, physioRating, physioLocation, physioSort]);
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            {/* Search, Location, and Language Inputs */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <input
-                  type="text"
-                  placeholder={uiTranslations.searchPlaceholder[selectedLanguage]}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
-                  aria-label={uiTranslations.searchPlaceholder[selectedLanguage]}
-                />
-              </div>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <select
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
-                  aria-label={uiTranslations.locationPlaceholder[selectedLanguage]}
-                >
-                  <option value="">{uiTranslations.locationPlaceholder[selectedLanguage]}</option>
-                  <option value="Delhi NCR">Delhi NCR</option>
-                  <option value="Mumbai, Maharashtra">Mumbai, Maharashtra</option>
-                  <option value="Pune, Maharashtra">Pune, Maharashtra</option>
-                  <option value="Chennai, Tamil Nadu">Chennai, Tamil Nadu</option>
-                  <option value="Bangalore, Karnataka">Bangalore, Karnataka</option>
-                  <option value="Hyderabad, Telangana">Hyderabad, Telangana</option>
-                </select>
-              </div>
-              <div className="relative">
-                <Languages className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <select
-                  value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value as 'en' | 'es' | 'fr')}
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
-                  aria-label="Select language"
-                >
-                  <option value="en">English</option>
-                  <option value="es">Español</option>
-                  <option value="fr">Français</option>
-                </select>
-              </div>
-            </div>
+  const renderControls = (
+    searchValue: string,
+    setSearch: (v: string) => void,
+    sortValue: 'name-asc' | 'name-desc' | 'rating-desc',
+    setSort: (v: 'name-asc' | 'name-desc' | 'rating-desc') => void,
+    ratingValue: number | null,
+    setRating: (v: number | null) => void,
+    locationValue: string,
+    setLocation: (v: string) => void
+  ) => (
+    <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <input
+            type="text"
+            placeholder={getTranslatedText('Search services...', 'Buscar servicios...', 'Rechercher des services...')}
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchValue}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
 
-            {/* Sort and Category Filter */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="flex-1">
-                <label htmlFor="sort" className="text-sm font-medium text-gray-700">
-                  {uiTranslations.sortLabel[selectedLanguage]}
-                </label>
-                <select
-                  id="sort"
-                  value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value as 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc')}
-                  className="mt-1 w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
-                  aria-label={uiTranslations.sortLabel[selectedLanguage]}
-                >
-                  <option value="name-asc">{selectedLanguage === 'en' ? 'Name (A-Z)' : selectedLanguage === 'es' ? 'Nombre (A-Z)' : 'Nom (A-Z)'}</option>
-                  <option value="name-desc">{selectedLanguage === 'en' ? 'Name (Z-A)' : selectedLanguage === 'es' ? 'Nombre (Z-A)' : 'Nom (Z-A)'}</option>
-                  <option value="price-asc">{selectedLanguage === 'en' ? 'Price (Low to High)' : selectedLanguage === 'es' ? 'Precio (Bajo a Alto)' : 'Prix (Croissant)'}</option>
-                  <option value="price-desc">{selectedLanguage === 'en' ? 'Price (High to Low)' : selectedLanguage === 'es' ? 'Precio (Alto a Bajo)' : 'Prix (Décroissant)'}</option>
-                </select>
-              </div>
-              <div className="flex-1">
-                <label className="text-sm font-medium text-gray-700">{uiTranslations.categoryLabel[selectedLanguage]}</label>
-                <div className="mt-1 flex gap-2">
-                  <button
-                    onClick={() => setCategoryFilter('All')}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'All' ? 'bg-[#499E14] text-white' : 'bg-gray-200 text-gray-700'} hover:bg-[#3a7e10] hover:text-white transition-all duration-300`}
-                    aria-pressed={categoryFilter === 'All'}
-                  >
-                    {selectedLanguage === 'en' ? 'All' : selectedLanguage === 'es' ? 'Todos' : 'Tous'}
-                  </button>
-                  <button
-                    onClick={() => setCategoryFilter('Spa')}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'Spa' ? 'bg-[#499E14] text-white' : 'bg-gray-200 text-gray-700'} hover:bg-[#3a7e10] hover:text-white transition-all duration-300`}
-                    aria-pressed={categoryFilter === 'Spa'}
-                  >
-                    Spa
-                  </button>
-                  <button
-                    onClick={() => setCategoryFilter('Physiotherapy')}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm ${categoryFilter === 'Physiotherapy' ? 'bg-[#499E14] text-white' : 'bg-gray-200 text-gray-700'} hover:bg-[#3a7e10] hover:text-white transition-all duration-300`}
-                    aria-pressed={categoryFilter === 'Physiotherapy'}
-                  >
-                    {selectedLanguage === 'en' ? 'Physiotherapy' : selectedLanguage === 'es' ? 'Fisioterapia' : 'Physiothérapie'}
-                  </button>
-                </div>
-              </div>
-            </div>
+        <div className="flex items-center gap-4">
+          <select
+            value={sortValue}
+            onChange={e => setSort(e.target.value as any)}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value="name-asc">{getTranslatedText('Name (A-Z)', 'Nombre (A-Z)', 'Nom (A-Z)')}</option>
+            <option value="name-desc">{getTranslatedText('Name (Z-A)', 'Nombre (Z-A)', 'Nom (Z-A)')}</option>
+            <option value="rating-desc">{getTranslatedText('Rating (High to Low)', 'Calificación (Alta a Baja)', 'Note (Élevée à Faible)')}</option>
+          </select>
 
-            {/* Translator Information */}
-            <div className="mb-6">
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                {uiTranslations.translatorsTitle[selectedLanguage]}
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {translators.map((translator, index) => (
-                  <div key={index} className="bg-gray-100 p-3 rounded-lg">
-                    <p className="text-gray-800 font-medium">{translator.name}</p>
-                    <p className="text-gray-600 text-sm">
-                      {uiTranslations.availableFrom[selectedLanguage]}: {translator.availability_date}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <select
+            value={ratingValue || ''}
+            onChange={e => setRating(e.target.value ? parseInt(e.target.value) : null)}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value="">{getTranslatedText('All Ratings', 'Todas las Calificaciones', 'Toutes les Notes')}</option>
+            <option value="4">4+ Stars</option>
+            <option value="3">3+ Stars</option>
+            <option value="2">2+ Stars</option>
+          </select>
 
-            {/* Service Listings */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredServices.map((service, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  <img
-                    src={service.image}
-                    alt={selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr}
-                    className="w-full h-40 object-cover rounded-lg mb-4"
-                  />
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    {selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr}
-                  </h4>
-                  <p className="text-gray-600 text-sm mb-2">
-                    {selectedLanguage === 'en' ? service.details : selectedLanguage === 'es' ? service.details_es : service.details_fr}
-                  </p>
-                  <p className="text-gray-500 text-xs italic mb-2">
-                    {selectedLanguage === 'en' ? service.description : selectedLanguage === 'es' ? service.description_es : service.description_fr}
-                  </p>
-                  <p className="text-gray-800 font-semibold mb-4">${service.price.toFixed(2)}</p>
-                  <Link
-                    to={`/cart?service=${encodeURIComponent(selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr)}`}
-                    className="w-full bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-300"
-                    aria-label={`${uiTranslations.addToCart[selectedLanguage]} ${selectedLanguage === 'en' ? service.name : selectedLanguage === 'es' ? service.name_es : service.name_fr}`}
-                  >
-                    {uiTranslations.addToCart[selectedLanguage]}
-                  </Link>
-                </div>
-              ))}
-            </div>
+          <div className="relative">
+            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder={getTranslatedText('Filter by location...', 'Filtrar por ubicación...', 'Filtrer par emplacement...')}
+              className="pl-10 pr-4 py-2 border rounded-lg"
+              value={locationValue}
+              onChange={e => setLocation(e.target.value)}
+            />
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* SPA SECTION */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-extrabold text-gray-900">
+            {getTranslatedText('Explore Spa Services', 'Explora Servicios de Spa', 'Découvrez les Services de Spa')}
+          </h2>
+        </div>
+        {renderControls(spaSearch, setSpaSearch, spaSort, setSpaSort, spaRating, setSpaRating, spaLocation, setSpaLocation)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {filteredSpas.map(spa => (
+            <div key={spa.spaId} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow">
+              <img src={spa.spaImage || 'https://via.placeholder.com/300x200?text=No+Image'} alt={spa.spaName} className="w-full h-48 object-cover" />
+              <div className="p-5">
+                <h3 className="text-xl font-semibold text-gray-900">{spa.spaName}</h3>
+                <div className="flex items-center mt-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="ml-1 text-sm text-gray-600">{spa.rating || 'Not rated'}</span>
+                </div>
+                <p className="mt-2 text-sm text-gray-600">{spa.spaDescription || 'No description provided.'}</p>
+                <p className="mt-2 text-xs text-gray-400 flex items-center">
+                  <MapPin className="w-4 h-4 mr-1" />{spa.address || 'No address available'}
+                </p>
+                <div className="mt-4">
+                  <Link to={`/viewservices/${spa.spaId}`} className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    {getTranslatedText('View Services', 'Explorar Más', 'Découvrir Plus')}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* PHYSIOTHERAPY SECTION */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-extrabold text-gray-900">
+            {getTranslatedText('Explore Physiotherapy Services', 'Explora Servicios de Fisioterapia', 'Découvrez les Services de Physiothérapie')}
+          </h2>
+        </div>
+        {renderControls(physioSearch, setPhysioSearch, physioSort, setPhysioSort, physioRating, setPhysioRating, physioLocation, setPhysioLocation)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPhysios.map(physio => (
+            <div key={physio.physioId} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow">
+              <img src={physio.physioImage || 'https://via.placeholder.com/300x200?text=No+Image'} alt={physio.physioName} className="w-full h-48 object-cover" />
+              <div className="p-5">
+                <h3 className="text-xl font-semibold text-gray-900">{physio.physioName}</h3>
+                <div className="flex items-center mt-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="ml-1 text-sm text-gray-600">{physio.rating || 'Not rated'}</span>
+                </div>
+                <p className="mt-2 text-sm text-gray-600">{physio.physioDescription || 'No description provided.'}</p>
+                <p className="mt-2 text-xs text-gray-400 flex items-center">
+                  <MapPin className="w-4 h-4 mr-1" />{physio.address || 'No address available'}
+                </p>
+                <div className="mt-4">
+                  <Link to={`/viewphysios/${physio.physioId}`} className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    {getTranslatedText('Book now', 'Explorar Más', 'Découvrir Plus')}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
