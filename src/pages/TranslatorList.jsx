@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe, Mail, Phone, Briefcase, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,84 +9,52 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
-const translators = [
-  {
-    id: 1,
-    name: "Sofia Rodriguez",
-    languages: ["Spanish", "English"],
-    experience: { years: 8, specialization: "Medical Translation" },
-    email: "sofia.rodriguez@example.com",
-    phone: "+34 600 123 456",
-    country: "Spain",
-    avatar: "https://i.pravatar.cc/150?u=sofia",
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    name: "Kenji Nakamura",
-    languages: ["Japanese", "English"],
-    experience: { years: 10, specialization: "Technical Translation" },
-    email: "kenji.nakamura@example.com",
-    phone: "+81 90 1234 5678",
-    country: "Japan",
-    avatar: "https://i.pravatar.cc/150?u=kenji",
-    rating: 4.9,
-  },
-  {
-    id: 3,
-    name: "Fatima Al-Mansour",
-    languages: ["Arabic", "French"],
-    experience: { years: 6, specialization: "Legal Translation" },
-    email: "fatima.mansour@example.com",
-    phone: "+971 50 987 6543",
-    country: "UAE",
-    avatar: "https://i.pravatar.cc/150?u=fatima",
-    rating: 4.7,
-  },
-  {
-    id: 4,
-    name: "Jean Dupont",
-    languages: ["French", "Spanish"],
-    experience: { years: 12, specialization: "Literary Translation" },
-    email: "jean.dupont@example.com",
-    phone: "+33 6 12 34 56 78",
-    country: "France",
-    avatar: "https://i.pravatar.cc/150?u=jean",
-    rating: 4.6,
-  },
-  {
-    id: 5,
-    name: "Liu Wei",
-    languages: ["Mandarin", "English"],
-    experience: { years: 9, specialization: "Business Translation" },
-    email: "liu.wei@example.com",
-    phone: "+86 138 0000 0000",
-    country: "China",
-    avatar: "https://i.pravatar.cc/150?u=liu",
-    rating: 4.8,
-  },
-  {
-    id: 6,
-    name: "Priya Sharma",
-    languages: ["Hindi", "English"],
-    experience: { years: 7, specialization: "Medical Translation" },
-    email: "priya.sharma@example.com",
-    phone: "+91 98765 43210",
-    country: "India",
-    avatar: "https://i.pravatar.cc/150?u=priya",
-    rating: 4.7,
-  },
-];
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import axios from "axios";
 
 const TranslatorList = () => {
+  const [translators, setTranslators] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("All");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/translators")
+      .then((response) => {
+        const formatted = response.data.map((t) => ({
+          id: t.translatorID,
+          name: t.translatorName,
+          languages: t.translatorLanguages
+            .split(",")
+            .map((lang) => lang.trim()),
+          experience: {
+            years: Math.floor(Math.random() * 11) + 5, // Dummy experience
+            specialization: "General Translation", // Optional default
+          },
+          email: "N/A",
+          phone: "N/A",
+          country: "India", // You can change this based on real data if available
+          avatar: t.translatorImage,
+          rating: parseFloat(t.translatorRating),
+          description: t.translatorDescription,
+        }));
+        setTranslators(formatted);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch translators:", error);
+      });
+  }, []);
 
   const filteredTranslators =
     selectedLanguage === "All"
       ? translators
-      : translators.filter((t) => t.languages.includes(selectedLanguage));
+      : translators.filter((t) =>
+          t.languages.includes(selectedLanguage)
+        );
 
   const languages = [
     "All",
@@ -100,7 +68,9 @@ const TranslatorList = () => {
         <Star
           key={i}
           className={`h-4 w-4 ${
-            i <= Math.round(rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+            i <= Math.round(rating)
+              ? "text-yellow-400 fill-yellow-400"
+              : "text-gray-300"
           }`}
         />
       );
@@ -126,7 +96,11 @@ const TranslatorList = () => {
             </SelectTrigger>
             <SelectContent className="rounded-xl shadow-lg bg-white">
               {languages.map((lang) => (
-                <SelectItem key={lang} value={lang} className="hover:bg-[#f0f8e8]">
+                <SelectItem
+                  key={lang}
+                  value={lang}
+                  className="hover:bg-[#f0f8e8]"
+                >
                   {lang}
                 </SelectItem>
               ))}
@@ -139,7 +113,9 @@ const TranslatorList = () => {
             <Card
               key={translator.id}
               className="shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-2xl transform hover:-translate-y-1"
-              style={{ animation: `fadeIn 0.3s ease-in ${index * 0.1}s both` }}
+              style={{
+                animation: `fadeIn 0.3s ease-in ${index * 0.1}s both`,
+              }}
             >
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center gap-4">
@@ -147,14 +123,20 @@ const TranslatorList = () => {
                     src={translator.avatar}
                     alt={`${translator.name} avatar`}
                     className="w-16 h-16 rounded-full object-cover border-2 border-[#e6f4e0]"
-                    onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+                    onError={(e) =>
+                      (e.target.src = "https://via.placeholder.com/150")
+                    }
                   />
                   <div>
-                    <h2 className="text-lg font-semibold text-[#3a7e10]">{translator.name}</h2>
+                    <h2 className="text-lg font-semibold text-[#3a7e10]">
+                      {translator.name}
+                    </h2>
                     <p className="text-sm text-gray-600">{translator.country}</p>
                     <div className="flex items-center gap-1 mt-1">
                       {renderStars(translator.rating)}
-                      <span className="text-sm text-gray-500 ml-2">({translator.rating})</span>
+                      <span className="text-sm text-gray-500 ml-2">
+                        ({translator.rating})
+                      </span>
                     </div>
                   </div>
                 </div>

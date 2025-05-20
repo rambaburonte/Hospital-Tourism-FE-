@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Hospital {
-  id: string;
-  hospital: string;
+  hospitalId: number;
+  hositalName: string;
+  hospitalDescription: string;
+  hospitalImage: string;
+  rating: string;
   address: string;
-  pictureUrl: string;
 }
 
 const HospitalList: React.FC = () => {
@@ -14,6 +17,7 @@ const HospitalList: React.FC = () => {
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHospitals = async () => {
@@ -27,32 +31,32 @@ const HospitalList: React.FC = () => {
         setLoading(false);
       }
     };
-    
 
     fetchHospitals();
   }, []);
 
-  // Extract unique cities from addresses
   const cities = useMemo(() => {
     const citySet = new Set<string>();
     hospitals.forEach((hospital) => {
-      // Assume address format: "Street, City, State"
-      const cityMatch = hospital.address.match(/,\s*([^,]+),\s*[^,]+$/);
-      if (cityMatch) citySet.add(cityMatch[1].trim());
+      const parts = hospital.address.split(",");
+      if (parts.length >= 1) {
+        citySet.add(parts[0].trim()); // use first part as city
+      }
     });
     return ["All Cities", ...Array.from(citySet).sort()];
   }, [hospitals]);
 
-  // Filter hospitals based on search query and selected city
   const filteredHospitals = useMemo(() => {
     return hospitals.filter((hospital) => {
       const matchesSearch =
-        hospital.hospital.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        hospital.hositalName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         hospital.address.toLowerCase().includes(searchQuery.toLowerCase());
+
       const matchesCity =
         selectedCity === "All Cities" ||
         selectedCity === "" ||
         hospital.address.includes(selectedCity);
+
       return matchesSearch && matchesCity;
     });
   }, [hospitals, searchQuery, selectedCity]);
@@ -73,28 +77,20 @@ const HospitalList: React.FC = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by name or address..."
                   className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  aria-label="Search hospitals"
                 />
                 <svg
                   className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  aria-hidden="true"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
                 className="w-full sm:w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Select city"
               >
                 {cities.map((city) => (
                   <option key={city} value={city}>
@@ -108,10 +104,7 @@ const HospitalList: React.FC = () => {
           {loading && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[...Array(4)].map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden animate-pulse"
-                >
+                <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden animate-pulse">
                   <div className="w-full h-48 bg-gray-200 dark:bg-gray-700" />
                   <div className="p-6">
                     <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" />
@@ -121,7 +114,9 @@ const HospitalList: React.FC = () => {
               ))}
             </div>
           )}
+
           {error && <p className="text-red-500 text-center">{error}</p>}
+
           {!loading && !error && filteredHospitals.length === 0 && (
             <p className="text-gray-600 dark:text-gray-300 text-center">
               No hospitals found matching your criteria.
@@ -131,42 +126,31 @@ const HospitalList: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredHospitals.map((hospital) => (
               <div
-                key={hospital.id}
+                key={hospital.hospitalId}
                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-gray-100 dark:border-gray-700"
               >
                 <img
-                  src={hospital.pictureUrl}
-                  alt={`${hospital.hospital} location`}
+                  src={hospital.hospitalImage || "https://via.placeholder.com/300x200?text=Hospital+Image"}
+                  alt={hospital.hositalName}
                   className="w-full h-48 object-cover cursor-pointer"
-                  onClick={() => {
-                    const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      `${hospital.hospital} ${hospital.address}`
-                    )}`;
-                    window.open(searchUrl, "_blank");
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                        `${hospital.hospital} ${hospital.address}`
-                      )}`;
-                      window.open(searchUrl, "_blank");
-                    }
-                  }}
                   onError={(e) => {
                     e.currentTarget.src = "https://via.placeholder.com/300x200?text=Hospital+Image";
                   }}
-                  role="link"
-                  tabIndex={0}
-                  aria-label={`View ${hospital.hospital} on Google Maps`}
                 />
                 <div className="p-6">
                   <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                    {hospital.hospital}
+                    {hospital.hositalName}
                   </h2>
+                  <p className="text-gray-600 dark:text-gray-300 mb-2">{hospital.hospitalDescription}</p>
                   <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    <strong>Location:</strong> {hospital.address}
+                    <strong>Address:</strong> {hospital.address}
                   </p>
+                  <button
+                    onClick={() => navigate(`/hospitaldoctors/${hospital.hospitalId}`)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                  >
+                    View Doctors
+                  </button>
                 </div>
               </div>
             ))}

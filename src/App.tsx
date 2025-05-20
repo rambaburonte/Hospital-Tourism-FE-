@@ -25,6 +25,10 @@ import Login from './components/userspage/login';
 import Registor from './components/userspage/registor';
 import Userdashboard from './components/userspage/userboard';
 import PatientProfile from './components/userspage/userprofile';
+import HospitalDoctor from './pages/hospitaldoctors';
+import SpaServices from './pages/spaservice';
+import Diagnostics from './pages/Diagnostics';
+import Labtests from './pages/labTests';
 
 // Admin Pages
 import Admindashboard from './admin/admindashboard';
@@ -40,6 +44,18 @@ import UploadTranslators from './admin/uploadTranslators';
 import UploadChefs from './admin/uploadChefs';
 import UploadPhysios from './admin/uploadPhysio';
 import UploadCenters from './admin/upoladCenters';
+import UploadSpaService from './admin/uploadSpaServices';
+import ViewHospitals from './admin/viewHospitals';
+import HospitalDoctors from './admin/HospitalDoctors';
+import LabTests  from './admin/viewdiagnolabtests';
+import Translators from './admin/viewTranslators';
+import Chefs from './admin/viewchefs';
+import Physios from './admin/viewPhysio';
+import Centers from './admin/viewspacenters';
+import SpaService from './admin/viewspaServices'
+import ViewDiagnostics from './admin/viewDiagnostics';
+import ViewLocations from './admin/viewLocations';
+import ViewUsers from './admin/viewUsers';
  // Corrected import name (PascalCase)
 
 // Utility Components
@@ -47,6 +63,7 @@ import NotFound from './pages/NotFound';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from './ScrollToTop';
+import { Import } from 'lucide-react';
 
 const queryClient = new QueryClient();
 
@@ -91,7 +108,10 @@ const App: React.FC = () => (
             <Route path="/register" element={<Registor />} />
             <Route path="/dashboard" element={<Userdashboard />} />
             <Route path="/PatientProfile" element={<PatientProfile />} />
-
+            <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
+             <Route path="/viewservices/:id" element={< SpaServices />} />
+             <Route path="/tests" element={< Diagnostics />} />
+             <Route path="/viewtests/:id" element={<  Labtests  />} />
             {/* Admin Routes */}
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
@@ -106,7 +126,18 @@ const App: React.FC = () => (
                 <Route path="/admin/uploadchefs" element={<UploadChefs/>} />
                  <Route path="/admin/uploadPhysios" element={<UploadPhysios/>} />
               <Route path="/admin/uploadCenters" element={<UploadCenters/>} />
-
+               <Route path="/admin/uploadspaServices" element={<UploadSpaService/>} />
+               <Route path="/admin/viewHospitals" element={<ViewHospitals/>} />
+               <Route path="/admin/hospitalDoctor/:id" element={<HospitalDoctors/>} />
+               <Route path="/admin/viewdiagnostics" element={<ViewDiagnostics/>} />
+               <Route path="/admin/labtests/:id" element={<LabTests />} />
+               <Route path="/admin/translators" element={<Translators />} />
+                <Route path="/admin/chefs" element={<Chefs />} />
+                <Route path="/admin/Physios" element={< Physios/>} />
+                <Route path="/admin/viewcenters" element={<Centers/>}/>
+                 <Route path="/admin/spaservices/:id" element={< SpaService/>} />
+               <Route path="/admin/viewLocations" element={<ViewLocations />} />
+               <Route path="/admin/users" element={<ViewUsers />} />
 
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />

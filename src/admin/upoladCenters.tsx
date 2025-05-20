@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Sidebar from './sidebar';
 
 interface Location {
   locationId: number;
@@ -19,11 +20,26 @@ const SpaUploadPage: React.FC = () => {
     locationId: ''
   });
 
+  // ✅ Call fetchLocations inside useEffect
   useEffect(() => {
-    axios.get('http://localhost:8080/api/locations')
-      .then(res => setLocations(res.data))
-      .catch(err => console.error('Failed to fetch locations:', err));
+    fetchLocations();
   }, []);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/locations");
+      const data = await response.json();
+      console.log("Fetched locations:", data); // Debugging
+
+      if (Array.isArray(data)) {
+        setLocations(data);
+      } else {
+        console.error("Expected array but got:", data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch locations:", error);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,27 +69,28 @@ const SpaUploadPage: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Upload Spa Center</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input type="text" name="spaName" placeholder="Spa Name" value={formData.spaName} onChange={handleChange} style={styles.input} required />
-        <textarea name="spaDescription" placeholder="Description" value={formData.spaDescription} onChange={handleChange} style={styles.textarea} required />
-        <input type="text" name="spaImage" placeholder="Image URL" value={formData.spaImage} onChange={handleChange} style={styles.input} required />
-        <input type="text" name="rating" placeholder="Rating" value={formData.rating} onChange={handleChange} style={styles.input} required />
-        <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} style={styles.input} required />
-        
-        <select name="locationId" value={formData.locationId} onChange={handleChange} style={styles.input} required>
-          <option value="">Select Location</option>
-          {locations.map(loc => (
-            <option key={loc.locationId} value={loc.locationId}>
-              {loc.city}, {loc.state}, {loc.country}
-            </option>
-          ))}
-        </select>
-
-        <button type="submit" style={styles.button}>Upload Spa</button>
-      </form>
-    </div>
+    <>
+      <Sidebar />
+      <div style={styles.container}>
+        <h1 style={styles.title}>Upload Spa Center</h1>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <select name="locationId" value={formData.locationId} onChange={handleChange} style={styles.input} required>
+            <option value="">Select Location</option>
+            {locations.map(loc => (
+              <option key={loc.locationId} value={loc.locationId}>
+                {loc.city}, {loc.state}, {loc.country}
+              </option>
+            ))}
+          </select>
+          <input type="text" name="spaName" placeholder="Spa Name" value={formData.spaName} onChange={handleChange} style={styles.input} required />
+          <textarea name="spaDescription" placeholder="Description" value={formData.spaDescription} onChange={handleChange} style={styles.textarea} required />
+          <input type="text" name="spaImage" placeholder="Image URL" value={formData.spaImage} onChange={handleChange} style={styles.input} required />
+          <input type="text" name="rating" placeholder="Rating" value={formData.rating} onChange={handleChange} style={styles.input} required />
+          <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} style={styles.input} required />
+          <button type="submit" style={styles.button}>Upload Spa</button>
+        </form>
+      </div>
+    </>
   );
 };
 

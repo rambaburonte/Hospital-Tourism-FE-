@@ -18,77 +18,75 @@ const Sidebar: React.FC = () => {
 
   const menuItems: MenuItem[] = [
     { name: 'Dashboard', icon: 'fas fa-home', path: '/admin/admindashboard' },
-    { name: 'Users', icon: 'fas fa-users', path: '/users' },
+    { name: 'Users', icon: 'fas fa-users', path: '/admin/users' },
     {
-      name: 'Doctors',
+      name: 'Hospital',
       icon: 'fas fa-user-md',
       subItems: [
-        { name: 'Upload', path: '/admin/doctors/upload' },
-        { name: 'View', path: '/admin/doctors/viewdoctors' },
+        { name: 'AddDoctors', path: '/admin/doctors/upload' },
+        { name: 'ViewDoctors', path: '/admin/doctors/viewdoctors' },
+        { name: 'AddHospital', path: '/admin/uploadhospital' },
+        { name: 'viewHopitals', path: '/admin/viewHospitals' },
+        
+      ],
+    },
+   
+    {
+      name: 'Diogonostics',
+      icon: 'fas fa-briefcase-medical',
+      subItems: [
+        { name: 'AddDioagnostics', path: '/admin/uploadDiagnostics' },
+        { name: 'AddLabtests', path: '/admin/uploadlabtests' },
+        { name: 'viewDiagnostics', path: '/admin/viewdiagnostics' },
       ],
     },
     {
-      name: 'Services',
+      name: 'Translators',
       icon: 'fas fa-briefcase-medical',
       subItems: [
-        { name: 'Packages', path: '/services/packages' },
+        { name: 'Add', path: '/admin/uploadTanslators' },
+        { name: 'view', path: '/admin/translators' },
+      ],
+    },
+    {
+      name: 'Personalized_chefs',
+      icon: 'fas fa-utensils',
+      subItems: [
+        { name: 'Add', path: '/admin/uploadchefs' },
+        { name: 'view', path: '/admin/chefs' },
+      ],
+    },
+    {
+      name: 'Physios',
+      icon: 'fas fa-dumbbell',
+      subItems: [
+        { name: 'Add', path: '/admin/uploadPhysios' },
+        { name: 'view', path: '/admin/Physios' },
+      ],
+    },
+    {
+      name: 'SpaServices',
+      icon: 'fas fa-spa',
+      subItems: [
+        { name: 'AddSpacenters', path: '/admin/uploadCenters' },
+        { name: 'AddServies', path: '/admin/uploadspaServices' },
+        { name: 'ViwSpaCenters', path: '/admin/viewcenters' },
       ],
     },
 
      {
-      name: 'Diogonostics',
-      icon: 'fas fa-briefcase-medical',
+      name: ' Business_Lacations',
+      icon: 'fas fa-spa',
       subItems: [
-        { name: 'uploadDioagnostics', path: '/admin/uploadDiagnostics' },
-        { name: 'uploadLabtests', path: '/admin/uploadlabtests' },
-        { name: 'viewDiagnostics', path: '/admin/viewdiagnostics' },
-        
-
+        { name: 'Add', path: '/admin/businessLocations' },
+    
+        { name: 'View', path: '/admin/viewLocations' },
       ],
     },
-       {
-      name: 'Translators',
-      icon: 'fas fa-briefcase-medical',
-      subItems: [
-        { name: 'upload', path: '/admin/uploadTanslators' },
-        { name: 'view', path: '/admin/viewTranslators' },
-      ],
-    },
-         {
-      name: 'Personalized_chefs',
-      icon: 'fas fa-briefcase-chefs',
-      subItems: [
-        { name: 'upload', path: '/admin/uploadchefs' },
-        { name: 'view', path: '/admin/viewchefs' },
-      ],
-    },
-           {
-      name: 'Physios',
-      icon: 'fas fa-briefcase-chefs',
-      subItems: [
-        { name: 'upload', path: '/admin/uploadPhysios' },
-        { name: 'view', path: '/admin/viewphysios' },
-      ],
-    },
-        {
-      name: 'SpaServices',
-      icon: 'fas fa-briefcase-chefs',
-      subItems: [
-        { name: 'UploadSpacenters', path: '/admin/uploadCenters' },
-        { name: 'UploadServies', path: '/admin/uploadServices' },
-         { name: 'ViwSpaCenters', path: '/admin/viewcenters' },
-      ],
-    },
-
-
-
-   { name: 'Hospital', icon: 'fas fa-hospital', path: '/admin/uploadhospital' },
-    { name: 'BusinessLocation', icon: 'fas fa-location', path: '/admin/businessLocations' },
- 
-
+   
+   
     { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/orders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/settings' },
-    
   ];
 
   const toggleSubMenu = (name: string) => {
@@ -96,10 +94,13 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-green-50 text-green-800 border-r border-green-100 shadow-sm">
+    <div className="fixed top-0 left-0 h-screen w-64 bg-green-50 text-green-800 border-r border-green-100 shadow-sm flex flex-col">
+      {/* Header */}
       <div className="p-6 text-2xl font-bold border-b border-green-100 text-green-700">
         Admin Panel
       </div>
+
+      {/* Scrollable Menu */}
       <nav className="flex-1 overflow-y-auto">
         {menuItems.map((item) => (
           <div key={item.name} className="border-b border-green-100">
@@ -145,6 +146,8 @@ const Sidebar: React.FC = () => {
           </div>
         ))}
       </nav>
+
+      {/* Logout */}
       <div className="p-4 border-t border-green-100">
         <Link
           to="/logout"
