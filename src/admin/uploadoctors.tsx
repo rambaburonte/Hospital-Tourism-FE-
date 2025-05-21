@@ -12,29 +12,19 @@ interface Hospital {
   address: string;
 }
 
-interface Doctor {
-  name: string;
-  email: string;
-  rating: number;
-  description: string;
-  department: string;
-  profilepic: string;
-  hospitalId: number;
-}
-
 const UploadDoctors: React.FC = () => {
-  const [hospitals, setHospitals] = useState<Hospital[]>([]);
+  const [hospitals, setHospitals] = useState<{ value: number; label: string }[]>([]);
   const [selectedHospital, setSelectedHospital] = useState<{ value: number; label: string } | null>(null);
 
-  const [doctor, setDoctor] = useState<Omit<Doctor, 'hospitalId'>>({
+  const [doctor, setDoctor] = useState({
     name: '',
     email: '',
     rating: 0,
     description: '',
     department: '',
-    profilepic: '',
   });
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -54,21 +44,46 @@ const UploadDoctors: React.FC = () => {
     }
   };
 
-  const handleChange = (field: keyof Doctor) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setDoctor({ ...doctor, [field]: field === 'rating' ? parseFloat(e.target.value) : e.target.value });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!selectedHospital) {
       setMessage('Please select a hospital');
       return;
     }
 
+    if (!imageFile) {
+      setMessage('Please select an image file');
+      return;
+    }
+
+    if (imageFile.size > 500 * 1024) {
+      setMessage('Image must be under 500KB');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', doctor.name);
+    formData.append('email', doctor.email);
+    formData.append('rating', doctor.rating.toString());
+    formData.append('description', doctor.description);
+    formData.append('department', doctor.department);
+    formData.append('hospitalId', selectedHospital.value.toString());
+    formData.append('image', imageFile);
+
     try {
-      const res = await axios.post('http://localhost:8080/api/doctorsupload', {
-        ...doctor,
-        hospitalId: selectedHospital.value,
+      const res = await axios.post('http://localhost:8080/api/doctorsupload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       if (res.status === 200 || res.status === 201) {
@@ -79,9 +94,9 @@ const UploadDoctors: React.FC = () => {
           rating: 0,
           description: '',
           department: '',
-          profilepic: '',
         });
         setSelectedHospital(null);
+        setImageFile(null);
       } else {
         setMessage('Failed to upload doctor');
       }
@@ -99,11 +114,11 @@ const UploadDoctors: React.FC = () => {
           <h1 className="text-3xl font-bold mb-6 text-center">Upload Doctor</h1>
 
           <div className="bg-white p-8 rounded-xl shadow-md border border-gray-200">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
               <div>
                 <label className="block font-medium text-gray-700 mb-2">Select Hospital</label>
                 <Select
-                  options={hospitals.sort((a, b) => a.label.localeCompare(b.label))}
+                  options={hospitals}
                   value={selectedHospital}
                   onChange={(opt) => setSelectedHospital(opt)}
                   placeholder="Choose a hospital"
@@ -171,11 +186,11 @@ const UploadDoctors: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block mb-1">Profile Picture URL</label>
+                    <label className="block mb-1">Profile Picture</label>
                     <input
-                      type="url"
-                      value={doctor.profilepic}
-                      onChange={handleChange('profilepic')}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -194,9 +209,9 @@ const UploadDoctors: React.FC = () => {
                           rating: 0,
                           description: '',
                           department: '',
-                          profilepic: '',
                         });
                         setSelectedHospital(null);
+                        setImageFile(null);
                         setMessage('');
                       }}
                       className="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300"
