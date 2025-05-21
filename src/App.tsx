@@ -47,6 +47,11 @@ import UploadCenters from './admin/upoladCenters';
 import UploadSpaService from './admin/uploadSpaServices';
 import ViewHospitals from './admin/viewHospitals';
 import HospitalDoctors from './admin/HospitalDoctors';
+
+import SubAdminRegister from './admin/subadminloginregister/subadminreg';
+import DiagnosticsList from './admin/viewDiagnostics';
+import SubadmLoginForm from './admin/subadminloginregister/subadmLogin';
+
 import LabTests  from './admin/viewdiagnolabtests';
 import Translators from './admin/viewTranslators';
 import Chefs from './admin/viewchefs';
@@ -56,6 +61,7 @@ import SpaService from './admin/viewspaServices'
 import ViewDiagnostics from './admin/viewDiagnostics';
 import ViewLocations from './admin/viewLocations';
 import ViewUsers from './admin/viewUsers';
+
  // Corrected import name (PascalCase)
 
 // Utility Components
@@ -102,16 +108,24 @@ const App: React.FC = () => (
             <Route path="/tours" element={<TourPlans />} />
             <Route path="/health-blogs" element={<HealthBlogs />} />
             <Route path="/blogs" element={<BlogDetail />} />
+            <Route path="/subadminregister" element={<SubAdminRegister />} />
+            
+
+            {/* Admin Routes */}
 
             {/* User Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registor />} />
             <Route path="/dashboard" element={<Userdashboard />} />
             <Route path="/PatientProfile" element={<PatientProfile />} />
+            <Route path="/subadminlogin" element={<SubadmLoginForm />} />
+
+
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
              <Route path="/viewservices/:id" element={< SpaServices />} />
              <Route path="/tests" element={< Diagnostics />} />
              <Route path="/viewtests/:id" element={<  Labtests  />} />
+
             {/* Admin Routes */}
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
@@ -129,6 +143,9 @@ const App: React.FC = () => (
                <Route path="/admin/uploadspaServices" element={<UploadSpaService/>} />
                <Route path="/admin/viewHospitals" element={<ViewHospitals/>} />
                <Route path="/admin/hospitalDoctor/:id" element={<HospitalDoctors/>} />
+
+               <Route path="admin/viewdiagnostics" element={<ViewDiagnostics/>} />
+
                <Route path="/admin/viewdiagnostics" element={<ViewDiagnostics/>} />
                <Route path="/admin/labtests/:id" element={<LabTests />} />
                <Route path="/admin/translators" element={<Translators />} />
@@ -138,6 +155,7 @@ const App: React.FC = () => (
                  <Route path="/admin/spaservices/:id" element={< SpaService/>} />
                <Route path="/admin/viewLocations" element={<ViewLocations />} />
                <Route path="/admin/users" element={<ViewUsers />} />
+
 
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />

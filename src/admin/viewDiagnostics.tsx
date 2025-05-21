@@ -105,4 +105,6 @@ const DiagnosticsList: React.FC = () => {
   );
 };
 
+
 export default DiagnosticsList;
+
