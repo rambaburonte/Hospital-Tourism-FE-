@@ -35,7 +35,7 @@ const Sidebar: React.FC = () => {
 
   const allMenuItems: MenuItem[] = [
     { name: 'Dashboard', icon: 'fas fa-home', path: '/admin/admindashboard' },
-    { name: 'Add Admin', icon: 'fas fa-user-plus', path: '/subadminregister' },
+    // { name: 'Add Admin', icon: 'fas fa-user-plus', path: '/subadminregister' },
     { name: 'Users', icon: 'fas fa-users', path: '/users' },
     {
       name: 'Hospital',
@@ -45,6 +45,15 @@ const Sidebar: React.FC = () => {
         { name: 'ViewDoctors', path: '/admin/doctors/viewdoctors' },
         { name: 'UploadHospital', path: '/admin/uploadhospital' },
         { name: 'viewHospitals', path: '/admin/viewHospitals' },
+      ],
+    },
+    {
+      name: 'Sub-Admin',
+      icon: 'fas fa-user-plus',
+      subItems: [
+        { name: 'Add Admin', path: '/subadminregister' },
+        { name: 'View Admins', path: '/subadmindashboard' },
+        { name: 'Update Admin', path: '/updateSubAdmin' },
       ],
     },
     {
