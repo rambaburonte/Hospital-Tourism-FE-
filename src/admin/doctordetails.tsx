@@ -106,7 +106,7 @@ const DoctorDetails: React.FC = () => {
             <div className="bg-white p-6 rounded-xl shadow-sm border border-red-50 text-center animate-fade-in">
               <p className="text-red-500 text-sm mb-4 leading-snug">{error}</p>
               <button
-                onClick={() => navigate('/doctors')}
+                onClick={() => navigate('/admin/doctors/viewdoctors')}
                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 active:scale-95 transition-all duration-200 min-w-[120px] text-sm shadow-sm"
                 aria-label="Back to doctors list"
               >

@@ -1,20 +1,17 @@
-// ... imports and interfaces remain the same
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
 const UploadHospitals: React.FC = () => {
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<LocationOption | null>(null);
   const [hospitalName, setHospitalName] = useState('');
   const [hospitalDescription, setHospitalDescription] = useState('');
-  const [hospitalImage, setHospitalImage] = useState('');
   const [rating, setRating] = useState('');
-  const [customAddress, setCustomAddress] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [hospitalAddress, setHospitalAddress] = useState('');
+
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -31,13 +28,9 @@ const UploadHospitals: React.FC = () => {
   const fetchLocations = async () => {
     try {
       const res = await axios.get('http://localhost:8080/api/locations');
-      const data = res.data;
-      const formatted = data.map((loc: any) => ({
+      const formatted = res.data.map((loc: any) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,
-        city: loc.city,
-        state: loc.state,
-        country: loc.country,
       }));
       setLocations(formatted);
     } catch (err) {
@@ -45,41 +38,30 @@ const UploadHospitals: React.FC = () => {
     }
   };
 
-  const isCustomAddressValid = (addr: string) => {
-    return /^[^ ]+$/.test(addr) && /^[A-Z0-9,]+$/.test(addr.toUpperCase());
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedLocation || !hospitalName || !hospitalDescription || !hospitalImage || !rating || !customAddress) {
+    if (!selectedLocation || !hospitalName || !hospitalDescription || !rating || !imageFile || !hospitalAddress ) {
       setMessage('All fields are required');
       return;
     }
 
-    if (!isCustomAddressValid(customAddress)) {
-      setMessage('Custom address must be ALL CAPS, use commas only, and contain NO spaces');
-      return;
-    }
-
-    const formattedAddress =
-      `${selectedLocation.city},${selectedLocation.state},${selectedLocation.country}`.toUpperCase() +
-      ',' +
-      customAddress;
+    const formData = new FormData();
+    formData.append('hospitalName', hospitalName);
+    formData.append('hospitalDescription', hospitalDescription);
+    formData.append('hospitalRating', rating);
+    formData.append('locationId', selectedLocation.value.toString());
+    formData.append('hospitalAdress', hospitalAddress);
+    formData.append('image', imageFile);
 
     try {
-      const res = await axios.post('http://localhost:8080/api/hospitals', {
-        hositalName: hospitalName,
-        hospitalDescription,
-        hospitalImage,
-        rating,
-        address: formattedAddress,
-        location: {
-          locationId: selectedLocation.value,
+      const res = await axios.post('http://localhost:8080/api/hospitals/add', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
       });
 
-      if (res.status === 200 || res.status === 201) {
+      if (res.status === 200) {
         setMessage('Hospital uploaded successfully!');
         handleReset();
       } else {
@@ -95,9 +77,8 @@ const UploadHospitals: React.FC = () => {
     setSelectedLocation(null);
     setHospitalName('');
     setHospitalDescription('');
-    setHospitalImage('');
     setRating('');
-    setCustomAddress('');
+    setImageFile(null);
     setMessage('');
   };
 
@@ -107,14 +88,12 @@ const UploadHospitals: React.FC = () => {
       <div className="flex-1 p-6 md:p-10 lg:ml-64">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold mb-6 text-center">Upload Hospital</h1>
-
           <div className="bg-white p-8 rounded-xl shadow-md border border-gray-200">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Location Dropdown */}
               <div>
                 <label className="block font-medium text-gray-700 mb-2">Select Location</label>
                 <Select
-                  options={locations.sort((a, b) => a.label.localeCompare(b.label))}
+                  options={locations}
                   value={selectedLocation}
                   onChange={(opt) => setSelectedLocation(opt)}
                   placeholder="Choose a location"
@@ -146,40 +125,44 @@ const UploadHospitals: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">Image URL</label>
-                    <input
-                      type="url"
-                      value={hospitalImage}
-                      onChange={(e) => setHospitalImage(e.target.value)}
-                      className="w-full border border-gray-300 rounded px-4 py-2"
-                      required
-                    />
-                  </div>
-
-                  <div>
                     <label className="block font-medium text-gray-700 mb-1">Rating</label>
                     <input
-                      type="text"
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="0.1"
                       value={rating}
                       onChange={(e) => setRating(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
                   </div>
+                 <label className="block font-medium text-gray-700 mb-1">Address</label>
+<textarea
+  value={hospitalAddress}
+  onChange={(e) => setHospitalAddress(e.target.value)}
+  className="w-full border border-gray-300 rounded px-4 py-2"
+  placeholder="e.g. Street Name, Area, Landmark, Zip Code"
+  required
+/>
 
-                  <div>
-                    <label className="block font-medium text-gray-700 mb-1">
-                      Additional Address Info (ALL CAPS, no spaces, comma separated)
-                    </label>
-                    <input
-                      type="text"
-                      value={customAddress}
-                      onChange={(e) => setCustomAddress(e.target.value)}
-                      className="w-full border border-gray-300 rounded px-4 py-2"
-                      placeholder="BLOCK-5,SECTOR-10"
-                      required
-                    />
-                  </div>
+
+                  <input
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    if (file && file.size > 512000) {
+      setMessage('Image size must be less than 500KB');
+      setImageFile(null);
+    } else {
+      setImageFile(file || null);
+    }
+  }}
+  className="w-full border border-gray-300 rounded px-4 py-2"
+  required
+/>
+
 
                   <div className="flex gap-4">
                     <button
@@ -218,3 +201,7 @@ const UploadHospitals: React.FC = () => {
 
 export default UploadHospitals;
 
+interface LocationOption {
+  value: number;
+  label: string;
+}
