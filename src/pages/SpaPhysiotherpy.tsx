@@ -169,7 +169,7 @@ const ServiceListingPage: React.FC = () => {
                   <MapPin className="w-4 h-4 mr-1" />{spa.address || 'No address available'}
                 </p>
                 <div className="mt-4">
-                  <Link to={`/viewservices/${spa.spaId}`} className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                  <Link to={`/viewtests/${spa.spaId}`} className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                     {getTranslatedText('View Services', 'Explorar Más', 'Découvrir Plus')}
                   </Link>
                 </div>

@@ -6,6 +6,11 @@ import Sidebar from './sidebar';
 interface Spa {
   spaId: number;
   spaName: string;
+  spaDescription: string;
+  rating: number;
+  address: string;
+  spaImage?: string;
+  status?: string;
 }
 
 const SpaCentersList: React.FC = () => {
@@ -30,12 +35,10 @@ const SpaCentersList: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex-1 p-6 bg-gray-100 ml-64">
+      <div className="flex-1 p-6 ml-64">
         <h1 className="text-3xl font-bold text-center mb-8 text-blue-800">Spa Centers</h1>
 
         {loading ? (
@@ -43,14 +46,28 @@ const SpaCentersList: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {spas.map((spa) => (
-              <div key={spa.spaId} className="bg-white p-5 rounded-xl shadow-md">
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">{spa.spaName}</h2>
-                <button
-                  onClick={() => handleView(spa.spaId)}
-                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                >
-                  View
-                </button>
+              <div key={spa.spaId} className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
+                {spa.spaImage && (
+                  <img
+                    src={spa.spaImage}
+                    alt={spa.spaName}
+                    className="w-full h-48 object-cover"
+                  />
+                )}
+                <div className="p-4 flex flex-col flex-grow">
+                  <h2 className="text-xl font-semibold text-gray-800">{spa.spaName}</h2>
+                  <p className="text-gray-600 text-sm mt-1">{spa.spaDescription}</p>
+                  <p className="text-gray-700 text-sm mt-2"><strong>Rating:</strong> {spa.rating} ⭐</p>
+                  <p className="text-gray-700 text-sm"><strong>Address:</strong> {spa.address}</p>
+                  {spa.status && <p className="text-sm text-green-600 mt-1"><strong>Status:</strong> {spa.status}</p>}
+
+                  <button
+                    onClick={() => handleView(spa.spaId)}
+                    className="mt-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mt-4"
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
             ))}
           </div>
