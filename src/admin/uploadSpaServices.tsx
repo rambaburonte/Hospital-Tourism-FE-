@@ -1,167 +1,194 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Select from 'react-select';
 import Sidebar from './sidebar';
 
 interface SpaCenter {
   spaId: number;
   spaName: string;
+  spaDescription: string;
+  spaImage: string;
+  rating: string;
+  address: string | null;
 }
 
-const SpaServiceUpload: React.FC = () => {
-  const [spaCenters, setSpaCenters] = useState<SpaCenter[]>([]);
-  const [formData, setFormData] = useState({
-    serviceName: '',
-    serviceDescription: '',
-    serviceImage: '',
-    rating: '',
-    price: '',
-    spaCenterId: 0
-  });
+interface OptionType {
+  value: number;
+  label: string;
+}
 
+const UploadSpaService: React.FC = () => {
+  const [spaOptions, setSpaOptions] = useState<OptionType[]>([]);
+  const [selectedSpa, setSelectedSpa] = useState<OptionType | null>(null);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
 
-  // Fetch spa centers on mount
   useEffect(() => {
-    fetch('http://localhost:8080/spaCenter/all')
-      .then((res) => res.json())
-      .then((data) => setSpaCenters(data))
-      .catch((err) => console.error('Error fetching spa centers:', err));
+    const fetchSpaCenters = async () => {
+      try {
+        const res = await axios.get('http://localhost:8080/spaCenter/all');
+        const options = res.data.map((spa: SpaCenter) => ({
+          value: spa.spaId,
+          label: `${spa.spaName} (${spa.address || 'No address'})`,
+        }));
+        setSpaOptions(options);
+      } catch (err) {
+        console.error('Failed to fetch spa centers:', err);
+        setMessage('Error fetching spa centers');
+      }
+    };
+
+    fetchSpaCenters();
   }, []);
 
-  // Handle form field changes
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'spaCenterId' ? Number(value) : value,
-    }));
-  };
-
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    fetch('http://localhost:8080/spaServices/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to upload service');
-        return res.json();
-      })
-      .then(() => {
-        setMessage('Spa service uploaded successfully!');
-        setFormData({
-          serviceName: '',
-          serviceDescription: '',
-          serviceImage: '',
-          rating: '',
-          price: '',
-          spaCenterId: 0
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        setMessage('Upload failed.');
+
+    try {
+      if (!selectedSpa || !name || !description || !price || !imageFile) {
+        setMessage('All fields are required');
+        return;
+      }
+
+      const parsedPrice = parseFloat(price);
+      if (isNaN(parsedPrice) || parsedPrice < 0) {
+        setMessage('Price must be a valid non-negative number');
+        return;
+      }
+
+      if (imageFile.size > 512000) {
+        setMessage('Image must be under 500KB');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('serviceName', name);
+      formData.append('description', description);
+      formData.append('spaPrice', parsedPrice.toString());
+      formData.append('spaCenterId', selectedSpa.value.toString());
+      formData.append('image', imageFile);
+
+      const res = await axios.post('http://localhost:8080/spaServices/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
+
+      if (res.status === 200 || res.status === 201) {
+        setMessage('Spa service uploaded successfully!');
+        setName('');
+        setDescription('');
+        setPrice('');
+        setSelectedSpa(null);
+        setImageFile(null);
+      } else {
+        setMessage('Failed to upload service');
+      }
+    } catch (err: any) {
+      console.error('Upload failed:', err);
+      setMessage(err?.response?.data || 'Server error during upload');
+    }
   };
 
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-      <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow rounded">
-        <h2 className="text-xl font-bold mb-4">Upload Spa Service</h2>
-        {message && <div className="mb-4 text-green-600">{message}</div>}
+      <main className="flex-1 p-6 md:p-10 lg:ml-64">
+        <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">Upload Spa Service</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 font-medium">Spa Center</label>
-            <select
-              name="spaCenterId"
-              value={formData.spaCenterId}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-              required
-            >
-              <option value="">Select a Spa Center</option>
-              {spaCenters.map((spa) => (
-                <option key={spa.spaId} value={spa.spaId}>
-                  {spa.spaName}
-                </option>
-              ))}
-            </select>
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
+            <div>
+              <label className="block font-medium mb-1">Select Spa Center</label>
+              <Select
+                options={spaOptions}
+                value={selectedSpa}
+                onChange={(opt) => setSelectedSpa(opt)}
+                placeholder="Choose a spa center"
+                isSearchable
+              />
+            </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Service Name</label>
-            <input
-              type="text"
-              name="serviceName"
-              value={formData.serviceName}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
+            {selectedSpa && (
+              <>
+                <div>
+                  <label className="block mb-1">Service Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full border px-4 py-2 rounded"
+                    required
+                  />
+                </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Description</label>
-            <textarea
-              name="serviceDescription"
-              value={formData.serviceDescription}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
+                <div>
+                  <label className="block mb-1">Description</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full border px-4 py-2 rounded"
+                    required
+                  />
+                </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Image URL</label>
-            <input
-              type="text"
-              name="serviceImage"
-              value={formData.serviceImage}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
+                <div>
+                  <label className="block mb-1">Price</label>
+                  <input
+                    type="number"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="w-full border px-4 py-2 rounded"
+                    placeholder="e.g. 499"
+                    required
+                  />
+                </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Rating</label>
-            <input
-              type="text"
-              name="rating"
-              value={formData.rating}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
+                <div>
+                  <label className="block mb-1">Service Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file && file.size > 512000) {
+                        setMessage('Image must be under 500KB');
+                        setImageFile(null);
+                      } else {
+                        setImageFile(file || null);
+                      }
+                    }}
+                    className="w-full"
+                    required
+                  />
+                </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Price</label>
-            <input
-              type="text"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700"
+                >
+                  Upload Service
+                </button>
+              </>
+            )}
 
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-          >
-            Upload
-          </button>
-        </form>
-      </div>
-    </>
+            {message && (
+              <div
+                className={`mt-4 text-center p-2 rounded ${
+                  message.toLowerCase().includes('success')
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-700'
+                }`}
+              >
+                {message}
+              </div>
+            )}
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 
-export default SpaServiceUpload;
+export default UploadSpaService;

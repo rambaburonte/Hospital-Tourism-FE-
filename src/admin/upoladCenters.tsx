@@ -13,14 +13,13 @@ const SpaUploadPage: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [formData, setFormData] = useState({
     spaName: '',
-    spaDescription: '',
-    spaImage: '',
-    rating: '',
     address: '',
+    spaDescription: '',
+    rating: '',
     locationId: ''
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  // ✅ Call fetchLocations inside useEffect
   useEffect(() => {
     fetchLocations();
   }, []);
@@ -29,8 +28,6 @@ const SpaUploadPage: React.FC = () => {
     try {
       const response = await fetch("http://localhost:8080/api/locations");
       const data = await response.json();
-      console.log("Fetched locations:", data); // Debugging
-
       if (Array.isArray(data)) {
         setLocations(data);
       } else {
@@ -45,26 +42,46 @@ const SpaUploadPage: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!imageFile) {
+      alert('Please upload an image.');
+      return;
+    }
+
+    const spaData = new FormData();
+    spaData.append('name', formData.spaName);
+    spaData.append('description', formData.spaDescription);
+    spaData.append('rating', formData.rating);
+    spaData.append('locationId', formData.locationId);
+    spaData.append('image', imageFile);
+
     try {
-      const payload = {
-        ...formData,
-        locationId: parseInt(formData.locationId, 10)
-      };
-      await axios.post('http://localhost:8080/spaCenter/upload', payload);
+      await axios.post('http://localhost:8080/spaCenter/upload', spaData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       alert('Spa center uploaded successfully!');
       setFormData({
         spaName: '',
         spaDescription: '',
-        spaImage: '',
+        address:'',
         rating: '',
-        address: '',
         locationId: ''
+
       });
+      setImageFile(null);
     } catch (error) {
       console.error('Upload failed:', error);
-      alert('Upload failed. See console for details.');
+      alert('Upload failed. Check console for more info.');
     }
   };
 
@@ -82,11 +99,48 @@ const SpaUploadPage: React.FC = () => {
               </option>
             ))}
           </select>
-          <input type="text" name="spaName" placeholder="Spa Name" value={formData.spaName} onChange={handleChange} style={styles.input} required />
-          <textarea name="spaDescription" placeholder="Description" value={formData.spaDescription} onChange={handleChange} style={styles.textarea} required />
-          <input type="text" name="spaImage" placeholder="Image URL" value={formData.spaImage} onChange={handleChange} style={styles.input} required />
-          <input type="text" name="rating" placeholder="Rating" value={formData.rating} onChange={handleChange} style={styles.input} required />
-          <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} style={styles.input} required />
+          <input
+            type="text"
+            name="spaName"
+            placeholder="Spa Name"
+            value={formData.spaName}
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
+          <textarea
+            name="spaDescription"
+            placeholder="Description"
+            value={formData.spaDescription}
+            onChange={handleChange}
+            style={styles.textarea}
+            required
+          />
+           <input
+            name="address"
+            placeholder="address"
+            value={formData.address}
+            onChange={handleChange}
+            style={styles.textarea}
+            required
+          />
+          <input
+            type="text"
+            name="rating"
+            placeholder="Rating (0-5)"
+            value={formData.rating}
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
+          <input
+            type="file"
+            name="spaImage"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={styles.input}
+            required
+          />
           <button type="submit" style={styles.button}>Upload Spa</button>
         </form>
       </div>

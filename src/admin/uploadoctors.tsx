@@ -5,79 +5,87 @@ import Sidebar from './sidebar';
 
 interface Hospital {
   hospitalId: number;
-  hositalName: string;
+  hositalName: string; // matches backend field
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
   address: string;
 }
 
+interface OptionType {
+  value: number;
+  label: string;
+}
+
 const UploadDoctors: React.FC = () => {
-  const [hospitals, setHospitals] = useState<{ value: number; label: string }[]>([]);
-  const [selectedHospital, setSelectedHospital] = useState<{ value: number; label: string } | null>(null);
-
-  const [doctor, setDoctor] = useState({
-    name: '',
-    email: '',
-    rating: 0,
-    description: '',
-    department: '',
-  });
-
+  const [hospitals, setHospitals] = useState<OptionType[]>([]);
+  const [selectedHospital, setSelectedHospital] = useState<OptionType | null>(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [rating, setRating] = useState('');
+  const [description, setDescription] = useState('');
+  const [department, setDepartment] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        const res = await axios.get('http://localhost:8080/api/hospitals');
+        const options = res.data.map((hospital: Hospital) => ({
+          value: hospital.hospitalId,
+          label: `${hospital.hositalName} (${hospital.address})`,
+        }));
+        setHospitals(options);
+      } catch (err) {
+        console.error('Failed to fetch hospitals:', err);
+        setMessage('Error fetching hospitals');
+      }
+    };
+
     fetchHospitals();
   }, []);
 
-  const fetchHospitals = async () => {
-    try {
-      const res = await axios.get('http://localhost:8080/api/hospitals');
-      const options = res.data.map((hospital: Hospital) => ({
-        value: hospital.hospitalId,
-        label: `${hospital.hositalName || 'Unnamed'} (${hospital.address || 'No Address'})`,
-      }));
-      setHospitals(options);
-    } catch (err) {
-      console.error('Failed to fetch hospitals:', err);
-    }
+  const validateRating = (value: string) => {
+    const num = parseFloat(value);
+    return !isNaN(num) && num >= 0 && num <= 5;
   };
 
-  const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setDoctor({ ...doctor, [field]: field === 'rating' ? parseFloat(e.target.value) : e.target.value });
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
-    }
+  const resetForm = () => {
+    setName('');
+    setEmail('');
+    setRating('');
+    setDescription('');
+    setDepartment('');
+    setImageFile(null);
+    setSelectedHospital(null);
+    setMessage('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedHospital) {
-      setMessage('Please select a hospital');
+    if (!selectedHospital || !name || !email || !description || !rating || !department || !imageFile) {
+      setMessage('All fields are required');
       return;
     }
 
-    if (!imageFile) {
-      setMessage('Please select an image file');
+    if (!validateRating(rating)) {
+      setMessage('Rating must be a number between 0 and 5');
       return;
     }
 
-    if (imageFile.size > 500 * 1024) {
+    if (imageFile.size > 512000) {
       setMessage('Image must be under 500KB');
       return;
     }
 
     const formData = new FormData();
-    formData.append('name', doctor.name);
-    formData.append('email', doctor.email);
-    formData.append('rating', doctor.rating.toString());
-    formData.append('description', doctor.description);
-    formData.append('department', doctor.department);
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('rating', rating);
+    formData.append('description', description);
+    formData.append('department', department);
     formData.append('hospitalId', selectedHospital.value.toString());
     formData.append('image', imageFile);
 
@@ -88,21 +96,13 @@ const UploadDoctors: React.FC = () => {
 
       if (res.status === 200 || res.status === 201) {
         setMessage('Doctor uploaded successfully!');
-        setDoctor({
-          name: '',
-          email: '',
-          rating: 0,
-          description: '',
-          department: '',
-        });
-        setSelectedHospital(null);
-        setImageFile(null);
+        resetForm();
       } else {
-        setMessage('Failed to upload doctor');
+        setMessage(`Failed to upload doctor: ${res.statusText}`);
       }
-    } catch (err) {
-      console.error(err);
-      setMessage('Error uploading doctor');
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      setMessage(err.response?.data || 'Server error while uploading doctor');
     }
   };
 
@@ -132,8 +132,8 @@ const UploadDoctors: React.FC = () => {
                     <label className="block mb-1">Doctor Name</label>
                     <input
                       type="text"
-                      value={doctor.name}
-                      onChange={handleChange('name')}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -143,8 +143,8 @@ const UploadDoctors: React.FC = () => {
                     <label className="block mb-1">Email</label>
                     <input
                       type="email"
-                      value={doctor.email}
-                      onChange={handleChange('email')}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -153,13 +153,11 @@ const UploadDoctors: React.FC = () => {
                   <div>
                     <label className="block mb-1">Rating</label>
                     <input
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      max="5"
-                      value={doctor.rating}
-                      onChange={handleChange('rating')}
+                      type="text"
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
+                      placeholder="e.g. 4.5"
                       required
                     />
                   </div>
@@ -168,8 +166,8 @@ const UploadDoctors: React.FC = () => {
                     <label className="block mb-1">Department</label>
                     <input
                       type="text"
-                      value={doctor.department}
-                      onChange={handleChange('department')}
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -178,8 +176,8 @@ const UploadDoctors: React.FC = () => {
                   <div>
                     <label className="block mb-1">Description</label>
                     <textarea
-                      value={doctor.description}
-                      onChange={handleChange('description')}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -190,7 +188,15 @@ const UploadDoctors: React.FC = () => {
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleImageChange}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file && file.size > 512000) {
+                          setMessage('Image must be under 500KB');
+                          setImageFile(null);
+                        } else {
+                          setImageFile(file || null);
+                        }
+                      }}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
@@ -202,18 +208,7 @@ const UploadDoctors: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        setDoctor({
-                          name: '',
-                          email: '',
-                          rating: 0,
-                          description: '',
-                          department: '',
-                        });
-                        setSelectedHospital(null);
-                        setImageFile(null);
-                        setMessage('');
-                      }}
+                      onClick={resetForm}
                       className="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300"
                     >
                       Reset

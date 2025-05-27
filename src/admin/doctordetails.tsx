@@ -175,12 +175,13 @@ const DoctorDetails: React.FC = () => {
         <div className="max-w-3xl mx-auto">
           <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 animate-fade-in">
             <header className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-              <img
-                src={"doctor.profilepic"}
-                alt={`Profile picture of ${doctor.name}`}
-                className="w-32 h-32 rounded-full object-cover border-2 border-indigo-200 shadow-sm"
-                onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/128')}
-              />
+            <img
+  src={doctor.profilepic || 'https://via.placeholder.com/128'}
+  alt={`Profile picture of ${doctor.name}`}
+  className="w-32 h-32 rounded-full object-cover border-2 border-indigo-200 shadow-sm"
+  onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/128')}
+/>
+
               <div className="text-center sm:text-left">
                 <h1 className="text-3xl font-bold text-gray-800 tracking-tight">{doctor.name}</h1>
                 <p className="text-lg text-indigo-600 font-medium">{doctor.specialty}</p>
@@ -218,7 +219,7 @@ const DoctorDetails: React.FC = () => {
             </article>
             <div className="mt-6">
               <button
-                onClick={() => navigate('/doctors')}
+                onClick={() => navigate('/admin/doctors/viewdoctors')}
                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 active:scale-95 transition-all duration-200 min-w-[120px] text-sm shadow-sm"
                 aria-label="Back to doctors list"
               >
