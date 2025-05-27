@@ -233,7 +233,7 @@ const DoctorsList = () => {
       <td className="p-3">{doctor.hospital?.hositalName}</td>
       <td className="p-3">
         <button
-          onClick={() => navigate(`/admin/doctordetails/${doctor.id}`)}
+          onClick={() => navigate(`/doctordetails/${doctor.id}`)}
           className="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-700"
         >
           View

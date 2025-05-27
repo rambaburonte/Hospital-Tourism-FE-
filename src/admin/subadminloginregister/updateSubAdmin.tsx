@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import Sidebar from '../sidebar';
 // Define the type for the form data
 interface SubAdminData {
     adminId: number;
@@ -55,6 +55,7 @@ const UpdateSubAdminForm: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-purple-50 p-6">
+             <Sidebar />
             <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6">
                 {/* Header */}
                 <h1 className="text-2xl font-bold text-purple-700 mb-4">Update Sub-Admin</h1>

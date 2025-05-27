@@ -108,9 +108,9 @@ const App: React.FC = () => (
             <Route path="/tours" element={<TourPlans />} />
             <Route path="/health-blogs" element={<HealthBlogs />} />
             <Route path="/blogs" element={<BlogDetail />} />
-            <Route path="/subadminregister" element={<SubAdminRegister />} />
-            <Route path="/subadmindashboard" element={<SubAdminDashboard />} />
-            <Route path="/updateSubAdmin" element={<UpdateSubAdminForm />} />
+            <Route path="/admin/subadminregister" element={<SubAdminRegister />} />
+            <Route path="/admin/subadmindashboard" element={<SubAdminDashboard />} />
+            
             {/* Admin Routes */}
 
             {/* User Routes */}
@@ -127,6 +127,7 @@ const App: React.FC = () => (
              <Route path="/viewtests/:id" element={<  Labtests  />} />
 
             {/* Admin Routes */}
+            <Route path="/admin/updateSubAdmin" element={<UpdateSubAdminForm />} />
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
             <Route path="/admin/doctors/viewdoctors" element={<ViewDoctors />} />

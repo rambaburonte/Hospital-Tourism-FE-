@@ -51,9 +51,9 @@ const Sidebar: React.FC = () => {
       name: 'Sub-Admin',
       icon: 'fas fa-user-plus',
       subItems: [
-        { name: 'Add Admin', path: '/subadminregister' },
-        { name: 'View Admins', path: '/subadmindashboard' },
-        { name: 'Update Admin', path: '/updateSubAdmin' },
+        { name: 'Add Admin', path: '/admin/subadminregister' },
+        { name: 'View Admins', path: '/admin/subadmindashboard' },
+        { name: 'Update Admin', path: '/admin/updateSubAdmin' },
       ],
     },
     {
@@ -69,8 +69,8 @@ const Sidebar: React.FC = () => {
       name: 'Translators',
       icon: 'fas fa-language',
       subItems: [
-        { name: 'upload', path: '/admin/uploadTranslators' },
-        { name: 'view', path: '/admin/viewTranslators' },
+        { name: 'upload', path: '/admin/uploadTanslators' },
+        { name: 'view', path: '/admin/translators' },
       ],
     },
     {
@@ -78,7 +78,7 @@ const Sidebar: React.FC = () => {
       icon: 'fas fa-utensils',
       subItems: [
         { name: 'upload', path: '/admin/uploadchefs' },
-        { name: 'view', path: '/admin/viewchefs' },
+        { name: 'view', path: '/admin/chefs' },
       ],
     },
     {
@@ -86,7 +86,7 @@ const Sidebar: React.FC = () => {
       icon: 'fas fa-dumbbell',
       subItems: [
         { name: 'upload', path: '/admin/uploadPhysios' },
-        { name: 'view', path: '/admin/viewphysios' },
+        { name: 'view', path: '/admin/Physios' },
       ],
     },
     {

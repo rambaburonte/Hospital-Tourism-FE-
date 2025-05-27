@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-
+import Sidebar from '../sidebar';
 // Permission categories and their actions
 const permissionCategories = [
   {
@@ -225,6 +225,7 @@ const SubAdminRegister = () => {
 
   return (
     <div className="min-h-screen bg-green-50 flex items-center justify-center p-6">
+       <Sidebar />
       <Toaster position="top-right" />
       <motion.div
         className="w-full max-w-lg bg-green-50/80 backdrop-blur-sm p-8 rounded-lg shadow-lg border border-green-100"
