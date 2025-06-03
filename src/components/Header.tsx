@@ -98,6 +98,7 @@ const Header: React.FC = () => {
     { to: '/doctors', label: 'Doctors' },
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
+    { to: '/medicinecatalog', label: 'Pharmacy' },
   ];
  
   const handleRedirect = () => {

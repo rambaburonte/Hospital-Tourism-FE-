@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
   const allMenuItems: MenuItem[] = [
     { name: 'Dashboard', icon: 'fas fa-home', path: '/admin/admindashboard' },
     // { name: 'Add Admin', icon: 'fas fa-user-plus', path: '/subadminregister' },
-    { name: 'Users', icon: 'fas fa-users', path: '/users' },
+    { name: 'Users', icon: 'fas fa-users', path: '/patientlist' },
     {
       name: 'Hospital',
       icon: 'fas fa-user-md',
@@ -88,6 +88,17 @@ const Sidebar: React.FC = () => {
         { name: 'upload', path: '/admin/uploadPhysios' },
         { name: 'view', path: '/admin/Physios' },
       ],
+    },
+    {
+      name: 'Pharmacy',
+      icon: 'fas fa-pills',
+      subItems: [
+        { name: 'Upload Capsule', path: '/admin/addMedicine' },
+        { name: 'View Capsule', path: '/admin/medicineList' },
+        { name: 'Update Capsule', path: '/admin/Capsule/:id' },
+        
+      ],
+      
     },
     {
       name: 'SpaServices',

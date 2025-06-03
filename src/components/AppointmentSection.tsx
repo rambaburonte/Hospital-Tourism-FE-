@@ -158,7 +158,7 @@ const AppointmentSection = () => {
     'Translators & Chefs': '/translatorAndChefList',
     'Translators': '/translatorAndChefList/translator',
     'Chefs': '/translatorAndChefList/chef',
-    Pharmacy: '/PharmacyCategoryPage',
+    'Pharmacy': '/medicinecatalog',
   };
 
   useEffect(() => {
@@ -188,7 +188,7 @@ const AppointmentSection = () => {
           axios.get('http://localhost:8080/api/travel').catch(() => ({ data: [] })),
           axios.get('http://localhost:8080/api/translators').catch(() => ({ data: [] })),
           axios.get('http://localhost:8080/api/chefs').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/pharmacies').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/cart-item/user/capsules-user').catch(() => ({ data: [] })),
           axios.get('http://localhost:8080/api/pharmacy-categories').catch(() => ({ data: [] })),
         ]);
 

@@ -1173,6 +1173,12 @@ const DashboardContent: React.FC = () => {
     <div className="flex-1 bg-green-50 min-h-screen">
       <header className="bg-white text-green-700 p-4 flex justify-between items-center shadow ml-64 border-b border-green-100">
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <button onClick={() => navigate('/userdocuments')}
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition"  
+        >
+
+          priscription
+          </button>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold">{isMajorAdmin ? 'Admin' : adminUser?.email || 'User'}</span>

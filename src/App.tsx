@@ -5,7 +5,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import SubAdminDashboard from './admin/subadminloginregister/getAllSubAdmins';
-import UpdateSubAdminForm from './admin/subadminloginregister/updateSubAdmin';
+
 // Public Pages
 import HomePage from './pages/Index';
 import AboutPage from './pages/About';
@@ -29,13 +29,14 @@ import HospitalDoctor from './pages/hospitaldoctors';
 import SpaServices from './pages/spaservice';
 import Diagnostics from './pages/Diagnostics';
 import Labtests from './pages/labTests';
-
+import UserDocuments from './components/userspage/UserDocuments';
+import UserCart from './Pharmacy/UserCart';
 // Admin Pages
 import Admindashboard from './admin/admindashboard';
 import Uploaddoctors from './admin/uploadoctors';
 import ViewDoctors from './admin/viewdoctors';
 import Uploadhospital from './admin/uploadhospitals';
-import DoctorDetails from './admin/doctordetails';
+
 import UploadTest from './admin/uploadlabtests';
 import Uploadloacation from './admin/businessLocation';
 import Uploaddiagnostics from './admin/uploadDiagnostics';
@@ -61,16 +62,21 @@ import SpaService from './admin/viewspaServices'
 import ViewDiagnostics from './admin/viewDiagnostics';
 import ViewLocations from './admin/viewLocations';
 import ViewUsers from './admin/viewUsers';
-
+import Users from './components/userspage/GetAllUsers';
+import DoctorDetails from './admin/doctordetails';
  // Corrected import name (PascalCase)
-
+import UpdateAllSubAdmin from './admin/subadminloginregister/alldetalupdatesubadmin';
 // Utility Components
 import NotFound from './pages/NotFound';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from './ScrollToTop';
 import { Import } from 'lucide-react';
-
+import UpdateSubAdminForm from './admin/subadminloginregister/updateSubAdmin';
+import AddMedicineForm from './Pharmacy/addMadicine';
+import MedicineList from './Pharmacy/MedicineList';
+import UpdateMedicine from './Pharmacy/MadichineUpdate';
+import MedicineCatalog from './Pharmacy/UserInterface';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -110,7 +116,12 @@ const App: React.FC = () => (
             <Route path="/blogs" element={<BlogDetail />} />
             <Route path="/admin/subadminregister" element={<SubAdminRegister />} />
             <Route path="/admin/subadmindashboard" element={<SubAdminDashboard />} />
-            
+            <Route path="/userdocuments" element={<UserDocuments />} />
+            <Route path="/medicinecatalog" element={<MedicineCatalog />} />
+            <Route path="/doctor-profile/:id" element={<DoctorDetails />} />
+            {/* Admin Routes */}
+            {/* <Route path="/admin/updatesubadmin/:id" element={<UpdateAllSubAdmin />} /> */}
+          
             {/* Admin Routes */}
 
             {/* User Routes */}
@@ -119,12 +130,15 @@ const App: React.FC = () => (
             <Route path="/dashboard" element={<Userdashboard />} />
             <Route path="/PatientProfile" element={<PatientProfile />} />
             <Route path="/subadminlogin" element={<SubadmLoginForm />} />
+            <Route path="/patientlist" element={<Users />} />
 
+            <Route path="/usercart" element={<UserCart />} />
 
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
              <Route path="/viewservices/:id" element={< SpaServices />} />
              <Route path="/tests" element={< Diagnostics />} />
              <Route path="/viewtests/:id" element={<  Labtests  />} />
+
 
             {/* Admin Routes */}
             <Route path="/admin/updateSubAdmin" element={<UpdateSubAdminForm />} />
@@ -144,20 +158,24 @@ const App: React.FC = () => (
                <Route path="/admin/uploadspaServices" element={<UploadSpaService/>} />
                <Route path="/admin/viewHospitals" element={<ViewHospitals/>} />
                <Route path="/admin/hospitalDoctor/:id" element={<HospitalDoctors/>} />
-
+            <Route path="/admin/viewdiagnostics" element={<DiagnosticsList />} />
+            <Route path="/admin/subadminregister" element={<SubAdminRegister />} />
                <Route path="admin/viewdiagnostics" element={<ViewDiagnostics/>} />
-
+                <Route path="/admin/viewHospitals" element={<ViewHospitals />} />
                <Route path="/admin/viewdiagnostics" element={<ViewDiagnostics/>} />
                <Route path="/admin/labtests/:id" element={<LabTests />} />
                <Route path="/admin/translators" element={<Translators />} />
                 <Route path="/admin/chefs" element={<Chefs />} />
                 <Route path="/admin/Physios" element={< Physios/>} />
                 <Route path="/admin/viewcenters" element={<Centers/>}/>
-                 <Route path="/admin/spaservices/:id" element={< SpaService/>} />
+                <Route path="/admin/spaservices/:id" element={< SpaService/>} />
                <Route path="/admin/viewLocations" element={<ViewLocations />} />
                <Route path="/admin/users" element={<ViewUsers />} />
-
-
+                <Route path="/admin/update-subadminAllData/:adminId" element={<UpdateAllSubAdmin />} />
+            <Route path="/admin/addMedicine" element={<AddMedicineForm />} />
+            <Route path="/admin/medicineList" element={<MedicineList />} />
+            <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
+            {/* User Routes */}
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
