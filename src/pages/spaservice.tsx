@@ -20,10 +20,10 @@ const SpaServiceDetailsPage: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [priceFilter, setPriceFilter] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
-
+  const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/spaServices/bySpaCenter/${id}`)
+      .get(`${base_url}/spaServices/bySpaCenter/${id}`)
       .then((res) => setServices(res.data))
       .catch((err) => console.error('Failed to fetch spa services:', err));
   }, [id]);

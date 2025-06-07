@@ -14,7 +14,7 @@ export default function LocationUploadPage() {
     state: '',
     city: '',
   });
-
+const base_url="https://healthtourism-5.onrender.com"
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [selectedStateCode, setSelectedStateCode] = useState('');
   const [countries, setCountries] = useState<Option[]>([]);

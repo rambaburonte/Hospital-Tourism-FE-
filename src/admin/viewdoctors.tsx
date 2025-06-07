@@ -39,7 +39,7 @@ const DoctorsList = () => {
   const [searchRating, setSearchRating] = useState('');
 
   const debouncedSetSearchQuery = useCallback(debounce(setSearchQuery, 300), []);
-
+const base_url="https://healthtourism-5.onrender.com"
   const searchOptions = {
     name: [...new Set(doctors.map((d) => d.specialty))],
     location: [...new Set(doctors.map((d) => d.location))],

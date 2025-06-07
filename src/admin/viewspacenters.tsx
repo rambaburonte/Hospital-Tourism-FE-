@@ -17,9 +17,9 @@ const SpaCentersList: React.FC = () => {
   const [spas, setSpas] = useState<Spa[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
-    axios.get('http://localhost:8080/spaCenter/all')
+    axios.get(`${base_url}/spaCenter/all`)
       .then((res) => {
         setSpas(res.data);
         setLoading(false);

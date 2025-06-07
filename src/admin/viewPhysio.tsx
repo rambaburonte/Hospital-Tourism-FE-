@@ -15,7 +15,7 @@ interface Physio {
 const PhysioList: React.FC = () => {
   const [physios, setPhysios] = useState<Physio[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios.get('http://localhost:8080/physio')
       .then(res => {

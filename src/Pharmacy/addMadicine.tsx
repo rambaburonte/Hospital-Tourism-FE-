@@ -51,8 +51,8 @@ const AddMedicineForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  const API_URL = 'http://localhost:8080/pharmacy/addMadicine';
+  const base_url="https://healthtourism-5.onrender.com"
+  const API_URL = `${base_url}/pharmacy/addMadicine`;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

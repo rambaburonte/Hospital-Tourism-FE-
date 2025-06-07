@@ -1765,8 +1765,8 @@ const MedicineList: React.FC = () => {
   const [alertCount, setAlertCount] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const API_URL = 'http://localhost:8080/pharmacy/dashboard';
-  const DELETE_API_URL = 'http://localhost:8080/pharmacy/deleteMadicine/';
+  const API_URL = 'https://healthtourism-5.onrender.com/pharmacy/dashboard';
+  const DELETE_API_URL = 'https://healthtourism-5.onrender.com/pharmacy/deleteMadicine/';
 
   const navigate = useNavigate();
 

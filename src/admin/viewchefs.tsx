@@ -15,7 +15,7 @@ interface Chef {
 const ChefList: React.FC = () => {
   const [chefs, setChefs] = useState<Chef[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios.get('http://localhost:8080/api/chefs')
       .then(res => {

@@ -20,10 +20,10 @@ import axios from "axios";
 const TranslatorList = () => {
   const [translators, setTranslators] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("All");
-
+  const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/translators")
+      .get(`${base_url}/api/translators`)
       .then((response) => {
         const formatted = response.data.map((t) => ({
           id: t.translatorID,

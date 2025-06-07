@@ -15,11 +15,11 @@ const SpaServicesPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [services, setServices] = useState<SpaService[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:8080/spaServices/bySpaCenter/${id}`)
+        .get(`${base_url}/spaServices/bySpaCenter/${id}`)
         .then((res) => {
           setServices(res.data);
           setLoading(false);

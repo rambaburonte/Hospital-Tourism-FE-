@@ -18,7 +18,7 @@ const UploadLabTests: React.FC = () => {
   const [department, setDepartment] = useState('');
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     fetchDiagnostics();
   }, []);

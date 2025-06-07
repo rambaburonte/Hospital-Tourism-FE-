@@ -17,9 +17,9 @@ interface User {
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
-    axios.get('http://localhost:8080/user')
+    axios.get('https://healthtourism-5.onrender.com/user')
       .then(res => {
         setUsers(res.data);
         setLoading(false);

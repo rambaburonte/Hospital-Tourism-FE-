@@ -12,7 +12,7 @@ interface Location {
 const LocationsPage: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios.get('http://localhost:8080/api/locations')
       .then((res) => {

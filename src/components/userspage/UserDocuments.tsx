@@ -495,10 +495,10 @@ const UserDocuments: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ text: string; type: 'error' } | null>(null);
-
+    const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get<UserData>('http://localhost:8080/user/get-doc-and-adrs/17')
+      .get<UserData>(`${base_url}/user/get-doc-and-adrs/17`)
       .then((res) => {
         setUserData(res.data);
         setLoading(false);

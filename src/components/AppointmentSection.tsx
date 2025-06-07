@@ -160,7 +160,7 @@ const AppointmentSection = () => {
     'Chefs': '/translatorAndChefList/chef',
     'Pharmacy': '/medicinecatalog',
   };
-
+   const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -179,17 +179,17 @@ const AppointmentSection = () => {
           pharmaciesRes,
           categoriesRes,
         ] = await Promise.all([
-          axios.get('http://localhost:8080/api/doctors').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/diagnostics').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/physio/all').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/spaCenter/all').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/hospitals').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/hotels').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/travel').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/translators').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/chefs').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/cart-item/user/capsules-user').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/api/pharmacy-categories').catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/doctors`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/diagnostics`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/physio/all`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/spaCenter/all`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/hospitals`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/hotels`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/travel`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/translators`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/chefs`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/cart-item/user/capsules-user`).catch(() => ({ data: [] })),
+          axios.get(`${base_url}/api/pharmacy-categories`).catch(() => ({ data: [] })),
         ]);
 
         const filterActive = (items: any[]) =>

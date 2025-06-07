@@ -52,10 +52,10 @@ const AllDoctorsPage: React.FC = () => {
   const [showFeedback, setShowFeedback] = useState<string | null>(null);
 
   const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
-
+  const base_url="https://healthtourism-5.onrender.com"
   const fetchDoctors = async () => {
     try {
-      const response = await axios.get<Doctor[]>('http://localhost:8080/api/doctors');
+      const response = await axios.get<Doctor[]>(`${base_url}/api/doctors`);
       const doctors = response.data;
       setAllDoctors(doctors);
 

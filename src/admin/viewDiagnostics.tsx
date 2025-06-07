@@ -17,7 +17,7 @@ const DiagnosticsList: React.FC = () => {
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'rating'>('name');
   const navigate = useNavigate();
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios.get('http://localhost:8080/api/diagnostics')
       .then(res => setDiagnostics(res.data))

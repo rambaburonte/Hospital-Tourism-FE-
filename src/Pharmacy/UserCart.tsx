@@ -5206,10 +5206,10 @@ const UserCart: React.FC = () => {
   useEffect(() => {
     loadExternalAssets();
   }, []);
-
+  const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get<CartItem[]>('http://localhost:8080/cart-item/user/cart/17')
+      .get<CartItem[]>(`${base_url}/cart-item/user/cart/17`)
       .then((response) => {
         setCartItems(response.data);
         setLoading(false);
@@ -5515,7 +5515,7 @@ const UserCart: React.FC = () => {
 
     try {
       const queryString = selectedItems.map(id => `cartIds=${id}`).join('&');
-      await axios.delete(`http://localhost:8080/cart-item/user/cart/clear?${queryString}`);
+      await axios.delete(`${base_url}/cart-item/user/cart/clear?${queryString}`);
       setCartItems((prev) => prev.filter((item) => !selectedItems.includes(item.cartId)));
       setSelectedItems([]);
     } catch (err) {
@@ -5525,7 +5525,7 @@ const UserCart: React.FC = () => {
 
   const handleDeleteSingleItem = async (cartId: number) => {
     try {
-      await axios.delete(`http://localhost:8080/cart-item/user/cart/clear/${cartId}`);
+      await axios.delete(`${base_url}/cart-item/user/cart/clear/${cartId}`);
       setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
       setSelectedItems((prev) => prev.filter((id) => id !== cartId));
     } catch (err) {

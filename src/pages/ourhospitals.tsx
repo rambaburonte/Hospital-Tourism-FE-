@@ -18,11 +18,11 @@ const HospitalList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const navigate = useNavigate();
-
+  const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await axios.get<Hospital[]>("http://localhost:8080/api/hospitals");
+        const response = await axios.get<Hospital[]>(`${base_url}/api/hospitals`);
         setHospitals(response.data);
       } catch (err) {
         setError("Failed to load hospitals.");

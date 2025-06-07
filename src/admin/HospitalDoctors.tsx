@@ -21,7 +21,7 @@ const DoctorList: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'rating'>('name');
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios.get('http://localhost:8080/api/doctors')
       .then(res => setDoctors(res.data))

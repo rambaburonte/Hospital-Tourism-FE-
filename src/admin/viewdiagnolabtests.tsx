@@ -16,7 +16,7 @@ const LabTests: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [labTests, setLabTests] = useState<LabTest[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios.get(`http://localhost:8080/api/diagnostics/${id}`)
       .then(res => {

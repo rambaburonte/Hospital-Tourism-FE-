@@ -19,7 +19,7 @@ const SpaUploadPage: React.FC = () => {
     locationId: ''
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     fetchLocations();
   }, []);

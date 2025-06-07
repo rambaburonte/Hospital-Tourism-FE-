@@ -265,9 +265,9 @@ export default function RegisterPage() {
       mobile: formData.mobile,
       country: formData.country?.label || '',
     };
-
+       const base_url="https://healthtourism-5.onrender.com"
     try {
-      const response = await fetch('http://localhost:8080/user/register', {
+      const response = await fetch(`${base_url}/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

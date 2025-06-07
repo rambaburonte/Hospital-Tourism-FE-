@@ -66,6 +66,15 @@ const Sidebar: React.FC = () => {
       ],
     },
     {
+      name: 'Chief',
+      icon: 'fas fa-briefcase-medical',
+      subItems: [
+        { name: 'Add-Chief', path: '/admin/uploadchefs' },
+        // { name: 'uploadLabtests', path: '/admin/uploadlabtests' },
+        // { name: 'viewDiagnostics', path: '/admin/viewdiagnostics' },
+      ],
+    },
+    {
       name: 'Translators',
       icon: 'fas fa-language',
       subItems: [
@@ -96,6 +105,17 @@ const Sidebar: React.FC = () => {
         { name: 'Upload Capsule', path: '/admin/addMedicine' },
         { name: 'View Capsule', path: '/admin/medicineList' },
         { name: 'Update Capsule', path: '/admin/Capsule/:id' },
+        
+      ],
+      
+    },
+    {
+      name: 'Slots',
+      icon: 'fas fa-pills',
+      subItems: [
+        { name: 'Add Slots', path: '/admin/slots' },
+        { name: 'View Slots', path: '/admin/view-slots' },
+        { name: 'Edit Slots', path: '/admin/edit-slotse/:id' },
         
       ],
       

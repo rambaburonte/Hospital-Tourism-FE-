@@ -18,7 +18,7 @@ const HospitalList: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [locationFilter, setLocationFilter] = useState<string>("all");
   const navigate = useNavigate();
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/hospitals")

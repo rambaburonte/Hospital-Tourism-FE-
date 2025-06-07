@@ -21,7 +21,7 @@ const UploadTranslators: React.FC = () => {
   const [rating, setRating] = useState('');
   const [languages, setLanguages] = useState('');
   const [message, setMessage] = useState('');
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     fetchLocations();
   }, []);

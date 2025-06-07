@@ -14,9 +14,9 @@ interface Translator {
 const TranslatorList: React.FC = () => {
   const [translators, setTranslators] = useState<Translator[]>([]);
   const [loading, setLoading] = useState(true);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
-    axios.get('http://localhost:8080/api/translators')
+    axios.get(`${base_url}/api/translators`)
       .then(res => {
         setTranslators(res.data);
         setLoading(false);

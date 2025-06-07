@@ -132,7 +132,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [verificationSuccess, setVerificationSuccess] = useState(false);
   const [error, setError] = useState("");
-
+const base_url="https://healthtourism-5.onrender.com"
   // Show email verified success
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -146,7 +146,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/user/login", {
+      const response = await fetch(`${base_url}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

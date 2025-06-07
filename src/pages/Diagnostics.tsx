@@ -20,10 +20,10 @@ const DiagnosticsList: React.FC = () => {
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [addressFilter, setAddressFilter] = useState('');
   const navigate = useNavigate();
-
+  const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get('http://localhost:8080/api/diagnostics')
+      .get(`${base_url}/api/diagnostics`)
       .then((res) => setDiagnostics(res.data))
       .catch((err) => console.error('Failed to fetch diagnostics:', err));
   }, []);

@@ -27,7 +27,7 @@ const UploadDoctors: React.FC = () => {
   const [department, setDepartment] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     const fetchHospitals = async () => {
       try {

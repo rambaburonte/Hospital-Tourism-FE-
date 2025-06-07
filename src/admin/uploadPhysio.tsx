@@ -20,7 +20,7 @@ const UploadPhysio: React.FC = () => {
     price: "",
     locationId: "",
   });
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/locations")

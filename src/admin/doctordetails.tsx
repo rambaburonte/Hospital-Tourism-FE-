@@ -898,7 +898,7 @@ const DoctorDetails: React.FC = () => {
     hospitalName: '',
   });
   const [updateMessage, setUpdateMessage] = useState<string | null>(null);
-
+const base_url="https://healthtourism-5.onrender.com"
   // Fetch doctor details
   useEffect(() => {
     const fetchDoctor = async () => {

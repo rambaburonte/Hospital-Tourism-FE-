@@ -1233,8 +1233,8 @@ const UpdateMedicine: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof Medicine, string>>>({});
-
-  const API_BASE = 'http://localhost:8080/pharmacy';
+  const base_url="https://healthtourism-5.onrender.com"
+  const API_BASE = `${base_url}/pharmacy`;
 
   useEffect(() => {
     const fetchMedicine = async () => {

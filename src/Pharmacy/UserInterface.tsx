@@ -460,7 +460,7 @@ const MedicineCatalog: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<Medicine[]>('http://localhost:8080/cart-item/user/capsules-user')
+      .get<Medicine[]>('https://healthtourism-5.onrender.com/cart-item/user/capsules-user')
       .then((res) => {
         setMedicines(res.data);
       })
@@ -473,7 +473,7 @@ const MedicineCatalog: React.FC = () => {
       return;
     }
     axios
-      .post(`http://localhost:8080/cart-item/user/cart/add?userId=${user.id}&madicineid=${medicineId}&qty=${qty}`)
+      .post(`https://healthtourism-5.onrender.com/cart-item/user/cart/add?userId=${user.id}&madicineid=${medicineId}&qty=${qty}`)
       .then(() => setCartCount((prev) => prev + 1))
       .catch((err) => console.error('Add to cart failed:', err));
   };

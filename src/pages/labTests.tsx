@@ -22,10 +22,10 @@ const LabTests: React.FC = () => {
   const [priceFilter, setPriceFilter] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [departmentFilter, setDepartmentFilter] = useState<string>('');
   const navigate = useNavigate();
-
+  const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/diagnostics/${id}`)
+      .get(`${base_url}/api/diagnostics/${id}`)
       .then((res) => {
         setLabTests(res.data);
         setLoading(false);

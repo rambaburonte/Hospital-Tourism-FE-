@@ -613,7 +613,7 @@ interface UsersApiResponse {
   users: User[];       // Or 'content', 'data', etc., depending on your backend
   totalItems: number;  // Or 'totalElements', 'totalCount', etc.
 }
-
+const base_url="https://healthtourism-5.onrender.com"
 // Fetch users with pagination, search, and sorting
 const fetchUsers = async (
   page: number, // API typically expects 0-indexed page for pagination, UI is 1-indexed
@@ -623,7 +623,7 @@ const fetchUsers = async (
 ): Promise<{ data: User[]; total: number }> => {
   // Adjust page for 0-indexed APIs if necessary, e.g., `apiPage = page - 1`
   // For this example, we'll assume the API endpoint is flexible or expects 1-indexed
-  const apiUrl = "http://localhost:8080/user/get-all-users";
+  const apiUrl = `${base_url}/user/get-all-users`;
   
   const response = await fetch(apiUrl);
 

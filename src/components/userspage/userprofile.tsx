@@ -2698,10 +2698,10 @@ const PatientProfile: React.FC = () => {
       setMessage('No user data found in localStorage. Please log in.');
     }
   }, []);
-
+   const base_url="https://healthtourism-5.onrender.com"
   const fetchPatient = async (id: number) => {
     try {
-      const res = await axios.get<Patient>(`http://localhost:8080/user/get-patients/${id}`);
+      const res = await axios.get<Patient>(`${base_url}/user/get-patients/${id}`);
       setPatient(res.data);
       setAddress(res.data.address || '');
     } catch (err) {
@@ -2776,9 +2776,9 @@ const PatientProfile: React.FC = () => {
       setMessage('Please select at least one file or provide an address to upload.');
       return;
     }
-
+      const base_url="https://healthtourism-5.onrender.com"
     try {
-      await axios.post(`http://localhost:8080/user/upload-files/${userId}`, formData, {
+      await axios.post(`${base_url}/user/upload-files/${userId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setMessage('Files and/or address uploaded successfully.');
@@ -2817,9 +2817,9 @@ const PatientProfile: React.FC = () => {
       setMessage('User ID not found.');
       return;
     }
-
+      const base_url="https://healthtourism-5.onrender.com"
     try {
-      await axios.delete(`http://localhost:8080/user/delete-file/${userId}/${type}`);
+      await axios.delete(`${base_url}/user/delete-file/${userId}/${type}`);
       setMessage(`${type} deleted successfully.`);
       fetchPatient(userId);
     } catch (error) {

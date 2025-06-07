@@ -13,7 +13,7 @@ const UploadHospitals: React.FC = () => {
   const [hospitalAddress, setHospitalAddress] = useState('');
 
   const [message, setMessage] = useState('');
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     fetchLocations();
   }, []);

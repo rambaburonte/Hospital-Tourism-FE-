@@ -24,7 +24,7 @@ const UploadDiagnostics: React.FC = () => {
   useEffect(() => {
     fetchLocations();
   }, []);
-
+const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(''), 3000);

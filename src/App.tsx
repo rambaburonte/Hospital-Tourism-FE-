@@ -77,6 +77,10 @@ import AddMedicineForm from './Pharmacy/addMadicine';
 import MedicineList from './Pharmacy/MedicineList';
 import UpdateMedicine from './Pharmacy/MadichineUpdate';
 import MedicineCatalog from './Pharmacy/UserInterface';
+
+
+
+import AddSlots from './admin/AddSlots';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -141,6 +145,7 @@ const App: React.FC = () => (
 
 
             {/* Admin Routes */}
+            <Route path="/admin/slots"element={<AddSlots/>}/>
             <Route path="/admin/updateSubAdmin" element={<UpdateSubAdminForm />} />
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
@@ -175,6 +180,7 @@ const App: React.FC = () => (
             <Route path="/admin/addMedicine" element={<AddMedicineForm />} />
             <Route path="/admin/medicineList" element={<MedicineList />} />
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
+            
             {/* User Routes */}
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
