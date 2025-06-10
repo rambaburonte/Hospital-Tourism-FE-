@@ -885,15 +885,15 @@ const base_url = 'https://healthtourism-5.onrender.com';
   const apiEndpoints: Record<string, string> = {
     'Find a Doctor': 'https://healthtourism-5.onrender.com/api/doctors',
     'Book a Test': 'https://healthtourism-5.onrender.com/api/diagnostics',
-    Spa: 'https://healthtourism-5.onrender.com/spaCenter/all',
-    Physiotherapy: 'https://healthtourism-5.onrender.com/physio/all',
+    'Spa': 'https://healthtourism-5.onrender.com/spaCenter/all',
+    'Physiotherapy': 'https://healthtourism-5.onrender.com/physio/all',
     'Locate Hospital': 'https://healthtourism-5.onrender.com/api/hospitals',
     'Hotel Booking': 'https://healthtourism-5.onrender.com/api/hotels',
     'Travel Booking': 'https://healthtourism-5.onrender.com/api/travel',
-    Translators: 'https://healthtourism-5.onrender.com/api/translators',
-    Chefs: 'https://healthtourism-5.onrender.com/api/chefs',
-    Pharmacy: 'https://healthtourism-5.onrender.com/cart-item/user/capsules-user',
-    pharmacyCategories: 'https://healthtourism-5.onrender.com/api/pharmacy-categories',
+    'Translators': 'https://healthtourism-5.onrender.com/api/translators',
+    'Chefs': 'https://healthtourism-5.onrender.com/api/chefs',
+    'Pharmacy': 'https://healthtourism-5.onrender.com/cart-item/user/capsules-user',
+    'pharmacyCategories': 'https://healthtourism-5.onrender.com/cart-item/user/capsules-user',
   };
 
   useEffect(() => {
