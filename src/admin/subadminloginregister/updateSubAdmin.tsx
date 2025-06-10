@@ -44,7 +44,7 @@ const base_url="https://healthtourism-5.onrender.com"
     // Handle save button click
     const handleSave = async () => {
         try {
-            const response = await axios.put("http://localhost:8080/admin/update-subadmin", formData);
+            const response = await axios.put("https://healthtourism-5.onrender.com/admin/update-subadmin", formData);
             alert("Sub-Admin updated successfully!");
             console.log(response.data);
         } catch (error: any) {

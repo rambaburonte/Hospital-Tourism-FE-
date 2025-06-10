@@ -63,7 +63,7 @@ const base_url="https://healthtourism-5.onrender.com"
     }
 
     try {
-      await axios.post('http://localhost:8080/api/locations', formData);
+      await axios.post('https://healthtourism-5.onrender.com/api/locations', formData);
       setMessage('Location uploaded successfully!');
       setFormData({ country: '', state: '', city: '' });
       setStates([]);

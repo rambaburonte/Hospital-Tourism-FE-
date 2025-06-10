@@ -71,7 +71,7 @@ const Sidebar: React.FC = () => {
       subItems: [
         { name: 'Add-Chief', path: '/admin/uploadchefs' },
         // { name: 'uploadLabtests', path: '/admin/uploadlabtests' },
-        // { name: 'viewDiagnostics', path: '/admin/viewdiagnostics' },
+         { name: 'view-Chefs', path: '/admin/ChefList' },
       ],
     },
     {
@@ -104,7 +104,7 @@ const Sidebar: React.FC = () => {
       subItems: [
         { name: 'Upload Capsule', path: '/admin/addMedicine' },
         { name: 'View Capsule', path: '/admin/medicineList' },
-        { name: 'Update Capsule', path: '/admin/Capsule/:id' },
+        { name: 'Update Capsule', path: '/admin/updateMedicine/:id' },
         
       ],
       

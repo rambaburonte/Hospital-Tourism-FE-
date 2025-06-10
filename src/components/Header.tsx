@@ -206,7 +206,7 @@ const Header: React.FC = () => {
                     event_label: 'Book Appointment',
                   });
                 }
-                navigate('/appointment');
+                navigate('/bookingfom');
               }}
             >
               Book Appointment

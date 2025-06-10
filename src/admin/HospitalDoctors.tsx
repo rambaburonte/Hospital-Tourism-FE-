@@ -23,7 +23,7 @@ const DoctorList: React.FC = () => {
   const [sortKey, setSortKey] = useState<'name' | 'rating'>('name');
 const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
-    axios.get('http://localhost:8080/api/doctors')
+    axios.get('https://healthtourism-5.onrender.com/api/doctors')
       .then(res => setDoctors(res.data))
       .catch(err => console.error(err));
   }, []);

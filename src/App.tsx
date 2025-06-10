@@ -77,9 +77,9 @@ import AddMedicineForm from './Pharmacy/addMadicine';
 import MedicineList from './Pharmacy/MedicineList';
 import UpdateMedicine from './Pharmacy/MadichineUpdate';
 import MedicineCatalog from './Pharmacy/UserInterface';
-
-
-
+import BookingForm from './admin/Booking';
+import ChefList from './admin/viewchefs';
+import UpdateChef from './admin/UpdateChef';
 import AddSlots from './admin/AddSlots';
 const queryClient = new QueryClient();
 
@@ -135,7 +135,7 @@ const App: React.FC = () => (
             <Route path="/PatientProfile" element={<PatientProfile />} />
             <Route path="/subadminlogin" element={<SubadmLoginForm />} />
             <Route path="/patientlist" element={<Users />} />
-
+            <Route path="/bookingfom" element={<BookingForm/>}/>
             <Route path="/usercart" element={<UserCart />} />
 
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
@@ -179,8 +179,9 @@ const App: React.FC = () => (
                 <Route path="/admin/update-subadminAllData/:adminId" element={<UpdateAllSubAdmin />} />
             <Route path="/admin/addMedicine" element={<AddMedicineForm />} />
             <Route path="/admin/medicineList" element={<MedicineList />} />
+            <Route path="/admin/ChefList" element={<ChefList/>} />
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
-            
+            <Route path="/update-chef/:chefID" element={<UpdateChef />} />
             {/* User Routes */}
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />

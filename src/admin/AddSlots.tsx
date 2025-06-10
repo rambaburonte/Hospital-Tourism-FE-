@@ -102,7 +102,7 @@ const base_url="https://healthtourism-5.onrender.com"
 
     try {
       const res = await axios.post<SlotResponse[]>(
-        "http://localhost:8080/api/services/slots/add",
+        "https://healthtourism-5.onrender.com/api/services/slots/add",
         {
           serviceType,
           serviceId,
