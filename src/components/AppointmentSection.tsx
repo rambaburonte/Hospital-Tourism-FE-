@@ -881,19 +881,19 @@ const AppointmentSection = () => {
     Chefs: '/translatorAndChefList/chef',
     Pharmacy: '/medicinecatalog',
   };
-
+const base_url = 'https://healthtourism-5.onrender.com';
   const apiEndpoints: Record<string, string> = {
-    'Find a Doctor': 'http://localhost:8080/api/doctors',
-    'Book a Test': 'http://localhost:8080/api/diagnostics',
-    Spa: 'http://localhost:8080/spaCenter/all',
-    Physiotherapy: 'http://localhost:8080/physio/all',
-    'Locate Hospital': 'http://localhost:8080/api/hospitals',
-    'Hotel Booking': 'http://localhost:8080/api/hotels',
-    'Travel Booking': 'http://localhost:8080/api/travel',
-    Translators: 'http://localhost:8080/api/translators',
-    Chefs: 'http://localhost:8080/api/chefs',
-    Pharmacy: 'http://localhost:8080/cart-item/user/capsules-user',
-    pharmacyCategories: 'http://localhost:8080/api/pharmacy-categories',
+    'Find a Doctor': 'https://healthtourism-5.onrender.com/api/doctors',
+    'Book a Test': 'https://healthtourism-5.onrender.com/api/diagnostics',
+    Spa: 'https://healthtourism-5.onrender.com/spaCenter/all',
+    Physiotherapy: 'https://healthtourism-5.onrender.com/physio/all',
+    'Locate Hospital': 'https://healthtourism-5.onrender.com/api/hospitals',
+    'Hotel Booking': 'https://healthtourism-5.onrender.com/api/hotels',
+    'Travel Booking': 'https://healthtourism-5.onrender.com/api/travel',
+    Translators: 'https://healthtourism-5.onrender.com/api/translators',
+    Chefs: 'https://healthtourism-5.onrender.com/api/chefs',
+    Pharmacy: 'https://healthtourism-5.onrender.com/cart-item/user/capsules-user',
+    pharmacyCategories: 'https://healthtourism-5.onrender.com/api/pharmacy-categories',
   };
 
   useEffect(() => {

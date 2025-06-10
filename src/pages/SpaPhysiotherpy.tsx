@@ -41,12 +41,12 @@ const ServiceListingPage: React.FC = () => {
 
   const getTranslatedText = (en: string, es: string, fr: string) =>
     selectedLanguage === 'en' ? en : selectedLanguage === 'es' ? es : fr || en;
-  const base_url="https://healthtourism-5.onrender.com"
+  const base_url="https://healthtourism-5.onrender.com";
   useEffect(() => {
     axios.get(`${base_url}/spaCenter/all`)
       .then(res => setSpaData(res.data))
       .catch(err => console.error('Failed to fetch spa data:', err));
-   const base_url="https://healthtourism-5.onrender.com"
+   
     axios.get(`${base_url}/physio`)
       .then(res => setPhysioData(res.data))
       .catch(err => console.error('Failed to fetch physio data:', err));

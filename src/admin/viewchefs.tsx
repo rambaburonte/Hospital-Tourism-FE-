@@ -406,7 +406,7 @@ const ChefList: React.FC = () => {
   useEffect(() => {
     const fetchChefs = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/chefs');
+        const response = await fetch('https://healthtourism-5.onrender.com/api/chefs');
         if (!response.ok) {
           throw new Error('Failed to fetch chefs data');
         }
