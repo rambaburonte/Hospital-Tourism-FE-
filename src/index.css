@@ -1,9 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* Medical watermark background */
+body {
+  background-image: url('/image.png') !important;
+  background-repeat: repeat !important;
+  background-size: 600px auto !important;
+  background-attachment: fixed !important;
+  position: relative !important;
+}
+
+body::before {
+  content: '' !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: rgba(255, 255, 255, 0.55) !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
 
 @layer base {
   :root {
