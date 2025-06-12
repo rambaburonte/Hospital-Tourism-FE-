@@ -31,6 +31,10 @@ import Diagnostics from './pages/Diagnostics';
 import Labtests from './pages/labTests';
 import UserDocuments from './components/userspage/UserDocuments';
 import UserCart from './Pharmacy/UserCart';
+import ChefsList from './pages/FindAllChefs';
+import SpaServiceDetailsPage from './pages/spaservice';
+import BookingPage from './components/bookingsingleservice';
+
 // Admin Pages
 import Admindashboard from './admin/admindashboard';
 import Uploaddoctors from './admin/uploadoctors';
@@ -123,6 +127,11 @@ const App: React.FC = () => (
             <Route path="/userdocuments" element={<UserDocuments />} />
             <Route path="/medicinecatalog" element={<MedicineCatalog />} />
             <Route path="/doctor-profile/:id" element={<DoctorDetails />} />
+            <Route path="/chef-list" element={<ChefsList />} />
+            <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
+
+            <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
+
             {/* Admin Routes */}
             {/* <Route path="/admin/updatesubadmin/:id" element={<UpdateAllSubAdmin />} /> */}
           
@@ -143,6 +152,7 @@ const App: React.FC = () => (
              <Route path="/tests" element={< Diagnostics />} />
              <Route path="/viewtests/:id" element={<  Labtests  />} />
 
+            <Route path="/tests" element={<DiagnosticsList />} />
 
             {/* Admin Routes */}
             <Route path="/admin/slots"element={<AddSlots/>}/>

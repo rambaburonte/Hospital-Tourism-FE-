@@ -21,6 +21,7 @@ const DiagnosticsList: React.FC = () => {
   const [addressFilter, setAddressFilter] = useState('');
   const navigate = useNavigate();
   const base_url="https://healthtourism-5.onrender.com"
+  
   useEffect(() => {
     axios
       .get(`${base_url}/api/diagnostics`)
