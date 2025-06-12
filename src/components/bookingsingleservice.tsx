@@ -164,7 +164,7 @@ const BookingPage = () => {
       if (!apiPath) return;
 
       try {
-        const res = await axios.get(`http://localhost:9090${apiPath}`);
+        const res = await axios.get(`https://healthtourism-5.onrender.com${apiPath}`);
         const data = res.data;
 
         if (serviceType === "doctor") {
@@ -233,7 +233,7 @@ const BookingPage = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:9090/api/bookings/book-service/${userId}/${serviceType}`,
+        `https://healthtourism-5.onrender.com/api/bookings/book-service/${userId}/${serviceType}`,
         payload,
         {
           headers: {
