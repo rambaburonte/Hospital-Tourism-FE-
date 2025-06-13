@@ -403,10 +403,12 @@ const ChefList: React.FC = () => {
   const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
   const navigate = useNavigate();
 
+  //const base_url = 'https://healthtourism-5.onrender.com/api/chefs';
+const base_url= 'http://localhost:8080';
   useEffect(() => {
     const fetchChefs = async () => {
       try {
-        const response = await fetch('https://healthtourism-5.onrender.com/api/chefs');
+        const response = await fetch(`${base_url}/api/chefs`);
         if (!response.ok) {
           throw new Error('Failed to fetch chefs data');
         }

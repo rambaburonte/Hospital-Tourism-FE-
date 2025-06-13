@@ -467,7 +467,7 @@ const HeroBanner = () => {
     
     {/* Image Carousel */}
     <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
-      <AspectRatio ratio={16 / 9}>
+      <AspectRatio ratio={19 / 9}>
         <Carousel className="w-full h-full" opts={{ loop: true, align: "start" }} setApi={setApi}>
           <CarouselContent>
             {bannerImages.map((image) => (
@@ -515,7 +515,7 @@ const HeroBanner = () => {
     </div>
     {/* Video Section */}
     <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
-      <AspectRatio ratio={16 / 10.5}>
+      <AspectRatio ratio={20 / 10.5}>
         <video
           src="https://www.w3schools.com/html/mov_bbb.mp4"
           autoPlay

@@ -132,7 +132,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [verificationSuccess, setVerificationSuccess] = useState(false);
   const [error, setError] = useState("");
-const base_url="https://healthtourism-5.onrender.com"
+//const base_url="https://healthtourism-5.onrender.com"
+   const base_url = "http://localhost:9090"; // Update with your actual base URL
   // Show email verified success
   useEffect(() => {
     const params = new URLSearchParams(location.search);
