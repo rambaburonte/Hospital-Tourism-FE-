@@ -415,7 +415,7 @@ import { Menu, Search, Phone, X, User, Plus, ShoppingCart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 
@@ -442,6 +442,7 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
 
   // Centralized GA tracking function
   const trackEvent = (action: string, category: string, label: string) => {
@@ -464,7 +465,7 @@ const Header: React.FC = () => {
 
   // Handle popup logic
   useEffect(() => {
-    if (sessionStorage.getItem('welcomePopupShown')) {
+    if (sessionStorage.getItem('welcomePopupShown') || location.pathname !== '/') {
       return;
     }
 
@@ -483,7 +484,7 @@ const Header: React.FC = () => {
     return () => {
       clearTimeout(showTimer);
     };
-  }, []);
+  }, [location.pathname]);
 
   // Effect to check login status from localStorage
   useEffect(() => {
