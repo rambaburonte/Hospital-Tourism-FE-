@@ -99,7 +99,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
       {!isAdminRoute && <Header />}
-      <div className={isAdminRoute ? '' : 'pt-32'}>{children}</div>
+      <div className={isAdminRoute ? '' : 'pt-32 pb-20'}>{children}</div>
       {!isAdminRoute && <Footer />}
     </>
   );

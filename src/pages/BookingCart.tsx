@@ -344,7 +344,7 @@ const BookingCart: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-Opacity-50 flex flex-col font-sans">
       <div className="flex-1 pt-20 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center mb-8">
           <div className="flex items-center space-x-4 sm:space-x-6">
