@@ -55,7 +55,7 @@ const base_url="https://healthtourism-5.onrender.com"
     formData.append('image', imageFile);
 
     try {
-      const res = await axios.post('http://localhost:8080/api/hospitals/add', formData, {
+      const res = await axios.post('http://localhost:9090/api/hospitals/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

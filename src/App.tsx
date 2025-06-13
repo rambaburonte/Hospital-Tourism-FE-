@@ -6,13 +6,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import SubAdminDashboard from './admin/subadminloginregister/getAllSubAdmins';
 
+
+import HospitalList from './pages/HospitalList';
+
+import WorldUserHeatmap from './components/worldMap';
 // Public Pages
 import HomePage from './pages/Index';
 import AboutPage from './pages/About';
 import Specialities from './pages/Specialities';
 import AllDoctorsPage from './pages/AllDoctorsPage';
 import ContactUsPage from './pages/contactus';
-import OurHospitals from './pages/ourhospitals';
+
 import PharmacyCategoryPage from './components/pharmaMedicine';
 import TranslatorList from './pages/TranslatorList';
 import ServiceListingPage from './pages/SpaPhysiotherpy';
@@ -120,7 +124,7 @@ const App: React.FC = () => (
             <Route path="/specialities" element={<Specialities />} />
             <Route path="/doctors" element={<AllDoctorsPage />} />
             <Route path="/ContactUsPage" element={<ContactUsPage />} />
-            <Route path="/OurHospitals" element={<OurHospitals />} />
+            <Route path="/HospitalList" element={<HospitalList />} />
             <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage />} />
             <Route path="/translatorList" element={<TranslatorList />} />
             <Route path="/ServiceListingPage" element={<ServiceListingPage />} />
@@ -134,9 +138,14 @@ const App: React.FC = () => (
             <Route path="/doctor-profile/:id" element={<DoctorDetails />} />
             <Route path="/chef-list" element={<ChefsList />} />
             <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
-
+            
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
 
+         
+
+
+
+           
             {/* Admin Routes */}
             {/* <Route path="/admin/updatesubadmin/:id" element={<UpdateAllSubAdmin />} /> */}
           

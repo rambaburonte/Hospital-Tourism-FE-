@@ -116,11 +116,12 @@ const Header: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home' },
     { to: '/specialities', label: 'Specialties' },
-    { to: '/OurHospitals', label: 'Our Hospitals' },
+
     { to: '/doctors', label: 'Doctors' },
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
     { to: '/medicinecatalog', label: 'Pharmacy' },
+    { to: '/HospitalList', label: 'Hospitals' },
   ];
 
   const handleRedirect = () => {
@@ -169,17 +170,14 @@ const Header: React.FC = () => {
         <div className="container mx-auto py-4 px-4 sm:px-6 flex justify-between items-center bg-white dark:bg-gray-900">
           <div className="flex items-center space-x-6">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <img
-                src="https://via.placeholder.com/40?text=MAX"
-                alt="MAX Healthcare Logo"
-                className="h-10 w-auto"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://via.placeholder.com/40?text=Logo';
-                }}
-              />
-              <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">MAX</span>
-            </Link>
+<Link to="/" className="flex items-center space-x-2">
+ 
+  <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">
+    MAX
+  </span>
+</Link>
+
+
 
             {/* Desktop Navigation */}
             {!isMobile && (
