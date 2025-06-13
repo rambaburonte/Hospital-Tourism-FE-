@@ -1,361 +1,15 @@
-// import { useParams } from "react-router-dom";
-// import { useState } from "react";
-// import axios from "axios";
-
-// const BookingPage = () => {
-//   const { serviceType, id } = useParams(); // 👈 id = dynamic service ID
-//   const userId = 1; // Hardcoded userId for now
-
-//   const [formData, setFormData] = useState({
-//     bookingStartTime: "",
-//     bookingEndTime: "",
-//     paymentMode: "ONLINE",
-//     bookingType: "SINGLE",
-//     bookingAmount: 0,
-//     remarks: "",
-//   });
-
-//   const [message, setMessage] = useState("");
-
-//   const serviceIdFieldMap: Record<string, string> = {
-//     chef: "chef",
-//     doctor: "doctor",
-//     physio: "physio",
-//     translator: "translator",
-//     spa: "spa",
-//     test: "labtest",
-//   };
-
-//   const handleChange = (
-//     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-//   ) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     const serviceIdField = serviceIdFieldMap[serviceType!];
-//     if (!serviceIdField) {
-//       setMessage("❌ Unsupported service type.");
-//       return;
-//     }
-
-//     const payload: any = {
-//       ...formData,
-//       [serviceIdField]: parseInt(id!), // 👈 dynamic ID injected into correct field
-//     };
-
-//     try {
-//       const response = await axios.post(
-//         `http://localhost:9090/api/bookings/book-service/${userId}/${serviceType}`,
-//         payload
-//       );
-//       console.log("✅ Booking successful", response.data);
-//       setMessage("✅ Booking successful!");
-//     } catch (error) {
-//       console.error("❌ Booking failed", error);
-//       setMessage("❌ Booking failed. Please check details.");
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-//       <h2 className="text-2xl font-bold mb-6 text-center capitalize">
-//         Book {serviceType} (ID: {id})
-//       </h2>
-
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <input
-//           type="datetime-local"
-//           name="bookingStartTime"
-//           value={formData.bookingStartTime}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           required
-//         />
-
-//         <input
-//           type="datetime-local"
-//           name="bookingEndTime"
-//           value={formData.bookingEndTime}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           required
-//         />
-
-//         <input
-//           type="number"
-//           name="bookingAmount"
-//           value={formData.bookingAmount}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           placeholder="Amount"
-//           required
-//         />
-
-//         <textarea
-//           name="remarks"
-//           value={formData.remarks}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           placeholder="Remarks (optional)"
-//         />
-
-//         <button
-//           type="submit"
-//           className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
-//         >
-//           Confirm Booking
-//         </button>
-//       </form>
-
-//       {message && <p className="mt-4 text-center text-blue-600">{message}</p>}
-//     </div>
-//   );
-// };
-
-// export default BookingPage;
-
-
-
-
-// import { useParams } from "react-router-dom";
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-
-// const BookingPage = () => {
-//   const { serviceType, id } = useParams(); // e.g., chef & 5
-
-//   // ✅ Get logged-in user from localStorage
-//   const userData = JSON.parse(localStorage.getItem("user") || "{}");
-//   const userId = userData?.userId || 1;
-
-//   const [formData, setFormData] = useState({
-//     bookingStartTime: "",
-//     bookingEndTime: "",
-//     paymentMode: "ONLINE",
-//     bookingType: "SINGLE",
-//     bookingAmount: 0,
-//     remarks: "",
-//   });
-
-//   const [basePrice, setBasePrice] = useState(0);
-//   const [message, setMessage] = useState("");
-//   const [serviceName, setServiceName] = useState("");
-
-//   const serviceApiMap: Record<string, string> = {
-//     chef: `/api/chefs/chef-By/Id/${id}`,
-//     translator: `/api/translators/getone/${id}`,
-//     spa: `/spaServices/spa/${id}`,
-//     doctor: `/api/doctors/By/${id}`,
-//     physio: `/physio/get/${id}`,
-//   };
-
-//   const serviceIdFieldMap: Record<string, string> = {
-//     chef: "chefId",
-//     translator: "translatorId",
-//     spa: "spaId",
-//     doctor: "doctorId",
-//     physio: "physioId",
-//   };
-
-//   // ✅ Fetch base price and service name
-//   useEffect(() => {
-//     const fetchPrice = async () => {
-//       const apiPath = serviceApiMap[serviceType!];
-//       if (!apiPath) return;
-
-//       try {
-//         const res = await axios.get(`http://localhost:9090${apiPath}`);
-//         const data = res.data;
-
-//         if (serviceType === "doctor") {
-//           setBasePrice(0);
-//           setServiceName(data?.doctorName || "Doctor");
-//         } else {
-//           setBasePrice(data?.price || 0);
-//           let name = "";
-//           switch (serviceType) {
-//             case "chef":
-//               name = data?.chefName;
-//               break;
-//             case "translator":
-//               name = data?.translatorName;
-//               break;
-//             case "spa":
-//               name = data?.spaServiceName;
-//               break;
-//             case "physio":
-//               name = data?.physioName;
-//               break;
-//           }
-//           setServiceName(name || "Service");
-//         }
-//       } catch (err) {
-//         console.error("❌ Failed to load price", err);
-//         setMessage("❌ Failed to load service details.");
-//       }
-//     };
-
-//     fetchPrice();
-//   }, [serviceType, id]);
-
-//   // ✅ Calculate booking amount
-//   useEffect(() => {
-//     if (
-//       formData.bookingStartTime &&
-//       formData.bookingEndTime &&
-//       basePrice > 0 &&
-//       serviceType !== "doctor"
-//     ) {
-//       const start = new Date(formData.bookingStartTime);
-//       const end = new Date(formData.bookingEndTime);
-//       const durationInMs = end.getTime() - start.getTime();
-//       const durationInDays = Math.max(Math.ceil(durationInMs / (1000 * 60 * 60 * 24)), 1);
-//       const total = durationInDays * basePrice;
-//       setFormData((prev) => ({
-//         ...prev,
-//         bookingAmount: total,
-//       }));
-//     } else if (serviceType === "doctor") {
-//       setFormData((prev) => ({
-//         ...prev,
-//         bookingAmount: 0,
-//       }));
-//     }
-//   }, [formData.bookingStartTime, formData.bookingEndTime, basePrice, serviceType]);
-
-//   const handleChange = (
-//     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-//   ) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     const serviceIdField = serviceIdFieldMap[serviceType!];
-//     if (!serviceIdField || !id) {
-//       setMessage("❌ Invalid service or ID.");
-//       return;
-//     }
-
-//     const payload: any = {
-//       ...formData,
-//       [serviceIdField]: parseInt(id),
-//     };
-
-//     try {
-//       const response = await axios.post(
-//         `http://localhost:9090/api/bookings/book-service/${userId}/${serviceType}`,
-//         payload,
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-
-//       console.log("✅ Booking successful:", response.data);
-//       setMessage("✅ Booking successful!");
-//     } catch (error) {
-//       console.error("❌ Booking failed:", error);
-//       setMessage("❌ Booking failed. Please check and try again.");
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-//       <h2 className="text-2xl font-bold mb-6 text-center capitalize">
-//         Book {serviceType}: <span className="text-green-700">{serviceName}</span>
-//       </h2>
-
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <input
-//           type="datetime-local"
-//           name="bookingStartTime"
-//           value={formData.bookingStartTime}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           required
-//         />
-
-//         <input
-//           type="datetime-local"
-//           name="bookingEndTime"
-//           value={formData.bookingEndTime}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           required
-//         />
-
-//         <select
-//           name="paymentMode"
-//           value={formData.paymentMode}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//         >
-//           <option value="ONLINE">Online</option>
-//           <option value="OFFLINE">Offline</option>
-//         </select>
-
-//         <select
-//           name="bookingType"
-//           value={formData.bookingType}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//         >
-//           <option value="SINGLE">Single</option>
-//           <option value="MULTIPLE">Multiple</option>
-//         </select>
-
-//         <textarea
-//           name="remarks"
-//           value={formData.remarks}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//           placeholder="Remarks (optional)"
-//         />
-
-//         <button
-//           type="submit"
-//           className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
-//         >
-//           {serviceType === "doctor"
-//             ? "Confirm Booking (Pay at Clinic)"
-//             : `Confirm Booking ₹${formData.bookingAmount}`}
-//         </button>
-//       </form>
-
-//       {message && <p className="mt-4 text-center text-blue-600">{message}</p>}
-//     </div>
-//   );
-// };
-
-// export default BookingPage;
-
-
-
-
-
-
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { BASE_URL } from "../config/config";
 
 const BookingPage = () => {
   const { serviceType, id } = useParams(); // e.g., chef & 5
+  const navigate = useNavigate();
+
+  // ✅ Get logged-in user from localStorage
   const userData = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = userData?.userId || 1;
+  const userId = userData?.userId || 1; // Default to 1 if not found
 
   const [formData, setFormData] = useState({
     bookingStartTime: "",
@@ -369,6 +23,8 @@ const BookingPage = () => {
   const [basePrice, setBasePrice] = useState(0);
   const [message, setMessage] = useState("");
   const [serviceName, setServiceName] = useState("");
+  const [specialty, setSpecialty] = useState(""); // New state for specialty
+  const [serviceDetails, setServiceDetails] = useState<any>(null); // New state for full service details
 
   const serviceApiMap: Record<string, string> = {
     chef: `/api/chefs/chef-By/Id/${id}`,
@@ -386,24 +42,29 @@ const BookingPage = () => {
     physio: "physioId",
   };
 
+  // ✅ Fetch base price, service name, and specialty
   useEffect(() => {
     const fetchPrice = async () => {
       const apiPath = serviceApiMap[serviceType!];
       if (!apiPath) return;
 
       try {
-        const res = await axios.get(`http://localhost:9090${apiPath}`);
+        const res = await axios.get(`${BASE_URL}${apiPath}`);
         const data = res.data;
+        setServiceDetails(data); // Save the entire data object
 
         if (serviceType === "doctor") {
-          setBasePrice(0);
+          setBasePrice(0); // Doctors might have a fixed consultation fee or no base price for duration
           setServiceName(data?.doctorName || "Doctor");
+          setSpecialty(data?.speciality || ""); // Doctors can also have specialties
         } else {
           setBasePrice(data?.price || 0);
           let name = "";
+          let fetchedSpecialty = "";
           switch (serviceType) {
             case "chef":
               name = data?.chefName;
+              fetchedSpecialty = data?.speciality || "";
               break;
             case "translator":
               name = data?.translatorName;
@@ -414,8 +75,11 @@ const BookingPage = () => {
             case "physio":
               name = data?.physioName;
               break;
+            default:
+              name = "Service";
           }
           setServiceName(name || "Service");
+          setSpecialty(fetchedSpecialty);
         }
       } catch (err) {
         console.error("❌ Failed to load price", err);
@@ -426,6 +90,7 @@ const BookingPage = () => {
     fetchPrice();
   }, [serviceType, id]);
 
+  // ✅ Calculate booking amount with discount
   useEffect(() => {
     if (
       formData.bookingStartTime &&
@@ -436,8 +101,16 @@ const BookingPage = () => {
       const start = new Date(formData.bookingStartTime);
       const end = new Date(formData.bookingEndTime);
       const durationInMs = end.getTime() - start.getTime();
+
+      // Calculate duration in days, ensuring at least 1 day
       const durationInDays = Math.max(Math.ceil(durationInMs / (1000 * 60 * 60 * 24)), 1);
-      const total = durationInDays * basePrice;
+
+      let total = basePrice;
+      if (durationInDays > 1) {
+        // Apply 10% discount for each additional day
+        total += (durationInDays - 1) * (basePrice * 0.9);
+      }
+
       setFormData((prev) => ({
         ...prev,
         bookingAmount: total,
@@ -445,7 +118,7 @@ const BookingPage = () => {
     } else if (serviceType === "doctor") {
       setFormData((prev) => ({
         ...prev,
-        bookingAmount: 0,
+        bookingAmount: 0, // Doctors might have a fixed consultation fee, set to 0 for now or handle separately
       }));
     }
   }, [formData.bookingStartTime, formData.bookingEndTime, basePrice, serviceType]);
@@ -460,7 +133,7 @@ const BookingPage = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleAddToCart = (e: React.FormEvent) => {
     e.preventDefault();
 
     const serviceIdField = serviceIdFieldMap[serviceType!];
@@ -469,165 +142,122 @@ const BookingPage = () => {
       return;
     }
 
-    const payload: any = {
-      ...formData,
-      [serviceIdField]: parseInt(id),
+    // Construct the booking item to save to localStorage
+    const newBookingItem = {
+      bookingId: Date.now(), // Unique ID for the booking item
+      bookingStatus: "PENDING", // Default status
+      bookingAmount: formData.bookingAmount,
+      bookingStartTime: formData.bookingStartTime,
+      bookingEndTime: formData.bookingEndTime,
+      serviceTypes: serviceType, // e.g., 'chef', 'doctor'
+      serviceName: `${serviceName} (Base: ₹${basePrice}, ${specialty ? specialty + ', ' : ''}Total: ₹${formData.bookingAmount.toFixed(2)})`, // Dynamic name for display
     };
 
     try {
-      const response = await axios.post(
-        `http://localhost:9090/api/bookings/book-service/${userId}/${serviceType}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("✅ Booking successful:", response.data);
-      setMessage("✅ Booking successful!");
+      const existingCart = JSON.parse(localStorage.getItem("bookingCart") || "[]");
+      const updatedCart = [...existingCart, newBookingItem];
+      localStorage.setItem("bookingCart", JSON.stringify(updatedCart));
+      setMessage("✅ Added to cart successfully!");
+      setTimeout(() => {
+        navigate("/bookingcart", { replace: true }); // Using replace to prevent back navigation
+      }, 2000);
     } catch (error) {
-      console.error("❌ Booking failed:", error);
-      setMessage("❌ Booking failed. Please check and try again.");
+      console.error("Error adding to cart", error);
+      setMessage("❌ Failed to add to cart.");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-lg w-full bg-white shadow-xl rounded-2xl p-8 transform transition-all duration-500 scale-100 animate-scaleIn">
-        <div className="bg-gradient-to-r from-[#499E14] to-[#3a7e10] text-white rounded-t-2xl p-6 mb-6">
-          <h2 className="text-3xl font-bold text-center capitalize">
-            Book {serviceType}: <span className="text-white">{serviceName}</span>
-          </h2>
-        </div>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold mb-2 text-center capitalize">
+        Book {serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}
+      </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="bookingStartTime" className="block text-sm font-medium text-gray-800">
-              Start Date & Time
-            </label>
-            <input
-              type="datetime-local"
-              id="bookingStartTime"
-              name="bookingStartTime"
-              value={formData.bookingStartTime}
-              onChange={handleChange}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:scale-[1.02]"
-              required
-            />
+      <div className="text-center mb-6 text-gray-700">
+        <p className="text-xl font-semibold">{serviceName}</p>
+        {specialty && serviceType === 'chef' && (
+          <p className="text-md">Specialty: {specialty}</p>
+        )}
+        {basePrice > 0 && serviceType !== "doctor" && (
+          <p className="text-md">Base Rate: ₹{basePrice} per day</p>
+        )}
+
+        {serviceType === 'chef' && serviceDetails && (
+          <div className="mt-6 p-6 bg-white rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.02] transform border border-gray-100 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+            <div className="relative z-10">
+              <h4 className="font-bold text-xl mb-3 text-gray-900">Chef Details:</h4>
+              {serviceDetails.chefImage && (
+                <img src={serviceDetails.chefImage} alt="Chef" className="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-blue-200 shadow-md transition-transform duration-300 group-hover:scale-105" />
+              )}
+              {serviceDetails.chefDescription && (
+                <p className="text-sm text-gray-700 leading-relaxed text-center">{serviceDetails.chefDescription}</p>
+              )}
+              {/* Add more chef details here as needed from serviceDetails, e.g., contact, experience */}
+            </div>
           </div>
-
-          <div>
-            <label htmlFor="bookingEndTime" className="block text-sm font-medium text-gray-800">
-              End Date & Time
-            </label>
-            <input
-              type="datetime-local"
-              id="bookingEndTime"
-              name="bookingEndTime"
-              value={formData.bookingEndTime}
-              onChange={handleChange}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:scale-[1.02]"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="paymentMode" className="block text-sm font-medium text-gray-800">
-              Payment Mode
-            </label>
-            <select
-              id="paymentMode"
-              name="paymentMode"
-              value={formData.paymentMode}
-              onChange={handleChange}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:scale-[1.02]"
-            >
-              <option value="ONLINE">Online</option>
-              <option value="OFFLINE">Offline</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="bookingType" className="block text-sm font-medium text-gray-800">
-              Booking Type
-            </label>
-            <select
-              id="bookingType"
-              name="bookingType"
-              value={formData.bookingType}
-              onChange={handleChange}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:scale-[1.02]"
-            >
-              <option value="SINGLE">Single</option>
-              <option value="MULTIPLE">Multiple</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="remarks" className="block text-sm font-medium text-gray-800">
-              Remarks (Optional)
-            </label>
-            <textarea
-              id="remarks"
-              name="remarks"
-              value={formData.remarks}
-              onChange={handleChange}
-              className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:scale-[1.02]"
-              placeholder="Add any special instructions"
-              rows={4}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-3 px-4 rounded-lg transform transition-all duration-300 hover:scale-105 focus:ring-2 focus:ring-[#499E14] focus:ring-offset-2"
-          >
-            {serviceType === "doctor"
-              ? "Confirm Booking (Pay at Clinic)"
-              : `Confirm Booking ₹${formData.bookingAmount}`}
-          </button>
-        </form>
-
-        {message && (
-          <p
-            className={`mt-6 text-center text-base font-medium animate-fadeIn ${
-              message.includes("successful") ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {message}
-          </p>
         )}
       </div>
 
-      {/* CSS for Animations */}
-      <style jsx>{`
-        @keyframes scaleIn {
-          from {
-            transform: scale(0.95);
-            opacity: 0;
-          }
-          to {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-        .animate-scaleIn {
-          animation: scaleIn 0.5s ease-out forwards;
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-in;
-        }
-      `}</style>
+      <form onSubmit={handleAddToCart} className="space-y-4">
+        <div>
+          <label htmlFor="bookingStartTime" className="block text-sm font-medium text-gray-700">Start Time</label>
+          <input
+            type="datetime-local"
+            name="bookingStartTime"
+            id="bookingStartTime"
+            value={formData.bookingStartTime}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-200 hover:border-blue-500 hover:shadow-md"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="bookingEndTime" className="block text-sm font-medium text-gray-700">End Time</label>
+          <input
+            type="datetime-local"
+            name="bookingEndTime"
+            id="bookingEndTime"
+            value={formData.bookingEndTime}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-200 hover:border-blue-500 hover:shadow-md"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="remarks" className="block text-sm font-medium text-gray-700">Remarks (optional)</label>
+          <textarea
+            name="remarks"
+            id="remarks"
+            value={formData.remarks}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-200 hover:border-blue-500 hover:shadow-md"
+            placeholder="Any special requests or notes"
+          />
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-3 rounded">
+          <p className="font-semibold">Estimated Total: ₹{formData.bookingAmount.toFixed(2)}</p>
+          {basePrice > 0 && formData.bookingStartTime && formData.bookingEndTime && serviceType !== "doctor" && (
+            <p className="text-sm">Daily Rate: ₹{basePrice} (10% off for additional days)</p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm transition duration-200 hover:shadow-lg hover:scale-105 transform"
+        >
+          Add to Cart ₹{formData.bookingAmount.toFixed(2)}
+        </button>
+      </form>
+
+      {message && (
+        <p className={`mt-4 text-center ${message.startsWith("✅") ? "text-green-600" : "text-red-600"}`}>
+          {message}
+        </p>
+      )}
     </div>
   );
 };

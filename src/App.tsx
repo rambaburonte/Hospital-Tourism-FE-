@@ -34,6 +34,7 @@ import UserCart from './Pharmacy/UserCart';
 import ChefsList from './pages/FindAllChefs';
 import SpaServiceDetailsPage from './pages/spaservice';
 import BookingPage from './components/bookingsingleservice';
+import BookingCart from './pages/BookingCart';
 
 
 
@@ -155,8 +156,10 @@ const App: React.FC = () => (
              <Route path="/viewservices/:id" element={< SpaServices />} />
              <Route path="/tests" element={< Diagnostics />} />
              <Route path="/viewtests/:id" element={<  Labtests  />} />
+             
 
             <Route path="/tests" element={<DiagnosticsList />} />
+            <Route path="/bookingcart" element={<BookingCart/>}/>
 
             {/* Admin Routes */}
             <Route path="/admin/slots"element={<AddSlots/>}/>
