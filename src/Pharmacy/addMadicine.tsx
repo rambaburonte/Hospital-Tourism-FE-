@@ -388,6 +388,7 @@
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import Sidebar from '@/admin/sidebar';
+import { BASE_URL } from '@/config/config';
 
 interface MedicineData {
   medicineName: string;
@@ -435,7 +436,7 @@ const AddMedicineForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const API_URL = 'https://healthtourism-5.onrender.com/pharmacy/addMadicine';
+  const API_URL = `${BASE_URL}/pharmacy/addMadicine`;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

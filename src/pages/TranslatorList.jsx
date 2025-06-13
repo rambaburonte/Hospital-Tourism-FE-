@@ -17,16 +17,15 @@ import {
 } from "@/components/ui/tooltip";
 import axios from "axios";
 
+
+
 const TranslatorList = () => {
   const [translators, setTranslators] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("All");
-  //const base_url="https://healthtourism-5.onrender.com"
-const base_url="http://localhost:9090"
-
-//http://localhost:9090/api/translators/getAll/traslators
+  // const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get(`${base_url}/api/translators/getAll/traslators`)
+      .get(`${BASE_URL}/api/translators`)
       .then((response) => {
         const formatted = response.data.map((t) => ({
           id: t.translatorID,

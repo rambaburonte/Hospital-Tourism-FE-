@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Search, SortAsc, SortDesc, IndianRupee, TestTube, Home, LayoutDashboard, FlaskConical } from 'lucide-react';
+import { BASE_URL } from '@/config/config';
+
 
 interface LabTest {
   id: number;
@@ -22,10 +24,10 @@ const LabTests: React.FC = () => {
   const [priceFilter, setPriceFilter] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [departmentFilter, setDepartmentFilter] = useState<string>('');
   const navigate = useNavigate();
-  const base_url="https://healthtourism-5.onrender.com"
+  // const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get(`${base_url}/api/diagnostics/${id}`)
+      .get(`${BASE_URL}/api/diagnostics/${id}`)
       .then((res) => {
         setLabTests(res.data);
         setLoading(false);

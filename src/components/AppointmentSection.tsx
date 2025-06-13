@@ -4740,6 +4740,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { FaSpa, FaUtensils } from 'react-icons/fa';
 import { TbPhysotherapist } from 'react-icons/tb';
 import axios from 'axios';
+import { API_ENDPOINTS, BASE_URL } from '../config/config';
 
 interface Doctor {
   id: number;
@@ -4917,19 +4918,19 @@ const AppointmentSection = () => {
     'Pharmacy': '/medicinecatalog',
   };
 
-  const base_url = 'http://localhost:9090';
+  // const base_url = 'http://localhost:9090';
   const apiEndpoints: Record<string, string> = {
-    'Find a Doctor': `${base_url}/api/doctors`,
-    'Book a Test': `${base_url}/api/diagnostics`,
-    'Spa': `${base_url}/spaServices/getAll/spaServices`,
-    'Physiotherapy': `${base_url}/physio/getall/pysios`,
-    'Locate Hospital': `${base_url}/api/hospitals/getall/hospitals`,
-    'Hotel Booking': `${base_url}/api/hotels`,
-    'Travel Booking': `${base_url}/api/travel`,
-    'Translators': `${base_url}/api/translators/getAll/traslators`,
-    'Chefs': `${base_url}/api/chefs`,
-    'Pharmacy': `${base_url}/cart-item/user/capsules-user`,
-    'pharmacyCategories': `${base_url}/cart-item/user/capsules-user`,
+    'Find a Doctor': `${BASE_URL}/api/doctors`,
+    'Book a Test': `${BASE_URL}/api/diagnostics`,
+    'Spa': `${BASE_URL}/spaServices/getAll/spaServices`,
+    'Physiotherapy': `${BASE_URL}/physio/getall/pysios`,
+    'Locate Hospital': `${BASE_URL}/api/hospitals/getall/hospitals`,
+    'Hotel Booking': `${BASE_URL}/api/hotels`,
+    'Travel Booking': `${BASE_URL}/api/travel`,
+    'Translators': `${BASE_URL}/api/translators/getAll/traslators`,
+    'Chefs': `${BASE_URL}/api/chefs`,
+    'Pharmacy': `${BASE_URL}/cart-item/user/capsules-user`,
+    'pharmacyCategories': `${BASE_URL}/cart-item/user/capsules-user`,
   };
 
   useEffect(() => {
@@ -4942,19 +4943,20 @@ const AppointmentSection = () => {
       try {
         if (selectedService === 'Pharmacy') {
           const [pharmaciesRes, categoriesRes] = await Promise.all([
-            axios.get(apiEndpoints['Pharmacy']).catch(() => ({ data: [] })),
-            axios.get(apiEndpoints['pharmacyCategories']).catch(() => ({ data: [] })),
+            axios.get<Pharmacy[]>(API_ENDPOINTS.PHARMACY).catch(() => ({ data: [] })),
+            axios.get<PharmacyCategory[]>(API_ENDPOINTS.PHARMACY_CATEGORIES).catch(() => ({ data: [] })),
           ]);
           setServiceData((prev) => ({
             ...prev,
-            Pharmacy: filterActive(pharmaciesRes.data).slice(0, 6),
+            Pharmacy: filterActive(pharmaciesRes.data),
           }));
-          setPharmacyCategories(filterActive(categoriesRes.data).slice(0, 6));
+          setPharmacyCategories(filterActive(categoriesRes.data));
         } else {
-          const res = await axios.get(apiEndpoints[selectedService]).catch(() => ({ data: [] }));
+          const endpoint = API_ENDPOINTS[selectedService.toUpperCase().replace(/\s+/g, '_') as keyof typeof API_ENDPOINTS];
+          const res = await axios.get<ServiceItem[]>(endpoint).catch(() => ({ data: [] }));
           setServiceData((prev) => ({
             ...prev,
-            [selectedService]: filterActive(res.data).slice(0, 6),
+            [selectedService]: filterActive(res.data),
           }));
         }
       } catch (err) {
@@ -4990,7 +4992,7 @@ const AppointmentSection = () => {
     navigate(`/booking?doctor=${encodeURIComponent(doctorSearch)}&location=${encodeURIComponent(location)}`);
   };
 
-  const handleServiceClick = (service: string) => {
+  const handleServiceClick = (service: ServiceKey) => {
     setSelectedService(selectedService === service ? null : service);
   };
 

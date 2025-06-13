@@ -8,6 +8,7 @@ import Modal from 'react-modal';
 import debounce from 'lodash.debounce';
 import Select, { SingleValue } from 'react-select';
 import axios from 'axios';
+import { BASE_URL } from '@/config/config';
 
 Modal.setAppElement('#root');
 
@@ -52,10 +53,10 @@ const AllDoctorsPage: React.FC = () => {
   const [showFeedback, setShowFeedback] = useState<string | null>(null);
 
   const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
-  const base_url="https://healthtourism-5.onrender.com"
+  // const base_url="https://healthtourism-5.onrender.com"
   const fetchDoctors = async () => {
     try {
-      const response = await axios.get<Doctor[]>(`${base_url}/api/doctors`);
+      const response = await axios.get<Doctor[]>(`${BASE_URL}/api/doctors`);
       const doctors = response.data;
       setAllDoctors(doctors);
 

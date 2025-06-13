@@ -1198,6 +1198,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '@/config/config';
 
 // Define Medicine interface with corrected types
 interface Medicine {
@@ -1233,8 +1234,8 @@ const UpdateMedicine: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof Medicine, string>>>({});
-  const base_url="https://healthtourism-5.onrender.com"
-  const API_BASE = `${base_url}/pharmacy`;
+  // const base_url="https://healthtourism-5.onrender.com"
+  const API_BASE = `${BASE_URL}/pharmacy`;
 
   useEffect(() => {
     const fetchMedicine = async () => {
