@@ -632,6 +632,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '@/config/config';
+
 
 interface Medicine {
   madicineid: number;
@@ -670,7 +672,7 @@ const MedicineCatalog: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<Medicine[]>('https://healthtourism-5.onrender.com/cart-item/user/capsules-user')
+      .get<Medicine[]>(`${BASE_URL}/cart-item/user/capsules-user`)
       .then((res) => {
         setMedicines(res.data);
       })
@@ -683,7 +685,7 @@ const MedicineCatalog: React.FC = () => {
       return;
     }
     axios
-      .post(`https://healthtourism-5.onrender.com/cart-item/user/cart/add?userId=${user.id}&madicineid=${medicineId}&qty=${qty}`)
+      .post(`${BASE_URL}/cart-item/user/cart/add?userId=${user.id}&madicineid=${medicineId}&qty=${qty}`)
       .then(() => setCartCount((prev) => prev + 1))
       .catch((err) => console.error('Add to cart failed:', err));
   };

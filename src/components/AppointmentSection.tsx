@@ -724,6 +724,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { FaSpa, FaUtensils } from 'react-icons/fa';
 import { TbPhysotherapist } from 'react-icons/tb';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/config';
 
 interface Doctor {
   id: number;
@@ -846,13 +847,24 @@ interface PharmacyCategory {
 
 type ServiceItem = Doctor | LabTest | Spa | Physio | Hospital | Hotel | Travel | Translator | Chef | Pharmacy;
 
+type ServiceData = {
+  'Find a Doctor': Doctor[];
+  'Book a Test': LabTest[];
+  'Spa & Physiotherapy': (Spa | Physio)[];
+  'Locate Hospital': Hospital[];
+  'Hotel Booking': Hotel[];
+  'Travel Booking': Travel[];
+  'Translators & Chefs': (Translator | Chef)[];
+  Pharmacy: Pharmacy[];
+};
+
+type ServiceKey = keyof ServiceData;
+
 const AppointmentSection = () => {
   const [doctorSearch, setDoctorSearch] = useState('');
   const [location, setLocation] = useState('');
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [serviceData, setServiceData] = useState<
-    Record<string, (Doctor | LabTest | Spa | Physio | Hospital | Hotel | Travel | Translator | Chef | Pharmacy)[]>
-  >({
+  const [selectedService, setSelectedService] = useState<ServiceKey | null>(null);
+  const [serviceData, setServiceData] = useState<ServiceData>({
     'Find a Doctor': [],
     'Book a Test': [],
     'Spa & Physiotherapy': [],
@@ -881,20 +893,94 @@ const AppointmentSection = () => {
     Chefs: '/translatorAndChefList/chef',
     Pharmacy: '/medicinecatalog',
   };
-const base_url = 'https://healthtourism-5.onrender.com';
-  const apiEndpoints: Record<string, string> = {
-    'Find a Doctor': 'https://healthtourism-5.onrender.com/api/doctors',
-    'Book a Test': 'https://healthtourism-5.onrender.com/api/diagnostics',
-    'Spa': 'https://healthtourism-5.onrender.com/spaCenter/all',
-    'Physiotherapy': 'https://healthtourism-5.onrender.com/physio/all',
-    'Locate Hospital': 'https://healthtourism-5.onrender.com/api/hospitals',
-    'Hotel Booking': 'https://healthtourism-5.onrender.com/api/hotels',
-    'Travel Booking': 'https://healthtourism-5.onrender.com/api/travel',
-    'Translators': 'https://healthtourism-5.onrender.com/api/translators',
-    'Chefs': 'https://healthtourism-5.onrender.com/api/chefs',
-    'Pharmacy': 'https://healthtourism-5.onrender.com/cart-item/user/capsules-user',
-    'pharmacyCategories': 'https://healthtourism-5.onrender.com/cart-item/user/capsules-user',
+
+  const filterActive = <T extends { status: string | null }>(items: T[]): T[] => {
+    return items.filter(
+      (item) =>
+        item.status &&
+        typeof item.status === 'string' &&
+        item.status.trim().toUpperCase() === 'ACTIVE'
+    );
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [
+          doctorsRes,
+          testsRes,
+          physiosRes,
+          spasRes,
+          hospitalsRes,
+          hotelsRes,
+          travelRes,
+          translatorsRes,
+          chefsRes,
+          pharmaciesRes,
+          categoriesRes,
+        ] = await Promise.all([
+          axios.get(API_ENDPOINTS.DOCTORS).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.DIAGNOSTICS).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.PHYSIO).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.SPA).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.HOSPITALS).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.HOTELS).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.TRAVEL).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.TRANSLATORS).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.CHEFS).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.PHARMACY).catch(() => ({ data: [] })),
+          axios.get(API_ENDPOINTS.PHARMACY_CATEGORIES).catch(() => ({ data: [] })),
+        ]);
+
+        const filterActive = (items: any[]) =>
+          items.filter(
+            (item) =>
+              item.status &&
+              typeof item.status === 'string' &&
+              item.status.trim().toUpperCase() === 'ACTIVE'
+          );
+
+        // Log API responses for debugging
+        console.log('Spas:', spasRes.data);
+        console.log('Physios:', physiosRes.data);
+        console.log('Translators:', translatorsRes.data);
+        console.log('Chefs:', chefsRes.data);
+
+        const activePhysios = filterActive(physiosRes.data).slice(0, 3);
+        const activeSpas = filterActive(spasRes.data).slice(0, 3);
+        const activeTranslators = filterActive(translatorsRes.data).slice(0, 3);
+        const activeChefs = filterActive(chefsRes.data).slice(0, 3);
+
+        // Log filtered data
+        console.log('Active Spas:', activeSpas);
+        console.log('Active Physios:', activePhysios);
+        console.log('Active Translators:', activeTranslators);
+        console.log('Active Chefs:', activeChefs);
+
+        setServiceData({
+          'Find a Doctor': filterActive(doctorsRes.data).slice(0, 6),
+          'Book a Test': filterActive(testsRes.data).slice(0, 6),
+          'Spa & Physiotherapy': [...activeSpas, ...activePhysios].slice(0, 6),
+          'Locate Hospital': filterActive(hospitalsRes.data).slice(0, 6),
+          'Hotel Booking': filterActive(hotelsRes.data).slice(0, 6),
+          'Travel Booking': filterActive(travelRes.data).slice(0, 6),
+          'Translators & Chefs': [...activeTranslators, ...activeChefs].slice(0, 6),
+          Pharmacy: filterActive(pharmaciesRes.data).slice(0, 6),
+        });
+
+        setPharmacyCategories(filterActive(categoriesRes.data).slice(0, 6));
+      } catch (err) {
+        setError('Failed to fetch data. Please try again later.');
+        console.error('API fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (!selectedService) return;
@@ -906,41 +992,42 @@ const base_url = 'https://healthtourism-5.onrender.com';
       try {
         if (selectedService === 'Spa & Physiotherapy') {
           const [spasRes, physiosRes] = await Promise.all([
-            axios.get(apiEndpoints['Spa']).catch(() => ({ data: [] })),
-            axios.get(apiEndpoints['Physiotherapy']).catch(() => ({ data: [] })),
+            axios.get<Spa[]>(API_ENDPOINTS.SPA).catch(() => ({ data: [] })),
+            axios.get<Physio[]>(API_ENDPOINTS.PHYSIO).catch(() => ({ data: [] })),
           ]);
-          const activeSpas = filterActive(spasRes.data).slice(0, 3);
-          const activePhysios = filterActive(physiosRes.data).slice(0, 3);
+          const activeSpas = filterActive(spasRes.data);
+          const activePhysios = filterActive(physiosRes.data);
           setServiceData((prev) => ({
             ...prev,
             'Spa & Physiotherapy': [...activeSpas, ...activePhysios],
           }));
         } else if (selectedService === 'Translators & Chefs') {
           const [translatorsRes, chefsRes] = await Promise.all([
-            axios.get(apiEndpoints['Translators']).catch(() => ({ data: [] })),
-            axios.get(apiEndpoints['Chefs']).catch(() => ({ data: [] })),
+            axios.get<Translator[]>(API_ENDPOINTS.TRANSLATORS).catch(() => ({ data: [] })),
+            axios.get<Chef[]>(API_ENDPOINTS.CHEFS).catch(() => ({ data: [] })),
           ]);
-          const activeTranslators = filterActive(translatorsRes.data).slice(0, 3);
-          const activeChefs = filterActive(chefsRes.data).slice(0, 3);
+          const activeTranslators = filterActive(translatorsRes.data);
+          const activeChefs = filterActive(chefsRes.data);
           setServiceData((prev) => ({
             ...prev,
             'Translators & Chefs': [...activeTranslators, ...activeChefs],
           }));
         } else if (selectedService === 'Pharmacy') {
           const [pharmaciesRes, categoriesRes] = await Promise.all([
-            axios.get(apiEndpoints['Pharmacy']).catch(() => ({ data: [] })),
-            axios.get(apiEndpoints['pharmacyCategories']).catch(() => ({ data: [] })),
+            axios.get<Pharmacy[]>(API_ENDPOINTS.PHARMACY).catch(() => ({ data: [] })),
+            axios.get<PharmacyCategory[]>(API_ENDPOINTS.PHARMACY_CATEGORIES).catch(() => ({ data: [] })),
           ]);
           setServiceData((prev) => ({
             ...prev,
-            Pharmacy: filterActive(pharmaciesRes.data).slice(0, 6),
+            Pharmacy: filterActive(pharmaciesRes.data),
           }));
-          setPharmacyCategories(filterActive(categoriesRes.data).slice(0, 6));
+          setPharmacyCategories(filterActive(categoriesRes.data));
         } else {
-          const res = await axios.get(apiEndpoints[selectedService]).catch(() => ({ data: [] }));
+          const endpoint = API_ENDPOINTS[selectedService.toUpperCase().replace(/\s+/g, '_') as keyof typeof API_ENDPOINTS];
+          const res = await axios.get<ServiceItem[]>(endpoint).catch(() => ({ data: [] }));
           setServiceData((prev) => ({
             ...prev,
-            [selectedService]: filterActive(res.data).slice(0, 6),
+            [selectedService]: filterActive(res.data),
           }));
         }
       } catch (err) {
@@ -956,15 +1043,6 @@ const base_url = 'https://healthtourism-5.onrender.com';
     fetchServiceData();
   }, [selectedService]);
 
-  const filterActive = <T extends { status: string | null }>(items: T[]): T[] => {
-    return items.filter(
-      (item) =>
-        item.status &&
-        typeof item.status === 'string' &&
-        item.status.trim().toUpperCase() === 'ACTIVE'
-    );
-  };
-
   const handleBookAppointment = () => {
     if (!doctorSearch || !location) {
       alert('Please enter a doctor search term and select a location.');
@@ -973,7 +1051,7 @@ const base_url = 'https://healthtourism-5.onrender.com';
     navigate(`/booking?doctor=${encodeURIComponent(doctorSearch)}&location=${encodeURIComponent(location)}`);
   };
 
-  const handleServiceClick = (service: string) => {
+  const handleServiceClick = (service: ServiceKey) => {
     setSelectedService(selectedService === service ? null : service);
   };
 
@@ -1140,7 +1218,7 @@ const base_url = 'https://healthtourism-5.onrender.com';
                 .map((service) => (
                   <button
                     key={service}
-                    onClick={() => handleServiceClick(service)}
+                    onClick={() => handleServiceClick(service as ServiceKey)}
                     className={`border border-gray-200 text-center rounded-xl bg-gradient-to-b from-gray-50 to-white shadow-md hover:shadow-xl hover:border-[#499E14] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:ring-offset-2 ${
                       selectedService === service ? 'border-[#499E14] bg-[#f0f8e8]' : ''
                     }`}

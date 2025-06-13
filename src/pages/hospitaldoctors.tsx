@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BASE_URL } from "@/config/config";
 
 interface Hospital {
   hospitalId: number;
@@ -27,11 +28,11 @@ const HospitalDoctors: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const base_url="https://healthtourism-5.onrender.com"
+  // const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get<Doctor[]>(`${base_url}/api/hospitals/${id}`);
+        const response = await axios.get<Doctor[]>(`${BASE_URL}/api/hospitals/${id}`);
         setDoctors(response.data);
       } catch (err) {
         setError("Failed to load doctors.");

@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Search, SortAsc, SortDesc, Star, MapPin, Home, TestTube, LayoutDashboard } from 'lucide-react';
+import { BASE_URL } from '@/config/config';
+
 
 interface Diagnostic {
   diognosticsId: number;
@@ -20,10 +22,10 @@ const DiagnosticsList: React.FC = () => {
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [addressFilter, setAddressFilter] = useState('');
   const navigate = useNavigate();
-  const base_url="https://healthtourism-5.onrender.com"
+  // const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get(`${base_url}/api/diagnostics`)
+      .get(`${BASE_URL}/api/diagnostics`)
       .then((res) => setDiagnostics(res.data))
       .catch((err) => console.error('Failed to fetch diagnostics:', err));
   }, []);

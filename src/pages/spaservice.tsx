@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Search, SortAsc, SortDesc, Star, IndianRupee } from 'lucide-react';
 import axios from 'axios';
+import { BASE_URL } from '@/config/config';
+
 
 interface SpaService {
   serviceName: string;
@@ -20,10 +22,10 @@ const SpaServiceDetailsPage: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [priceFilter, setPriceFilter] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
-  const base_url="https://healthtourism-5.onrender.com"
+  // const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     axios
-      .get(`${base_url}/spaServices/bySpaCenter/${id}`)
+      .get(`${BASE_URL}/spaServices/bySpaCenter/${id}`)
       .then((res) => setServices(res.data))
       .catch((err) => console.error('Failed to fetch spa services:', err));
   }, [id]);

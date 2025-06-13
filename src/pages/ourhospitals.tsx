@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "@/config/config";
+
+
+
 
 interface Hospital {
   hospitalId: number;
@@ -18,11 +22,11 @@ const HospitalList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const navigate = useNavigate();
-  const base_url="https://healthtourism-5.onrender.com"
+  // const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await axios.get<Hospital[]>(`${base_url}/api/hospitals`);
+        const response = await axios.get<Hospital[]>(`${BASE_URL}/api/hospitals`);
         setHospitals(response.data);
       } catch (err) {
         setError("Failed to load hospitals.");

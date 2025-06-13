@@ -1745,6 +1745,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/admin/sidebar';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '@/config/config';
 
 interface Medicine {
   madicineid: number;
@@ -1765,8 +1766,8 @@ const MedicineList: React.FC = () => {
   const [alertCount, setAlertCount] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const API_URL = 'https://healthtourism-5.onrender.com/pharmacy/dashboard';
-  const DELETE_API_URL = 'https://healthtourism-5.onrender.com/pharmacy/deleteMadicine/';
+  const API_URL = `${BASE_URL}/pharmacy/dashboard`;
+  const DELETE_API_URL = `${BASE_URL}/pharmacy/deleteMadicine/`;
 
   const navigate = useNavigate();
 

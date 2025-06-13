@@ -6083,6 +6083,8 @@ import axios from 'axios';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { BASE_URL } from '@/config/config';
+
 
 // Fix Leaflet marker icon issue in React
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -6195,14 +6197,14 @@ const UserCart: React.FC = () => {
     }
   }, []);
 
-  const base_url = "https://healthtourism-5.onrender.com";
+  // const base_url = "https://healthtourism-5.onrender.com";
 
   useEffect(() => {
     if (!user?.id) return; // Only fetch cart items if user ID exists
 
     setLoading(true);
     axios
-      .get<CartItem[]>(`${base_url}/cart-item/user/cart/${user.id}`)
+      .get<CartItem[]>(`${BASE_URL}/cart-item/user/cart/${user.id}`)
       .then((response) => {
         setCartItems(response.data);
         setLoading(false);
@@ -6531,7 +6533,7 @@ const UserCart: React.FC = () => {
 
     try {
       const queryString = selectedItems.map(id => `cartIds=${id}`).join('&');
-      await axios.delete(`${base_url}/cart-item/user/cart/clear?${queryString}`);
+      await axios.delete(`${BASE_URL}/cart-item/user/cart/clear?${queryString}`);
       setCartItems((prev) => prev.filter((item) => !selectedItems.includes(item.cartId)));
       setSelectedItems([]);
     } catch (err) {
@@ -6541,7 +6543,7 @@ const UserCart: React.FC = () => {
 
   const handleDeleteSingleItem = async (cartId: number) => {
     try {
-      await axios.delete(`${base_url}/cart-item/user/cart/clear/${cartId}`);
+      await axios.delete(`${BASE_URL}/cart-item/user/cart/clear/${cartId}`);
       setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
       setSelectedItems((prev) => prev.filter((id) => id !== cartId));
     } catch (err) {

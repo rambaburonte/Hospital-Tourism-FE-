@@ -4,7 +4,7 @@
 
 /* Medical watermark background */
 body {
-  background-image: url('/image.png') !important;
+  background-image: url('/HealthTourism bg 2.png') !important;
   background-repeat: repeat !important;
   background-size: 600px auto !important;
   background-attachment: fixed !important;
@@ -19,7 +19,7 @@ body::before {
   width: 100% !important;
   height: 100% !important;
   background-color: rgba(255, 255, 255, 0.55) !important;
-  z-index: -1 !important;
+  z-index: -9999 !important;
   pointer-events: none !important;
 }
 
