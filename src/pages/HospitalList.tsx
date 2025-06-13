@@ -155,7 +155,7 @@ const HospitalList: React.FC = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await fetch('http://localhost:9090/api/hospitals/getall/hospitals');
+        const response = await fetch('https://healthtourism-5.onrender.com/api/hospitals/getall/hospitals');
         if (!response.ok) {
           throw new Error('Failed to fetch hospitals');
         }

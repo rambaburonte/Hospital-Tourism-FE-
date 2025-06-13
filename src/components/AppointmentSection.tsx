@@ -5897,6 +5897,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { FaSpa, FaUtensils } from 'react-icons/fa';
 import { TbPhysotherapist } from 'react-icons/tb';
 import axios from 'axios';
+import { BASE_URL } from '@/config/config';
 
 interface Doctor {
   id: number;
@@ -6074,19 +6075,19 @@ const AppointmentSection = () => {
     'Pharmacy': '/medicinecatalog',
   };
 
-  const base_url = 'http://localhost:9090';
+  // const base_url = 'http://localhost:9090';
   const apiEndpoints: Record<string, string> = {
-    'Find a Doctor': `${base_url}/api/doctors`,
-    'Book a Test': `${base_url}/api/diagnostics`,
-    'Spa': `${base_url}/spaServices/getAll/spaServices`,
-    'Physiotherapy': `${base_url}/physio/getall/pysios`,
-    'Locate Hospital': `${base_url}/api/hospitals/getall/hospitals`,
-    'Hotel & GuestHouse Booking': `${base_url}/api/hotels`,
-    'Travel Booking': `${base_url}/api/travel`,
-    'Translators': `${base_url}/api/translators/getAll/traslators`,
-    'Chefs': `${base_url}/api/chefs`,
-    'Pharmacy': `${base_url}/cart-item/user/capsules-user`,
-    'pharmacyCategories': `${base_url}/cart-item/user/capsules-user`,
+    'Find a Doctor': `${BASE_URL}/api/doctors`,
+    'Book a Test': `${BASE_URL}/api/diagnostics`,
+    'Spa': `${BASE_URL}/spaServices/getAll/spaServices`,
+    'Physiotherapy': `${BASE_URL}}/physio/getall/pysios`,
+    'Locate Hospital': `${BASE_URL}/api/hospitals/getall/hospitals`,
+    'Hotel & GuestHouse Booking': `${BASE_URL}/api/hotels`,
+    'Travel Booking': `${BASE_URL}/api/travel`,
+    'Translators': `${BASE_URL}/api/translators/getAll/traslators`,
+    'Chefs': `${BASE_URL}/api/chefs`,
+    'Pharmacy': `${BASE_URL}/cart-item/user/capsules-user`,
+    'pharmacyCategories': `${BASE_URL}/cart-item/user/capsules-user`,
   };
 
   useEffect(() => {
