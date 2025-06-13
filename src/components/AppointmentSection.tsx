@@ -4917,7 +4917,7 @@ const AppointmentSection = () => {
     'Pharmacy': '/medicinecatalog',
   };
 
-  const base_url = 'https://healthtourism-5.onrender.com';
+  const base_url = 'http://localhost:9090';
   const apiEndpoints: Record<string, string> = {
     'Find a Doctor': `${base_url}/api/doctors`,
     'Book a Test': `${base_url}/api/diagnostics`,
