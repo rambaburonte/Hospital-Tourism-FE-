@@ -112,9 +112,9 @@ const HealthBlogsSection = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
           {blogs.map((blog, index) => (
-            <Card key={index} className="overflow-hidden border-0 shadow-md blog-card">
+            <Card key={index} className="overflow-hidden border-0 shadow-md blog-card bg-slate-50 shadow-sm">
               <div className="relative h-48">
                 <img
                   src={blog.image}

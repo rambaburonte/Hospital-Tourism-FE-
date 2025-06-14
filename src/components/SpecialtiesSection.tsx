@@ -22,7 +22,7 @@ const SpecialtiesSection = () => {
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {specialtiesList.map((specialty, index) => (
-            <Card key={index} className="border border-gray-200 specialty-icon hover:border-primary">
+            <Card key={index} className="border border-gray-200 specialty-icon hover:border-primary bg-slate-50 shadow-sm">
               <CardContent className="p-4">
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0 bg-slate-50 p-3 rounded-full">

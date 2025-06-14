@@ -52,9 +52,9 @@ const AwardsSection = () => {
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-gray-800">Awards</h2>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 ">
           {awards.slice(0, 4).map((award, index) => (
-            <Card key={index} className="border-0 shadow-sm award-card">
+            <Card key={index} className="border-0 shadow-sm award-card bg-slate-50 shadow-sm">
               <CardContent className="p-4 text-center">
                 <div className="mb-3 flex justify-center">
                   <div className="text-3xl mb-2">{award.icon}</div>
@@ -67,9 +67,12 @@ const AwardsSection = () => {
         </div>
         
         <div className="mt-8 text-center">
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
-            View All Awards
-          </Button>
+        <Button
+          variant="outline"
+          className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:text-white-500 hover:scale-105 hover:shadow-md transition-all duration-200"
+        >
+         View All Awards
+        </Button>
         </div>
       </div>
     </section>
