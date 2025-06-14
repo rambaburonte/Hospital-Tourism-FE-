@@ -26,7 +26,7 @@ const BookingPage = () => {
   const [specialty, setSpecialty] = useState(""); // New state for specialty
   const [serviceDetails, setServiceDetails] = useState<any>(null); // New state for full service details
 
-  const serviceApiMap: Record<string, string> = {
+  const serviceApiMap = {
     chef: `/api/chefs/chef-By/Id/${id}`,
     translator: `/api/translators/getone/${id}`,
     spa: `/spaServices/spa/${id}`,
@@ -34,7 +34,7 @@ const BookingPage = () => {
     physio: `/physio/get/${id}`,
   };
 
-  const serviceIdFieldMap: Record<string, string> = {
+  const serviceIdFieldMap = {
     chef: "chefId",
     translator: "translatorId",
     spa: "spaId",
@@ -45,7 +45,7 @@ const BookingPage = () => {
   // ✅ Fetch base price, service name, and specialty
   useEffect(() => {
     const fetchPrice = async () => {
-      const apiPath = serviceApiMap[serviceType!];
+      const apiPath = serviceApiMap[serviceType];
       if (!apiPath) return;
 
       try {
@@ -133,33 +133,36 @@ const BookingPage = () => {
     }));
   };
 
-  const handleAddToCart = (e: React.FormEvent) => {
+  const handleAddToCart = async (e) => {
     e.preventDefault();
 
-    const serviceIdField = serviceIdFieldMap[serviceType!];
+    const serviceIdField = serviceIdFieldMap[serviceType];
     if (!serviceIdField || !id) {
       setMessage("❌ Invalid service or ID.");
       return;
     }
 
-    // Construct the booking item to save to localStorage
-    const newBookingItem = {
-      bookingId: Date.now(), // Unique ID for the booking item
-      bookingStatus: "PENDING", // Default status
-      bookingAmount: formData.bookingAmount,
+    // Construct the payload for the API
+    const payload = {
       bookingStartTime: formData.bookingStartTime,
       bookingEndTime: formData.bookingEndTime,
-      serviceTypes: serviceType, // e.g., 'chef', 'doctor'
-      serviceName: `${serviceName} (Base: ₹${basePrice}, ${specialty ? specialty + ', ' : ''}Total: ₹${formData.bookingAmount.toFixed(2)})`, // Dynamic name for display
+      paymentMode: formData.paymentMode,
+      bookingType: formData.bookingType,
+      bookingAmount: formData.bookingAmount,
+      remarks: formData.remarks,
+      [serviceIdField]: parseInt(id), // e.g., chefId, doctorId, etc.
     };
 
     try {
-      const existingCart = JSON.parse(localStorage.getItem("bookingCart") || "[]");
-      const updatedCart = [...existingCart, newBookingItem];
-      localStorage.setItem("bookingCart", JSON.stringify(updatedCart));
+      const response = await axios.post(
+        // `${BASE_URL}/api/bookings/book-service/${userId}/${serviceType}`,
+        `${BASE_URL}/api/AddToCart/addToCart/${userId}/${serviceType}`,
+        payload
+        // http://localhost:9090/api/AddToCart/addToCart/3/chef
+      );
       setMessage("✅ Added to cart successfully!");
       setTimeout(() => {
-        navigate("/bookingcart", { replace: true }); // Using replace to prevent back navigation
+        navigate("/bookingcart", { replace: true }); // Navigate to cart after success
       }, 2000);
     } catch (error) {
       console.error("Error adding to cart", error);
@@ -193,7 +196,6 @@ const BookingPage = () => {
               {serviceDetails.chefDescription && (
                 <p className="text-sm text-gray-700 leading-relaxed text-center">{serviceDetails.chefDescription}</p>
               )}
-              {/* Add more chef details here as needed from serviceDetails, e.g., contact, experience */}
             </div>
           </div>
         )}

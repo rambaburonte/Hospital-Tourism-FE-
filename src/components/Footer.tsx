@@ -250,7 +250,6 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-// Removed ZylogicLogo import to use public/ folder as fallback
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -399,7 +398,7 @@ const Footer = () => {
             <div className="space-y-4">
               <p className="text-sm">Emergency: 1800 123 4567</p>
               <p className="text-sm">
-                Email: <a href="mailto:info@maxhealthcare.com" className="hover:text-red-600 transition-colors duration-200">info@maxhealthcare.com</a>
+                Email: <a href="mailto:Info.meditailor@gmail.com" className="hover:text-red-600 transition-colors duration-200">Info.meditailor@gmail.com</a>
               </p>
             </div>
           </div>
@@ -408,22 +407,27 @@ const Footer = () => {
         <div className="border-t border-green-600 mt-10 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm">© {currentYear} Max Healthcare. All Rights Reserved.</p>
+            <p className="text-sm font-bold text-green-700 bg-green-100 px-4 py-1 rounded-lg">
+              Developed by{' '}
+              <a 
+                href="https://zynlogic.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline hover:text-red-600 transition-colors duration-200"
+              >
+                <img
+                  src="/ZylogicLogo.png"
+                  alt="Zynlogic"
+                  style={{ height: '2em', verticalAlign: 'middle', display: 'inline' }}
+                  onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x20?text=Zynlogic'; }}
+                />
+              </a>
+            </p>
             <div className="flex space-x-6">
               <Link to="/privacy-policy" className="text-xs hover:text-red-600 transition-colors duration-200">Privacy Policy</Link>
               <Link to="/terms-conditions" className="text-xs hover:text-red-600 transition-colors duration-200">Terms & Conditions</Link>
               <Link to="/sitemap" className="text-xs hover:text-red-600 transition-colors duration-200">Sitemap</Link>
             </div>
-            <p className="text-sm">
-              Developed by{' '}
-              <a href="https://zynlogic.com" target="_blank" rel="noopener noreferrer" className="inline hover:text-red-600 transition-colors duration-200">
-                <img
-                  src="/ZylogicLogo.png"
-                  alt="Zynlogic"
-                  style={{ height: '1em', verticalAlign: 'middle', display: 'inline' }}
-                  onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x20?text=Zynlogic'; }}
-                />
-              </a>
-            </p>
           </div>
         </div>
       </div>

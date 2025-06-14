@@ -231,7 +231,7 @@ const TranslatorList = () => {
   const [translators, setTranslators] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("All");
 
-  const base_url = "http://localhost:9090";
+  const base_url = "https://healthtourism-5.onrender.com";
 
   useEffect(() => {
     axios

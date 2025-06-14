@@ -99,6 +99,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '@/config/config';
+
 
 const HospitalNetworkSection = () => {
   const [hospitals, setHospitals] = useState([]);
@@ -108,7 +110,7 @@ const HospitalNetworkSection = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await fetch('http://localhost:9090/api/hospitals/getall/hospitals');
+        const response = await fetch('https://healthtourism-5.onrender.com/api/hospitals/getall/hospitals');
         if (!response.ok) {
           throw new Error('Failed to fetch hospitals');
         }
