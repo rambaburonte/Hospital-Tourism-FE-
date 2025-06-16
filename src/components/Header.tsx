@@ -444,7 +444,7 @@ const Header: React.FC = () => {
   const [cartItemCount, setCartItemCount] = useState(0);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
-  const location = useLocation(); // Get current location
+  const location = useLocation();
 
   // Centralized GA tracking function
   const trackEvent = (action: string, category: string, label: string) => {
@@ -496,12 +496,18 @@ const Header: React.FC = () => {
       if (user) {
         const userData = JSON.parse(user);
         // Fetch cart count
-        axios.get(`${BASE_URL}/api/cart/count/${userData.id || userData.userId}`)
+        axios.get(`${BASE_URL}/api/AddToCart/count/${userData.id || userData.userId}`)
           .then(response => {
-            setCartItemCount(response.data.count || 0);
+            if (response.data && typeof response.data === 'number') {
+              setCartItemCount(response.data);
+            } else {
+              console.warn('Invalid cart count response:', response.data);
+              setCartItemCount(0);
+            }
           })
           .catch(err => {
             console.error('Failed to fetch cart count:', err);
+            setCartItemCount(0);
           });
       }
     } catch (e) {
