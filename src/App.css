@@ -7,7 +7,7 @@
   min-height: 100vh;
 }
 
-/* 🔽 Watermark Pattern Background */
+/*  Watermark Pattern Background */
 #root::before {
   content: "";
   position: fixed;
@@ -15,8 +15,13 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('/https://png.pngtree.com/thumb_back/fh260/background/20241127/pngtree-calming-spa-design-with-water-patterns-and-floral-overlays-image_16686783.jpg'); /* Replace with actual path */
-  background-repeat: repeat;
+
+
+  background-image: url('/SL-040820-29750-27.jpg'); /* Replace with actual path */
+
+  
+  background-repeat: no-repeat;
+
   background-size: 300px auto; /* Adjust as needed */
   opacity: 0.05; /* Make it subtle */
   z-index: -1;

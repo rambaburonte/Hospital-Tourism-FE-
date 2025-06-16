@@ -1,5 +1,9 @@
+
 //export const BASE_URL = 'https://healthtourism.onrender.com';
  export const BASE_URL = 'http://localhost:9090'
+
+
+
 
 export const API_ENDPOINTS = {
   DOCTORS: `${BASE_URL}/api/doctors`,
