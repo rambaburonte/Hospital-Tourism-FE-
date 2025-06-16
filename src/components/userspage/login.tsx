@@ -123,6 +123,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BASE_URL } from "@/config/config";
 
 export default function Login() {
   const location = useLocation();
@@ -132,8 +133,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [verificationSuccess, setVerificationSuccess] = useState(false);
   const [error, setError] = useState("");
-//const base_url="https://healthtourism-5.onrender.com"
-   const base_url = "http://localhost:9090"; // Update with your actual base URL
+
   // Show email verified success
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -147,7 +147,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch(`${base_url}/user/login`, {
+      const response = await fetch(`${BASE_URL}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

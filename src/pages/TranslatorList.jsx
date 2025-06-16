@@ -231,8 +231,8 @@ const TranslatorList = () => {
   const [translators, setTranslators] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("All");
 
-  const base_url = "https://healthtourism-5.onrender.com";
-
+  //const base_url = "https://healthtourism-5.onrender.com";
+  const base_url = "http://localhost:9090";
   useEffect(() => {
     axios
       .get(`${base_url}/api/translators/getAll/traslators`)

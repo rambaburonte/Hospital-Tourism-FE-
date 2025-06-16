@@ -419,17 +419,22 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 const bannerImages = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&w=1200&q=80",
+    src: "./madical.jpg",
     alt: "Modern hospital facility",
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1200&q=80",
+    src: "./Doctors.jpg",
     alt: "Healthcare professionals",
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1580281657527-47d6b9b6038e?auto=format&fit=crop&w=1200&q=80",
+    src: "./spaAndPysio.jpg",
+    alt: "Medical equipment and labs",
+  },
+  {
+    id: 4,
+    src: "./Hospital.jpg",
     alt: "Medical equipment and labs",
   },
 ];
@@ -476,34 +481,9 @@ const HeroBanner = () => {
                   <img
                     src={image.src}
                     alt={image.alt}
-                    className="w-full h-full object-cover brightness-75 transition-transform duration-500 ease-in-out"
+                    className="w-full h-full object-cover  transition-transform duration-500 ease-in-out"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                    <div className="text-center text-white px-6 backdrop-blur-md">
-                      <motion.h2 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="text-3xl md:text-4xl font-bold leading-tight drop-shadow-md"
-                      >
-                        Excellence in Healthcare
-                      </motion.h2>
-                      <motion.p 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="mt-2 text-sm md:text-base"
-                      >
-                        Providing comprehensive care with cutting-edge technology
-                      </motion.p>
-                      <motion.button 
-                        whileHover={{ scale: 1.05 }}
-                        className="mt-4 px-5 py-2 bg-white text-gray-800 rounded-md shadow-md hover:bg-gray-100 transition"
-                      >
-                        Learn More
-                      </motion.button>
-                    </div>
-                  </div>
+                 
                 </div>
               </CarouselItem>
             ))}

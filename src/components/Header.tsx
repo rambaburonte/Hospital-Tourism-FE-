@@ -571,15 +571,11 @@ const Header: React.FC = () => {
           <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
               <Phone className="h-4 w-4 text-green-200" />
-              <span>Emergency: 1800 XXX XXXX</span>
-              <span>|</span>
-              <span className="cursor-pointer hover:text-green-200" onClick={() => navigate('/OurHospitals')}>
-                Locate a Hospital
-              </span>
+              <span>Emergency: 8595114141</span>
             </div>
             <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
-              <span onClick={() => navigate('/blog')} className="cursor-pointer hover:text-green-200">Blog</span>
+              <span onClick={() => navigate('/health-blogs')} className="cursor-pointer hover:text-green-200">Blog</span>
             </div>
           </div>
         </div>
