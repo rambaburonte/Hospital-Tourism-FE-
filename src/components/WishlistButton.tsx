@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '@/config/config';
+import { Heart } from 'lucide-react';
 
 export type ServiceType = 'chef' | 'labtest' | 'doctor' | 'spa' | 'translator' | 'physio' | 'hospital' | 'hotel' | 'travel' | 'pharmacy';
 
@@ -192,6 +193,35 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
     }));
   };
 
+  const getServiceIdField = (serviceType: ServiceType): string => {
+    const normalizedType = serviceType.toLowerCase();
+    switch (normalizedType) {
+      case 'doctor':
+        return 'doctorId';
+      case 'labtest':
+        return 'testId';
+      case 'spa':
+        return 'spaCenterId';
+      case 'physio':
+      case 'physiotherapy':
+        return 'physioId';
+      case 'hospital':
+        return 'hospitalId';
+      case 'hotel':
+        return 'hotelId';
+      case 'travel':
+        return 'travelId';
+      case 'translator':
+        return 'translatorId';
+      case 'chef':
+        return 'chefId';
+      case 'pharmacy':
+        return 'pharmacyId';
+      default:
+        throw new Error(`Unknown service type: ${serviceType}`);
+    }
+  };
+
   const handleAddToWishlist = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.id) {
@@ -205,7 +235,13 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
     setMessage(null);
 
     try {
+      const serviceIdFieldName = getServiceIdField(serviceType);
+      if (!serviceIdFieldName) {
+        throw new Error(`Invalid service type: ${serviceType}`);
+      }
+
       const payload = {
+        userId: user.id,
         serviceName: serviceDetails?.chefName || serviceDetails?.translatorName || serviceDetails?.spaServiceName || serviceDetails?.doctorName || serviceDetails?.physioName || serviceName,
         serviceDescription: description || serviceDetails?.description || serviceDetails?.speciality || '',
         serviceImageUrl: serviceImageUrl || serviceDetails?.chefImage || serviceDetails?.image || 'https://placehold.co/400x300?text=No+Image',
@@ -216,12 +252,13 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
         paymentMode: formData.paymentMode,
         bookingType: formData.bookingType,
         remarks: formData.remarks,
+        [serviceIdFieldName]: serviceId, // Dynamically add the service ID
       };
 
       console.log('Wishlist payload:', payload);
 
       const response = await axios.post(
-        `${BASE_URL}/api/AddToCart/addToCart/${user.id}/${serviceType.toLowerCase()}`,
+        `${BASE_URL}/api/wishlist/add/${user.id}/${serviceType}/${serviceId}`,
         payload,
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -317,35 +354,30 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
       <button
         onClick={toggleWishlist}
         disabled={isLoading}
-        className={`p-2 rounded-full transition-colors duration-200 ${
+        className={`p-2 rounded-full transition-colors duration-200 border border-gray-300 bg-white bg-opacity-70 ${ 
           isInWishlist
             ? 'text-red-500 hover:text-red-600'
-            : 'text-gray-400 hover:text-red-500'
+            : 'text-gray-400 hover:text-gray-500'
         } ${className}`}
         title={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
       >
-        <svg
-          className="w-6 h-6"
-          fill={isInWishlist ? 'currentColor' : 'none'}
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          />
-        </svg>
+        <Heart className="w-6 h-6" fill={isInWishlist ? 'currentColor' : 'none'} />
       </button>
 
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4 py-10">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg overflow-y-auto max-h-[calc(100vh-100px)]">
-            <h2 className="text-2xl font-bold mb-2 text-center capitalize">
-              Add {serviceType} to Wishlist
-            </h2>
+          <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg overflow-y-auto max-h-[calc(100vh-120px)]">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold capitalize">
+                Add {serviceType} to Wishlist
+              </h2>
+              <button
+                onClick={closePopup}
+                className="text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+            </div>
             <div className="text-center mb-6 text-gray-700">
               <p className="text-xl font-semibold">
                 {isServiceDetailsLoading ? 'Loading service details...' : (

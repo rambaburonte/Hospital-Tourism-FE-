@@ -106,19 +106,19 @@ const BookingCart: React.FC = () => {
     const fetchBookings = async () => {
       setLoading(true);
       try {
-        // http://localhost:9090/api/AddToCart/user/${user.id}
-        // const response = await axios.get(`${BASE_URL}/api/bookings/user/${user.id}`);
-        const response = await axios.get(`${BASE_URL}/api/AddToCart/user/${user.id}`);
+        const response = await axios.get(`${BASE_URL}/api/bookings/user/${user.id}`);
 
-        const bookings = response.data.map((item: any) => ({
-          bookingId: item.bookingId,
-          bookingStatus: item.bookingStatus,
-          bookingAmount: item.bookingAmount,
-          bookingStartTime: item.bookingStartTime,
-          bookingEndTime: item.bookingEndTime,
-          serviceTypes: item.serviceTypes,
-          serviceName: item.serviceName,
-        }));
+        const bookings = response.data
+          .filter((item: any) => item.serviceTypes.toLowerCase() !== 'pharmacy') // Filter out pharmacy items (though the new API should ideally only return bookings)
+          .map((item: any) => ({
+            bookingId: item.bookingId,
+            bookingStatus: item.bookingStatus,
+            bookingAmount: item.bookingAmount,
+            bookingStartTime: item.bookingStartTime,
+            bookingEndTime: item.bookingEndTime,
+            serviceTypes: item.serviceTypes,
+            serviceName: item.serviceName,
+          }));
         setBookingItems(bookings);
         setLoading(false);
       } catch (err) {

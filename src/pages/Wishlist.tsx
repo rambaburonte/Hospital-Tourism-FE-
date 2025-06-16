@@ -31,7 +31,7 @@ const Wishlist: React.FC = () => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<{ id: number } | null>(null);
+  const [user, setUser] = useState<{ id: number; name?: string; email?: string } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,7 +39,9 @@ const Wishlist: React.FC = () => {
     if (storedUser && (storedUser.id || storedUser.userId)) {
       setUser({
         ...storedUser,
-        id: storedUser.id || storedUser.userId
+        id: storedUser.id || storedUser.userId,
+        name: storedUser.name || storedUser.userName,
+        email: storedUser.email || storedUser.userEmail
       });
     } else {
       setError('Please login to view your wishlist');
@@ -67,6 +69,7 @@ const Wishlist: React.FC = () => {
       }
 
       if (response.data) {
+        console.log("Fetched wishlist data:", response.data);
         setWishlistItems(response.data);
         setError(null);
       } else {
@@ -115,15 +118,19 @@ const Wishlist: React.FC = () => {
 
           const payload = {
             userId: user.id,
-            bookingStartTime: item.bookingStartTime || new Date().toISOString(),
-            bookingEndTime: item.bookingEndTime || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
             paymentMode: item.paymentMode || 'ONLINE',
             bookingType: item.bookingType || 'SINGLE',
-            bookingAmount: item.bookingAmount || item.price || 100,
             remarks: item.remarks || item.notes || '',
+            userName: user.name || 'User',
+            userEmail: user.email || '',
+            serviceType: item.serviceType,
             serviceName: item.serviceName,
             serviceDescription: item.serviceDescription,
             serviceImageUrl: item.serviceImageUrl || 'https://placehold.co/400x300?text=No+Image',
+            bookingAmount: item.bookingAmount || item.price || 100,
+            bookingStartTime: item.bookingStartTime || new Date().toISOString(),
+            bookingEndTime: item.bookingEndTime || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            notes: item.remarks || item.notes || '',
             [serviceIdField]: item.serviceId,
           };
 
@@ -250,7 +257,7 @@ const Wishlist: React.FC = () => {
             {error.includes('login') && (
               <Link
                 to="/login"
-                className="mt-4 inline-block bg-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-purple-700 transition"
+                className="mt-4 inline-block bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition"
               >
                 Login
               </Link>
@@ -274,7 +281,7 @@ const Wishlist: React.FC = () => {
               <p className="text-gray-500 text-lg mb-4">Your wishlist is empty</p>
               <Link
                 to="/"
-                className="inline-block bg-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-purple-700 transition"
+                className="inline-block bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition"
               >
                 Browse Services
               </Link>
@@ -292,14 +299,6 @@ const Wishlist: React.FC = () => {
                       alt={item.serviceName}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute top-2 right-2">
-                      <button
-                        onClick={() => removeFromWishlist(item.wishlistId)}
-                        className="p-2 rounded-full bg-purple-600 text-white shadow-sm opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 delay-200"
-                      >
-                        <Heart className="h-5 w-5 fill-current" />
-                      </button>
-                    </div>
                   </div>
                   <div className="p-4 text-center">
                     <p className="text-xs text-gray-500 uppercase font-medium">{item.serviceType}</p>
@@ -322,7 +321,7 @@ const Wishlist: React.FC = () => {
                     <p className="text-lg font-bold text-gray-900">₹{(item.bookingAmount || item.price || 0).toFixed(2)}</p>
                     <button
                       onClick={() => removeFromWishlist(item.wishlistId)}
-                      className="mt-2 p-2 text-red-500 hover:text-red-700 transition-colors duration-200"
+                      className="mt-2 p-2 text-green-500 hover:text-green-700 transition-colors duration-200"
                       aria-label="Remove from wishlist"
                     >
                       <Trash2 className="h-5 w-5" />
@@ -370,11 +369,11 @@ const Wishlist: React.FC = () => {
                   <button 
                     onClick={moveToCart}
                     disabled={loading || wishlistItems.length === 0}
-                    className="w-full bg-purple-600 text-white font-semibold py-2 rounded-lg hover:bg-purple-700 transition mb-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition mb-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Moving to cart...' : 'Continue to checkout'}
                   </button>
-                  <Link to="/cart" className="block text-center text-purple-600 hover:underline text-sm">
+                  <Link to="/cart" className="block text-center text-green-600 hover:underline text-sm">
                     View & edit cart
                   </Link>
                 </div>

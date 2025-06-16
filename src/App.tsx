@@ -160,7 +160,7 @@ const App: React.FC = () => (
             <Route path="/subadminlogin" element={<SubadmLoginForm />} />
             <Route path="/patientlist" element={<Users />} />
             <Route path="/bookingfom" element={<BookingForm/>}/>
-            <Route path="/usercart" element={<UserCart />} />
+            
             <Route path="/wishlist" element={<Wishlist />} />
 
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
