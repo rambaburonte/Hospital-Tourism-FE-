@@ -79,11 +79,7 @@ const Watermark = () => {
       className="fixed inset-0 flex items-center justify-center pointer-events-none z-0 opacity-10 select-none"
       aria-hidden="true"
     >
-      <span
-        className="text-[100px] md:text-[150px] lg:text-[200px] font-bold text-[#499E14] transform -rotate-45 tracking-wider"
-      >
-        Max Healthcare
-      </span>
+      
       {/* For image watermark, uncomment below and place logo in public/ */}
       {/* <img
         src="/ZylogicLogo.png"

@@ -89,24 +89,46 @@ const BookingCart: React.FC = () => {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user") || 'null');
-    if (storedUser && storedUser.id) {
-      setUser(storedUser);
+    if (storedUser && (storedUser.id || storedUser.userId)) {
+      setUser({
+        ...storedUser,
+        id: storedUser.id || storedUser.userId // Use either id or userId
+      });
     } else {
+      setError('User not logged in');
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    try {
-      const storedBookings = JSON.parse(localStorage.getItem("bookingCart") || "[]");
-      setBookingItems(storedBookings);
+    if (!user?.id) return;
+
+    const fetchBookings = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/api/bookings/user/${user.id}`);
+
+        const bookings = response.data
+          .filter((item: any) => item.serviceTypes.toLowerCase() !== 'pharmacy') // Filter out pharmacy items (though the new API should ideally only return bookings)
+          .map((item: any) => ({
+            bookingId: item.bookingId,
+            bookingStatus: item.bookingStatus,
+            bookingAmount: item.bookingAmount,
+            bookingStartTime: item.bookingStartTime,
+            bookingEndTime: item.bookingEndTime,
+            serviceTypes: item.serviceTypes,
+            serviceName: item.serviceName,
+          }));
+        setBookingItems(bookings);
         setLoading(false);
-    } catch (err) {
-      setError('Failed to load bookings from cart');
+      } catch (err) {
+        setError('Failed to load bookings from server');
         setLoading(false);
-    }
-  }, []);
+      }
+    };
+
+    fetchBookings();
+  }, [user]);
 
   useEffect(() => {
     loadExternalAssets();
@@ -301,13 +323,13 @@ const BookingCart: React.FC = () => {
     const updatedBookings = bookingItems.filter(item => !selectedItems.includes(item.bookingId));
     setBookingItems(updatedBookings);
     setSelectedItems([]);
-    localStorage.setItem("bookingCart", JSON.stringify(updatedBookings));
+    // Note: No localStorage update since we're using API
   };
 
   const handleDeleteSingleItem = (bookingId: number) => {
     const updatedBookings = bookingItems.filter(item => item.bookingId !== bookingId);
     setBookingItems(updatedBookings);
-    localStorage.setItem("bookingCart", JSON.stringify(updatedBookings));
+    // Note: No localStorage update since we're using API
   };
 
   const handleCloseSuccessMessage = () => {
@@ -340,7 +362,7 @@ const BookingCart: React.FC = () => {
   const handleRemoveBooking = (index: number) => {
     const updatedBookings = bookingItems.filter((_, i) => i !== index);
     setBookingItems(updatedBookings);
-    localStorage.setItem("bookingCart", JSON.stringify(updatedBookings));
+    // Note: No localStorage update since we're using API
   };
 
   return (

@@ -82,12 +82,12 @@ const TopTourPlans = () => {
   }, [currentSlide]);
 
   return (
-    <section className="bg-slate-50 py-12 w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-slate-50 py-12 w-full bg-opacity-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 bg-opacity-50">
         <div className="w-full max-w-7xl mx-auto">
           {/* Auto-Scrolling Full-Width Section */}
           <div className="mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
+            <h2 className="text-2xl py-12 sm:text-3xl font-bold text-center bg-opacity-50">
               Explore our Plans
             </h2>
             <div
@@ -171,7 +171,7 @@ const TopTourPlans = () => {
             <div className="mt-12 text-center">
               <Link
                 to="/tours"
-                className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
+                className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:text-white-500 hover:scale-105 hover:shadow-md transition-all duration-200"
                 aria-label="Explore More"
               >
                 Explore More

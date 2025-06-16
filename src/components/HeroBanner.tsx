@@ -467,7 +467,7 @@ const HeroBanner = () => {
   }, [api, onSelect]);
 
   return (
-   <section className="w-full py-16 bg-gradient-to-br from-white to-gray-100">
+   <section className="w-full py-16 bg-opacity-50 from-white to-gray-100 ">
   <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-10 items-center">
     
     {/* Image Carousel */}

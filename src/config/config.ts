@@ -1,6 +1,8 @@
 
-//export const BASE_URL = 'https://healthtourism.onrender.com';
- export const BASE_URL = 'http://localhost:9090'
+
+export const BASE_URL = 'https://healthtourism-5.onrender.com';
+ //export const BASE_URL = 'http://localhost:9090'
+
 
 
 

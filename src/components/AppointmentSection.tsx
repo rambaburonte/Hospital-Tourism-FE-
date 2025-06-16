@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Search, User, Hotel, Plane, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,7 +6,8 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { FaSpa, FaUtensils } from 'react-icons/fa';
 import { TbPhysotherapist } from 'react-icons/tb';
 import axios from 'axios';
-import { BASE_URL } from '@/config/config';
+import { BASE_URL, API_ENDPOINTS } from '@/config/config';
+import WishlistButton, { ServiceType } from './WishlistButton';
 
 interface Doctor {
   id: number;
@@ -186,19 +185,18 @@ const AppointmentSection = () => {
     'Pharmacy': '/medicinecatalog',
   };
 
-  // const base_url = 'http://localhost:9090';
   const apiEndpoints: Record<string, string> = {
-    'Find a Doctor': `${BASE_URL}/api/doctors`,
-    'Book a Test': `${BASE_URL}/api/diagnostics`,
-    'Spa': `${BASE_URL}/spaServices/getAll/spaServices`,
-    'Physiotherapy': `${BASE_URL}}/physio/getall/pysios`,
-    'Locate Hospital': `${BASE_URL}/api/hospitals/getall/hospitals`,
-    'Hotel & GuestHouse Booking': `${BASE_URL}/api/hotels`,
-    'Travel Booking': `${BASE_URL}/api/travel`,
-    'Translators': `${BASE_URL}/api/translators/getAll/traslators`,
-    'Chefs': `${BASE_URL}/api/chefs`,
-    'Pharmacy': `${BASE_URL}/cart-item/user/capsules-user`,
-    'pharmacyCategories': `${BASE_URL}/cart-item/user/capsules-user`,
+    'Find a Doctor': API_ENDPOINTS.DOCTORS,
+    'Book a Test': API_ENDPOINTS.DIAGNOSTICS,
+    'Spa': API_ENDPOINTS.SPA,
+    'Physiotherapy': API_ENDPOINTS.PHYSIO,
+    'Locate Hospital': API_ENDPOINTS.HOSPITALS,
+    'Hotel & GuestHouse Booking': API_ENDPOINTS.HOTELS,
+    'Travel Booking': API_ENDPOINTS.TRAVEL,
+    'Translators': API_ENDPOINTS.TRANSLATORS,
+    'Chefs': API_ENDPOINTS.CHEFS,
+    'Pharmacy': API_ENDPOINTS.PHARMACY,
+    'pharmacyCategories': API_ENDPOINTS.PHARMACY_CATEGORIES,
   };
 
   useEffect(() => {
@@ -211,19 +209,19 @@ const AppointmentSection = () => {
       try {
         if (selectedService === 'Pharmacy') {
           const [pharmaciesRes, categoriesRes] = await Promise.all([
-            axios.get(apiEndpoints['Pharmacy']).catch(() => ({ data: [] })),
-            axios.get(apiEndpoints['pharmacyCategories']).catch(() => ({ data: [] })),
+            axios.get(apiEndpoints['Pharmacy']).then(res => res.data).catch(() => []), 
+            axios.get(apiEndpoints['pharmacyCategories']).then(res => res.data).catch(() => []), 
           ]);
           setServiceData((prev) => ({
             ...prev,
-            Pharmacy: filterActive(pharmaciesRes.data).slice(0, 6),
+            Pharmacy: filterActive(pharmaciesRes as Pharmacy[]).slice(0, 6),
           }));
-          setPharmacyCategories(filterActive(categoriesRes.data).slice(0, 6));
+          setPharmacyCategories(filterActive(categoriesRes as PharmacyCategory[]).slice(0, 6));
         } else {
-          const res = await axios.get(apiEndpoints[selectedService]).catch(() => ({ data: [] }));
+          const res = await axios.get(apiEndpoints[selectedService]).then(res => res.data).catch(() => []); 
           setServiceData((prev) => ({
             ...prev,
-            [selectedService]: filterActive(res.data).slice(0, 6),
+            [selectedService]: filterActive(res as ServiceItem[]).slice(0, 6), 
           }));
         }
       } catch (err) {
@@ -390,18 +388,38 @@ const AppointmentSection = () => {
     return defaultFields;
   };
 
+  const getServiceType = (item: ServiceItem): ServiceType => {
+    if ('chefName' in item) return 'chef';
+    if ('testTitle' in item) return 'labtest';
+    if ('name' in item && 'department' in item) return 'doctor';
+    if ('serviceName' in item) return 'spa';
+    if ('translatorName' in item) return 'translator';
+    if ('physioName' in item) return 'physio';
+    if ('hospitalName' in item) return 'hospital';
+    if ('hotelName' in item) return 'hotel';
+    if ('travelName' in item) return 'travel';
+    if ('pharmacyName' in item) return 'pharmacy';
+    throw new Error("Unknown service type");
+  };
+
+  const getServicePrice = (item: ServiceItem): number => {
+    if ('price' in item && typeof item.price === 'number') return item.price;
+    if ('price' in item && typeof item.price === 'string') return parseFloat(item.price) || 0;
+    return 0;
+  };
+
   return (
-    <section className="bg-slate-50 py-12">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="bg-slate-50 py-12 bg-opacity-50">
+      <div className="container mx-auto px-4 md:px-6 bg-opacity-50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8 ">
             Schedule Your Appointment Online
           </h2>
           <p className="text-center text-sm text-gray-600 mb-4">
             Current time: {new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} (IST)
           </p>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-white rounded-lg shadow-lg p-6 bg-opacity-50">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
@@ -525,33 +543,54 @@ const AppointmentSection = () => {
                                 </div>
                               ))
                             : serviceData[selectedService].slice(0, 6).map((item, index) => {
-                                const { name, details, description, image } = renderItemFields(item);
-                                return (
-                                  <div
-                                    key={index}
-                                    className="bg-white p-5 rounded-xl shadow-lg"
-                                  >
-                                    <Link to={getDetailRoute(item)}>
-                                      <img
-                                        src={image}
-                                        alt={name}
-                                        className="w-full h-40 object-cover rounded-lg mb-4"
-                                        loading="lazy"
-                                      />
-                                      <h4 className="text-lg font-semibold text-gray-800 mb-2">{name}</h4>
-                                      <p className="text-gray-600 text-sm mb-2">{details}</p>
-                                      <p className="text-gray-500 text-sm italic">{description}</p>
-                                    </Link>
-                                    <Link
-                                      to={getBookingRoute(item)}
-                                      className="mt-4 block bg-[#499E14] text-white font-semibold py-2 px-4 rounded-lg w-full text-center shadow-md"
-                                      aria-label={`Book ${name}`}
-                                    >
-                                      Book Here
-                                    </Link>
-                                  </div>
-                                );
-                              })}
+                              const { name, details, description, image } = renderItemFields(item);
+                              const serviceId = 
+                              'id' in item ? item.id :
+                              'physioId' in item ? item.physioId :
+                              'spaCenterId' in item ? item.spaCenterId :
+                              'hospitalId' in item ? item.hospitalId :
+                              'hotelId' in item ? item.hotelId :
+                              'travelId' in item ? item.travelId :
+                              'translatorID' in item ? item.translatorID :
+                              'chefID' in item ? item.chefID :
+                              'pharmacyId' in item ? item.pharmacyId : 0;
+
+                               return (
+                              <div
+                        key={index}
+                         className="bg-white p-5 rounded-xl shadow-lg relative"
+                    >
+                  <div className="absolute top-2 right-2 z-10">
+                   <WishlistButton
+                     serviceId={serviceId}
+                     serviceType={getServiceType(item)}
+                     serviceName={name}
+                     price={getServicePrice(item)}
+                     description={description}
+                     serviceImageUrl={image}
+                   />
+               </div>
+                  <Link to={getDetailRoute(item)}>
+                <img
+                    src={image}
+                    alt={name}
+                   className="w-full h-40 object-cover rounded-lg mb-4"
+                  loading="lazy"
+                          />
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">{name}</h4>
+                  <p className="text-gray-600 text-sm mb-2">{details}</p>
+                             <p className="text-gray-500 text-sm italic">{description}</p>
+                     </Link>
+                   <Link
+                     to={getBookingRoute(item)}
+                     className="mt-4 block bg-[#499E14] text-white font-semibold py-2 px-4 rounded-lg w-full text-center shadow-md"
+                   aria-label={`Book ${name}`}
+                         >
+                     Book Here
+                  </Link>
+                   </div>
+                        );
+                             })}
                         </div>
                         <div className="mt-8 text-center">
                           <Link
