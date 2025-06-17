@@ -214,6 +214,7 @@ import PhoneInput from 'react-phone-input-2';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
 import 'react-phone-input-2/lib/style.css';
+import { BASE_URL } from '@/config/config';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -265,9 +266,9 @@ export default function RegisterPage() {
       mobile: formData.mobile,
       country: formData.country?.label || '',
     };
-       const base_url="https://healthtourism-5.onrender.com"
+      
     try {
-      const response = await fetch(`${base_url}/user/register`, {
+      const response = await fetch(`${BASE_URL}/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
