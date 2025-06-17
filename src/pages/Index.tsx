@@ -59,7 +59,7 @@
 
 
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import HeroBanner from '@/components/HeroBanner';
 import AppointmentSection from '@/components/AppointmentSection';
 import SpecialtiesSection from '@/components/SpecialtiesSection';
@@ -72,6 +72,7 @@ import TechnologySection from '@/components/TechnologySection';
 import TopTourPlans from '@/components/Tourplans';
 import Footer from '@/components/Footer';
 import VideoSection from '@/components/Videos';
+import { useLocation } from 'react-router-dom';
 
 const Watermark = () => {
   return (
@@ -92,6 +93,9 @@ const Watermark = () => {
 };
 
 const Index = () => {
+  const appointmentSectionRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://embed.tawk.to/6821a62df3613e190ca8896c/1ir1n28q5';
@@ -105,12 +109,20 @@ const Index = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (location.state && (location.state as { scrollToAppointment?: boolean }).scrollToAppointment) {
+      appointmentSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [location.state]);
+
   return (
     <div className="min-h-screen flex flex-col relative">
       <Watermark />
       <main className="flex-grow relative z-10">
         <HeroBanner />
-        <AppointmentSection />
+        <div ref={appointmentSectionRef}>
+          <AppointmentSection />
+        </div>
         <SpecialtiesSection />
         <ExpertHelpSection />
         <TechnologySection />

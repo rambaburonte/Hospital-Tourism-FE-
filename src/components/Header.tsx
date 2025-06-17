@@ -19,8 +19,11 @@ declare global {
 // Define UserData interface for type safety
 interface UserData {
   id?: string;
+  userId?: string;
   name?: string;
+  userName?: string;
   email?: string;
+  userEmail?: string;
 }
 
 const Header: React.FC = () => {
@@ -30,7 +33,10 @@ const Header: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -76,13 +82,16 @@ const Header: React.FC = () => {
     };
   }, [location.pathname]);
 
-  // Effect to check login status and cart count
-  useEffect(() => {
+  // Function to check login status and fetch cart count
+  const checkLoginStatusAndCart = () => {
     const user = localStorage.getItem('user');
     try {
-      setIsLoggedIn(!!user && !!JSON.parse(user));
-      if (user) {
-        const userData = JSON.parse(user);
+      const userData: UserData = JSON.parse(user || '{}');
+      const loggedIn = !!user && !!userData.id || !!userData.userId;
+      setIsLoggedIn(loggedIn);
+
+      if (loggedIn) {
+        setUserName(userData.name || userData.userName || 'User');
         // Fetch cart count
         axios.get(`${BASE_URL}/api/AddToCart/count/${userData.id || userData.userId}`)
           .then(response => {
@@ -97,25 +106,42 @@ const Header: React.FC = () => {
             console.error('Failed to fetch cart count:', err);
             setCartItemCount(0);
           });
+      } else {
+        setUserName(null);
+        setCartItemCount(0);
       }
     } catch (e) {
       console.error('Invalid user data in localStorage:', e);
       setIsLoggedIn(false);
+      setUserName(null);
+      setCartItemCount(0);
     }
+  };
+
+  // Effect to check login status and cart count on mount and path change
+  useEffect(() => {
+    checkLoginStatusAndCart();
 
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'user') {
-        try {
-          const updatedUser = localStorage.getItem('user');
-          setIsLoggedIn(!!updatedUser && !!JSON.parse(updatedUser));
-        } catch (e) {
-          console.error('Invalid user data in localStorage:', e);
-          setIsLoggedIn(false);
-        }
+        checkLoginStatusAndCart(); // Re-run checks if user data changes in localStorage
       }
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
+  }, [location.pathname]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   // Handle button clicks with GA tracking
@@ -130,13 +156,32 @@ const Header: React.FC = () => {
   };
 
   // Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    if (window.location.pathname !== '/login') {
-      navigate('/login');
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevent any default button behavior
+    console.log('handleLogout called');
+    
+    try {
+      console.log('Current localStorage user:', localStorage.getItem('user'));
+      localStorage.removeItem('user');
+      console.log('User item removed from localStorage. Current localStorage user:', localStorage.getItem('user'));
+
+      // Immediately update state and re-check login status
+      checkLoginStatusAndCart(); 
+      setDropdownOpen(false); // Close dropdown
+      console.log('State updated and login status re-checked.');
+
+      if (location.pathname !== '/login') {
+        console.log('Navigating to /login');
+        navigate('/login');
+      } else {
+        console.log('Already on /login page');
+      }
+
+      trackEvent('logout', 'Authentication', 'User Logout');
+      console.log('Logout event tracked');
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
-    trackEvent('logout', 'Authentication', 'User Logout');
   };
 
   const navItems = [
@@ -178,15 +223,11 @@ const Header: React.FC = () => {
           <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
               <Phone className="h-4 w-4 text-green-200" />
-              <span>Emergency: 1800 XXX XXXX</span>
-              <span>|</span>
-              <span className="cursor-pointer hover:text-green-200" onClick={() => navigate('/OurHospitals')}>
-                Locate a Hospital
-              </span>
+              <span>Emergency: 8595114141</span>
             </div>
             <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
-              <span onClick={() => navigate('/blog')} className="cursor-pointer hover:text-green-200">Blog</span>
+              <span onClick={() => navigate('/health-blogs')} className="cursor-pointer hover:text-green-200">Blog</span>
             </div>
           </div>
         </div>
@@ -241,120 +282,152 @@ const Header: React.FC = () => {
               Book Appointment
             </Button>
 
-            {!isMobile && (
-              <div className="flex items-center gap-4">
-                <Link
-                  to="/bookingcart"
-                  className="relative text-gray-600 hover:text-[#499E14] transition-colors"
+            {!isMobile && isLoggedIn ? (
+              <div className="relative" ref={userDropdownRef}>
+                <Button
+                  variant="outline"
+                  className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg pr-2"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  <ShoppingCart className="h-6 w-6" />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-[#499E14] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Link>
-                <Link
-                  to="/wishlist"
-                  className="relative text-gray-600 hover:text-[#499E14] transition-colors"
-                >
-                  <Heart className="h-6 w-6" />
-                </Link>
-                {isLoggedIn ? (
-                  <Button
-                    variant="outline"
-                    className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
-                    onClick={handleLogout}
-                  >
-                    <User className="mr-2 h-4 w-4" /> Logout
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
-                    onClick={() => {
-                      trackEvent('button_click', 'Header', 'Login');
-                      navigate('/login');
-                    }}
-                  >
-                    <User className="mr-2 h-4 w-4" /> Login
-                  </Button>
+                  <User className="mr-2 h-4 w-4" /> {userName}
+                </Button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5">
+                    <Link
+                      to="/bookingcart"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-2" /> Cart
+                      {cartItemCount > 0 && (
+                        <span className="ml-auto bg-[#499E14] text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                          {cartItemCount}
+                        </span>
+                      )}
+                    </Link>
+                    <Link
+                      to="/wishlist"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <Heart className="h-4 w-4 mr-2" /> Wishlist
+                    </Link>
+                    <Link
+                      to="/myorders"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <LogOut className="h-4 w-4 mr-2 rotate-180" /> My Orders
+                    </Link>
+                    <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
+                    <button
+                      onClick={(e) => { handleLogout(e); setDropdownOpen(false); }}
+                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" /> Logout
+                    </button>
+                  </div>
                 )}
               </div>
-            )}
-
-            {isMobile && (
+            ) : !isMobile && (
               <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                variant="outline"
+                className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+                onClick={() => {
+                  trackEvent('button_click', 'Header', 'Login');
+                  navigate('/login');
+                }}
               >
-                {mobileMenuOpen ? (
-                  <X className="h-6 w-6 text-gray-700 dark:text-gray-200" />
-                ) : (
-                  <Menu className="h-6 w-6 text-gray-700 dark:text-gray-200" />
-                )}
+                <User className="mr-2 h-4 w-4" /> Login
               </Button>
             )}
           </div>
+
+          {/* Mobile Menu Toggle */}
+          {isMobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-700 dark:text-gray-200"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
+          )}
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu Sidebar */}
         {isMobile && mobileMenuOpen && (
-          <div className="container mx-auto px-4 py-4 bg-white dark:bg-gray-900 border-t border-green-200 dark:border-green-800">
-            <nav className="flex flex-col space-y-4">
+          <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+              <Link to="/" className="flex items-center space-x-2" onClick={() => setMobileMenuOpen(false)}>
+                <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">MAX</span>
+              </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-gray-700 dark:text-gray-200"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+            <nav className="flex flex-col p-4 space-y-2">
               {navItems.map(({ to, label }) => (
                 <Link
                   key={to}
                   to={to}
-                  className="text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 font-medium"
+                  className="block py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {label}
                 </Link>
               ))}
-              {/* Mobile Cart Link */}
-              <Link
-                to="/bookingcart"
-                className="text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 font-medium flex items-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <ShoppingCart className="mr-2 h-4 w-4" /> Cart
-              </Link>
-
               {isLoggedIn ? (
-                <Button
-                  variant="outline"
-                  className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                >
-                  <User className="mr-2 h-4 w-4" /> Logout
-                </Button>
+                <>
+                  <Link
+                    to="/bookingcart"
+                    className="flex items-center py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <ShoppingCart className="h-6 w-6 mr-2" /> Cart
+                    {cartItemCount > 0 && (
+                      <span className="ml-auto bg-[#499E14] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {cartItemCount}
+                      </span>
+                    )}
+                  </Link>
+                  <Link
+                    to="/wishlist"
+                    className="flex items-center py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Heart className="h-6 w-6 mr-2" /> Wishlist
+                  </Link>
+                  <Link
+                    to="/myorders"
+                    className="flex items-center py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LogOut className="h-6 w-6 mr-2 rotate-180" /> My Orders
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="w-full mt-2 text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+                    onClick={(e) => { handleLogout(e); setMobileMenuOpen(false); }}
+                  >
+                    <User className="mr-2 h-4 w-4" /> Logout
+                  </Button>
+                </>
               ) : (
                 <Button
                   variant="outline"
-                  className="text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
-                  onClick={() => {
-                    trackEvent('button_click', 'Header', 'Login Mobile');
-                    setMobileMenuOpen(false);
-                    navigate('/login');
-                  }}
+                  className="w-full mt-2 text-[#499E14] dark:text-[#5ab81a] border-[#499E14] dark:border-[#5ab81a] hover:bg-green-500 hover:text-white dark:hover:bg-green-400 dark:hover:text-gray-900 rounded-lg"
+                  onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
                 >
                   <User className="mr-2 h-4 w-4" /> Login
                 </Button>
               )}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-10 pr-4 py-2 w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
-                />
-              </div>
             </nav>
           </div>
         )}

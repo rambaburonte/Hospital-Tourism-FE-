@@ -134,6 +134,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { MapPin, Star } from 'lucide-react';
+import { BASE_URL } from '@/config/config';
 
 interface Hospital {
   hospitalId: number;
@@ -155,7 +156,7 @@ const HospitalList: React.FC = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await fetch('https://healthtourism-5.onrender.com/api/hospitals/getall/hospitals');
+        const response = await fetch(`${BASE_URL}/api/hospitals/getall/hospitals`);
         if (!response.ok) {
           throw new Error('Failed to fetch hospitals');
         }

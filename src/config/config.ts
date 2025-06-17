@@ -1,5 +1,11 @@
-// export const BASE_URL = 'https://healthtourism-5.onrender.com';
-export const BASE_URL = 'http://localhost:9090'
+
+
+export const BASE_URL = 'https://healthtourism-5.onrender.com';
+//  export const BASE_URL = 'http://localhost:9090'
+
+
+
+
 
 export const API_ENDPOINTS = {
   DOCTORS: `${BASE_URL}/api/doctors`,
@@ -7,7 +13,7 @@ export const API_ENDPOINTS = {
   PHYSIO: `${BASE_URL}/physio/all`,
   SPA: `${BASE_URL}/spaCenter/all`,
   HOSPITALS: `${BASE_URL}/api/hospitals`,
-  HOTELS: `${BASE_URL}/api/hotels`,
+  HOTELS: `${BASE_URL}/api/hotels/getall/hospitals`,
   TRAVEL: `${BASE_URL}/api/travel`,
   TRANSLATORS: `${BASE_URL}/api/translators`,
   CHEFS: `${BASE_URL}/api/chefs`,

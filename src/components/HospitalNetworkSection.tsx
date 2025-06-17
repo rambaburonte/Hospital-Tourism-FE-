@@ -110,7 +110,7 @@ const HospitalNetworkSection = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await fetch('https://healthtourism-5.onrender.com/api/hospitals/getall/hospitals');
+        const response = await fetch(`${BASE_URL}/api/hospitals/getall/hospitals`);
         if (!response.ok) {
           throw new Error('Failed to fetch hospitals');
         }
