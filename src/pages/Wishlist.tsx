@@ -117,10 +117,6 @@ const Wishlist: React.FC = () => {
           }
 
           const payload = {
-            userId: user.id,
-            paymentMode: item.paymentMode || 'ONLINE',
-            bookingType: item.bookingType || 'SINGLE',
-            remarks: item.remarks || item.notes || '',
             userName: user.name || 'User',
             userEmail: user.email || '',
             serviceType: item.serviceType,
