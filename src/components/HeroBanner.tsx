@@ -497,7 +497,7 @@ const HeroBanner = () => {
     <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
       <AspectRatio ratio={20 / 10.5}>
         <video
-          src="https://www.w3schools.com/html/mov_bbb.mp4"
+          src="video1.mp4"
           autoPlay
           muted
           loop

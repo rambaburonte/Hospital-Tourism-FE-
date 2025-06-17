@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface Location {
   locationId: number;
   city: string;
@@ -19,14 +19,14 @@ const SpaUploadPage: React.FC = () => {
     locationId: ''
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     fetchLocations();
   }, []);
 
   const fetchLocations = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/locations");
+      const response = await fetch(`${BASE_URL}/api/locations`);
       const data = await response.json();
       if (Array.isArray(data)) {
         setLocations(data);
@@ -64,7 +64,7 @@ const base_url="https://healthtourism-5.onrender.com"
     spaData.append('image', imageFile);
 
     try {
-      await axios.post('http://localhost:8080/spaCenter/upload', spaData, {
+      await axios.post(`${BASE_URL}/spaCenter/upload`, spaData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

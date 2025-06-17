@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface Doctor {
   id: number;
   name: string;
@@ -21,9 +21,9 @@ const DoctorList: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'rating'>('name');
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
-    axios.get('https://healthtourism-5.onrender.com/api/doctors')
+    axios.get(`${BASE_URL}/api/doctors`)
       .then(res => setDoctors(res.data))
       .catch(err => console.error(err));
   }, []);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface Location {
   locationId: number;
   city: string;
@@ -20,10 +20,10 @@ const UploadPhysio: React.FC = () => {
     price: "",
     locationId: "",
   });
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/locations")
+      .get(`${BASE_URL}/api/locations`)
       .then((response) => setLocations(response.data))
       .catch((error) => console.error("Error fetching locations", error));
   }, []);
@@ -41,7 +41,7 @@ const base_url="https://healthtourism-5.onrender.com"
     };
 
     axios
-      .post("http://localhost:8080/physio/save-Physio", payload)
+      .post(`${BASE_URL}/physio/save-Physio`, payload)
       .then(() => {
         alert("Physio uploaded successfully!");
         setFormData({

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Adjust path as needed
-
+import { BASE_URL } from '@/config/config';
 interface Physio {
   physioId: number;
   physioName: string;
@@ -15,9 +15,9 @@ interface Physio {
 const PhysioList: React.FC = () => {
   const [physios, setPhysios] = useState<Physio[]>([]);
   const [loading, setLoading] = useState(true);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
-    axios.get('http://localhost:8080/physio')
+    axios.get(`${BASE_URL}/physio`)
       .then(res => {
         const onlyPhysios = res.data.map((item: any) => ({
           physioId: item.physioId,

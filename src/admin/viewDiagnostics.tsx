@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface Diagnostic {
   diognosticsId: number;
   diognosticsName: string;
@@ -17,9 +17,8 @@ const DiagnosticsList: React.FC = () => {
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'rating'>('name');
   const navigate = useNavigate();
-const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
-    axios.get('http://localhost:8080/api/diagnostics')
+    axios.get(`${BASE_URL}/api/diagnostics`)
       .then(res => setDiagnostics(res.data))
       .catch(err => console.error(err));
   }, []);

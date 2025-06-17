@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface Spa {
   spaId: number;
   spaName: string;
@@ -17,9 +17,9 @@ const SpaCentersList: React.FC = () => {
   const [spas, setSpas] = useState<Spa[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
-    axios.get(`${base_url}/spaCenter/all`)
+    axios.get(`${BASE_URL}/spaCenter/all`)
       .then((res) => {
         setSpas(res.data);
         setLoading(false);

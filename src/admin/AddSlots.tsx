@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback } from "react";
 import axios from "axios";
-
+import { BASE_URL } from '@/config/config';
 interface SlotResponse {
   id: number;
   slots: string | null;
@@ -22,7 +22,7 @@ const AddSlots: React.FC = () => {
   const [responseSlots, setResponseSlots] = useState<SlotResponse[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-const base_url="https://healthtourism-5.onrender.com"
+
   // Validate slot time format and logic
   const isValidSlotTime = (start: string, end: string): boolean => {
     if (!start || !end) return false;
@@ -36,14 +36,16 @@ const base_url="https://healthtourism-5.onrender.com"
       .map((part, idx) => (idx < 2 ? parseInt(part) : part));
 
     // Adjust hours for AM/PM
-    const startHour24 = startPeriod === "PM" && startHours !== 12 ? startHours + 12 : startHours;
-    const endHour24 = endPeriod === "PM" && endHours !== 12 ? endHours + 12 : endHours;
+    const startHourNum = typeof startHours === "number" ? startHours : parseInt(startHours as string);
+    const endHourNum = typeof endHours === "number" ? endHours : parseInt(endHours as string);
+    const startHour24 = startPeriod === "PM" && startHourNum !== 12 ? startHourNum + 12 : startHourNum;
+    const endHour24 = endPeriod === "PM" && endHourNum !== 12 ? endHourNum + 12 : endHourNum;
 
     // Create Date objects for comparison
     const startDate = new Date();
-    startDate.setHours(startHour24, startMinutes, 0);
+    startDate.setHours(Number(startHour24), Number(startMinutes), 0);
     const endDate = new Date();
-    endDate.setHours(endHour24, endMinutes, 0);
+    endDate.setHours(Number(endHour24), Number(endMinutes), 0);
 
     // Ensure end time is after start time
     return endDate > startDate;
@@ -102,7 +104,7 @@ const base_url="https://healthtourism-5.onrender.com"
 
     try {
       const res = await axios.post<SlotResponse[]>(
-        "https://healthtourism-5.onrender.com/api/services/slots/add",
+        `${BASE_URL}/api/services/slots/add`,
         {
           serviceType,
           serviceId,

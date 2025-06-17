@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '@/admin/sidebar';
 import { Country, State, City } from 'country-state-city';
-
+import { BASE_URL } from '@/config/config';
 interface Option {
   name: string;
   isoCode: string;
@@ -14,7 +14,7 @@ export default function LocationUploadPage() {
     state: '',
     city: '',
   });
-const base_url="https://healthtourism-5.onrender.com"
+
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [selectedStateCode, setSelectedStateCode] = useState('');
   const [countries, setCountries] = useState<Option[]>([]);
@@ -63,7 +63,7 @@ const base_url="https://healthtourism-5.onrender.com"
     }
 
     try {
-      await axios.post('https://healthtourism-5.onrender.com/api/locations', formData);
+      await axios.post(`${BASE_URL}/api/locations`, formData);
       setMessage('Location uploaded successfully!');
       setFormData({ country: '', state: '', city: '' });
       setStates([]);
