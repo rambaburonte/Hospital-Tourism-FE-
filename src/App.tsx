@@ -79,6 +79,7 @@ import ViewLocations from './admin/viewLocations';
 import ViewUsers from './admin/viewUsers';
 import Users from './components/userspage/GetAllUsers';
 import DoctorDetails from './admin/doctordetails';
+import AllOrders from './admin/AllOrders';
  // Corrected import name (PascalCase)
 import UpdateAllSubAdmin from './admin/subadminloginregister/alldetalupdatesubadmin';
 // Utility Components
@@ -214,6 +215,8 @@ const App: React.FC = () => (
             <Route path="/admin/ChefList" element={<ChefList/>} />
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
             <Route path="/update-chef/:chefID" element={<UpdateChef />} />
+            <Route path="/admin/AllOrders" element={<AllOrders/>}/>
+
             {/* User Routes */}
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
