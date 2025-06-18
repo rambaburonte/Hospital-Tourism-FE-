@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface LocationOption {
   label: string;
   value: number;
@@ -24,7 +24,7 @@ const UploadDiagnostics: React.FC = () => {
   useEffect(() => {
     fetchLocations();
   }, []);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(''), 3000);
@@ -34,7 +34,7 @@ const base_url="https://healthtourism-5.onrender.com"
 
   const fetchLocations = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/locations');
+      const res = await axios.get(`${BASE_URL}/api/locations`);
       const data = res.data;
       const formatted = data.map((loc: any) => ({
         value: loc.locationId,
@@ -60,7 +60,7 @@ const base_url="https://healthtourism-5.onrender.com"
     const fullAddress = `${selectedLocation.city},${customAddress}`.toUpperCase();
 
     try {
-      const res = await axios.post('http://localhost:8080/api/diagnostics/add', {
+      const res = await axios.post(`${BASE_URL}/api/diagnostics/add`, {
         diognosticsName: name,
         diognosticsDescription: description,
         diognosticsImage: image,

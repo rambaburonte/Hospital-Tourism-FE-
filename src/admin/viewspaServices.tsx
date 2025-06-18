@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Adjust the path as needed
-
+import { BASE_URL } from '@/config/config';
 interface SpaService {
   serviceName: string;
   serviceDescription: string;
@@ -15,11 +15,11 @@ const SpaServicesPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [services, setServices] = useState<SpaService[]>([]);
   const [loading, setLoading] = useState(true);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     if (id) {
       axios
-        .get(`${base_url}/spaServices/bySpaCenter/${id}`)
+        .get(`${BASE_URL}/spaServices/bySpaCenter/${id}`)
         .then((res) => {
           setServices(res.data);
           setLoading(false);

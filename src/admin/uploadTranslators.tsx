@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface LocationOption {
   label: string;
   value: number;
@@ -21,14 +21,14 @@ const UploadTranslators: React.FC = () => {
   const [rating, setRating] = useState('');
   const [languages, setLanguages] = useState('');
   const [message, setMessage] = useState('');
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     fetchLocations();
   }, []);
 
   const fetchLocations = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/locations');
+      const res = await axios.get(`${BASE_URL}/api/locations`);
       const formatted = res.data.map((loc: any) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,

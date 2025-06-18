@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Adjust import path if needed
-
+import { BASE_URL } from '@/config/config';
 interface Location {
   locationId: number;
   city: string;
@@ -12,9 +12,9 @@ interface Location {
 const LocationsPage: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
-    axios.get('http://localhost:8080/api/locations')
+    axios.get(`${BASE_URL}/api/locations`)
       .then((res) => {
         setLocations(res.data);
         setLoading(false);

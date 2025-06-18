@@ -5,7 +5,7 @@ import { ClipLoader } from 'react-spinners';
 import { X, Menu } from 'lucide-react';
 import Sidebar from './sidebar';
 import { useNavigate } from "react-router-dom";
-
+import { BASE_URL } from '@/config/config';
 // Debounce utility
 const debounce = (func, delay) => {
   let timeout;
@@ -39,7 +39,6 @@ const DoctorsList = () => {
   const [searchRating, setSearchRating] = useState('');
 
   const debouncedSetSearchQuery = useCallback(debounce(setSearchQuery, 300), []);
-const base_url="https://healthtourism-5.onrender.com"
   const searchOptions = {
     name: [...new Set(doctors.map((d) => d.specialty))],
     location: [...new Set(doctors.map((d) => d.location))],
@@ -49,7 +48,7 @@ const base_url="https://healthtourism-5.onrender.com"
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/doctors')
+    fetch(`${BASE_URL}/api/doctors`)
       .then((res) => res.json())
       .then((data) => {
         setDoctors(data);

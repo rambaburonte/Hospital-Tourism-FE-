@@ -40,6 +40,7 @@ import SpaServiceDetailsPage from './pages/spaservice';
 import BookingPage from './components/bookingsingleservice';
 import BookingCart from './pages/BookingCart';
 import Wishlist from './pages/Wishlist';
+import MyOrders from './pages/MyOrders';
 
 
 
@@ -160,7 +161,7 @@ const App: React.FC = () => (
             <Route path="/subadminlogin" element={<SubadmLoginForm />} />
             <Route path="/patientlist" element={<Users />} />
             <Route path="/bookingfom" element={<BookingForm/>}/>
-            
+            <Route path='usercart' element={<UserCart/>}/>
             <Route path="/wishlist" element={<Wishlist />} />
 
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
@@ -171,6 +172,9 @@ const App: React.FC = () => (
 
             <Route path="/tests" element={<DiagnosticsList />} />
             <Route path="/bookingcart" element={<BookingCart/>}/>
+            <Route path="/MyOrders" element={<MyOrders/>}/>
+
+
 
             {/* Admin Routes */}
             <Route path="/admin/slots"element={<AddSlots/>}/>

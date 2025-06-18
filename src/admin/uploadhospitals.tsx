@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 const UploadHospitals: React.FC = () => {
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<LocationOption | null>(null);
@@ -13,7 +13,7 @@ const UploadHospitals: React.FC = () => {
   const [hospitalAddress, setHospitalAddress] = useState('');
 
   const [message, setMessage] = useState('');
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     fetchLocations();
   }, []);
@@ -27,7 +27,7 @@ const base_url="https://healthtourism-5.onrender.com"
 
   const fetchLocations = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/locations');
+      const res = await axios.get(`${BASE_URL}/api/locations`);
       const formatted = res.data.map((loc: any) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,
@@ -55,7 +55,7 @@ const base_url="https://healthtourism-5.onrender.com"
     formData.append('image', imageFile);
 
     try {
-      const res = await axios.post('http://localhost:9090/api/hospitals/add', formData, {
+      const res = await axios.post(`${BASE_URL}/api/hospitals/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface DiagnosticsOption {
   label: string;
   value: number;
@@ -18,14 +18,14 @@ const UploadLabTests: React.FC = () => {
   const [department, setDepartment] = useState('');
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     fetchDiagnostics();
   }, []);
 
   const fetchDiagnostics = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/diagnostics');
+      const res = await axios.get(`${BASE_URL}/api/diagnostics`);
       const formatted = res.data.map((d: any) => ({
         value: d.diognosticsId,
         label: d.diognosticsName,
@@ -45,7 +45,7 @@ const base_url="https://healthtourism-5.onrender.com"
     }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/labtests/add', {
+      const res = await axios.post(`${BASE_URL}/api/labtests/add`, {
         testTitle: title,
         testDescription: description,
         testPrice: parseFloat(price),

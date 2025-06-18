@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '../config/config';
 interface Hospital {
   hospitalId: number;
   hositalName: string; // matches backend field
@@ -27,11 +27,11 @@ const UploadDoctors: React.FC = () => {
   const [department, setDepartment] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/hospitals');
+        const res = await axios.get(`${BASE_URL}/api/hospitals/getall/hospitals`);
         const options = res.data.map((hospital: Hospital) => ({
           value: hospital.hospitalId,
           label: `${hospital.hositalName} (${hospital.address})`,
@@ -90,7 +90,7 @@ const base_url="https://healthtourism-5.onrender.com"
     formData.append('image', imageFile);
 
     try {
-      const res = await axios.post('http://localhost:8080/api/doctorsupload', formData, {
+      const res = await axios.post(`${BASE_URL}/api/doctorsupload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

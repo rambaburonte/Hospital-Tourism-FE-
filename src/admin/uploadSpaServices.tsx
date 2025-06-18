@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface SpaCenter {
   spaId: number;
   spaName: string;
@@ -25,11 +25,11 @@ const UploadSpaService: React.FC = () => {
   const [price, setPrice] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     const fetchSpaCenters = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/spaCenter/all');
+        const res = await axios.get(`${BASE_URL}/spaCenter/all`);
         const options = res.data.map((spa: SpaCenter) => ({
           value: spa.spaId,
           label: `${spa.spaName} (${spa.address || 'No address'})`,
@@ -71,7 +71,7 @@ const base_url="https://healthtourism-5.onrender.com"
       formData.append('spaCenterId', selectedSpa.value.toString());
       formData.append('image', imageFile);
 
-      const res = await axios.post('http://localhost:8080/spaServices/upload', formData, {
+      const res = await axios.post(`${BASE_URL}/spaServices/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

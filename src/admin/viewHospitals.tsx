@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "./sidebar";
-
+import { BASE_URL } from '@/config/config';
 interface Hospital {
   hospitalId: number;
   hositalName: string;
@@ -18,10 +18,10 @@ const HospitalList: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [locationFilter, setLocationFilter] = useState<string>("all");
   const navigate = useNavigate();
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/hospitals")
+      .get(`${BASE_URL}/api/hospitals`)
       .then((res) => {
         setHospitals(res.data);
         setLoading(false);

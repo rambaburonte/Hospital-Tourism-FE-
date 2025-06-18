@@ -9,7 +9,9 @@ const BookingPage = () => {
 
   // ✅ Get logged-in user from localStorage
   const userData = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = userData?.userId || 1; // Default to 1 if not found
+  console.log('BookingPage: Raw userData from localStorage:', userData);
+  const userId = userData?.id || userData?.userId; // Prioritize 'id', then 'userId'
+  console.log('BookingPage: Assigned userId:', userId);
 
   const [formData, setFormData] = useState({
     bookingStartTime: "",
@@ -17,7 +19,7 @@ const BookingPage = () => {
     paymentMode: "ONLINE",
     bookingType: "SINGLE",
     bookingAmount: 0,
-    remarks: "",
+    additionalRemarks: "",
   });
 
   const [basePrice, setBasePrice] = useState(0);
@@ -25,6 +27,7 @@ const BookingPage = () => {
   const [serviceName, setServiceName] = useState("");
   const [specialty, setSpecialty] = useState(""); // New state for specialty
   const [serviceDetails, setServiceDetails] = useState<any>(null); // New state for full service details
+  const [endTimeError, setEndTimeError] = useState<string | null>(null); // New state for end time error
 
   const serviceApiMap = {
     chef: `/api/chefs/chef-By/Id/${id}`,
@@ -127,10 +130,24 @@ const BookingPage = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => {
+      const newFormData = {
+        ...prev,
+        [name]: value,
+      };
+
+      if (name === "bookingEndTime" || name === "bookingStartTime") {
+        const startTime = new Date(newFormData.bookingStartTime);
+        const endTime = new Date(newFormData.bookingEndTime);
+
+        if (newFormData.bookingStartTime && newFormData.bookingEndTime && endTime < startTime) {
+          setEndTimeError("End time cannot be before start time");
+        } else {
+          setEndTimeError(null);
+        }
+      }
+      return newFormData;
+    });
   };
 
   const handleAddToCart = async (e) => {
@@ -149,7 +166,7 @@ const BookingPage = () => {
       paymentMode: formData.paymentMode,
       bookingType: formData.bookingType,
       bookingAmount: formData.bookingAmount,
-      remarks: formData.remarks,
+      additionalRemarks: formData.additionalRemarks,
       [serviceIdField]: parseInt(id), // e.g., chefId, doctorId, etc.
     };
 
@@ -162,7 +179,7 @@ const BookingPage = () => {
       );
       setMessage("✅ Added to cart successfully!");
       setTimeout(() => {
-        navigate("/bookingcart", { replace: true }); // Navigate to cart after success
+        navigate("/", { state: { scrollToAppointment: true }, replace: true }); // Navigate to home page and indicate scrolling to appointment section
       }, 2000);
     } catch (error) {
       console.error("Error adding to cart", error);
@@ -217,6 +234,7 @@ const BookingPage = () => {
 
         <div>
           <label htmlFor="bookingEndTime" className="block text-sm font-medium text-gray-700">End Time</label>
+          {endTimeError && <p className="text-red-500 text-xs mt-1">{endTimeError}</p>}
           <input
             type="datetime-local"
             name="bookingEndTime"
@@ -229,11 +247,11 @@ const BookingPage = () => {
         </div>
 
         <div>
-          <label htmlFor="remarks" className="block text-sm font-medium text-gray-700">Remarks (optional)</label>
+          <label htmlFor="additionalRemarks" className="block text-sm font-medium text-gray-700">Remarks (optional)</label>
           <textarea
-            name="remarks"
-            id="remarks"
-            value={formData.remarks}
+            name="additionalRemarks"
+            id="additionalRemarks"
+            value={formData.additionalRemarks}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-200 hover:border-blue-500 hover:shadow-md"
             placeholder="Any special requests or notes"
@@ -242,7 +260,29 @@ const BookingPage = () => {
 
         <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-3 rounded">
           <p className="font-semibold">Estimated Total: ₹{formData.bookingAmount.toFixed(2)}</p>
-          {basePrice > 0 && formData.bookingStartTime && formData.bookingEndTime && serviceType !== "doctor" && (
+          {formData.bookingStartTime && formData.bookingEndTime && (
+            <p className="text-sm">
+              Duration: {(() => {
+                const start = new Date(formData.bookingStartTime);
+                const end = new Date(formData.bookingEndTime);
+                const diffMs = end.getTime() - start.getTime();
+                
+                if (diffMs <= 0) return "Invalid duration";
+
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                let durationText = [];
+                if (diffDays > 0) durationText.push(`${diffDays} day${diffDays > 1 ? 's' : ''}`);
+                if (diffHours > 0) durationText.push(`${diffHours} hour${diffHours > 1 ? 's' : ''}`);
+                if (diffMinutes > 0) durationText.push(`${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`);
+                
+                return durationText.join(', ') || 'Less than a minute';
+              })()}
+            </p>
+          )}
+          {basePrice > 0 && serviceType !== "doctor" && (
             <p className="text-sm">Daily Rate: ₹{basePrice} (10% off for additional days)</p>
           )}
         </div>

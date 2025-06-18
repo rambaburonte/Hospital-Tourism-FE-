@@ -70,7 +70,7 @@ body::before {
     --foreground: 0 0% 98%; /* Light text */
 
     --card: 222.2 84% 4.9%;
-    --card-foreground:  B0 0% 98%;
+    --card-foreground: 0 0% 98%;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 0 0% 98%;
@@ -139,4 +139,27 @@ body::before {
 
 .max-healthcare-bg-light-teal {
   background-color: #e6f4e0;
+}
+
+/* Healthcare heading style from the image */
+@layer utilities {
+  .healthcare-heading {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700; /* Bold */
+    font-size: 5rem; /* 80px, matching the large size in the image */
+    line-height: 1.1; /* Tight line spacing */
+    color: hsl(var(--foreground)); /* Matches your theme's dark gray in light mode */
+    text-align: left;
+  }
+
+  /* Optional: For the emphasized word (like "Global") */
+  .healthcare-heading-emphasis {
+    font-size: 5.5rem; /* Slightly larger, like "Global" in the image */
+  }
+
+  /* For smaller words like "and" */
+  .healthcare-heading-small {
+    font-size: 4rem; /* Slightly smaller */
+    text-transform: lowercase;
+  }
 }
