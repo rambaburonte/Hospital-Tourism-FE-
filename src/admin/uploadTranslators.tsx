@@ -79,7 +79,7 @@ formData.append("image", imageFile);
         image: imageFile.name,
       });
 
-      const res = await axios.post('http://localhost:8080/api/translators/add', formData, {
+      const res = await axios.post('${BASE_URL}/api/translators/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { BASE_URL } from '@/config/config';
 interface Chef {
   chefID: number;
   chefName: string;
@@ -22,7 +22,7 @@ const ChefsList: React.FC = () => {
   useEffect(() => {
     const fetchChefs = async () => {
       try {
-        const response = await fetch('http://localhost:9090/api/chefs');
+        const response = await fetch(`${BASE_URL}/api/chefs`);
         const data = await response.json();
         setChefs(data);
       } catch (error) {

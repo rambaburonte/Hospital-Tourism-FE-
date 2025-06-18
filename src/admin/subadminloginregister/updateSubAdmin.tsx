@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Sidebar from '../sidebar';
+import { BASE_URL } from '@/config/config';
 // Define the type for the form data
 interface SubAdminData {
     adminId: number;
@@ -21,7 +22,7 @@ const UpdateSubAdminForm: React.FC = () => {
         employeeId: "EMP124",
         permissions: ["Add Doctor"]
     });
-const base_url="https://healthtourism-5.onrender.com"
+
     // State for selected permission in dropdown
     const [selectedPermission, setSelectedPermission] = useState<string>("Add Doctor");
 
@@ -44,7 +45,7 @@ const base_url="https://healthtourism-5.onrender.com"
     // Handle save button click
     const handleSave = async () => {
         try {
-            const response = await axios.put("https://healthtourism-5.onrender.com/admin/update-subadmin", formData);
+            const response = await axios.put(`${BASE_URL}/admin/update-subadmin`, formData);
             alert("Sub-Admin updated successfully!");
             console.log(response.data);
         } catch (error: any) {

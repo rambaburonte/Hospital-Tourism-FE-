@@ -71,7 +71,7 @@
 //     setLoading(true);
 
 //     try {
-//       const response = await axios.post<LoginResponse>('http://localhost:8080/admin/login', {
+//       const response = await axios.post<LoginResponse>('${BASE_URL}/admin/login', {
 //         adminEmail: email,
 //         adminPassword: password,
 //       });
@@ -325,7 +325,7 @@
 //     setLoading(true);
 
 //     try {
-//       const response = await axios.post('http://localhost:8080/admin/login', {
+//       const response = await axios.post('${BASE_URL}/admin/login', {
 //         adminEmail: email,
 //         adminPassword: password,
 //       });
@@ -478,7 +478,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
-
+import { BASE_URL } from '@/config/config';
 interface LoginResponse {
   adminId: number;
   adminName: string;
@@ -576,7 +576,7 @@ const SubadmLoginForm: React.FC = () => {
         navigate('/admin/admindashboard');
       } else {
         // Regular admin/sub-admin login
-        const response = await axios.post('http://localhost:8080/admin/login', {
+        const response = await axios.post(`${BASE_URL}/admin/login`, {
           adminEmail: email,
           adminPassword: password,
         });

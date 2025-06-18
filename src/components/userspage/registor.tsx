@@ -57,7 +57,7 @@
 //     };
 
 //     try {
-//       const response = await fetch('http://localhost:8080/user/register', {
+//       const response = await fetch('${BASE_URL}/user/register', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -493,7 +493,7 @@ export default function RegisterPage() {
 //     };
 
 //     try {
-//       const response = await fetch('http://localhost:8080/user/register', {
+//       const response = await fetch('${BASE_URL}/user/register', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',

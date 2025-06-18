@@ -1,5 +1,5 @@
  import React, { useState, useEffect } from 'react';
-
+import { BASE_URL } from '@/config/config';
 // Define the User interface based on API response
 interface User {
   id: number;
@@ -27,7 +27,7 @@ const Users: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8080/user/get-all-users');
+        const response = await fetch(`${BASE_URL}/user/get-all-users`);
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }
