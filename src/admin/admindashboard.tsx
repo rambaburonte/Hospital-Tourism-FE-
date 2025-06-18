@@ -347,6 +347,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './sidebar';
+import { BASE_URL } from '@/config/config';
 
 // Placeholder component
 const PlaceholderContent: React.FC<{ title: string }> = ({ title }) => (
@@ -418,15 +419,15 @@ const DashboardContent: React.FC = () => {
       }
     };
 
-    fetchData('http://localhost:9090/user/get-all-users', setTotalUsers);
-    fetchData('http://localhost:9090/admin/get-all-subadmins', setTotalSubAdmins);
-    fetchData('http://localhost:9090/api/doctors', setTotalDoctors);
-    fetchData('http://localhost:9090/api/hospitals/getall/hospitals', setTotalHospitals);
-    fetchData('http://localhost:9090/api/diagnostics', setTotalDiagnostics);
-    fetchData('http://localhost:9090/api/chefs', setTotalChefs);
-    fetchData('http://localhost:9090/physio/getall/pysios', setTotalPhysios);
-    fetchData('http://localhost:9090/api/translators/getAll/traslators', setTotalTranslators);
-    fetchData('http://localhost:9090/spaServices/getAll/spaServices', setTotalSpaServices);
+    fetchData(`${BASE_URL}/user/get-all-users`, setTotalUsers);
+    fetchData(`${BASE_URL}/admin/get-all-subadmins`, setTotalSubAdmins);
+    fetchData(`${BASE_URL}/api/doctors`, setTotalDoctors);
+    fetchData(`${BASE_URL}/api/hospitals/getall/hospitals`, setTotalHospitals);
+    fetchData(`${BASE_URL}/api/diagnostics`, setTotalDiagnostics);
+    fetchData(`${BASE_URL}/api/chefs`, setTotalChefs);
+    fetchData(`${BASE_URL}/physio/getall/pysios`, setTotalPhysios);
+    fetchData(`${BASE_URL}/api/translators/getAll/traslators`, setTotalTranslators);
+    fetchData(`${BASE_URL}/spaServices/getAll/spaServices`, setTotalSpaServices);
   }, []);
 
   const handleLogout = () => {

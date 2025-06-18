@@ -130,7 +130,7 @@ const Sidebar: React.FC = () => {
       ],
     },
     { name: 'BusinessLocation', icon: 'fas fa-map-marker-alt', path: '/admin/businessLocations' },
-    { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/orders' },
+    { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/settings' },
   ];
 

@@ -68,7 +68,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get(`http://localhost:8080/admin/get-subadmin/${adminId}`)
+//       .get(`${BASE_URL}/admin/get-subadmin/${adminId}`)
 //       .then((response) => {
 //         const admin = response.data;
 //         setFormData({
@@ -190,7 +190,7 @@
 //         status: formData.status,
 //         ...(formData.adminPassword && { adminPassword: formData.adminPassword }),
 //       };
-//       await axios.put(`http://localhost:8080/admin/update-subadmin/${adminId}`, updateData);
+//       await axios.put(`${BASE_URL}/admin/update-subadmin/${adminId}`, updateData);
 //       toast.success('Sub-Admin updated successfully!');
 //       setTimeout(() => navigate('/admin/admindashboard'), 1500);
 //     } catch (error: any) {
@@ -424,7 +424,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Sidebar from '../sidebar';
-
+import { BASE_URL } from '@/config/config';
 const permissionCategories = [
   { name: 'Doctors', permissions: ['Add Doctor', 'Edit Doctor', 'View Doctors', 'Delete Doctor', 'Download Doctors'] },
   { name: 'Hospitals', permissions: ['Add Hospital', 'Edit Hospital', 'View Hospitals', 'Delete Hospital', 'Download Hospitals'] },
@@ -468,7 +468,7 @@ const UpdateAllSubAdmin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/admin/get-subadmin/${adminId}`)
+      .get(`${BASE_URL}/admin/get-subadmin/${adminId}`)
       .then((res) => {
         const admin = res.data;
         setFormData({
@@ -561,7 +561,7 @@ const UpdateAllSubAdmin = () => {
         status: formData.status,
         ...(formData.adminPassword && { adminPassword: formData.adminPassword }),
       };
-      await axios.put(`http://localhost:8080/admin/update-subadmin/${adminId}`, updateData);
+      await axios.put(`${BASE_URL}/admin/update-subadmin/${adminId}`, updateData);
       toast.success('Sub-Admin updated!');
       setTimeout(() => navigate('/admin/admindashboard'), 1500);
     } catch (err: any) {

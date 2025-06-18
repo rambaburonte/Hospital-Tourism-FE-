@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Star } from 'lucide-react';
-
+import { BASE_URL } from '@/config/config';
 type ServiceType = 'chef' | 'labtest' | 'doctor' | 'spa' | 'translator' | 'physio' | 'hospital' | 'hotel' | 'travel' | 'pharmacy';
 
 interface OrderItem {
@@ -205,7 +205,7 @@ const MyOrders: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`http://localhost:9090/api/AddToCart/user-successful/${user?.id}`, {
+      const response = await axios.get(`${BASE_URL}/api/AddToCart/user-successful/${user?.id}`, {
         headers: { 'Content-Type': 'application/json' },
       });
 

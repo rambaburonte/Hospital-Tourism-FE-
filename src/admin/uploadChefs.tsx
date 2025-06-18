@@ -28,7 +28,7 @@
 
 //   const fetchLocations = async () => {
 //     try {
-//       const res = await axios.get('http://localhost:8080/api/locations');
+//       const res = await axios.get('${BASE_URL}/api/locations');
 //       const formatted = res.data.map((loc: any) => ({
 //         value: loc.locationId,
 //         label: `${loc.city}, ${loc.state}, ${loc.country}`,
@@ -47,7 +47,7 @@
 //     }
 
 //     try {
-//       const res = await axios.post('http://localhost:8080/api/chefs/add', {
+//       const res = await axios.post('${BASE_URL}/api/chefs/add', {
 //         chefName: name,
 //         chefDescription: description,
 //         chefImage: image,

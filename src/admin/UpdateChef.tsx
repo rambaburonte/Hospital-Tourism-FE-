@@ -34,7 +34,7 @@
 //   const [showSlotsModal, setShowSlotsModal] = useState<boolean>(false);
 //   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 // //const base_url = 'https://healthtourism-5.onrender.com/api/chefs';
-// const base_url= 'http://localhost:8080';
+// const base_url= '${BASE_URL}';
 //   useEffect(() => {
 //     const fetchChef = async () => {
 //       try {

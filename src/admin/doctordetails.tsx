@@ -56,7 +56,7 @@
 //     const fetchDoctor = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await axios.get<Doctor>(`http://localhost:8080/api/doctors/${id}`);
+//         const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
 //         const doc = response.data;
 //         const mappedDoctor: DisplayDoctor = {
 //           id: doc.id,
@@ -307,7 +307,7 @@
 //     const fetchDoctor = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await axios.get<Doctor>(`http://localhost:8080/api/doctors/${id}`);
+//         const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
 //         const doc = response.data;
 //         const mappedDoctor: DisplayDoctor = {
 //           id: doc.id,
@@ -340,11 +340,11 @@
 //   const handleStatusChange = async (status: string) => {
 //     try {
 //       if (status === 'active') {
-//         await axios.put(`http://localhost:8080/api/restore/${id}`);
+//         await axios.put(`${BASE_URL}/api/restore/${id}`);
 //         setIsActive(true);
 //         setActionMessage('Doctor activated successfully');
 //       } else {
-//         await axios.delete(`http://localhost:8080/api/soft-delete/${id}`);
+//         await axios.delete(`${BASE_URL}/api/soft-delete/${id}`);
 //         setIsActive(false);
 //         setActionMessage('Doctor deactivated successfully');
 //       }
@@ -603,7 +603,7 @@
 //     const fetchDoctor = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await axios.get<Doctor>(`http://localhost:8080/api/doctors/${id}`);
+//         const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
 //         const doc = response.data;
 //         const mappedDoctor: DisplayDoctor = {
 //           id: doc.id,
@@ -634,14 +634,14 @@
 //   const handleStatusChange = async (status: string) => {
 //     try {
 //       if (status === 'active') {
-//         await axios.put(`http://localhost:8080/api/restore/${id}`);
+//         await axios.put(`${BASE_URL}/api/restore/${id}`);
 //         setIsActive(true);
 //         setActionMessage('Doctor activated successfully');
 //         if (doctor) {
 //           setDoctor({ ...doctor, status: 'active' });
 //         }
 //       } else {
-//         await axios.delete(`http://localhost:8080/api/soft-delete/${id}`);
+//         await axios.delete(`${BASE_URL}/api/soft-delete/${id}`);
 //         setIsActive(false);
 //         setActionMessage('Doctor deactivated successfully');
 //         if (doctor) {
