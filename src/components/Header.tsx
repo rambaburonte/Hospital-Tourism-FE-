@@ -142,11 +142,10 @@ const Header: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home' },
     { to: '/specialities', label: 'Specialties' },
-    { to: '/doctors', label: 'Doctors' },
+   
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
-    { to: '/medicinecatalog', label: 'Pharmacy' },
-    { to: '/HospitalList', label: 'Hospitals' },
+    
   ];
 
   const handleRedirect = () => {
