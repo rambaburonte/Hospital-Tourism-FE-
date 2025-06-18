@@ -504,9 +504,7 @@ interface Order {
 }
 
 const TABS = [
-  { label: 'Basic Information', key: 'basic' },
-  { label: 'Orders', key: 'orders' },
-  { label: 'Address', key: 'address' },
+  { label: 'Orders', key: 'orders' }
 ];
 
 const ORDERS_PER_PAGE = 12;
@@ -692,7 +690,13 @@ const AllOrders: React.FC = () => {
   };
 
   // Pagination logic
-  const filteredOrders = orders.filter((order) =>
+  // Sort orders by bookingDate descending (latest first)
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = new Date(a.bookingDate || a.date).getTime();
+    const dateB = new Date(b.bookingDate || b.date).getTime();
+    return dateB - dateA;
+  });
+  const filteredOrders = sortedOrders.filter((order) =>
     selectedTab === 'All' ? true : order.status === selectedTab
   );
   const totalPages = Math.ceil(filteredOrders.length / ORDERS_PER_PAGE);
@@ -710,7 +714,7 @@ const AllOrders: React.FC = () => {
         {/* Back Arrow */}
         <button
           className="mb-4 flex items-center text-blue-600 hover:text-blue-800 text-base font-medium"
-          onClick={() => navigate('/admin')}
+          onClick={() => navigate('/admin/admindashboard')}
         >
           <ChevronLeft className="w-5 h-5 mr-1" /> Back to Dashboard
         </button>
@@ -739,7 +743,7 @@ const AllOrders: React.FC = () => {
 
         {/* Order Status Tabs */}
         <div className="flex space-x-2 mb-4">
-          {['All', 'Completed', 'InProgress', 'Pending', 'Cancelled', 'New'].map((tab) => (
+          {['All'].map((tab) => (
             <button
               key={tab}
               className={`py-1 px-3 rounded-md text-xs font-medium border transition-colors duration-200 ${

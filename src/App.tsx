@@ -97,6 +97,7 @@ import BookingForm from './admin/Booking';
 import ChefList from './admin/viewchefs';
 import UpdateChef from './admin/UpdateChef';
 import AddSlots from './admin/AddSlots';
+import MedicalRecords from './components/userspage/MedicalRecords';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -219,6 +220,7 @@ const App: React.FC = () => (
 
             {/* User Routes */}
             {/* 404 Route */}
+            <Route path="/medical-records" element={<MedicalRecords />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
