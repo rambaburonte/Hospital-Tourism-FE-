@@ -404,6 +404,12 @@
 
 
 
+
+
+
+
+
+
 import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
@@ -494,7 +500,7 @@ const HeroBanner = () => {
       </AspectRatio>
     </div>
     {/* Video Section */}
-    {/* <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
+    <div className="relative h-full w-full rounded-xl overflow-hidden shadow-lg">
       <AspectRatio ratio={20 / 10.5}>
         <video
           src="video1.mp4"
@@ -505,7 +511,7 @@ const HeroBanner = () => {
           className="w-full h-full object-cover rounded-xl shadow-lg border border-gray-200"
         />
       </AspectRatio>
-    </div> */}
+    </div>
   </div>
 </section>
   );
