@@ -52,7 +52,8 @@ export default function Login() {
       window.dispatchEvent(storageEvent);
 
       // Redirect to dashboard
-      navigate("/dashboard");
+      // navigate("/dashboard");
+      navigate("/", { state: { scrollToHero: true }, replace: true });
     } catch (err: any) {
       setError(err.message || "Login failed");
     }
