@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Adjust path based on your project structure
-
+import { BASE_URL } from '@/config/config';
 interface User {
   id: number;
   name?: string;
@@ -17,9 +17,9 @@ interface User {
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
-    axios.get('https://healthtourism-5.onrender.com/user')
+    axios.get(`${BASE_URL}/user`)
       .then(res => {
         setUsers(res.data);
         setLoading(false);

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+// import { BASE_URL } from '@/config/config';
 import Sidebar from '../sidebar';
 // Permission categories and their actions
 const permissionCategories = [
@@ -199,7 +200,7 @@ const SubAdminRegister = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:8080/admin/register', formData);
+      const response = await axios.post('${BASE_URL}/admin/register', formData);
       toast.success(response.data.message || 'Sub-Admin registered successfully!');
       setFormData({
         adminName: '',

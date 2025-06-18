@@ -56,7 +56,7 @@
 //     const fetchDoctor = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await axios.get<Doctor>(`http://localhost:8080/api/doctors/${id}`);
+//         const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
 //         const doc = response.data;
 //         const mappedDoctor: DisplayDoctor = {
 //           id: doc.id,
@@ -307,7 +307,7 @@
 //     const fetchDoctor = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await axios.get<Doctor>(`http://localhost:8080/api/doctors/${id}`);
+//         const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
 //         const doc = response.data;
 //         const mappedDoctor: DisplayDoctor = {
 //           id: doc.id,
@@ -340,11 +340,11 @@
 //   const handleStatusChange = async (status: string) => {
 //     try {
 //       if (status === 'active') {
-//         await axios.put(`http://localhost:8080/api/restore/${id}`);
+//         await axios.put(`${BASE_URL}/api/restore/${id}`);
 //         setIsActive(true);
 //         setActionMessage('Doctor activated successfully');
 //       } else {
-//         await axios.delete(`http://localhost:8080/api/soft-delete/${id}`);
+//         await axios.delete(`${BASE_URL}/api/soft-delete/${id}`);
 //         setIsActive(false);
 //         setActionMessage('Doctor deactivated successfully');
 //       }
@@ -603,7 +603,7 @@
 //     const fetchDoctor = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await axios.get<Doctor>(`http://localhost:8080/api/doctors/${id}`);
+//         const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
 //         const doc = response.data;
 //         const mappedDoctor: DisplayDoctor = {
 //           id: doc.id,
@@ -634,14 +634,14 @@
 //   const handleStatusChange = async (status: string) => {
 //     try {
 //       if (status === 'active') {
-//         await axios.put(`http://localhost:8080/api/restore/${id}`);
+//         await axios.put(`${BASE_URL}/api/restore/${id}`);
 //         setIsActive(true);
 //         setActionMessage('Doctor activated successfully');
 //         if (doctor) {
 //           setDoctor({ ...doctor, status: 'active' });
 //         }
 //       } else {
-//         await axios.delete(`http://localhost:8080/api/soft-delete/${id}`);
+//         await axios.delete(`${BASE_URL}/api/soft-delete/${id}`);
 //         setIsActive(false);
 //         setActionMessage('Doctor deactivated successfully');
 //         if (doctor) {
@@ -843,13 +843,17 @@
 
 // export default DoctorDetails;
 
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '@/admin/sidebar';
 import { ClipLoader } from 'react-spinners';
 import { Menu, X } from 'lucide-react';
-
+import { BASE_URL } from '@/config/config';
 interface Doctor {
   id: number;
   name: string;
@@ -898,13 +902,13 @@ const DoctorDetails: React.FC = () => {
     hospitalName: '',
   });
   const [updateMessage, setUpdateMessage] = useState<string | null>(null);
-const base_url="https://healthtourism-5.onrender.com"
+
   // Fetch doctor details
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get<Doctor>(`https://healthtourism-5.onrender.com/api/doctors/${id}`);
+        const response = await axios.get<Doctor>(`${BASE_URL}/api/doctors/${id}`);
         const doc = response.data;
         const mappedDoctor: DisplayDoctor = {
           id: doc.id,
@@ -946,14 +950,14 @@ const base_url="https://healthtourism-5.onrender.com"
   const handleStatusChange = async (status: string) => {
     try {
       if (status === 'active') {
-        await axios.put(`https://healthtourism-5.onrender.com/api/restore/${id}`);
+        await axios.put(`${BASE_URL}/api/restore/${id}`);
         setIsActive(true);
         setActionMessage('Doctor activated successfully');
         if (doctor) {
           setDoctor({ ...doctor, status: 'active' });
         }
       } else {
-        await axios.delete(`https://healthtourism-5.onrender.com/api/soft-delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/soft-delete/${id}`);
         setIsActive(false);
         setActionMessage('Doctor deactivated successfully');
         if (doctor) {
@@ -990,7 +994,7 @@ const base_url="https://healthtourism-5.onrender.com"
         hospitalId: formData.hospitalId,
         hospitalName: formData.hospitalName,
       };
-      const response = await axios.put<Doctor>(`https://healthtourism-5.onrender.com/api/doctors/update/${id}`, updatedDoctor);
+      const response = await axios.put<Doctor>(`${BASE_URL}/api/doctors/update/${id}`, updatedDoctor);
       const updatedDoc = response.data;
       setDoctor((prev) =>
         prev

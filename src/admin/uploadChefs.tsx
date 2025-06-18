@@ -28,7 +28,7 @@
 
 //   const fetchLocations = async () => {
 //     try {
-//       const res = await axios.get('http://localhost:8080/api/locations');
+//       const res = await axios.get('${BASE_URL}/api/locations');
 //       const formatted = res.data.map((loc: any) => ({
 //         value: loc.locationId,
 //         label: `${loc.city}, ${loc.state}, ${loc.country}`,
@@ -47,7 +47,7 @@
 //     }
 
 //     try {
-//       const res = await axios.post('http://localhost:8080/api/chefs/add', {
+//       const res = await axios.post('${BASE_URL}/api/chefs/add', {
 //         chefName: name,
 //         chefDescription: description,
 //         chefImage: image,
@@ -214,7 +214,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from './sidebar';  // Assuming Sidebar is exported as a named export
-
+import { BASE_URL } from '@/config/config';
 interface LocationOption {
   label: string;
   value: number;
@@ -240,10 +240,9 @@ const UploadChefs: React.FC = () => {
   useEffect(() => {
     fetchLocations();
   }, []);
-const base_url="https://healthtourism-5.onrender.com"
   const fetchLocations = async () => {
     try {
-      const res = await axios.get('https://healthtourism-5.onrender.com/api/locations');
+      const res = await axios.get(`${BASE_URL}/api/locations`);
       const formatted = res.data.map((loc: any) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,
@@ -273,7 +272,7 @@ const base_url="https://healthtourism-5.onrender.com"
     setMessage('');
 
     try {
-      const res = await axios.post('base_url/api/chefs/add/5', {
+      const res = await axios.post(`${BASE_URL}/api/chefs/add/${selectedLocation.value}`, {
         chefName: name,
         chefDescription: description,
         chefImage: image,

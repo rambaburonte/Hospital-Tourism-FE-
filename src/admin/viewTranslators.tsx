@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface Translator {
   translatorID: number;
   translatorName: string;
@@ -14,9 +14,9 @@ interface Translator {
 const TranslatorList: React.FC = () => {
   const [translators, setTranslators] = useState<Translator[]>([]);
   const [loading, setLoading] = useState(true);
-const base_url="https://healthtourism-5.onrender.com"
+
   useEffect(() => {
-    axios.get(`${base_url}/api/translators`)
+    axios.get(`${BASE_URL}/api/translators`)
       .then(res => {
         setTranslators(res.data);
         setLoading(false);

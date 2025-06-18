@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from './sidebar';
-
+import { BASE_URL } from '@/config/config';
 interface LabTest {
   id: number;
   testTitle: string;
@@ -16,9 +16,8 @@ const LabTests: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [labTests, setLabTests] = useState<LabTest[]>([]);
   const [loading, setLoading] = useState(true);
-const base_url="https://healthtourism-5.onrender.com"
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/diagnostics/${id}`)
+    axios.get(`${BASE_URL}/api/diagnostics/${id}`)
       .then(res => {
         setLabTests(res.data);
         setLoading(false);

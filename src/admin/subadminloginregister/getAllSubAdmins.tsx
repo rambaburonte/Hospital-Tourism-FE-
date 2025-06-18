@@ -7,7 +7,7 @@
 //   const [subAdmins, setSubAdmins] = useState([]);
 
 //   useEffect(() => {
-//     axios.get('http://localhost:8080/admin/get-all-subadmins')
+//     axios.get('${BASE_URL}/admin/get-all-subadmins')
 //       .then(response => setSubAdmins(response.data))
 //       .catch(error => console.error("Error fetching sub-admins:", error));
 //   }, []);
@@ -89,7 +89,7 @@
 //   const [genderFilter, setGenderFilter] = useState('All');
 
 //   useEffect(() => {
-//     axios.get('http://localhost:8080/admin/get-all-subadmins')
+//     axios.get('${BASE_URL}/admin/get-all-subadmins')
 //       .then(response => setSubAdmins(response.data))
 //       .catch(error => console.error("Error fetching sub-admins:", error));
 //   }, []);
@@ -199,7 +199,7 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     axios.get('http://localhost:8080/admin/get-all-subadmins')
+//     axios.get('${BASE_URL}/admin/get-all-subadmins')
 //       .then(response => setSubAdmins(response.data))
 //       .catch(error => console.error("Error fetching sub-admins:", error));
 //   }, []);
@@ -302,14 +302,14 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     axios.get('http://localhost:8080/admin/get-all-subadmins')
+//     axios.get('${BASE_URL}/admin/get-all-subadmins')
 //       .then(response => setSubAdmins(response.data))
 //       .catch(error => console.error("Error fetching sub-admins:", error));
 //   }, []);
 
 //   const handleStatusChange = (adminId, status) => {
 //     // Example API call - update with your real endpoint
-//     axios.put(`http://localhost:8080/admin/update-status/${adminId}`, { status })
+//     axios.put(`${BASE_URL}/admin/update-status/${adminId}`, { status })
 //       .then(() => console.log(`Status updated to ${status} for admin ${adminId}`))
 //       .catch(err => console.error("Status update failed", err));
 //   };
@@ -457,7 +457,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get('http://localhost:8080/admin/get-all-subadmins')
+//       .get('${BASE_URL}/admin/get-all-subadmins')
 //       .then((response) => {
 //         const admins = response.data.map((admin: any) => ({
 //           ...admin,
@@ -472,9 +472,9 @@
 //     setLoading((prev) => ({ ...prev, [adminId]: true }));
 //     try {
 //       if (status === 'active') {
-//         await axios.put(`http://localhost:8080/admin/update-status/active/${adminId}`);
+//         await axios.put(`${BASE_URL}/admin/update-status/active/${adminId}`);
 //       } else {
-//         await axios.delete(`http://localhost:8080/admin/soft-delete-subadmin/${adminId}`);
+//         await axios.delete(`${BASE_URL}/admin/soft-delete-subadmin/${adminId}`);
 //       }
 //       setSubAdmins((prev) =>
 //         prev.map((admin) =>
@@ -621,6 +621,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '@/config/config';
 import {
   FaUser,
   FaVenusMars,
@@ -650,7 +651,7 @@ const SubAdminDashboard = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/admin/get-all-subadmins')
+      .get('${BASE_URL}/admin/get-all-subadmins')
       .then((response) => {
         const admins = response.data.map((admin: any) => ({
           ...admin,
@@ -665,9 +666,9 @@ const SubAdminDashboard = () => {
     setLoading((prev) => ({ ...prev, [adminId]: true }));
     try {
       if (status === 'active') {
-        await axios.put(`http://localhost:8080/admin/update-status/active/${adminId}`);
+        await axios.put(`${BASE_URL}/admin/update-status/active/${adminId}`);
       } else {
-        await axios.delete(`http://localhost:8080/admin/soft-delete-subadmin/${adminId}`);
+        await axios.delete(`${BASE_URL}/admin/soft-delete-subadmin/${adminId}`);
       }
       setSubAdmins((prev) =>
         prev.map((admin) =>
