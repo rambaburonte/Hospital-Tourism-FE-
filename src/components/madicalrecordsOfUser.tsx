@@ -17,10 +17,11 @@ const MedicalRecords: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'documents' | 'testResults' | 'scans'>('documents');
   const [showTabs, setShowTabs] = useState(true);
   const [documents, setDocuments] = useState<Record[]>([]);
-  const [testResults, setTestResults] = useState<Record[]>([]);
-  const [scans, setScans] = useState<Record[]>([]);
+  const [testResults, setTestResults] = useState<Record[]>([]);  const [scans, setScans] = useState<Record[]>([]);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedDocumentType, setSelectedDocumentType] = useState<'documents' | 'testResults' | 'scans'>('documents');
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [user, setUser] = useState<{ id: number } | null>(null);  const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   // Function to extract filename without extension from URL
@@ -200,6 +201,31 @@ const MedicalRecords: React.FC = () => {
         return '';
     }
   };
+  const getFieldNameForUpload = (docType: 'documents' | 'testResults' | 'scans') => {
+    switch (docType) {
+      case 'documents':
+        return 'prescription';
+      case 'testResults':
+        return 'patientreportsUrl';
+      case 'scans':
+        return 'patientaxraysUrl';
+      default:
+        return '';
+    }
+  };
+
+  const getDocumentTypeName = (docType: 'documents' | 'testResults' | 'scans') => {
+    switch (docType) {
+      case 'documents':
+        return 'Prescription';
+      case 'testResults':
+        return 'Test Report';
+      case 'scans':
+        return 'Scan';
+      default:
+        return '';
+    }
+  };
   const getApiFieldName = () => {
     switch (activeTab) {
       case 'documents':
@@ -248,14 +274,13 @@ const MedicalRecords: React.FC = () => {
     if (!selectedFile) {
       setUploadError('Please select a file to upload');
       return;
-    }
-
-    const formData = new FormData();
-    const fieldName = getFieldName();
+    }    const formData = new FormData();
+    const fieldName = getFieldNameForUpload(selectedDocumentType);
     formData.append(fieldName, selectedFile);
 
     console.log('Upload Debug Info:');
     console.log('User ID:', user.id);
+    console.log('Selected Document Type:', selectedDocumentType);
     console.log('Field Name:', fieldName);
     console.log('Selected File:', selectedFile.name, selectedFile.type, selectedFile.size);
     console.log('Upload URL:', `${BASE_URL}/user/upload-files/${user.id}`);
@@ -273,10 +298,9 @@ const MedicalRecords: React.FC = () => {
       console.log('Upload Success - API Response:', response.data);
 
       // Refresh the medical records after successful upload
-      await fetchMedicalRecords(user.id);
-
-      setShowUploadModal(false);
+      await fetchMedicalRecords(user.id);      setShowUploadModal(false);
       setSelectedFile(null);
+      setSelectedDocumentType('documents');
       setUploadError(null);
     } catch (error: unknown) {
       console.error('Upload error:', error);
@@ -306,9 +330,7 @@ const MedicalRecords: React.FC = () => {
             <p className="text-gray-600 dark:text-gray-300">
               Access and manage your medical documents, test results, and scans in one place.
             </p>
-          </div>
-
-          {/* Tabs */}
+          </div>          {/* Tabs - Only show if URL has specific tab parameter */}
           {showTabs && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-6">
               <div className="flex border-b border-gray-200 dark:border-gray-700">
@@ -322,6 +344,9 @@ const MedicalRecords: React.FC = () => {
                 >
                   <FileText className="w-5 h-5 mr-2" />
                   Documents
+                  <span className="ml-2 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full">
+                    {documents.length}
+                  </span>
                 </button>
                 <button
                   className={`flex items-center px-6 py-3 text-sm font-medium ${
@@ -333,6 +358,9 @@ const MedicalRecords: React.FC = () => {
                 >
                   <Microscope className="w-5 h-5 mr-2" />
                   Test Results
+                  <span className="ml-2 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full">
+                    {testResults.length}
+                  </span>
                 </button>
                 <button
                   className={`flex items-center px-6 py-3 text-sm font-medium ${
@@ -344,86 +372,316 @@ const MedicalRecords: React.FC = () => {
                 >
                   <Scan className="w-5 h-5 mr-2" />
                   Scans
+                  <span className="ml-2 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full">
+                    {scans.length}
+                  </span>
                 </button>
               </div>
             </div>
           )}
 
-          {/* Content */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{getTabTitle()}</h2>
-              <button
-                className="px-4 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
-                onClick={() => setShowUploadModal(true)}
-              >
-                Upload New
-              </button>
-            </div>            {/* Records List */}
-            <div className="space-y-4">
-              {loading ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-500 dark:text-gray-400">Loading records...</p>
-                </div>
-              ) : getRecords().length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-500 dark:text-gray-400">No records found.</p>
-                </div>
-              ) : (
-                getRecords().map((record) => (
-                  <div
-                    key={record.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
-                        {activeTab === 'documents' && <FileText className="w-6 h-6 text-[#499E14]" />}
-                        {activeTab === 'testResults' && <Microscope className="w-6 h-6 text-[#499E14]" />}
-                        {activeTab === 'scans' && <Scan className="w-6 h-6 text-[#499E14]" />}
-                      </div>
-                      <div>
-                        <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {record.type} • {new Date(record.date).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
-                        onClick={() => window.open(record.fileUrl, '_blank')}
-                      >
-                        View
-                      </button>
-                      <button
-                        className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
-                        onClick={() => {
-                          const link = document.createElement('a');
-                          link.href = record.fileUrl;
-                          link.download = record.name;
-                          link.click();
-                        }}
-                      >
-                        Download
-                      </button>
-                    </div>
+          {/* Content - Show all three sections when tabs are hidden */}
+          {!showTabs ? (
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{getTabTitle()}</h2>
+                <button
+                  className="px-4 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
+                  onClick={() => {
+                    setSelectedDocumentType(activeTab);
+                    setShowUploadModal(true);
+                  }}
+                >
+                  Upload New
+                </button>
+              </div>
+
+              {/* Records List */}
+              <div className="space-y-4">
+                {loading ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">Loading records...</p>
                   </div>
-                ))
-              )}
+                ) : getRecords().length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">No records found.</p>
+                  </div>
+                ) : (
+                  getRecords().map((record) => (
+                    <div
+                      key={record.id}
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
+                          {activeTab === 'documents' && <FileText className="w-6 h-6 text-[#499E14]" />}
+                          {activeTab === 'testResults' && <Microscope className="w-6 h-6 text-[#499E14]" />}
+                          {activeTab === 'scans' && <Scan className="w-6 h-6 text-[#499E14]" />}
+                        </div>
+                        <div>
+                          <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {record.type} • {new Date(record.date).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                          onClick={() => window.open(record.fileUrl, '_blank')}
+                        >
+                          View
+                        </button>
+                        <button
+                          className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            link.href = record.fileUrl;
+                            link.download = record.name;
+                            link.click();
+                          }}
+                        >
+                          Download
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            // Show all three sections when tabs are visible (default view)
+            <div className="space-y-6">
+              {/* Documents Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center">
+                    <FileText className="w-6 h-6 text-[#499E14] mr-3" />
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Documents & Prescriptions</h2>
+                    <span className="ml-3 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full">
+                      {documents.length}
+                    </span>
+                  </div>
+                  <button
+                    className="px-4 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
+                    onClick={() => {
+                      setSelectedDocumentType('documents');
+                      setShowUploadModal(true);
+                    }}
+                  >
+                    Upload Document
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {loading ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 dark:text-gray-400">Loading documents...</p>
+                    </div>
+                  ) : documents.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 dark:text-gray-400">No documents found.</p>
+                    </div>
+                  ) : (
+                    documents.map((record) => (
+                      <div
+                        key={record.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
+                            <FileText className="w-6 h-6 text-[#499E14]" />
+                          </div>
+                          <div>
+                            <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {record.type} • {new Date(record.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                            onClick={() => window.open(record.fileUrl, '_blank')}
+                          >
+                            View
+                          </button>
+                          <button
+                            className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                            onClick={() => {
+                              const link = document.createElement('a');
+                              link.href = record.fileUrl;
+                              link.download = record.name;
+                              link.click();
+                            }}
+                          >
+                            Download
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Test Results Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center">
+                    <Microscope className="w-6 h-6 text-[#499E14] mr-3" />
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Test Results & Reports</h2>
+                    <span className="ml-3 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full">
+                      {testResults.length}
+                    </span>
+                  </div>
+                  <button
+                    className="px-4 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
+                    onClick={() => {
+                      setSelectedDocumentType('testResults');
+                      setShowUploadModal(true);
+                    }}
+                  >
+                    Upload Report
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {loading ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 dark:text-gray-400">Loading test results...</p>
+                    </div>
+                  ) : testResults.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 dark:text-gray-400">No test results found.</p>
+                    </div>
+                  ) : (
+                    testResults.map((record) => (
+                      <div
+                        key={record.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
+                            <Microscope className="w-6 h-6 text-[#499E14]" />
+                          </div>
+                          <div>
+                            <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {record.type} • {new Date(record.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                            onClick={() => window.open(record.fileUrl, '_blank')}
+                          >
+                            View
+                          </button>
+                          <button
+                            className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                            onClick={() => {
+                              const link = document.createElement('a');
+                              link.href = record.fileUrl;
+                              link.download = record.name;
+                              link.click();
+                            }}
+                          >
+                            Download
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Scans Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center">
+                    <Scan className="w-6 h-6 text-[#499E14] mr-3" />
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">X-rays & Scans</h2>
+                    <span className="ml-3 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full">
+                      {scans.length}
+                    </span>
+                  </div>
+                  <button
+                    className="px-4 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
+                    onClick={() => {
+                      setSelectedDocumentType('scans');
+                      setShowUploadModal(true);
+                    }}
+                  >
+                    Upload Scan
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {loading ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 dark:text-gray-400">Loading scans...</p>
+                    </div>
+                  ) : scans.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 dark:text-gray-400">No scans found.</p>
+                    </div>
+                  ) : (
+                    scans.map((record) => (
+                      <div
+                        key={record.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
+                            <Scan className="w-6 h-6 text-[#499E14]" />
+                          </div>
+                          <div>
+                            <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {record.type} • {new Date(record.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                            onClick={() => window.open(record.fileUrl, '_blank')}
+                          >
+                            View
+                          </button>
+                          <button
+                            className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                            onClick={() => {
+                              const link = document.createElement('a');
+                              link.href = record.fileUrl;
+                              link.download = record.name;
+                              link.click();
+                            }}
+                          >
+                            Download
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Upload Modal */}
           {showUploadModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                <div className="flex justify-between items-center mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">                <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Upload {getTabTitle().replace('Your ', '')}
-                  </h3>                  <button
+                    Upload Medical Document
+                  </h3>
+                  <button
                     onClick={() => {
                       setShowUploadModal(false);
                       setSelectedFile(null);
+                      setSelectedDocumentType('documents');
                       setUploadError(null);
                       setUploading(false);
                     }}
@@ -434,9 +692,23 @@ const MedicalRecords: React.FC = () => {
                     </svg>
                   </button>
                 </div>
-                <div className="space-y-4">                  <div>
+                <div className="space-y-4">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Select PDF file for {getRecordType()}
+                      Document Type
+                    </label>
+                    <select
+                      value={selectedDocumentType}
+                      onChange={(e) => setSelectedDocumentType(e.target.value as 'documents' | 'testResults' | 'scans')}
+                      className="w-full text-sm text-gray-900 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-2"
+                    >
+                      <option value="documents">Prescription / Documents</option>
+                      <option value="testResults">Test Results / Reports</option>
+                      <option value="scans">X-rays / Scans</option>
+                    </select>
+                  </div>                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Select PDF file for {getDocumentTypeName(selectedDocumentType)}
                     </label>
                     <input
                       type="file"

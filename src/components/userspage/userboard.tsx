@@ -15,13 +15,6 @@ export default function Userdashboard() {
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
               Welcome, User!
             </h1>
-            <button
-              onClick={() => navigate('/PatientProfile')}
-              className="px-6 py-2 bg-[#499E14] text-white rounded-lg hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635] focus:outline-none shadow-md"
-              aria-label="View patient profile"
-            >
-              View Profile
-            </button>
           </div>
 
           <p className="text-gray-600 dark:text-gray-300 mb-10 text-lg">
