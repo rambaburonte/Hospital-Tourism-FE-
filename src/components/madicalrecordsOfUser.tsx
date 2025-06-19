@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FileText, Microscope, Scan } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -16,32 +16,143 @@ const MedicalRecords: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<'documents' | 'testResults' | 'scans'>('documents');
   const [showTabs, setShowTabs] = useState(true);
-  const [documents, setDocuments] = useState<Record[]>([
-    { id: '1', name: 'Prescription - Dr. Smith', date: '2024-03-15', type: 'Prescription', fileUrl: '#' },
-    { id: '2', name: 'Medical Report - Cardiology', date: '2024-03-10', type: 'Medical Report', fileUrl: '#' },
-  ]);
-  const [testResults, setTestResults] = useState<Record[]>([
-    { id: '1', name: 'Blood Test Results', date: '2024-03-15', type: 'Blood Test', fileUrl: '#' },
-    { id: '2', name: 'Urine Analysis Report', date: '2024-03-10', type: 'Urine Test', fileUrl: '#' },
-  ]);
-  const [scans, setScans] = useState<Record[]>([
-    { id: '1', name: 'Chest X-Ray', date: '2024-03-15', type: 'X-Ray', fileUrl: '#' },
-    { id: '2', name: 'Brain MRI Scan', date: '2024-03-10', type: 'MRI', fileUrl: '#' },
-  ]);
+  const [documents, setDocuments] = useState<Record[]>([]);
+  const [testResults, setTestResults] = useState<Record[]>([]);
+  const [scans, setScans] = useState<Record[]>([]);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [user, setUser] = useState<{ id: number } | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [user, setUser] = useState<{ id: number } | null>(null);  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  // Function to extract filename without extension from URL
+  const extractFilenameFromUrl = (url: string): string => {
+    try {
+      const urlParts = url.split('/');
+      const filename = urlParts[urlParts.length - 1];
+      
+      // For complex URLs with multiple underscores and IDs, extract the actual filename
+      // e.g., "emp17_d4e97b2c-365d-40be-b872-9cc6634eca20_emp15_68a9c601-682e-4d40-ac47-965ee54e37ae_E Call Letter.pdf"
+      // Should extract "E Call Letter"
+      const parts = filename.split('_');
+      let actualFilename = '';
+      
+      if (parts.length > 2) {
+        // Take the part after the last underscore before the extension
+        actualFilename = parts[parts.length - 1];
+      } else {
+        actualFilename = filename;
+      }
+      
+      // Remove file extension
+      const nameWithoutExtension = actualFilename.replace(/\.[^/.]+$/, '');
+      return nameWithoutExtension || 'Document';
+    } catch {
+      return 'Document';
+    }
+  };
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
-    if (storedUser && (storedUser.id || storedUser.userId)) {
-      setUser({
-        ...storedUser,
-        id: storedUser.id || storedUser.userId,
-      });
+  // Function to fetch medical records from backend
+  const fetchMedicalRecords = useCallback(async (userId: number) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${BASE_URL}/user/get-doc-and-adrs/${userId}`);
+      const userData = response.data;
+
+      console.log('API Response:', userData); // Debug log      // Process documents (prescriptions) - handle array URLs with backward compatibility
+      let prescriptionUrls = userData.prescriptionUrls;
+      
+      // Backward compatibility: check for old field names or single URL format
+      if (!prescriptionUrls || !Array.isArray(prescriptionUrls) || prescriptionUrls.length === 0) {
+        if (userData.prescriptionUrl && typeof userData.prescriptionUrl === 'string' && userData.prescriptionUrl.trim() !== '') {
+          prescriptionUrls = [userData.prescriptionUrl];
+        }
+      }
+      
+      if (prescriptionUrls && Array.isArray(prescriptionUrls) && prescriptionUrls.length > 0) {
+        const prescriptionRecords = prescriptionUrls
+          .filter((url: string) => url && url.trim() !== '')
+          .map((url: string, index: number) => ({
+            id: `prescription-${index + 1}`,
+            name: extractFilenameFromUrl(url),
+            date: new Date().toISOString().split('T')[0],
+            type: 'Prescription',
+            fileUrl: url,
+          }));
+        setDocuments(prescriptionRecords);
+      } else {
+        setDocuments([]);
+      }      // Process test results (reports) - handle array URLs with backward compatibility
+      let patientReportsUrls = userData.patientReportsUrls;
+      
+      // Backward compatibility: check for old field names or single URL format
+      if (!patientReportsUrls || !Array.isArray(patientReportsUrls) || patientReportsUrls.length === 0) {
+        if (userData.patientreportsUrl && typeof userData.patientreportsUrl === 'string' && userData.patientreportsUrl.trim() !== '') {
+          patientReportsUrls = [userData.patientreportsUrl];
+        }
+      }
+      
+      if (patientReportsUrls && Array.isArray(patientReportsUrls) && patientReportsUrls.length > 0) {
+        const reportRecords = patientReportsUrls
+          .filter((url: string) => url && url.trim() !== '')
+          .map((url: string, index: number) => ({
+            id: `report-${index + 1}`,
+            name: extractFilenameFromUrl(url),
+            date: new Date().toISOString().split('T')[0],
+            type: 'Test Report',
+            fileUrl: url,
+          }));
+        setTestResults(reportRecords);
+      } else {
+        setTestResults([]);
+      }      // Process scans (X-rays) - handle array URLs with backward compatibility
+      let patientAxraysUrls = userData.patientAxraysUrls;
+      
+      // Backward compatibility: check for old field names or single URL format
+      if (!patientAxraysUrls || !Array.isArray(patientAxraysUrls) || patientAxraysUrls.length === 0) {
+        if (userData.patientaxraysUrl && typeof userData.patientaxraysUrl === 'string' && userData.patientaxraysUrl.trim() !== '') {
+          patientAxraysUrls = [userData.patientaxraysUrl];
+        }
+      }
+      
+      if (patientAxraysUrls && Array.isArray(patientAxraysUrls) && patientAxraysUrls.length > 0) {
+        const xrayRecords = patientAxraysUrls
+          .filter((url: string) => url && url.trim() !== '')
+          .map((url: string, index: number) => ({
+            id: `xray-${index + 1}`,
+            name: extractFilenameFromUrl(url),
+            date: new Date().toISOString().split('T')[0],
+            type: 'X-Ray',
+            fileUrl: url,
+          }));
+        setScans(xrayRecords);
+      } else {
+        setScans([]);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching medical records:', error);
+    } finally {
+      setLoading(false);
     }
   }, []);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+    console.log('Stored user from localStorage:', storedUser); // Debug log
+    
+    if (storedUser && (storedUser.id || storedUser.userId)) {
+      const userId = storedUser.id || storedUser.userId;
+      console.log('Using user ID:', userId); // Debug log
+      
+      setUser({
+        ...storedUser,
+        id: userId,
+      });
+      
+      // Fetch medical records when user is set
+      fetchMedicalRecords(userId);
+    } else {
+      console.log('No valid user found in localStorage'); // Debug log
+    }
+  }, [fetchMedicalRecords]);
 
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -77,9 +188,7 @@ const MedicalRecords: React.FC = () => {
       default:
         return '';
     }
-  };
-
-  const getFieldName = () => {
+  };  const getFieldName = () => {
     switch (activeTab) {
       case 'documents':
         return 'prescription';
@@ -91,15 +200,14 @@ const MedicalRecords: React.FC = () => {
         return '';
     }
   };
-
   const getApiFieldName = () => {
     switch (activeTab) {
       case 'documents':
-        return 'prescriptionUrl';
+        return 'prescriptionUrls';
       case 'testResults':
-        return 'patientreportsUrl';
+        return 'patientReportsUrls';
       case 'scans':
-        return 'patientaxraysUrl';
+        return 'patientAxraysUrls';
       default:
         return '';
     }
@@ -117,15 +225,21 @@ const MedicalRecords: React.FC = () => {
         return '';
     }
   };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      
+      // Check if the file is a PDF
+      if (file.type !== 'application/pdf') {
+        setUploadError('Please select a PDF file only');
+        setSelectedFile(null);
+        return;
+      }
+      
+      setSelectedFile(file);
       setUploadError(null);
     }
-  };
-
-  const handleUpload = async () => {
+  };  const handleUpload = async () => {
     if (!user?.id) {
       setUploadError('User not logged in');
       return;
@@ -140,7 +254,14 @@ const MedicalRecords: React.FC = () => {
     const fieldName = getFieldName();
     formData.append(fieldName, selectedFile);
 
+    console.log('Upload Debug Info:');
+    console.log('User ID:', user.id);
+    console.log('Field Name:', fieldName);
+    console.log('Selected File:', selectedFile.name, selectedFile.type, selectedFile.size);
+    console.log('Upload URL:', `${BASE_URL}/user/upload-files/${user.id}`);
+
     try {
+      setUploading(true);
       const response = await axios.post(
         `${BASE_URL}/user/upload-files/${user.id}`,
         formData,
@@ -149,50 +270,29 @@ const MedicalRecords: React.FC = () => {
         }
       );
 
-      console.log('API Response:', response.data);
+      console.log('Upload Success - API Response:', response.data);
 
-      const data = response.data as { [key: string]: string };
-      const apiFieldName = getApiFieldName();
-      const fileUrl = data[apiFieldName];
-
-      if (!fileUrl) {
-        console.error('Expected API field:', apiFieldName, 'Available fields:', Object.keys(data));
-        setUploadError(
-          `API response missing file URL for field "${apiFieldName}". Please check the API response structure.`
-        );
-        return;
-      }
-
-      const newRecord: Record = {
-        id: `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
-        name: selectedFile.name,
-        date: new Date().toISOString().split('T')[0],
-        type: getRecordType(),
-        fileUrl,
-      };
-
-      switch (activeTab) {
-        case 'documents':
-          setDocuments((prev) => [...prev, newRecord]);
-          break;
-        case 'testResults':
-          setTestResults((prev) => [...prev, newRecord]);
-          break;
-        case 'scans':
-          setScans((prev) => [...prev, newRecord]);
-          break;
-      }
+      // Refresh the medical records after successful upload
+      await fetchMedicalRecords(user.id);
 
       setShowUploadModal(false);
       setSelectedFile(null);
       setUploadError(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Upload error:', error);
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        'Failed to upload file. Please try again.';
+      
+      let errorMessage = 'Failed to upload file. Please try again.';
+      
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string; error?: string } }; message?: string };
+        const responseData = axiosError.response?.data;
+        console.log('Error Response Data:', responseData);
+        errorMessage = responseData?.message || responseData?.error || axiosError.message || errorMessage;
+      }
+      
       setUploadError(errorMessage);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -259,53 +359,56 @@ const MedicalRecords: React.FC = () => {
               >
                 Upload New
               </button>
-            </div>
-
-            {/* Records List */}
+            </div>            {/* Records List */}
             <div className="space-y-4">
-              {getRecords().map((record) => (
-                <div
-                  key={record.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
-                      {activeTab === 'documents' && <FileText className="w-6 h-6 text-[#499E14]" />}
-                      {activeTab === 'testResults' && <Microscope className="w-6 h-6 text-[#499E14]" />}
-                      {activeTab === 'scans' && <Scan className="w-6 h-6 text-[#499E14]" />}
-                    </div>
-                    <div>
-                      <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {record.type} • {new Date(record.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
-                      onClick={() => {
-                        /* Handle view */
-                      }}
-                    >
-                      View
-                    </button>
-                    <button
-                      className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
-                      onClick={() => {
-                        /* Handle download */
-                      }}
-                    >
-                      Download
-                    </button>
-                  </div>
+              {loading ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500 dark:text-gray-400">Loading records...</p>
                 </div>
-              ))}
-
-              {getRecords().length === 0 && (
+              ) : getRecords().length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500 dark:text-gray-400">No records found.</p>
                 </div>
+              ) : (
+                getRecords().map((record) => (
+                  <div
+                    key={record.id}
+                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="p-2 bg-[#499E14] bg-opacity-10 rounded-lg">
+                        {activeTab === 'documents' && <FileText className="w-6 h-6 text-[#499E14]" />}
+                        {activeTab === 'testResults' && <Microscope className="w-6 h-6 text-[#499E14]" />}
+                        {activeTab === 'scans' && <Scan className="w-6 h-6 text-[#499E14]" />}
+                      </div>
+                      <div>
+                        <h3 className="text-gray-900 dark:text-white font-medium">{record.name}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {record.type} • {new Date(record.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                        onClick={() => window.open(record.fileUrl, '_blank')}
+                      >
+                        View
+                      </button>
+                      <button
+                        className="px-3 py-1 text-sm text-[#499E14] hover:bg-[#499E14] hover:bg-opacity-10 rounded-md transition-colors duration-200"
+                        onClick={() => {
+                          const link = document.createElement('a');
+                          link.href = record.fileUrl;
+                          link.download = record.name;
+                          link.click();
+                        }}
+                      >
+                        Download
+                      </button>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
           </div>
@@ -317,12 +420,12 @@ const MedicalRecords: React.FC = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Upload {getTabTitle().replace('Your ', '')}
-                  </h3>
-                  <button
+                  </h3>                  <button
                     onClick={() => {
                       setShowUploadModal(false);
                       setSelectedFile(null);
                       setUploadError(null);
+                      setUploading(false);
                     }}
                     className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                   >
@@ -331,24 +434,26 @@ const MedicalRecords: React.FC = () => {
                     </svg>
                   </button>
                 </div>
-                <div className="space-y-4">
-                  <div>
+                <div className="space-y-4">                  <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      {getRecordType()}
+                      Select PDF file for {getRecordType()}
                     </label>
                     <input
                       type="file"
+                      accept=".pdf,application/pdf"
                       onChange={handleFileChange}
                       className="w-full text-sm text-gray-900 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-2"
                     />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Only PDF files are supported
+                    </p>
                   </div>
-                  {uploadError && <p className="text-sm text-red-600 mt-2">{uploadError}</p>}
-                  <button
+                  {uploadError && <p className="text-sm text-red-600 mt-2">{uploadError}</p>}                  <button
                     onClick={handleUpload}
-                    className="w-full bg-[#499E14] text-white rounded-lg py-2 hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635]"
-                    disabled={!selectedFile}
+                    className="w-full bg-[#499E14] text-white rounded-lg py-2 hover:bg-[#3a7e10] transition-colors duration-200 focus:ring-4 focus:ring-[#a3e635] disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!selectedFile || uploading}
                   >
-                    Upload
+                    {uploading ? 'Uploading...' : 'Upload'}
                   </button>
                 </div>
               </div>
