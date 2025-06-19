@@ -97,7 +97,7 @@ import BookingForm from './admin/Booking';
 import ChefList from './admin/viewchefs';
 import UpdateChef from './admin/UpdateChef';
 import AddSlots from './admin/AddSlots';
-import MedicalRecords from './components/userspage/MadicalRec';
+import MedicalRecords from './components/madiclrecordsOfUser';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -171,6 +171,8 @@ const App: React.FC = () => (
              <Route path="/tests" element={< Diagnostics />} />
              <Route path="/viewtests/:id" element={<  Labtests  />} />
              
+            <Route path="/medical-records" element={<MedicalRecords />} />
+
 
             <Route path="/tests" element={<DiagnosticsList />} />
             <Route path="/bookingcart" element={<BookingCart/>}/>
@@ -220,7 +222,7 @@ const App: React.FC = () => (
 
             {/* User Routes */}
             {/* 404 Route */}
-            <Route path="/medical-records" element={<MedicalRecords />} />
+           
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
