@@ -97,7 +97,7 @@ import BookingForm from './admin/Booking';
 import ChefList from './admin/viewchefs';
 import UpdateChef from './admin/UpdateChef';
 import AddSlots from './admin/AddSlots';
-import MedicalRecords from './components/madiclrecordsOfUser';
+import MedicalRecords from './components/madicalrecordsOfUser.js';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
