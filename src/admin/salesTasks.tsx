@@ -9,8 +9,15 @@ interface SalesFollowUp {
   salesId: number;
   remark: string;
   status: string;
-  createdAt: string;
-  updatedAt: string;
+  followUpDate: string;
+  booking: {
+    bookingId: number;
+  };
+  salesTeam: {
+    id: number;
+    name: string;
+    email: string;
+  };
 }
 
 interface SalesTeam {
@@ -20,6 +27,7 @@ interface SalesTeam {
   role?: string;
   phone?: string;
   department?: string;
+  password?: string;
 }
 
 interface Booking {
@@ -37,11 +45,9 @@ interface Booking {
   paymentStatus: string;
   remarks?: string;
   additionalRemarks?: string;
-  salesAssigned?: boolean;
-  salesId?: number;
+  salesTeam?: SalesTeam | null;
   createdAt?: string;
   updatedAt?: string;
-  // Service-specific fields
   chefId?: number;
   chefName?: string;
   doctorId?: number;
@@ -74,37 +80,45 @@ const SalesTasksPage: React.FC = () => {
   const [showFollowUpModal, setShowFollowUpModal] = useState(false);
   const [followUpTask, setFollowUpTask] = useState<Booking | null>(null);
   const [followUpHistory, setFollowUpHistory] = useState<SalesFollowUp[]>([]);
-  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [selectedSalesId, setSelectedSalesId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchTasks();
     fetchSalesTeam();
   }, []);
 
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get(`${BASE_URL}/api/bookings/free-offline-unpaid`, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      setTasks(response.data);
-    } catch (err: unknown) {
-      let errorMessage = 'Failed to fetch sales tasks. Please try again later.';
-      if (err && typeof err === 'object' && 'response' in err) {
-        const response = (err as { response?: { data?: { message?: string } } }).response;
-        errorMessage = response?.data?.message || errorMessage;
-      }
-      setError(errorMessage);
-      console.error('Error fetching sales tasks:', err);
-    } finally {
-      setLoading(false);
+ const fetchTasks = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+
+    const response = await axios.get(`${BASE_URL}/api/bookings/free-offline-unpaid`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    // 👇 Show all tasks, not just unassigned ones
+    setTasks(response.data);
+
+    if (response.data.length === 0) {
+      setError('No tasks found.');
     }
-  };
+  } catch (err: unknown) {
+    let errorMessage = 'Failed to fetch sales tasks. Please try again later.';
+    if (err && typeof err === 'object' && 'response' in err) {
+      const response = (err as { response?: { data?: { message?: string } } }).response;
+      errorMessage = response?.data?.message || errorMessage;
+    }
+    setError(errorMessage);
+    console.error('Error fetching sales tasks:', err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const fetchSalesTeam = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/bookings/all`, {
+      const response = await axios.get(`${BASE_URL}/api/salesteam/all`, {
         headers: { 'Content-Type': 'application/json' },
       });
       setSalesTeam(response.data);
@@ -115,8 +129,25 @@ const SalesTasksPage: React.FC = () => {
 
   const fetchFollowUpHistory = async (bookingId: number) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/bookings/followups/history/booking/${bookingId}`);
-      setFollowUpHistory(response.data);
+      const response = await axios.get(`${BASE_URL}/api/bookings/followups/booking/${bookingId}`, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      // Map API response to SalesFollowUp interface
+      const history = response.data.map((item: any) => ({
+        id: item.id,
+        bookingId: item.booking.bookingId,
+        salesId: item.salesTeam.id,
+        remark: item.remarks,
+        status: item.status,
+        followUpDate: item.followUpDate,
+        booking: { bookingId: item.booking.bookingId },
+        salesTeam: {
+          id: item.salesTeam.id,
+          name: item.salesTeam.name,
+          email: item.salesTeam.email,
+        },
+      }));
+      setFollowUpHistory(history);
     } catch (err) {
       console.error('Error fetching follow-up history:', err);
       setFollowUpHistory([]);
@@ -160,6 +191,8 @@ const SalesTasksPage: React.FC = () => {
         return 'text-red-600 bg-red-100';
       case 'completed':
         return 'text-blue-600 bg-blue-100';
+      case 'assigned':
+        return 'text-purple-600 bg-purple-100';
       default:
         return 'text-gray-600 bg-gray-100';
     }
@@ -189,15 +222,15 @@ const SalesTasksPage: React.FC = () => {
 
   const formatTime = (timeString?: string) => {
     if (!timeString) return 'N/A';
-    return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
+    return new Date(timeString).toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
     });
   };
 
   const handleTaskSelection = (bookingId: number) => {
-    setSelectedTasks(prev => 
-      prev.includes(bookingId) 
+    setSelectedTasks(prev =>
+      prev.includes(bookingId)
         ? prev.filter(id => id !== bookingId)
         : [...prev, bookingId]
     );
@@ -210,26 +243,22 @@ const SalesTasksPage: React.FC = () => {
       setSelectedTasks(tasks.map(task => task.bookingId));
     }
   };
-  const handleAssignToSales = async () => {
+
+  const handleAssignToSales = async (salesId: number) => {
     if (selectedTasks.length === 0) {
       alert('Please select at least one task to assign.');
       return;
     }
-    setShowAssignModal(true);
-  };
-
-  const performAssignment = async (salesId: number, remark: string) => {
     try {
       setAssignLoading(true);
       await axios.post(`${BASE_URL}/api/bookings/assign`, selectedTasks, {
-        params: { salesId, remark },
+        params: { salesId, remark: '' },
         headers: { 'Content-Type': 'application/json' },
       });
-      
       alert('Tasks assigned successfully!');
       setSelectedTasks([]);
-      setShowAssignModal(false);
-      fetchTasks(); // Refresh the list
+      setSelectedSalesId(null);
+      fetchTasks();
     } catch (err: unknown) {
       let errorMessage = 'Failed to assign tasks. Please try again.';
       if (err && typeof err === 'object' && 'response' in err) {
@@ -255,10 +284,9 @@ const SalesTasksPage: React.FC = () => {
         params: { bookingId, salesId, remark, status },
         headers: { 'Content-Type': 'application/json' },
       });
-      
       alert('Follow-up added successfully!');
       await fetchFollowUpHistory(bookingId);
-      fetchTasks(); // Refresh tasks
+      fetchTasks();
     } catch (err: unknown) {
       let errorMessage = 'Failed to add follow-up.';
       if (err && typeof err === 'object' && 'response' in err) {
@@ -290,20 +318,30 @@ const SalesTasksPage: React.FC = () => {
           <h1 className="text-3xl font-bold text-blue-800">Sales Tasks</h1>
           <div className="flex space-x-3">
             {selectedTasks.length > 0 && (
-              <button
-                onClick={handleAssignToSales}
-                disabled={assignLoading}
-                className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
-              >
-                {assignLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Assigning...
-                  </>
-                ) : (
-                  `Assign ${selectedTasks.length} Task${selectedTasks.length > 1 ? 's' : ''}`
+              <div className="relative">
+                <select
+                  value={selectedSalesId || ''}
+                  onChange={(e) => {
+                    const salesId = parseInt(e.target.value);
+                    setSelectedSalesId(salesId);
+                    if (salesId) handleAssignToSales(salesId);
+                  }}
+                  disabled={assignLoading}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm focus:ring-green-500 disabled:bg-green-400"
+                >
+                  <option value="">Assign to...</option>
+                  {salesTeam.map(member => (
+                    <option key={member.id} value={member.id}>
+                      {member.name} ({member.email})
+                    </option>
+                  ))}
+                </select>
+                {assignLoading && (
+                  <div className="absolute inset-y-0 right-2 flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  </div>
                 )}
-              </button>
+              </div>
             )}
             <button
               onClick={fetchTasks}
@@ -357,7 +395,7 @@ const SalesTasksPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-blue-800 text-white">
@@ -419,15 +457,16 @@ const SalesTasksPage: React.FC = () => {
                           </span>
                           {task.paymentMode && <div className="mt-1 text-gray-500">{task.paymentMode}</div>}
                         </div>
-                      </td>                      <td className="px-4 py-3">
+                      </td>
+                      <td className="px-4 py-3">
                         <div className="flex space-x-2">
-                          <button 
+                          <button
                             onClick={() => handleViewTask(task)}
                             className="text-blue-600 hover:text-blue-800 text-xs border border-blue-300 hover:border-blue-500 px-2 py-1 rounded transition-colors"
                           >
                             View Details
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleTaskSelection(task.bookingId)}
                             className="text-green-600 hover:text-green-800 text-xs border border-green-300 hover:border-green-500 px-2 py-1 rounded transition-colors"
                           >
@@ -439,7 +478,8 @@ const SalesTasksPage: React.FC = () => {
                   ))}
                 </tbody>
               </table>
-            </div>          </div>
+            </div>
+          </div>
         )}
       </div>
 
@@ -458,7 +498,7 @@ const SalesTasksPage: React.FC = () => {
                 ×
               </button>
             </div>
-            
+
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
               {/* Task Information */}
               <div className="mb-6 p-4 bg-blue-50 rounded-lg">
@@ -492,19 +532,25 @@ const SalesTasksPage: React.FC = () => {
                     <span className="font-medium">End Time:</span> {formatTime(followUpTask.bookingEndTime)}
                   </div>
                   <div>
-                    <span className="font-medium">Status:</span> 
+                    <span className="font-medium">Status:</span>
                     <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(followUpTask.bookingStatus)}`}>
                       {followUpTask.bookingStatus}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium">Payment:</span> 
+                    <span className="font-medium">Payment:</span>
                     <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${getPaymentStatusColor(followUpTask.paymentStatus)}`}>
                       {followUpTask.paymentStatus}
                     </span>
                   </div>
                   <div>
                     <span className="font-medium">Payment Mode:</span> {followUpTask.paymentMode || 'N/A'}
+                  </div>
+                  <div>
+                    <span className="font-medium">Assigned Sales:</span>
+                    {followUpTask.salesTeam
+                      ? `${followUpTask.salesTeam.name} (${followUpTask.salesTeam.email})`
+                      : 'Not Assigned'}
                   </div>
                 </div>
                 {followUpTask.remarks && (
@@ -522,28 +568,28 @@ const SalesTasksPage: React.FC = () => {
               {/* Add Follow-up Form */}
               <div className="mb-6 p-4 bg-green-50 rounded-lg">
                 <h3 className="text-lg font-semibold text-green-800 mb-3">Add Follow-up</h3>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.target as HTMLFormElement);
-                  const salesId = parseInt(formData.get('salesId') as string);
-                  const remark = formData.get('remark') as string;
-                  const status = formData.get('status') as string;
-                  
-                  if (salesId && remark && status) {
-                    handleAddFollowUp(followUpTask.bookingId, salesId, remark, status);
-                  }
-                }}>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target as HTMLFormElement);
+                    const remark = formData.get('remark') as string;
+                    const status = formData.get('status') as string;
+
+                    if (remark && status && followUpTask.salesTeam?.id) {
+                      handleAddFollowUp(followUpTask.bookingId, followUpTask.salesTeam.id, remark, status);
+                    } else {
+                      alert('This task must be assigned to a sales person before adding a follow-up.');
+                    }
+                  }}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">Sales Person</label>
-                      <select name="salesId" required className="w-full border rounded-lg px-3 py-2 text-sm">
-                        <option value="">Select Sales Person</option>
-                        {salesTeam.map(member => (
-                          <option key={member.id} value={member.id}>
-                            {member.name} ({member.email})
-                          </option>
-                        ))}
-                      </select>
+                      <div className="w-full border rounded-lg px-3 py-2 text-sm bg-gray-100">
+                        {followUpTask.salesTeam
+                          ? `${followUpTask.salesTeam.name} (${followUpTask.salesTeam.email})`
+                          : 'Not Assigned'}
+                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">Status</label>
@@ -592,106 +638,23 @@ const SalesTasksPage: React.FC = () => {
                         <div className="flex justify-between items-start mb-2">
                           <div className="flex items-center space-x-2">
                             <span className="font-medium">
-                              {salesTeam.find(s => s.id === followUp.salesId)?.name || `Sales ID: ${followUp.salesId}`}
+                              {followUp.salesTeam.name || `Sales ID: ${followUp.salesId}`}
                             </span>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(followUp.status)}`}>
                               {followUp.status}
                             </span>
                           </div>
-                          <span className="text-xs text-gray-500">{formatDateTime(followUp.createdAt)}</span>
+                          <span className="text-xs text-gray-500">{formatDateTime(followUp.followUpDate)}</span>
                         </div>
-                        <p className="text-sm text-gray-700">{followUp.remark}</p>
+                        <p className="text-sm text-gray-700">
+                          {followUp.remark || 'No remarks provided'}
+                        </p>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Assignment Modal */}
-      {showAssignModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="flex justify-between items-center p-6 border-b">
-              <h2 className="text-xl font-bold text-blue-800">
-                Assign Tasks to Sales Team
-              </h2>
-              <button
-                onClick={() => setShowAssignModal(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                ×
-              </button>
-            </div>
-            
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.target as HTMLFormElement);
-              const salesId = parseInt(formData.get('salesId') as string);
-              const remark = formData.get('remark') as string || '';
-              
-              if (salesId) {
-                performAssignment(salesId, remark);
-              }
-            }}>
-              <div className="p-6">
-                <div className="mb-4">
-                  <p className="text-sm text-gray-600 mb-4">
-                    You are assigning {selectedTasks.length} task{selectedTasks.length > 1 ? 's' : ''} to a sales team member.
-                  </p>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">Select Sales Person</label>
-                    <select name="salesId" required className="w-full border rounded-lg px-3 py-2">
-                      <option value="">Choose a sales person...</option>
-                      {salesTeam.map(member => (
-                        <option key={member.id} value={member.id}>
-                          {member.name} ({member.email})
-                          {member.department && ` - ${member.department}`}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">Assignment Remark (Optional)</label>
-                    <textarea
-                      name="remark"
-                      rows={3}
-                      className="w-full border rounded-lg px-3 py-2 text-sm"
-                      placeholder="Enter assignment remarks or instructions..."
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-end space-x-3 p-6 border-t">
-                <button
-                  type="button"
-                  onClick={() => setShowAssignModal(false)}
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={assignLoading}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition-colors flex items-center"
-                >
-                  {assignLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Assigning...
-                    </>
-                  ) : (
-                    'Assign Tasks'
-                  )}
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
