@@ -684,9 +684,20 @@ const Sidebar: React.FC = () => {
         { name: 'ViewSpaCenters', path: '/admin/viewcenters' },
       ],
     },
+    {
+      name: 'Sales Team & Tasks',
+      icon: 'fas fa-users-cog',
+      subItems: [
+        { name: 'Sales Team', path: '/admin/salesTeam' },
+        { name: 'Tasks', path: '/admin/salesTasks' },
+      ],
+    },
     { name: 'BusinessLocation', icon: 'fas fa-map-marker-alt', path: '/admin/businessLocations' },
+
     { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/orders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
+    { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
+    { name: 'Settings', icon: 'fas fa-cog', path: '/settings' },
   ];
 
   const getFilteredMenuItems = (): MenuItem[] => {

@@ -923,7 +923,13 @@ const UpdateChef: React.FC = () => {
             <div className="space-y-2 text-sm text-gray-600">
               <p><span className="font-medium text-gray-800">Experience:</span> {formData.experience}</p>
               <p><span className="font-medium text-gray-800">Styles:</span> {formData.styles}</p>
-              <p><span className="font-medium text-gray-800">Price:</span> ${formData.price?.toFixed(2)}</p>
+              <p><span className="font-medium text-gray-800">Price:</span> ${
+                typeof formData.price === 'number'
+                  ? formData.price.toFixed(2)
+                  : Number(formData.price)
+                    ? Number(formData.price).toFixed(2)
+                    : formData.price || 'N/A'
+              }</p>
             </div>
           </div>
 

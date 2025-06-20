@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, Search, Phone, X, User, Plus, ShoppingCart, Heart, LogOut } from 'lucide-react';
+import { Menu, Search, Phone, X, User, Plus, ShoppingCart, Heart, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -187,11 +187,10 @@ const Header: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home' },
     { to: '/specialities', label: 'Specialties' },
-    { to: '/doctors', label: 'Doctors' },
+   
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
-    { to: '/medicinecatalog', label: 'Pharmacy' },
-    { to: '/HospitalList', label: 'Hospitals' },
+    
   ];
 
   const handleRedirect = () => {
@@ -223,7 +222,7 @@ const Header: React.FC = () => {
           <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
               <Phone className="h-4 w-4 text-green-200" />
-              <span>Emergency: 8595114141</span>
+                <a href="tel:8595114141" className="hover:text-green-200">Emergency: 8595114141</a>
             </div>
             <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
@@ -319,6 +318,20 @@ const Header: React.FC = () => {
                     >
                       <LogOut className="h-4 w-4 mr-2 rotate-180" /> My Orders
                     </Link>
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <LayoutDashboard className="h-4 w-4 mr-2" /> Dashboard
+                    </Link>
+                    <Link
+                      to="/PatientProfile"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <User className="h-4 w-4 mr-2" /> Profile
+                    </Link>
                     <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
                     <button
                       onClick={(e) => { handleLogout(e); setDropdownOpen(false); }}
@@ -410,6 +423,20 @@ const Header: React.FC = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <LogOut className="h-6 w-6 mr-2 rotate-180" /> My Orders
+                  </Link>
+                  <Link
+                    to="/admin/dashboard"
+                    className="flex items-center py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LayoutDashboard className="h-6 w-6 mr-2" /> Dashboard
+                  </Link>
+                  <Link
+                    to="/profile"
+                    className="flex items-center py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="h-6 w-6 mr-2" /> Profile
                   </Link>
                   <Button
                     variant="outline"

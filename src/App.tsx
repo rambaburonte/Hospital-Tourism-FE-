@@ -68,7 +68,7 @@ import SubAdminRegister from './admin/subadminloginregister/subadminreg';
 import DiagnosticsList from './admin/viewDiagnostics';
 import SubadmLoginForm from './admin/subadminloginregister/subadmLogin';
 
-import LabTests  from './admin/viewdiagnolabtests';
+import LabTests from './admin/viewdiagnolabtests';
 import Translators from './admin/viewTranslators';
 import Chefs from './admin/viewchefs';
 import Physios from './admin/viewPhysio';
@@ -79,7 +79,10 @@ import ViewLocations from './admin/viewLocations';
 import ViewUsers from './admin/viewUsers';
 import Users from './components/userspage/GetAllUsers';
 import DoctorDetails from './admin/doctordetails';
- // Corrected import name (PascalCase)
+import AllOrders from './admin/AllOrders';
+import SalesTeamPage from './admin/salesTeam';
+import SalesTasksPage from './admin/salesTasks';
+// Corrected import name (PascalCase)
 import UpdateAllSubAdmin from './admin/subadminloginregister/alldetalupdatesubadmin';
 // Utility Components
 import NotFound from './pages/NotFound';
@@ -99,6 +102,8 @@ import AddSlots from './admin/AddSlots';
 import ViewBlogCategory from './admin/ViewBlogCategory';
 import ViewBlogs from './admin/ViewBlogs';
 import ViewBlog from './admin/ViewBlog';
+import MedicalRecords from './components/madicalrecordsOfUser.js';
+
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -143,18 +148,18 @@ const App: React.FC = () => (
             <Route path="/doctor-profile/:id" element={<DoctorDetails />} />
             <Route path="/chef-list" element={<ChefsList />} />
             <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
-            
+
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
             
 
-         
 
 
 
-           
+
+
             {/* Admin Routes */}
             {/* <Route path="/admin/updatesubadmin/:id" element={<UpdateAllSubAdmin />} /> */}
-          
+
             {/* Admin Routes */}
 
             {/* User Routes */}
@@ -164,65 +169,73 @@ const App: React.FC = () => (
             <Route path="/PatientProfile" element={<PatientProfile />} />
             <Route path="/subadminlogin" element={<SubadmLoginForm />} />
             <Route path="/patientlist" element={<Users />} />
-            <Route path="/bookingfom" element={<BookingForm/>}/>
-            <Route path='usercart' element={<UserCart/>}/>
+            <Route path="/bookingfom" element={<BookingForm />} />
+            <Route path='usercart' element={<UserCart />} />
             <Route path="/wishlist" element={<Wishlist />} />
 
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
-             <Route path="/viewservices/:id" element={< SpaServices />} />
-             <Route path="/tests" element={< Diagnostics />} />
-             <Route path="/viewtests/:id" element={<  Labtests  />} />
-             
+            <Route path="/viewservices/:id" element={< SpaServices />} />
+            <Route path="/tests" element={< Diagnostics />} />
+            <Route path="/viewtests/:id" element={<  Labtests />} />
+
+            <Route path="/medical-records" element={<MedicalRecords />} />
+
 
             <Route path="/tests" element={<DiagnosticsList />} />
-            <Route path="/bookingcart" element={<BookingCart/>}/>
-            <Route path="/MyOrders" element={<MyOrders/>}/>
+            <Route path="/bookingcart" element={<BookingCart />} />
+            <Route path="/MyOrders" element={<MyOrders />} />
 
 
 
             {/* Admin Routes */}
-            <Route path="/admin/slots"element={<AddSlots/>}/>
+            <Route path="/admin/slots" element={<AddSlots />} />
             <Route path="/admin/updateSubAdmin" element={<UpdateSubAdminForm />} />
             <Route path="/admin/admindashboard" element={<Admindashboard />} />
             <Route path="/admin/doctors/upload" element={<Uploaddoctors />} />
             <Route path="/admin/doctors/viewdoctors" element={<ViewDoctors />} />
             <Route path="/admin/uploadhospital" element={<Uploadhospital />} />
-             <Route path="/admin/uploadlabtests" element={<UploadTest />} />
+            <Route path="/admin/uploadlabtests" element={<UploadTest />} />
             <Route path="/admin/doctordetails/:id" element={<DoctorDetails />} />
-            <Route path="/admin/businessLocations" element={<Uploadloacation/>} />
-             <Route path="/admin/uploadDiagnostics" element={<Uploaddiagnostics/>} />
-              <Route path="/admin/uploadlabtests" element={<Uploadlabtests/>} />
-               <Route path="/admin/uploadTanslators" element={<UploadTranslators/>} />
-                <Route path="/admin/uploadchefs" element={<UploadChefs/>} />
-                 <Route path="/admin/uploadPhysios" element={<UploadPhysios/>} />
-              <Route path="/admin/uploadCenters" element={<UploadCenters/>} />
-               <Route path="/admin/uploadspaServices" element={<UploadSpaService/>} />
-               <Route path="/admin/viewHospitals" element={<ViewHospitals/>} />
-               <Route path="/admin/hospitalDoctor/:id" element={<HospitalDoctors/>} />
+            <Route path="/admin/businessLocations" element={<Uploadloacation />} />
+            <Route path="/admin/uploadDiagnostics" element={<Uploaddiagnostics />} />
+            <Route path="/admin/uploadlabtests" element={<Uploadlabtests />} />
+            <Route path="/admin/uploadTanslators" element={<UploadTranslators />} />
+            <Route path="/admin/uploadchefs" element={<UploadChefs />} />
+            <Route path="/admin/uploadPhysios" element={<UploadPhysios />} />
+            <Route path="/admin/uploadCenters" element={<UploadCenters />} />
+            <Route path="/admin/uploadspaServices" element={<UploadSpaService />} />
+            <Route path="/admin/viewHospitals" element={<ViewHospitals />} />
+            <Route path="/admin/hospitalDoctor/:id" element={<HospitalDoctors />} />
             <Route path="/admin/viewdiagnostics" element={<DiagnosticsList />} />
             <Route path="/admin/subadminregister" element={<SubAdminRegister />} />
-               <Route path="admin/viewdiagnostics" element={<ViewDiagnostics/>} />
-                <Route path="/admin/viewHospitals" element={<ViewHospitals />} />
-               <Route path="/admin/viewdiagnostics" element={<ViewDiagnostics/>} />
-               <Route path="/admin/labtests/:id" element={<LabTests />} />
-               <Route path="/admin/translators" element={<Translators />} />
-                <Route path="/admin/chefs" element={<Chefs />} />
-                <Route path="/admin/Physios" element={< Physios/>} />
-                <Route path="/admin/viewcenters" element={<Centers/>}/>
-                <Route path="/admin/spaservices/:id" element={< SpaService/>} />
-               <Route path="/admin/viewLocations" element={<ViewLocations />} />
-               <Route path="/admin/users" element={<ViewUsers />} />
-                <Route path="/admin/update-subadminAllData/:adminId" element={<UpdateAllSubAdmin />} />
+            <Route path="admin/viewdiagnostics" element={<ViewDiagnostics />} />
+            <Route path="/admin/viewHospitals" element={<ViewHospitals />} />
+            <Route path="/admin/viewdiagnostics" element={<ViewDiagnostics />} />
+            <Route path="/admin/labtests/:id" element={<LabTests />} />
+            <Route path="/admin/translators" element={<Translators />} />
+            <Route path="/admin/chefs" element={<Chefs />} />
+            <Route path="/admin/Physios" element={< Physios />} />
+            <Route path="/admin/viewcenters" element={<Centers />} />
+            <Route path="/admin/spaservices/:id" element={< SpaService />} />
+            <Route path="/admin/viewLocations" element={<ViewLocations />} />
+            <Route path="/admin/users" element={<ViewUsers />} />
+            <Route path="/admin/update-subadminAllData/:adminId" element={<UpdateAllSubAdmin />} />
             <Route path="/admin/addMedicine" element={<AddMedicineForm />} />
             <Route path="/admin/medicineList" element={<MedicineList />} />
-            <Route path="/admin/ChefList" element={<ChefList/>} />
+            <Route path="/admin/ChefList" element={<ChefList />} />
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
             <Route path="/update-chef/:chefID" element={<UpdateChef />} />
+
             <Route path="/admin/ViewBlogCategory" element={<ViewBlogCategory />} />
             <Route path="/admin/ViewBlogs" element={<ViewBlogs />} />
            <Route path="/admin/ViewBlog/:id" element={<ViewBlog />} />
+            <Route path="/admin/AllOrders" element={<AllOrders />} />
+            <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
+            <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
+
             {/* User Routes */}
             {/* 404 Route */}
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
