@@ -96,6 +96,9 @@ import BookingForm from './admin/Booking';
 import ChefList from './admin/viewchefs';
 import UpdateChef from './admin/UpdateChef';
 import AddSlots from './admin/AddSlots';
+import ViewBlogCategory from './admin/ViewBlogCategory';
+import ViewBlogs from './admin/ViewBlogs';
+import ViewBlog from './admin/ViewBlog';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -142,6 +145,7 @@ const App: React.FC = () => (
             <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
             
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
+            
 
          
 
@@ -214,6 +218,9 @@ const App: React.FC = () => (
             <Route path="/admin/ChefList" element={<ChefList/>} />
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
             <Route path="/update-chef/:chefID" element={<UpdateChef />} />
+            <Route path="/admin/ViewBlogCategory" element={<ViewBlogCategory />} />
+            <Route path="/admin/ViewBlogs" element={<ViewBlogs />} />
+           <Route path="/admin/ViewBlog/:id" element={<ViewBlog />} />
             {/* User Routes */}
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
