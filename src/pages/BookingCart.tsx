@@ -1153,14 +1153,21 @@ const BookingCart: React.FC = () => {
         console.log('Sending bookingIds to backend:', selectedItems);
         const response = await axios.put(`${BASE_URL}/api/AddToCart/bookings/update-payment-status`, selectedItems, {
           headers: { 'Content-Type': 'application/json' }
-        });
-        console.log('Backend response:', response.data);
+        });        console.log('Backend response:', response.data);
 
+        // Check if any bookings were successfully updated
+        const updatedCount = response.data?.length || selectedItems.length;
+        
         // Update local state
         const updatedBookings = bookingItems.filter(item => !selectedItems.includes(item.bookingId));
         setBookingItems(updatedBookings);
         setSelectedItems([]);
-        setSuccessMessage('Booking confirmed successfully!');
+        
+        // Show success message with count
+        const successMsg = updatedCount === 1 
+          ? '✅ Booking confirmed and payment processed successfully!' 
+          : `✅ ${updatedCount} bookings confirmed and payments processed successfully!`;
+        setSuccessMessage(successMsg);
         setTimeout(() => setSuccessMessage(null), 5000);
 
         // Reset address and payment states
@@ -1168,10 +1175,25 @@ const BookingCart: React.FC = () => {
         setPaymentMethod('');
         setPaymentDetails({});
         setAddressConfirmed(false);
-        setPaymentConfirmed(false);
-      } catch (apiError: any) {
+        setPaymentConfirmed(false);      } catch (apiError: unknown) {
         console.error('Error updating payment status in backend:', apiError);
-        const errorMessage = apiError.response?.data?.message || apiError.message || 'Failed to confirm booking. Please try again.';
+        
+        let errorMessage = 'Failed to confirm booking. Please try again.';
+        if (apiError && typeof apiError === 'object' && 'response' in apiError) {
+          const axiosError = apiError as { response?: { data?: { message?: string; error?: string }; status?: number } };
+          if (axiosError.response?.data?.message) {
+            errorMessage = axiosError.response.data.message;
+          } else if (axiosError.response?.data?.error === 'PAYMENT_UPDATE_FAILED') {
+            errorMessage = 'Payment update failed. Please check your booking details and try again.';
+          } else if (axiosError.response?.status === 400) {
+            errorMessage = 'Invalid booking data. Please refresh the page and try again.';
+          } else if (axiosError.response?.status === 404) {
+            errorMessage = 'Booking not found. Please refresh the page.';
+          } else if (axiosError.response?.status === 500) {
+            errorMessage = 'Server error occurred. Please try again later.';
+          }
+        }
+        
         setPaymentGatewayError(errorMessage);
       }
     }

@@ -105,7 +105,14 @@ import ViewBlog from './admin/ViewBlog';
 import MedicalRecords from './components/madicalrecordsOfUser.js';
 
 import HospitalAdvertisement from './components/Advertisement.js';
-
+import Cardiology from './pages/specialties/Cardiology';
+import Neurology from './pages/specialties/Neurology';
+import Orthopedics from './pages/specialties/Orthopedics';
+import Oncology from './pages/specialties/Oncology';
+import Gastroenterology from './pages/specialties/Gastroenterology';
+import Pediatrics from './pages/specialties/Pediatrics';
+import Gynecology from './pages/specialties/Gynecology';
+import Urology from './pages/specialties/Urology';
 
 import contactus from './pages/contactus';
 const queryClient = new QueryClient();
@@ -157,6 +164,14 @@ const App: React.FC = () => (
             
 
 
+            <Route path="/specialties/cardiology" element={<Cardiology />} />
+            <Route path="/specialties/neurology" element={<Neurology />} />
+            <Route path="/specialties/orthopedics" element={<Orthopedics />} />
+            <Route path="/specialties/oncology" element={<Oncology />} />
+            <Route path="/specialties/gastroenterology" element={<Gastroenterology />} />
+            <Route path="/specialties/pediatrics" element={<Pediatrics />} />
+            <Route path="/specialties/gynecology" element={<Gynecology />} />
+            <Route path="/specialties/urology" element={<Urology />} />
            
 
 
