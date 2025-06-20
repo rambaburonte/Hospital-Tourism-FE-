@@ -1252,6 +1252,12 @@ interface ServiceItem {
   testDepartment?: string;
   testDescription?: string;
   testImage?: string;
+  diognosticsId?: number;
+  diognosticsName?: string;
+  diognosticsDescription?: string;
+  diognosticsImage?: string;
+  diognosticsrating?: string;
+  diognosticsaddress?: string;
   hospitalId?: number;
   hospitalName?: string;
   address?: string;
@@ -1509,11 +1515,11 @@ const AppointmentSection = () => {
   const handleCategoryClick = (categoryName: string) => {
     navigate(`/PharmacyCategoryPage/list?category=${encodeURIComponent(categoryName)}`);
   };
-
   const getDetailRoute = (item: ServiceItem): string => {
     console.log('Generating Detail Route for:', item);
     if ('id' in item && 'department' in item) return `/hospitaldoctors/${item.id}`;
     if ('testTitle' in item) return `/tests/${item.id}`;
+    if ('diognosticsName' in item) return `/diagnostics/${item.diognosticsId}`;
     if ('serviceName' in item) return `/ServiceListingPage/spa/${item.spaCenterId}`;
     if ('physioName' in item) return `/ServiceListingPage/physio/${item.physioId}`;
     if ('hospitalName' in item) return `/OurHospitals/${item.hospitalId}`;
@@ -1524,11 +1530,11 @@ const AppointmentSection = () => {
     if ('pharmacyName' in item) return `/PharmacyCategoryPage/${item.pharmacyId}`;
     return '#';
   };
-
   const getBookingRoute = (item: ServiceItem): string => {
     console.log('Generating Booking Route for:', item);
     if ('id' in item && 'department' in item) return `/booking/doctor/${item.id}`;
     if ('testTitle' in item) return `/booking/test/${item.id}`;
+    if ('diognosticsName' in item) return `/booking/diagnostics/${item.diognosticsId}`;
     if ('serviceName' in item) return `/booking/spa/${item.spaCenterId}`;
     if ('physioName' in item) return `/booking/physio/${item.physioId}`;
     if ('hospitalName' in item) return `/booking/hospital/${item.hospitalId}`;
@@ -1556,13 +1562,20 @@ const AppointmentSection = () => {
         description: item.description,
         image: item.profilepic || defaultFields.image,
       };
-    }
-    if ('testTitle' in item) {
+    }    if ('testTitle' in item) {
       return {
         name: item.testTitle,
         details: item.testDepartment,
         description: item.testDescription,
         image: item.testImage || defaultFields.image,
+      };
+    }
+    if ('diognosticsName' in item) {
+      return {
+        name: item.diognosticsName,
+        details: item.diognosticsaddress || 'No address provided',
+        description: item.diognosticsDescription || 'No description available',
+        image: item.diognosticsImage || defaultFields.image,
       };
     }
     if ('serviceName' in item) {
@@ -1631,10 +1644,10 @@ const AppointmentSection = () => {
     }
     return defaultFields;
   };
-
   const getServiceType = (item: ServiceItem): ServiceType => {
     if ('chefName' in item) return 'chef';
     if ('testTitle' in item) return 'labtest';
+    if ('diognosticsName' in item) return 'labtest';
     if ('name' in item && 'department' in item) return 'doctor';
     if ('serviceName' in item) return 'spa';
     if ('translatorName' in item) return 'translator';
