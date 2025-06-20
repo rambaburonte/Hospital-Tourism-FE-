@@ -1,32 +1,100 @@
+
+// import React from 'react';
+// import { Heart, Brain, Bone, Radiation, Stethoscope, Baby, Droplet, ArrowRight } from 'lucide-react';
+// import { Card, CardContent } from "@/components/ui/card";
+
+// const specialtiesList = [
+//   { icon: <Heart className="h-6 w-6 text-primary" />, title: "Cardiology", description: "Heart & Vascular Care" },
+//   { icon: <Brain className="h-6 w-6 text-primary" />, title: "Neurology", description: "Brain & Nervous System" },
+//   { icon: <Bone className="h-6 w-6 text-primary" />, title: "Orthopedics", description: "Joint & Bone Care" },
+//   { icon: <Radiation className="h-6 w-6 text-primary" />, title: "Oncology", description: "Cancer Care" },
+//   { icon: <Stethoscope className="h-6 w-6 text-primary" />, title: "Gastroenterology", description: "Digestive Disorders" },
+//   { icon: <Baby className="h-6 w-6 text-primary" />, title: "Pediatrics", description: "Children's Health" },
+//   { icon: <Heart className="h-6 w-6 text-primary" />, title: "Gynecology", description: "Women's Health" },
+//   { icon: <Droplet className="h-6 w-6 text-primary" />, title: "Urology", description: "Urinary System" },
+// ];
+
+// const SpecialtiesSection = () => {
+//   return (
+//     <section className="py-12">
+//       <div className="container mx-auto px-4 md:px-6">
+//         <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">Specialties & Procedures</h2>
+//         <div className="w-20 h-1 bg-primary mb-8"></div>
+        
+//         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+//           {specialtiesList.map((specialty, index) => (
+//             <Card key={index} className="border border-gray-200 specialty-icon hover:border-primary bg-slate-50 shadow-sm">
+//               <CardContent className="p-4">
+//                 <div className="flex items-start space-x-3">
+//                   <div className="flex-shrink-0 bg-slate-50 p-3 rounded-full">
+//                     {specialty.icon}
+//                   </div>
+//                   <div>
+//                     <h3 className="font-semibold text-gray-800">{specialty.title}</h3>
+//                     <p className="text-sm text-gray-600">{specialty.description}</p>
+//                   </div>
+//                 </div>
+//               </CardContent>
+//             </Card>
+//           ))}
+//         </div>
+        
+//         <div className="mt-8 flex justify-end">
+//           <a href="#" className="flex items-center text-primary font-medium hover:underline">
+//             View All Specialties
+//             <ArrowRight className="ml-2 h-4 w-4" />
+//           </a>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default SpecialtiesSection;
+
+
+
+
+
+
+
+
+
+
+
+
 import React from 'react';
 import { Heart, Brain, Bone, Radiation, Stethoscope, Baby, Droplet, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 
 const specialtiesList = [
-  { icon: <Heart className="h-6 w-6 text-primary" />, title: "Cardiology", description: "Heart & Vascular Care" },
-  { icon: <Brain className="h-6 w-6 text-primary" />, title: "Neurology", description: "Brain & Nervous System" },
-  { icon: <Bone className="h-6 w-6 text-primary" />, title: "Orthopedics", description: "Joint & Bone Care" },
-  { icon: <Radiation className="h-6 w-6 text-primary" />, title: "Oncology", description: "Cancer Care" },
-  { icon: <Stethoscope className="h-6 w-6 text-primary" />, title: "Gastroenterology", description: "Digestive Disorders" },
-  { icon: <Baby className="h-6 w-6 text-primary" />, title: "Pediatrics", description: "Children's Health" },
-  { icon: <Heart className="h-6 w-6 text-primary" />, title: "Gynecology", description: "Women's Health" },
-  { icon: <Droplet className="h-6 w-6 text-primary" />, title: "Urology", description: "Urinary System" },
+  { icon: <Heart className="h-6 w-6" />, title: "Cardiology", description: "Heart & Vascular Care" },
+  { icon: <Brain className="h-6 w-6" />, title: "Neurology", description: "Brain & Nervous System" },
+  { icon: <Bone className="h-6 w-6" />, title: "Orthopedics", description: "Joint & Bone Care" },
+  { icon: <Radiation className="h-6 w-6" />, title: "Oncology", description: "Cancer Care" },
+  { icon: <Stethoscope className="h-6 w-6" />, title: "Gastroenterology", description: "Digestive Disorders" },
+  { icon: <Baby className="h-6 w-6" />, title: "Pediatrics", description: "Children's Health" },
+  { icon: <Heart className="h-6 w-6" />, title: "Gynecology", description: "Women's Health" },
+  { icon: <Droplet className="h-6 w-6" />, title: "Urology", description: "Urinary System" },
 ];
 
 const SpecialtiesSection = () => {
   return (
-    <section className="py-12">
+    <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">Specialties & Procedures</h2>
-        <div className="w-20 h-1 bg-primary mb-8"></div>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 text-center">Specialties & Procedures</h2>
+        <div className="w-24 h-1 bg-[#499E14] mx-auto mb-10"></div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {specialtiesList.map((specialty, index) => (
-            <Card key={index} className="border border-gray-200 specialty-icon hover:border-primary bg-slate-50 shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 bg-slate-50 p-3 rounded-full">
-                    {specialty.icon}
+            <Card
+              key={index}
+              className="border border-gray-200 bg-white hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg overflow-hidden"
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 bg-gray-100 p-3 rounded-full">
+                    {React.cloneElement(specialty.icon, { className: "h-6 w-6 text-[#499E14]" })}
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">{specialty.title}</h3>
@@ -38,10 +106,10 @@ const SpecialtiesSection = () => {
           ))}
         </div>
         
-        <div className="mt-8 flex justify-end">
-          <a href="#" className="flex items-center text-primary font-medium hover:underline">
+        <div className="mt-12 text-center">
+          <a href="#" className="flex items-center justify-center text-[#499E14] font-semibold hover:text-[#3d7c10] transition-colors duration-300">
             View All Specialties
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight className="ml-2 h-5 w-5" />
           </a>
         </div>
       </div>

@@ -106,6 +106,8 @@ import MedicalRecords from './components/madicalrecordsOfUser.js';
 
 import HospitalAdvertisement from './components/Advertisement.js';
 
+
+import contactus from './pages/contactus';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -234,7 +236,9 @@ const App: React.FC = () => (
             <Route path="/admin/AllOrders" element={<AllOrders />} />
             <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
             <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
-
+            
+            <Route path="/" element={<HospitalAdvertisement />} />
+            <Route path="/contact-us" element={<ContactUsPage />} />
             {/* User Routes */}
             {/* 404 Route */}
 
