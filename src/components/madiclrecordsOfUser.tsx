@@ -101,6 +101,11 @@ const MedicalRecords: React.FC = () => {
         return 'patientreportsUrl'; // Adjust based on actual API response
       case 'scans':
         return 'patientaxraysUrl'; // Adjust based on actual API response
+
+        return 'patientreportsUrl';
+      case 'scans':
+        return 'patientaxraysUrl';
+
       default:
         return '';
     }

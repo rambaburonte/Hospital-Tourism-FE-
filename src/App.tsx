@@ -80,6 +80,8 @@ import ViewUsers from './admin/viewUsers';
 import Users from './components/userspage/GetAllUsers';
 import DoctorDetails from './admin/doctordetails';
 import AllOrders from './admin/AllOrders';
+import SalesTeamPage from './admin/salesTeam';
+import SalesTasksPage from './admin/salesTasks';
 // Corrected import name (PascalCase)
 import UpdateAllSubAdmin from './admin/subadminloginregister/alldetalupdatesubadmin';
 // Utility Components
@@ -220,6 +222,8 @@ const App: React.FC = () => (
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
             <Route path="/update-chef/:chefID" element={<UpdateChef />} />
             <Route path="/admin/AllOrders" element={<AllOrders />} />
+            <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
+            <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
 
             {/* User Routes */}
             {/* 404 Route */}
