@@ -73,6 +73,7 @@ import TopTourPlans from '@/components/Tourplans';
 import Footer from '@/components/Footer';
 import VideoSection from '@/components/Videos';
 import { useLocation } from 'react-router-dom';
+import HospitalAdvertisement from '@/components/Advertisement';
 
 const Watermark = () => {
   return (
@@ -126,8 +127,9 @@ const Index = () => {
         <SpecialtiesSection />
         <ExpertHelpSection />
         <TechnologySection />
-        <HospitalNetworkSection />
+        {/* <HospitalNetworkSection /> */}
         {/* <PatientStorySection /> */}
+        <HospitalAdvertisement />
         <TopTourPlans />
         <VideoSection />
         <HealthBlogsSection />

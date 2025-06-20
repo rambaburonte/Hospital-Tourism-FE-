@@ -236,9 +236,8 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-6">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">
-                MAX
-              </span>
+              <img src="/maditailr/maditailarLogo.png" alt="MAX Logo" className="h-20 w-25" />
+              
             </Link>
 
             {/* Desktop Navigation */}

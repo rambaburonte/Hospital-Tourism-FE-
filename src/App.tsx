@@ -98,6 +98,7 @@ import ChefList from './admin/viewchefs';
 import UpdateChef from './admin/UpdateChef';
 import AddSlots from './admin/AddSlots';
 import MedicalRecords from './components/madicalrecordsOfUser.js';
+import HospitalAdvertisement from './components/Advertisement.js';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -146,7 +147,7 @@ const App: React.FC = () => (
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
 
 
-
+           
 
 
 
