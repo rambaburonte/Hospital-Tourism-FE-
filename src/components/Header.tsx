@@ -200,7 +200,7 @@ const Header: React.FC = () => {
   return (
     <>
       {/* Google Analytics Script */}
-      <Helmet>
+      {/* <Helmet>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-NMEZPCSMXK"></script>
         <script>
           {`
@@ -210,7 +210,7 @@ const Header: React.FC = () => {
             gtag('config', 'G-NMEZPCSMXK');
           `}
         </script>
-      </Helmet>
+      </Helmet> */}
 
       <header
         className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 transition-shadow duration-300 ${
