@@ -47,12 +47,12 @@ const SpecialtiesSection = () => {
           ))}
         </div>
         
-        <div className="mt-12 text-center">
+        {/* <div className="mt-12 text-center">
           <a href="/specialities" className="flex items-center justify-center text-[#499E14] font-semibold hover:text-[#3d7c10] transition-colors duration-300">
             View All Specialties
             <ArrowRight className="ml-2 h-5 w-5" />
           </a>
-        </div>
+        </div> */}
       </div>
     </section>
   );
