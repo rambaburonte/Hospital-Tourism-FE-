@@ -129,6 +129,13 @@ export default function Login() {
           >
             Sub Admin Login
           </button>
+
+            <button
+            onClick={() => navigate("/saleslogin")}
+            className="ml-2 text-sm text-green-600 hover:underline"
+          >
+            Sales Login
+          </button>
         </div>
       </div>
     </div>
