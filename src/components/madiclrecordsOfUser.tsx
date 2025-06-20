@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { FileText, Microscope, Scan } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
@@ -97,9 +98,14 @@ const MedicalRecords: React.FC = () => {
       case 'documents':
         return 'prescriptionUrl';
       case 'testResults':
+        return 'patientreportsUrl'; // Adjust based on actual API response
+      case 'scans':
+        return 'patientaxraysUrl'; // Adjust based on actual API response
+
         return 'patientreportsUrl';
       case 'scans':
         return 'patientaxraysUrl';
+
       default:
         return '';
     }

@@ -104,6 +104,8 @@ import ViewBlogs from './admin/ViewBlogs';
 import ViewBlog from './admin/ViewBlog';
 import MedicalRecords from './components/madicalrecordsOfUser.js';
 
+import HospitalAdvertisement from './components/Advertisement.js';
+
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -153,7 +155,7 @@ const App: React.FC = () => (
             
 
 
-
+           
 
 
 
