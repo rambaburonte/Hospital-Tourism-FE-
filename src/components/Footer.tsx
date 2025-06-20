@@ -465,7 +465,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <h2 className="text-lg font-semibold mb-4">
               <img
-                src="public/maditailr/maditailarLogo.png" // Replace with the correct path to the uploaded logo image
+                src="/maditailr/maditailarLogo.png" // Replace with the correct path to the uploaded logo image
                 alt="Meditailor Logo"
                 style={{ height: '5em', verticalAlign: 'middle' }}
                 onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x20?text=Meditailor'; }}
