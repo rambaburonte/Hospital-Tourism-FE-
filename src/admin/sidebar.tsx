@@ -684,6 +684,15 @@ const Sidebar: React.FC = () => {
         { name: 'ViewSpaCenters', path: '/admin/viewcenters' },
       ],
     },
+     {
+      name: 'Packages',
+      icon: 'fas fa-spa',
+      subItems: [
+        { name: 'viewpackages', path: '/admin/viewpackage' },
+        { name: 'Addpackages', path: '/admin/addpackages' },
+        // { name: 'ViewSpaCenters', path: '/admin/viewcenters' },
+      ],
+    },
     {
       name: 'Sales Team & Tasks',
       icon: 'fas fa-users-cog',

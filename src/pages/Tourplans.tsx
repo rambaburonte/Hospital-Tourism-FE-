@@ -1,203 +1,207 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Heart, Stethoscope, TestTube, Car, ChefHat, Plane, Package, Languages, Search, Filter, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Define the type for tour plan items
 interface TourPlan {
+  id: number;
   name: string;
   description: string;
-  image: string;
+  image: string | null;
   category: string;
   price: number;
   inclusions: string[];
+  durationDays: number;
+  featured: string;
 }
 
-const TourPlans = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [priceRange, setPriceRange] = useState([0, 5000]);
-  const [sortOption, setSortOption] = useState('popularity');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+// Define the type for booking status
+interface BookingStatus {
+  [key: number]: {
+    loading: boolean;
+    error: string | null;
+    success: boolean;
+  };
+}
 
-  // Sample tour plan data (2-3 plans per category)
-  const tourPlans: TourPlan[] = [
-    // Spa & Physiotherapy
-    {
-      name: 'Delhi Spa Retreat',
-      description: 'Luxury spa treatments and physiotherapy in Delhi’s premier wellness center.',
-      image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Spa & Physiotherapy',
-      price: 700,
-      inclusions: ['Spa Therapy', 'Physiotherapy'],
-    },
-    {
-      name: 'Bangalore Yoga Wellness',
-      description: 'Guided yoga and spa therapy for holistic wellness in Bangalore.',
-      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Spa & Physiotherapy',
-      price: 900,
-      inclusions: ['Yoga Sessions', 'Spa Therapy'],
-    },
-    {
-      name: 'Chennai Relaxation Plan',
-      description: 'Therapeutic massage and physiotherapy sessions in Chennai.',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Spa & Physiotherapy',
-      price: 650,
-      inclusions: ['Massage', 'Physiotherapy'],
-    },
-    // Doctor Consultation
-    {
-      name: 'Mumbai Heart Checkup',
-      description: 'Cardiology consultation with comprehensive screening in Mumbai.',
-      image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Doctor Consultation',
-      price: 1100,
-      inclusions: ['Cardiology Consultation', 'Health Screening'],
-    },
-    {
-      name: 'Delhi Orthopedic Care',
-      description: 'Orthopedic consultation with follow-up care in Delhi.',
-      image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Doctor Consultation',
-      price: 950,
-      inclusions: ['Orthopedic Consultation', 'Follow-up'],
-    },
-    {
-      name: 'Bangalore Neuro Consult',
-      description: 'Neurology consultation with specialist care in Bangalore.',
-      image: 'https://images.unsplash.com/photo-1612349317154-3c9b2e5b7d5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Doctor Consultation',
-      price: 1200,
-      inclusions: ['Neurology Consultation', 'Diagnostic Review'],
-    },
-    // Lab Testing
-    {
-      name: 'Bangalore Diagnostic Plan',
-      description: 'Full-body lab tests including blood work and imaging in Bangalore.',
-      image: 'https://images.unsplash.com/photo-1585435465945-bef5a93d24c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Lab Testing',
-      price: 600,
-      inclusions: ['Blood Tests', 'MRI Scan'],
-    },
-    {
-      name: 'Chennai Health Check',
-      description: 'Comprehensive lab tests for preventive health in Chennai.',
-      image: 'https://images.unsplash.com/photo-1576091160550-2173fd1bece7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Lab Testing',
-      price: 750,
-      inclusions: ['Lab Tests', 'Health Report'],
-    },
-    {
-      name: 'Delhi Lab Screening',
-      description: 'Advanced diagnostic tests for complete health assessment in Delhi.',
-      image: 'https://images.unsplash.com/photo-1579684453423-8a6b57f2fad9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Lab Testing',
-      price: 800,
-      inclusions: ['Blood Work', 'Ultrasound'],
-    },
-    // Travel with Cab
-    {
-      name: 'Chennai Medical Transport',
-      description: 'Dedicated cab service for medical visits in Chennai.',
-      image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Travel with Cab',
-      price: 450,
-      inclusions: ['Cab Service', 'Hospital Transfers'],
-    },
-    {
-      name: 'Mumbai Clinic Shuttle',
-      description: 'Convenient cab transport for clinic visits in Mumbai.',
-      image: 'https://images.unsplash.com/photo-1542451365-e5aa846e5e9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Travel with Cab',
-      price: 500,
-      inclusions: ['Cab Service', 'Clinic Visits'],
-    },
-    // Chef-Curated Meals
-    {
-      name: 'Delhi Gourmet Health Stay',
-      description: 'Luxury hotel stay with healthy meals by a chef in Delhi.',
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Chef-Curated Meals',
-      price: 1200,
-      inclusions: ['Hotel Stay', 'Chef-Prepared Meals'],
-    },
-    {
-      name: 'Bangalore Culinary Wellness',
-      description: 'Hotel stay with diet-specific meals by a chef in Bangalore.',
-      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe75d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Chef-Curated Meals',
-      price: 1400,
-      inclusions: ['Hotel Stay', 'Custom Meals'],
-    },
-    // Flight-Included Travel
-    {
-      name: 'Mumbai Flight Medical Plan',
-      description: 'Flight to Mumbai with hospital consultation and hotel stay.',
-      image: 'https://images.unsplash.com/photo-1519494026892-80e0c3713da0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Flight-Included Travel',
-      price: 1600,
-      inclusions: ['Flight', 'Hospital Consultation', 'Hotel'],
-    },
-    {
-      name: 'Delhi Flight Wellness Plan',
-      description: 'Flight to Delhi with spa therapy and consultation.',
-      image: 'https://images.unsplash.com/photo-1542451365-e5aa846e5e9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Flight-Included Travel',
-      price: 1450,
-      inclusions: ['Flight', 'Spa Therapy', 'Consultation'],
-    },
-    // End-to-End Care
-    {
-      name: 'Bangalore Complete Care',
-      description: 'All-inclusive plan with flights, consultations, tests, and spa.',
-      image: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'End-to-End Care',
-      price: 2200,
-      inclusions: ['Flights', 'Doctor Consultation', 'Lab Tests', 'Spa', 'Cab', 'Chef Meals', 'Translator'],
-    },
-    {
-      name: 'Delhi Ultimate Health Journey',
-      description: 'Comprehensive medical tourism with all services included.',
-      image: 'https://images.unsplash.com/photo-1532634922-8fe0b757fb13?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'End-to-End Care',
-      price: 2500,
-      inclusions: ['Flights', 'Consultation', 'Tests', 'Hotel', 'Cab', 'Chef Meals', 'Translator'],
-    },
-    // Flight-Free Wellness
-    {
-      name: 'Chennai Local Wellness',
-      description: 'Spa, consultation, and cab services without flights in Chennai.',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Flight-Free Wellness',
-      price: 850,
-      inclusions: ['Spa Therapy', 'Doctor Consultation', 'Cab Service'],
-    },
-    {
-      name: 'Mumbai Grounded Care',
-      description: 'Local medical and wellness services without flights in Mumbai.',
-      image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Flight-Free Wellness',
-      price: 700,
-      inclusions: ['Lab Tests', 'Hotel Stay', 'Cab Service'],
-    },
-    // Translator-Assisted Care
-    {
-      name: 'Delhi Language-Supported Care',
-      description: 'Doctor consultation with translator services in Delhi.',
-      image: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Translator-Assisted Care',
-      price: 1000,
-      inclusions: ['Doctor Consultation', 'Translator Services'],
-    },
-    {
-      name: 'Bangalore Interpreter Plan',
-      description: 'Medical visits with interpreter support in Bangalore.',
-      image: 'https://images.unsplash.com/photo-1576091160550-2173fd1bece7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      category: 'Translator-Assisted Care',
-      price: 900,
-      inclusions: ['Consultation', 'Translator Services'],
-    },
-  ];
+// Define the type for API response
+interface ApiServicePackage {
+  id: number;
+  name: string;
+  description: string;
+  totalPrice: number;
+  durationDays: number;
+  imageUrl: string | null;
+  featured: string;
+  serviceItems: { id: number; servicePackageId: number; serviceItemId: number | null }[];
+}
+
+// Define the type for booking response DTO
+interface BookingPackageDTO {
+  id: number;
+  userId: number;
+  servicePackageId: number;
+  bookingDate: string;
+  status: string;
+  totalPrice: number;
+}
+
+// Define the type for user data stored in localStorage
+interface UserData {
+  id: number;
+  email: string;
+  // Add other user fields as needed
+}
+
+const TourPlans: React.FC = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [priceRange, setPriceRange] = useState<number[]>([0, 27500]);
+  const [sortOption, setSortOption] = useState<string>('popularity');
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [tourPlans, setTourPlans] = useState<TourPlan[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [bookingStatus, setBookingStatus] = useState<BookingStatus>({});
+
+  // Map serviceItemIds to inclusion names (assumed mapping)
+  const serviceItemMap: Record<number, string> = {
+    1: 'Spa Therapy',
+    2: 'Yoga Sessions',
+    152: 'Doctor Consultation',
+    153: 'Hotel Stay',
+    202: 'Lab Tests',
+    252: 'Cab Service',
+    302: 'Flight',
+    303: 'Translator Services',
+    304: 'Chef-Prepared Meals',
+    307: 'Physiotherapy',
+  };
+
+  // Map service items to categories
+  const getCategoryFromInclusions = (inclusions: string[]): string => {
+    if (inclusions.includes('Flight')) return 'Flight-Included Travel';
+    if (inclusions.includes('Translator Services')) return 'Translator-Assisted Care';
+    if (inclusions.includes('Spa Therapy') || inclusions.includes('Yoga Sessions') || inclusions.includes('Physiotherapy'))
+      return 'Spa & Physiotherapy';
+    if (inclusions.includes('Doctor Consultation')) return 'Doctor Consultation';
+    if (inclusions.includes('Lab Tests')) return 'Lab Testing';
+    if (inclusions.includes('Cab Service')) return 'Travel with Cab';
+    if (inclusions.includes('Chef-Prepared Meals')) return 'Chef-Curated Meals';
+    if (inclusions.length > 4) return 'End-to-End Care';
+    return 'Flight-Free Wellness';
+  };
+
+  // Fetch tour plans from API
+  useEffect(() => {
+    const fetchTourPlans = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:4545/admin/packege/All/packages', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: ApiServicePackage[] = await response.json();
+
+        // Map API data to TourPlan interface
+        const mappedPlans: TourPlan[] = data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          description: item.description.trim(),
+          image: item.imageUrl || 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+          price: item.totalPrice,
+          durationDays: item.durationDays,
+          featured: item.featured,
+          inclusions: item.serviceItems
+            .map((si) => serviceItemMap[si.serviceItemId!])
+            .filter((inclusion): inclusion is string => inclusion !== undefined),
+          category: getCategoryFromInclusions(
+            item.serviceItems
+              .map((si) => serviceItemMap[si.serviceItemId!])
+              .filter((inclusion): inclusion is string => inclusion !== undefined)
+          ),
+        }));
+
+        setTourPlans(mappedPlans);
+      } catch (err) {
+        setError('Failed to fetch tour plans. Please try again later.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTourPlans();
+  }, []);
+
+  // Handle booking action
+  const handleBookPackage = async (packageId: number) => {
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: 'Please log in to book a package.', success: false },
+      }));
+      navigate('/login');
+      return;
+    }
+
+    let userId: number;
+    try {
+      const userData: UserData = JSON.parse(userString);
+      userId = userData.id;
+    } catch (err) {
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: 'Invalid user data. Please log in again.', success: false },
+      }));
+      navigate('/login');
+      return;
+    }
+
+    setBookingStatus((prev) => ({
+      ...prev,
+      [packageId]: { loading: true, error: null, success: false },
+    }));
+
+    try {
+      const response = await fetch(`http://localhost:4545/user/package/book/${userId}/${packageId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: BookingPackageDTO = await response.json();
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: null, success: true },
+      }));
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setBookingStatus((prev) => ({
+          ...prev,
+          [packageId]: { loading: false, error: null, success: false },
+        }));
+      }, 5000);
+    } catch (err) {
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: 'Failed to book package. Please try again.', success: false },
+      }));
+      console.error(err);
+    }
+  };
 
   // Map categories to their respective icons
   const categoryIcons: Record<string, JSX.Element> = {
@@ -212,25 +216,18 @@ const TourPlans = () => {
     'Translator-Assisted Care': <Languages className="h-5 w-5 text-[#499E14]" />,
   };
 
-  // Available categories
-  const categories = [
-    'All',
-    'Spa & Physiotherapy',
-    'Doctor Consultation',
-    'Lab Testing',
-    'Travel with Cab',
-    'Chef-Curated Meals',
-    'Flight-Included Travel',
-    'End-to-End Care',
-    'Flight-Free Wellness',
-    'Translator-Assisted Care',
-  ];
+  // Available categories (dynamically generated)
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(new Set(tourPlans.map((plan) => plan.category)));
+    return ['All', ...uniqueCategories];
+  }, [tourPlans]);
 
   // Memoized filtered tour plans
   const filteredTourPlans = useMemo(() => {
-    let plans = tourPlans.filter((plan) => {
-      const matchesSearch = plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           plan.description.toLowerCase().includes(searchTerm.toLowerCase());
+    let plans = tourPlans.filter((plan: TourPlan) => {
+      const matchesSearch =
+        plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        plan.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || plan.category === selectedCategory;
       const matchesPrice = plan.price >= priceRange[0] && plan.price <= priceRange[1];
       return matchesSearch && matchesCategory && matchesPrice;
@@ -238,15 +235,31 @@ const TourPlans = () => {
 
     // Sort plans
     if (sortOption === 'priceLowToHigh') {
-      plans.sort((a, b) => a.price - b.price);
+      plans.sort((a: TourPlan, b: TourPlan) => a.price - b.price);
     } else if (sortOption === 'priceHighToLow') {
-      plans.sort((a, b) => b.price - a.price);
+      plans.sort((a: TourPlan, b: TourPlan) => b.price - a.price);
     } else if (sortOption === 'popularity') {
-      plans.sort((a, b) => tourPlans.indexOf(a) - tourPlans.indexOf(b)); // Maintain original order
+      plans.sort((a: TourPlan, b: TourPlan) => (b.featured === 'Yes' ? 1 : -1));
     }
 
     return plans;
-  }, [searchTerm, selectedCategory, priceRange, sortOption]);
+  }, [searchTerm, selectedCategory, priceRange, sortOption, tourPlans]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-xl text-gray-600">Loading tour plans...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-xl text-red-600">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <section className="bg-gray-100 py-16 w-full">
@@ -288,7 +301,7 @@ const TourPlans = () => {
                 <input
                   type="text"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                   placeholder="Search tour plans..."
                   className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300"
                   aria-label="Search tour plans"
@@ -300,13 +313,14 @@ const TourPlans = () => {
                 <input
                   type="range"
                   min="0"
-                  max="5000"
+                  max="27500"
                   value={priceRange[1]}
-                  onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setPriceRange([0, parseInt(e.target.value)])
+                  }
                   className="w-full accent-[#499E14]"
                   aria-label="Price range filter"
                 />
-                
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>$0</span>
                   <span>${priceRange[1]}</span>
@@ -347,7 +361,7 @@ const TourPlans = () => {
             <div className="flex justify-end mb-6">
               <select
                 value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortOption(e.target.value)}
                 className="p-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#499E14] focus:border-[#499E14] transition-all duration-300 hover:bg-gray-50"
                 aria-label="Sort tour plans"
               >
@@ -367,15 +381,15 @@ const TourPlans = () => {
                 <p className="text-center text-gray-600 text-lg">No tour plans found.</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredTourPlans.map((plan, index) => (
+                  {filteredTourPlans.map((plan: TourPlan) => (
                     <div
-                      key={index}
+                      key={plan.id}
                       className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-gradient-to-r from-[#e6f4e0] to-[#f0f8e8]"
                       role="article"
                       aria-label={plan.name}
                     >
                       <img
-                        src={plan.image}
+                        src={plan.image!}
                         alt={plan.name}
                         className="w-full h-56 object-cover rounded-xl mb-4"
                       />
@@ -398,6 +412,27 @@ const TourPlans = () => {
                       </div>
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">{plan.description}</p>
                       <p className="text-gray-800 text-lg font-semibold">Price: ${plan.price}</p>
+                      <p className="text-gray-600 text-sm mb-3">Duration: {plan.durationDays} days</p>
+                      <button
+                        onClick={() => handleBookPackage(plan.id)}
+                        disabled={bookingStatus[plan.id]?.loading}
+                        className={`w-full py-2 rounded-lg text-white font-medium transition-all duration-300 ${
+                          bookingStatus[plan.id]?.loading
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-[#499E14] hover:bg-[#3a7e10]'
+                        }`}
+                        aria-label={`Book ${plan.name}`}
+                      >
+                        {bookingStatus[plan.id]?.loading ? 'Booking...' : 'Book Here'}
+                      </button>
+                      {bookingStatus[plan.id]?.success && (
+                        <p className="text-green-600 text-sm mt-2 text-center">Booking successful!</p>
+                      )}
+                      {bookingStatus[plan.id]?.error && (
+                        <p className="text-red-600 text-sm mt-2 text-center">
+                          {bookingStatus[plan.id].error}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -406,17 +441,21 @@ const TourPlans = () => {
           </div>
         </div>
       </div>
-      <style>
-        {`
-          @keyframes fade-in {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
           }
-          .animate-fade-in {
-            animation: fade-in 1s ease-out;
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
-        `}
-      </style>
+        }
+        .animate-fade-in {
+          animation: fade-in 1s ease-out;
+        }
+      `}</style>
     </section>
   );
 };

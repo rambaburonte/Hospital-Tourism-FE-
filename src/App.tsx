@@ -106,6 +106,8 @@ import ViewBlog from './admin/ViewBlog';
 import MedicalRecords from './components/madicalrecordsOfUser.js';
 
 import HospitalAdvertisement from './components/Advertisement.js';
+import ViewPackges from "./admin/ViewPackages.tsx";
+import AddPackages from "./admin/AddPackages";
 
 
 import contactus from './pages/contactus';
@@ -238,6 +240,8 @@ const App: React.FC = () => (
             <Route path="/admin/AllOrders" element={<AllOrders />} />
             <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
             <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
+            <Route path="/admin/viewpackage"  element={<ViewPackges/>}/>
+            <Route path="/admin/addpackages"  element={<AddPackages/>}/>
             
             <Route path="/" element={<HospitalAdvertisement />} />
             <Route path="/contact-us" element={<ContactUsPage />} />
