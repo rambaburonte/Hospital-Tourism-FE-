@@ -2,9 +2,9 @@
 
 
 
-//  export const BASE_URL = 'https://meditailor.infororg.com';
+ export const BASE_URL = 'https://meditailor.infororg.com';
 
- export const BASE_URL = 'http://localhost:4545';
+ //export const BASE_URL = 'http://localhost:4545';
 
 
 

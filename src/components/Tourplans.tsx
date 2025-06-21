@@ -1,75 +1,147 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plane, Clock, Heart } from 'lucide-react';
+import axios from 'axios';
+
+// Define the type for service items
+interface PackageServiceItem {
+  id: number;
+  serviceItemId: number | null;
+  servicePackageId: number;
+}
+
+// Define the type for service package from backend
+interface ServicePackage {
+  id: number;
+  name: string;
+  description: string;
+  totalPrice: number;
+  durationDays: number;
+  imageUrl?: string;
+  featured: string;
+  serviceItems: PackageServiceItem[];
+}
 
 // Define the type for tour plan items
 interface TourPlan {
+  id: number; // Added to track package ID for booking
   name: string;
   details: string;
   image: string;
   description: string;
   category: string;
   route: string;
+  inclusions: string[];
+  price: number;
+  durationDays: number;
 }
 
-const TopTourPlans = () => {
+// Define the type for booking status
+interface BookingStatus {
+  [key: number]: {
+    loading: boolean;
+    error: string | null;
+    success: boolean;
+  };
+}
+
+// Define the type for booking response DTO
+interface BookingPackageDTO {
+  id: number;
+  userId: number;
+  servicePackageId: number;
+  bookingDate: string;
+  status: string;
+  totalPrice: number;
+}
+
+// Define the type for user data stored in localStorage
+interface UserData {
+  id: number;
+  email: string;
+  // Add other user fields as needed
+}
+
+const TopTourPlans: React.FC = () => {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [packages, setPackages] = useState<ServicePackage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [bookingStatus, setBookingStatus] = useState<BookingStatus>({});
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Sample tour plan data
-  const tourPlans: TourPlan[] = [
-    {
-      name: 'Medical Travel Package',
-      details: 'Flight + Cardiology Checkup + Spa Therapy',
-      image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      description: 'Includes direct flight to Delhi, a cardiology checkup at Max Hospital, and a therapeutic massage for recovery.',
-      category: 'Travel Booking',
-      route: '/travel',
-    },
-    {
-      name: 'Mumbai Neurology Recovery Plan',
-      details: 'Neurology Consultation + Physiotherapy',
-      image: 'https://images.unsplash.com/photo-1612349317154-3c9b2e5b7d5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      description: 'Neurology consultation at Max Hospital Mumbai with post-treatment physiotherapy for optimal recovery.',
-      category: 'Appointment Booking',
-      route: '/appointments',
-    },
-    {
-      name: 'Bangalore Wellness Journey',
-      details: 'Flight + Dermatology + Yoga Therapy',
-      image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      description: 'Direct flight to Bangalore, dermatology appointment, and guided yoga therapy for holistic wellness.',
-      category: 'Spa & Physiotherapy',
-      route: '/spa-physiotherapy',
-    },
-    {
-      name: 'Chennai Orthopedic Care Package',
-      details: 'Flight + Orthopedic Consultation + Hydrotherapy',
-      image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      description: 'Direct flight to Chennai, orthopedic consultation at Max Hospital, and hydrotherapy for joint pain relief.',
-      category: 'Travel Booking',
-      route: '/travel',
-    },
-  ];
-
-  // Map categories to their respective icons
-  const categoryIcons: Record<string, JSX.Element> = {
-    'Travel Booking': <Plane className="h-6 w-6 text-indigo-600" />,
-    'Appointment Booking': <Clock className="h-6 w-6 text-indigo-600" />,
-    'Spa & Physiotherapy': <Heart className="h-6 w-6 text-indigo-600" />,
+  // Map serviceItemIds to inclusion names (aligned with TourPlans.tsx)
+  const serviceItemMap: Record<number, string> = {
+    1: 'Spa Therapy',
+    2: 'Yoga Sessions',
+    152: 'Doctor Consultation',
+    153: 'Hotel Stay',
+    202: 'Lab Tests',
+    252: 'Cab Service',
+    302: 'Flight',
+    303: 'Translator Services',
+    304: 'Chef-Prepared Meals',
+    307: 'Physiotherapy',
   };
 
-  // Memoized tour plans
-  const memoizedTourPlans = useMemo(() => tourPlans, []);
+  // Fetch packages from backend
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const res = await axios.get('http://localhost:4545/admin/packege/All/packages');
+        const filteredPackages = res.data.filter(
+          (pkg: ServicePackage) => pkg.featured.toLowerCase() === 'no'
+        );
+        setPackages(filteredPackages);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching packages:', err);
+        setError('Failed to load featured packages. Please try again later.');
+        setLoading(false);
+      }
+    };
+    fetchPackages();
+  }, []);
+
+  // Map packages to tour plans
+  const tourPlans: TourPlan[] = useMemo(() => {
+    return packages.map((pkg) => ({
+      id: pkg.id,
+      name: pkg.name,
+      details: pkg.serviceItems.length
+        ? pkg.serviceItems
+            .map((item) => serviceItemMap[item.serviceItemId!])
+            .filter((inclusion): inclusion is string => inclusion !== undefined)
+            .join(' + ')
+        : 'Custom Medical Package',
+      image: pkg.imageUrl || 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      description: pkg.description || `A ${pkg.durationDays}-day medical package costing $${pkg.totalPrice}.`,
+      category: pkg.serviceItems.length ? 'Medical Package' : 'General Package',
+      route: '/packages',
+      inclusions: pkg.serviceItems
+        .map((si) => serviceItemMap[si.serviceItemId!])
+        .filter((inclusion): inclusion is string => inclusion !== undefined),
+      price: pkg.totalPrice,
+      durationDays: pkg.durationDays,
+    }));
+  }, [packages]);
+
+  // Map categories to their respective icons (aligned with TourPlans.tsx)
+  const categoryIcons: Record<string, JSX.Element> = {
+    'Medical Package': <Plane className="h-5 w-5 text-[#499E14]" />,
+    'General Package': <Clock className="h-5 w-5 text-[#499E14]" />,
+    'Spa & Physiotherapy': <Heart className="h-5 w-5 text-[#499E14]" />,
+  };
 
   // Auto-scrolling logic
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % memoizedTourPlans.length);
+      setCurrentSlide((prev) => (prev + 1) % tourPlans.length);
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [memoizedTourPlans.length]);
+  }, [tourPlans.length]);
 
   // Scroll to the current slide
   useEffect(() => {
@@ -80,6 +152,95 @@ const TopTourPlans = () => {
       });
     }
   }, [currentSlide]);
+
+  // Handle booking action
+  const handleBookPackage = async (packageId: number) => {
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: 'Please log in to book a package.', success: false },
+      }));
+      navigate('/login');
+      return;
+    }
+
+    let userId: number;
+    try {
+      const userData: UserData = JSON.parse(userString);
+      userId = userData.id;
+    } catch (err) {
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: 'Invalid user data. Please log in again.', success: false },
+      }));
+      navigate('/login');
+      return;
+    }
+
+    setBookingStatus((prev) => ({
+      ...prev,
+      [packageId]: { loading: true, error: null, success: false },
+    }));
+
+    try {
+      const response = await axios.post(`http://localhost:4545/user/package/book/${userId}/${packageId}`, {}, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data: BookingPackageDTO = response.data;
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: null, success: true },
+      }));
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setBookingStatus((prev) => ({
+          ...prev,
+          [packageId]: { loading: false, error: null, success: false },
+        }));
+      }, 5000);
+    } catch (err) {
+      setBookingStatus((prev) => ({
+        ...prev,
+        [packageId]: { loading: false, error: 'Failed to book package. Please try again.', success: false },
+      }));
+      console.error(err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="bg-slate-50 py-12 w-full bg-opacity-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 bg-opacity-50">
+          <p className="text-center text-gray-600">Loading featured packages...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="bg-slate-50 py-12 w-full bg-opacity-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 bg-opacity-50">
+          <p className="text-center text-red-600">{error}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!tourPlans.length) {
+    return (
+      <section className="bg-slate-50 py-12 w-full bg-opacity-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 bg-opacity-50">
+          <p className="text-center text-gray-600">No featured packages available.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-slate-50 py-12 w-full bg-opacity-50">
@@ -98,12 +259,12 @@ const TopTourPlans = () => {
               aria-label="Top tour plans auto-scrolling carousel"
             >
               <div className="flex w-full">
-                {memoizedTourPlans.map((plan, index) => (
+                {tourPlans.map((plan, index) => (
                   <div
-                    key={index}
+                    key={plan.id}
                     className="w-full flex-none"
                     role="group"
-                    aria-label={`Slide ${index + 1} of ${memoizedTourPlans.length}`}
+                    aria-label={`Slide ${index + 1} of ${tourPlans.length}`}
                   >
                     <div className="relative w-full h-64 sm:h-96">
                       <img
@@ -128,12 +289,10 @@ const TopTourPlans = () => {
 
           {/* Medical Tour Plans Section with Scaling Cards */}
           <div>
-           
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {memoizedTourPlans.slice(0, 4).map((plan, index) => (
+              {tourPlans.slice(0, 4).map((plan) => (
                 <div
-                  key={index}
+                  key={plan.id}
                   className="bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                   role="article"
                   aria-label={plan.name}
@@ -144,26 +303,62 @@ const TopTourPlans = () => {
                     className="w-full h-40 object-cover rounded-lg mb-4"
                   />
                   <div className="flex items-center mb-2">
-                    <div className="bg-slate-100 p-3 rounded-full shadow-sm mr-3">
+                    <div className="bg-[#f0f8e8] p-3 rounded-full shadow-sm mr-3">
                       {categoryIcons[plan.category]}
                     </div>
                     <h4 className="text-lg font-semibold text-gray-800">
                       {plan.name}
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm mb-2">
-                    {plan.details}
-                  </p>
-                  <p className="text-gray-500 text-xs italic mb-4">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {plan.inclusions.map((inclusion, i) => (
+                      <span
+                        key={i}
+                        className="inline-block bg-[#e6f4e0] text-[#3a7e10] text-xs px-3 py-1 rounded-full hover:bg-[#d0e8b8] transition-all duration-200 cursor-default"
+                        title={inclusion}
+                      >
+                        {inclusion}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-gray-600 text-sm mb-2 line-clamp-2">
                     {plan.description}
                   </p>
-                  <Link
-                    to={plan.route}
-                    className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300"
-                    aria-label={`Book Now ${plan.name}`}
-                  >
-                    Book Now
-                  </Link>
+                  <p className="text-gray-800 text-sm font-semibold mb-2">
+                    Price: ${plan.price}
+                  </p>
+                  <p className="text-gray-600 text-sm mb-3">
+                    Duration: {plan.durationDays} days
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleBookPackage(plan.id)}
+                      disabled={bookingStatus[plan.id]?.loading}
+                      className={`flex-1 py-2 rounded-lg text-white font-medium transition-all duration-300 ${
+                        bookingStatus[plan.id]?.loading
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-[#499E14] hover:bg-[#3a7e10]'
+                      }`}
+                      aria-label={`Book ${plan.name}`}
+                    >
+                      {bookingStatus[plan.id]?.loading ? 'Booking...' : 'Book Here'}
+                    </button>
+                    <Link
+                      to={plan.route}
+                      className="flex-1 bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md text-center transition-all duration-300"
+                      aria-label={`View Details ${plan.name}`}
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                  {bookingStatus[plan.id]?.success && (
+                    <p className="text-green-600 text-sm mt-2 text-center">Booking successful!</p>
+                  )}
+                  {bookingStatus[plan.id]?.error && (
+                    <p className="text-red-600 text-sm mt-2 text-center">
+                      {bookingStatus[plan.id].error}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -171,7 +366,7 @@ const TopTourPlans = () => {
             <div className="mt-12 text-center">
               <Link
                 to="/tours"
-                className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:text-white-500 hover:scale-105 hover:shadow-md transition-all duration-200"
+                className="inline-block bg-[#499E14] hover:bg-[#3a7e10] text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:text-white hover:scale-105 hover:shadow-md transition-all duration-200"
                 aria-label="Explore More"
               >
                 Explore More

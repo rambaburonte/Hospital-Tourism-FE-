@@ -83,6 +83,9 @@ import DoctorDetails from './admin/doctordetails';
 import AllOrders from './admin/AllOrders';
 import SalesTeamPage from './admin/salesTeam';
 import SalesTasksPage from './admin/salesTasks';
+
+import PackagesDisplayPage from './admin/ViewPackages.js';
+import AddPackages from './admin/AddPackages';
 // Corrected import name (PascalCase)
 import UpdateAllSubAdmin from './admin/subadminloginregister/alldetalupdatesubadmin';
 // Utility Components
@@ -94,6 +97,8 @@ import { Import } from 'lucide-react';
 import UpdateSubAdminForm from './admin/subadminloginregister/updateSubAdmin';
 import AddMedicineForm from './Pharmacy/addMadicine';
 import MedicineList from './Pharmacy/MedicineList';
+import PrescriptionList from './Pharmacy/PrescriptionList';
+import OrderList from './Pharmacy/OrderList';
 import UpdateMedicine from './Pharmacy/MadichineUpdate';
 import MedicineCatalog from './Pharmacy/UserInterface';
 import BookingForm from './admin/Booking';
@@ -106,7 +111,14 @@ import ViewBlog from './admin/ViewBlog';
 import MedicalRecords from './components/madicalrecordsOfUser.js';
 
 import HospitalAdvertisement from './components/Advertisement.js';
-
+import Cardiology from './pages/specialties/Cardiology';
+import Neurology from './pages/specialties/Neurology';
+import Orthopedics from './pages/specialties/Orthopedics';
+import Oncology from './pages/specialties/Oncology';
+import Gastroenterology from './pages/specialties/Gastroenterology';
+import Pediatrics from './pages/specialties/Pediatrics';
+import Gynecology from './pages/specialties/Gynecology';
+import Urology from './pages/specialties/Urology';
 
 import contactus from './pages/contactus';
 const queryClient = new QueryClient();
@@ -154,12 +166,20 @@ const App: React.FC = () => (
             <Route path="/chef-list" element={<ChefsList />} />
             <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
             <Route path="/saleslogin" element={<SalesLogin/>} />
-
+            <Route path="/admin/orders" element={<OrderList />} />
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
             
 
 
-           
+            <Route path="/specialties/cardiology" element={<Cardiology />} />
+            <Route path="/specialties/neurology" element={<Neurology />} />
+            <Route path="/specialties/orthopedics" element={<Orthopedics />} />
+            <Route path="/specialties/oncology" element={<Oncology />} />
+            <Route path="/specialties/gastroenterology" element={<Gastroenterology />} />
+            <Route path="/specialties/pediatrics" element={<Pediatrics />} />
+            <Route path="/specialties/gynecology" element={<Gynecology />} />
+            <Route path="/specialties/urology" element={<Urology />} />
+           <Route path="/admin/prescriptions" element={<PrescriptionList />} />
 
 
 
@@ -238,6 +258,8 @@ const App: React.FC = () => (
             <Route path="/admin/AllOrders" element={<AllOrders />} />
             <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
             <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
+            <Route path="/admin/viewpackage"  element={<PackagesDisplayPage/>}/>
+            <Route path="/admin/addpackages"  element={<AddPackages/>}/>
             
             <Route path="/" element={<HospitalAdvertisement />} />
             <Route path="/contact-us" element={<ContactUsPage />} />

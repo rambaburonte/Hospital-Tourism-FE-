@@ -1,19 +1,21 @@
 import React from 'react';
 import { Heart, Brain, Bone, Radiation, Stethoscope, Baby, Droplet, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from 'react-router-dom';
 
 const specialtiesList = [
-  { icon: <Heart className="h-6 w-6" />, title: "Cardiology", description: "Heart & Vascular Care" },
-  { icon: <Brain className="h-6 w-6" />, title: "Neurology", description: "Brain & Nervous System" },
-  { icon: <Bone className="h-6 w-6" />, title: "Orthopedics", description: "Joint & Bone Care" },
-  { icon: <Radiation className="h-6 w-6" />, title: "Oncology", description: "Cancer Care" },
-  { icon: <Stethoscope className="h-6 w-6" />, title: "Gastroenterology", description: "Digestive Disorders" },
-  { icon: <Baby className="h-6 w-6" />, title: "Pediatrics", description: "Children's Health" },
-  { icon: <Heart className="h-6 w-6" />, title: "Gynecology", description: "Women's Health" },
-  { icon: <Droplet className="h-6 w-6" />, title: "Urology", description: "Urinary System" },
+  { icon: <Heart className="h-6 w-6" />, title: "Cardiology", description: "Heart & Vascular Care", path: "/specialties/cardiology" },
+  { icon: <Brain className="h-6 w-6" />, title: "Neurology", description: "Brain & Nervous System", path: "/specialties/neurology" },
+  { icon: <Bone className="h-6 w-6" />, title: "Orthopedics", description: "Joint & Bone Care", path: "/specialties/orthopedics" },
+  { icon: <Radiation className="h-6 w-6" />, title: "Oncology", description: "Cancer Care", path: "/specialties/oncology" },
+  { icon: <Stethoscope className="h-6 w-6" />, title: "Gastroenterology", description: "Digestive Disorders", path: "/specialties/gastroenterology" },
+  { icon: <Baby className="h-6 w-6" />, title: "Pediatrics", description: "Children's Health", path: "/specialties/pediatrics" },
+  { icon: <Heart className="h-6 w-6" />, title: "Gynecology", description: "Women's Health", path: "/specialties/gynecology" },
+  { icon: <Droplet className="h-6 w-6" />, title: "Urology", description: "Urinary System", path: "/specialties/urology" },
 ];
 
 const SpecialtiesSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
@@ -24,7 +26,11 @@ const SpecialtiesSection = () => {
           {specialtiesList.map((specialty, index) => (
             <Card
               key={index}
-              className="border border-gray-200 bg-white hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg overflow-hidden"
+              className="border border-gray-200 bg-white hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg overflow-hidden cursor-pointer"
+              onClick={() => navigate(specialty.path)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={e => { if (e.key === 'Enter') navigate(specialty.path); }}
             >
               <CardContent className="p-6">
                 <div className="flex items-center space-x-4">
@@ -41,12 +47,12 @@ const SpecialtiesSection = () => {
           ))}
         </div>
         
-        <div className="mt-12 text-center">
-          <a href="#" className="flex items-center justify-center text-[#499E14] font-semibold hover:text-[#3d7c10] transition-colors duration-300">
+        {/* <div className="mt-12 text-center">
+          <a href="/specialities" className="flex items-center justify-center text-[#499E14] font-semibold hover:text-[#3d7c10] transition-colors duration-300">
             View All Specialties
             <ArrowRight className="ml-2 h-5 w-5" />
           </a>
-        </div>
+        </div> */}
       </div>
     </section>
   );
