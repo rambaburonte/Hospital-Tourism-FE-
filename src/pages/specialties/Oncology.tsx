@@ -142,7 +142,7 @@ const Oncology: React.FC = () => (
           Our oncology team is here to support you every step of the way. Schedule a consultation today.
         </p>
         <a
-          href="[Insert appointment link]"
+          href="/contact-us"
           className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition"
         >
           Book an Appointment

@@ -142,7 +142,7 @@ const Neurology: React.FC = () => (
           Our neurology team is here to support you. Schedule an appointment today to address your neurological concerns.
         </p>
         <a
-          href="[Insert appointment link]"
+          href="/contact-us"
           className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition"
         >
           Book an Appointment

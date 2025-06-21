@@ -1,5 +1,3 @@
-
-
 // import React from 'react';
 
 // const Cardiology: React.FC = () => (
@@ -222,7 +220,7 @@ const Cardiology: React.FC = () => (
           Your heart deserves the best care. Schedule an appointment with our cardiology team today to start your journey to better heart health.
         </p>
         <a
-          href="[Insert appointment link]"
+          href="/contact-us"
           className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition"
         >
           Book an Appointment

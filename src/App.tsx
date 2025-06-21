@@ -94,6 +94,8 @@ import { Import } from 'lucide-react';
 import UpdateSubAdminForm from './admin/subadminloginregister/updateSubAdmin';
 import AddMedicineForm from './Pharmacy/addMadicine';
 import MedicineList from './Pharmacy/MedicineList';
+import PrescriptionList from './Pharmacy/PrescriptionList';
+import OrderList from './Pharmacy/OrderList';
 import UpdateMedicine from './Pharmacy/MadichineUpdate';
 import MedicineCatalog from './Pharmacy/UserInterface';
 import BookingForm from './admin/Booking';
@@ -161,7 +163,7 @@ const App: React.FC = () => (
             <Route path="/chef-list" element={<ChefsList />} />
             <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
             <Route path="/saleslogin" element={<SalesLogin/>} />
-
+            <Route path="/admin/orders" element={<OrderList />} />
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
             
 
@@ -174,7 +176,7 @@ const App: React.FC = () => (
             <Route path="/specialties/pediatrics" element={<Pediatrics />} />
             <Route path="/specialties/gynecology" element={<Gynecology />} />
             <Route path="/specialties/urology" element={<Urology />} />
-           
+           <Route path="/admin/prescriptions" element={<PrescriptionList />} />
 
 
 

@@ -142,7 +142,7 @@ const Orthopedics: React.FC = () => (
           Our orthopedic team is dedicated to helping you move pain-free. Schedule an appointment today.
         </p>
         <a
-          href="[Insert appointment link]"
+          href="/contact-us"
           className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition"
         >
           Book an Appointment

@@ -142,7 +142,7 @@ const Pediatrics: React.FC = () => (
           Our pediatric team is dedicated to your child’s health. Schedule an appointment today.
         </p>
         <a
-          href="[Insert appointment link]"
+          href="/contact-us"
           className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition"
         >
           Book an Appointment
