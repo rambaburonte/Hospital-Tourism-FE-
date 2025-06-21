@@ -255,6 +255,8 @@ const App: React.FC = () => (
             <Route path="/admin/AllOrders" element={<AllOrders />} />
             <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
             <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
+            <Route path="/admin/viewpackage"  element={<ViewPackges/>}/>
+            <Route path="/admin/addpackages"  element={<AddPackages/>}/>
             
             <Route path="/" element={<HospitalAdvertisement />} />
             <Route path="/contact-us" element={<ContactUsPage />} />
