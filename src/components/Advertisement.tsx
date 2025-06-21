@@ -1,375 +1,3 @@
-// import React from 'react';
-
-
-// const HospitalAdvertisement: React.FC = () => {
-//   return (
-//     <div className="flex flex-col items-center justify-center p-6 bg-gray-100">
-//       <h1 className="text-3xl font-bold text-center mb-6 text-blue-800">Visit Our Top Hospitals!</h1>
-//       <div className="flex flex-wrap justify-center gap-6">
-//         <div className="flex flex-col items-center">
-//           <img
-//                   src="/maditailr/madi1.jpg"
-//                   alt="Doctor giving thumbs up"
-//                   className="w-full h-auto rounded-lg shadow-lg"
-//                 />
-
-                 
-//           <p className="text-center text-lg">Experience world-class care at CK Birla Hospital.</p>
-//         </div>
-//         <div className="flex flex-col items-center">
-//           <img  src="/maditailr/med2.jpg"
-//                   alt="Doctor giving thumbs up"
-//                   className="w-full h-auto rounded-lg shadow-lg"
-//                 />
-//           <p className="text-center text-lg">Trust Fortis for exceptional healthcare services.</p>
-//         </div>
-//         <div className="flex flex-col items-center">
-//           <img  src="/maditailr/med3.jpg"
-//                   alt="Doctor giving thumbs up"
-//                   className="w-full h-auto rounded-lg shadow-lg"
-//                 />
-//           <p className="text-center text-lg">Sarvodaya Healthcare - Your health, our priority.</p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default HospitalAdvertisement;
-
-
-// import React from 'react';
-
-// const HospitalAdvertisement: React.FC = () => {
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 overflow-hidden">
-//       {/* Header with Hospital Logos */}
-//       <div className="w-full bg-gradient-to-r from-green-100 to-green-200 p-8 flex justify-around items-center shadow-lg sticky top-0 z-10">
-//         <img src="/maditailr/med3.jpg" alt="Sarvodaya Healthcare Logo" className="h-20 transition-transform hover:scale-110" />
-//         <img src="/maditailr/med2.jpg" alt="Fortis Logo" className="h-20 transition-transform hover:scale-110" />
-//         <img src="/maditailr/madi1.jpg" alt="CK Birla Hospital Logo" className="h-20 transition-transform hover:scale-110" />
-//       </div>
-
-//       {/* Main Advertisement Section with Parallax Effect */}
-//       <div
-//         className="w-full min-h-[80vh] bg-fixed bg-center bg-cover relative"
-//         style={{ backgroundImage: "url('/medical_background.jpg')" }}
-//       >
-//         {/* Overlay for Readability */}
-//         <div className="absolute inset-0 bg-gradient-to-b from-teal-900/80 to-teal-800/60"></div>
-
-//         <div className="relative z-10 flex items-center justify-center h-full p-6">
-//           <div className="text-center max-w-4xl p-10 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-teal-300 transform hover:scale-105 transition duration-500">
-//             <h1 className="text-6xl font-extrabold mb-8 text-yellow-400 animate-pulse-slow drop-shadow-2xl">
-//               Your Ultimate Medical Tourism Revolution!
-//             </h1>
-//             <p className="text-2xl mb-8 text-white leading-loose animate-fade-in">
-//               Transform your health journey in India with cutting-edge solutions:
-//               <ul className="list-disc list-inside mt-6 space-y-4 text-left max-w-2xl mx-auto text-lg">
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Premium Treatments:</strong> Enjoy 60-90% cost savings with world-class care.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Seamless Travel:</strong> All-in-one bookings for flights, hotels, and hospitals.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Wellness Focus:</strong> Personalized recovery with cultural tours and retreats.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Round-the-Clock Support:</strong> 24/7 expert guidance from medical pros.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Top Facilities:</strong> Powered by CK Birla, Fortis, and Sarvodaya Healthcare.</li>
-//               </ul>
-//             </p>
-//             <button className="mt-8 px-10 py-5 bg-gradient-to-r from-green-600 to-emerald-700 text-white font-extrabold text-xl rounded-xl shadow-lg hover:from-green-700 hover:to-emerald-800 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl animate-bounce-slow">
-//               Secure Your Free Consultation Now – Offer Ends Soon!
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default HospitalAdvertisement;
-
-
-// import React from 'react';
-
-// const HospitalAdvertisement: React.FC = () => {
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 overflow-hidden">
-// {/* Header with Hospital Logos Scrolling Animation */}
-// <div className="w-full bg-gradient-to-r from-green-100 to-green-200 p-8 shadow-lg sticky top-0 z-10 overflow-hidden">
-//   <div className="relative w-full h-32">
-//     <div
-//       className="absolute flex items-center h-32 animate-scroll-logos"
-//       style={{ whiteSpace: 'nowrap', minWidth: '100%' }}
-//     >
-//       <img
-//         src="/maditailr/med3.jpg"
-//         alt="Sarvodaya Healthcare Logo"
-//         className="h-32 object-contain px-4 transition-transform hover:scale-110"
-//       />
-//       <img
-//         src="/maditailr/med2.jpg"
-//         alt="Fortis Logo"
-//         className="h-32 object-contain px-4 transition-transform hover:scale-110"
-//       />
-//       <img
-//         src="/maditailr/madi1.jpg"
-//         alt="CK Birla Hospital Logo"
-//         className="h-32 object-contain px-4 transition-transform hover:scale-110"
-//       />
-//       {/* Duplicate for seamless loop */}
-//       <img
-//         src="/maditailr/med3.jpg"
-//         alt="Sarvodaya Healthcare Logo"
-//         className="h-32 object-contain px-4 transition-transform hover:scale-110"
-//       />
-//       <img
-//         src="/maditailr/med2.jpg"
-//         alt="Fortis Logo"
-//         className="h-32 object-contain px-4 transition-transform hover:scale-110"
-//       />
-//       <img
-//         src="/maditailr/madi1.jpg"
-//         alt="CK Birla Hospital Logo"
-//         className="h-32 object-contain px-4 transition-transform hover:scale-110"
-//       />
-//     </div>
-//   </div>
-//   <style>
-//     {`
-//       @keyframes scroll-logos {
-//         0% { transform: translateX(0); }
-//         100% { transform: translateX(-50%); }
-//       }
-//       .animate-scroll-logos {
-//         animation: scroll-logos 20s linear infinite;
-//       }
-//     `}
-//   </style>
-// </div>
-
-//       {/* Main Advertisement Section with Parallax Effect */}
-//       <div
-//         className="w-full min-h-[80vh] bg-fixed bg-center bg-cover relative"
-//         style={{ backgroundImage: "url('/medical_background.jpg')" }}
-//       >
-//         {/* Overlay for Readability */}
-//         <div className="absolute inset-0 bg-gradient-to-b from-teal-900/80 to-teal-800/60"></div>
-
-//         <div className="relative z-10 flex items-center justify-center h-full p-6">
-//           <div className="text-center max-w-4xl p-10 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-teal-300 transform hover:scale-105 transition duration-500">
-//             <h1 className="text-6xl font-extrabold mb-8 text-yellow-400 animate-pulse-slow drop-shadow-2xl">
-//               Your Ultimate Medical Tourism Revolution!
-//             </h1>
-//             <p className="text-2xl mb-8 text-white leading-loose animate-fade-in">
-//               Transform your health journey in India with cutting-edge solutions:
-//               <ul className="list-disc list-inside mt-6 space-y-4 text-left max-w-2xl mx-auto text-lg">
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Premium Treatments:</strong> Enjoy 60-90% cost savings with world-class care.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Seamless Travel:</strong> All-in-one bookings for flights, hotels, and hospitals.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Wellness Focus:</strong> Personalized recovery with cultural tours and retreats.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Round-the-Clock Support:</strong> 24/7 expert guidance from medical pros.</li>
-//                 <li className="hover:text-yellow-300 transition-colors"><strong>Top Facilities:</strong> Powered by CK Birla, Fortis, and Sarvodaya Healthcare.</li>
-//               </ul>
-//             </p>
-//             <button className="mt-8 px-10 py-5 bg-gradient-to-r from-green-600 to-emerald-700 text-white font-extrabold text-xl rounded-xl shadow-lg hover:from-green-700 hover:to-emerald-800 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl animate-bounce-slow">
-//               Secure Your Free Consultation Now – Offer Ends Soon!
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default HospitalAdvertisement;
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from 'react';
-
-// type Language = 'en' | 'fr';
-
-// const HospitalAdvertisement: React.FC = () => {
-//   const [darkMode, setDarkMode] = useState(false);
-//   const [language, setLanguage] = useState<Language>('en');
-//   const animationDuration = 30;
-
-//   const hospitals = [
-//     {
-//       name: 'Sarvodaya Healthcare',
-//       logo: '/maditailr/med3.jpg',
-//       link: 'https://www.sarvodayahospital.com/',
-//     },
-//     {
-//       name: 'Fortis Hospital',
-//       logo: '/maditailr/med2.jpg',
-//       link: 'https://www.fortishealthcare.com/',
-//     },
-//     {
-//       name: 'CK Birla Hospital',
-//       logo: '/maditailr/madi1.jpg',
-//       link: 'https://www.ckbhospital.com/',
-//     },
-//   ];
-
-//   const translations: Record<Language, any> = {
-//     en: {
-//       title: 'Our Trusted Healthcare Partners',
-//       header: 'Your Ultimate Medical Tourism Revolution!',
-//       description: 'Transform your health journey in India with cutting-edge solutions:',
-//       points: [
-//         'Premium Treatments: Save up to 90% with world-class care.',
-//         'Seamless Travel: One-stop bookings for travel & hospitals.',
-//         'Wellness Focus: Recovery with retreats & cultural tours.',
-//         '24/7 Support: Ongoing guidance from trusted professionals.',
-//       ],
-//       button: 'Secure Your Free Consultation Now!',
-//     },
-//     fr: {
-//       title: 'Nos partenaires de santé de confiance',
-//       header: 'Votre révolution ultime du tourisme médical !',
-//       description: 'Transformez votre parcours de santé en Inde avec des solutions de pointe :',
-//       points: [
-//         'Traitements Premium : Économisez jusqu\'à 90 % avec des soins de qualité mondiale.',
-//         'Voyage sans couture : Réservations uniques pour voyages et hôpitaux.',
-//         'Accent sur le bien-être : Récupération avec retraites et visites culturelles.',
-//         'Support 24/7 : Accompagnement continu par des professionnels de confiance.',
-//       ],
-//       button: 'Réservez votre consultation gratuite maintenant !',
-//     },
-//   };
-
-//   // Detect theme and language on first load
-//   useEffect(() => {
-//     const savedTheme = localStorage.getItem('darkMode');
-//     const savedLang = localStorage.getItem('language') as Language;
-
-//     // Auto-detect system dark mode
-//     if (savedTheme === null) {
-//       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-//       setDarkMode(prefersDark);
-//       localStorage.setItem('darkMode', prefersDark.toString());
-//     } else {
-//       setDarkMode(savedTheme === 'true');
-//     }
-
-//     // Language preference
-//     if (savedLang) {
-//       setLanguage(savedLang);
-//     }
-//   }, []);
-
-//   // Save dark mode and language on change
-//   useEffect(() => {
-//     localStorage.setItem('darkMode', darkMode.toString());
-//     localStorage.setItem('language', language);
-//   }, [darkMode, language]);
-
-//   const t = translations[language];
-
-//   return (
-//     <div className={`${darkMode ? 'dark' : ''}`}>
-//       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
-
-//         {/* Theme and Language Toggle */}
-//         <div className="fixed top-4 right-4 z-20 flex gap-3">
-//           <button
-//             onClick={() => setDarkMode(!darkMode)}
-//             className="px-3 py-2 rounded bg-gray-800 text-white dark:bg-yellow-400 dark:text-black font-semibold shadow hover:scale-105 transition"
-//           >
-//             {darkMode ? '☀️ Light' : '🌙 Dark'}
-//           </button>
-//           <select
-//             value={language}
-//             onChange={(e) => setLanguage(e.target.value as Language)}
-//             className="px-3 py-2 rounded bg-white dark:bg-gray-700 dark:text-white font-semibold shadow"
-//           >
-//             <option value="en">🇺🇸 EN</option>
-//             <option value="fr">🇫🇷 FR</option>
-//           </select>
-//         </div>
-
-//         {/* Logo Header */}
-//         <div className="w-full bg-gradient-to-r from-green-100 to-green-200 dark:from-emerald-900 dark:to-emerald-800 p-6 sm:p-8 shadow-lg sticky top-0 z-10 overflow-hidden">
-//           <h2 className="text-xl sm:text-2xl font-bold text-center text-green-800 dark:text-green-200 mb-4">
-//             {t.title}
-//           </h2>
-
-//           <div className="relative w-full h-36 sm:h-40 overflow-hidden group">
-//             <div
-//               className="absolute flex items-center h-full animate-scroll-logos group-hover:[animation-play-state:paused]"
-//               style={{ whiteSpace: 'nowrap', minWidth: '100%', animationDuration: `${animationDuration}s` }}
-//             >
-//               {[...hospitals, ...hospitals].map((h, index) => (
-//                 <a key={index} href={h.link} target="_blank" rel="noreferrer" className="inline-block w-[33vw] sm:w-auto px-4 text-center">
-//                   <div className="relative">
-//                     <img src={h.logo} alt={h.name} className="h-20 sm:h-32 object-contain mx-auto transition-transform hover:scale-110" />
-//                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent hover:from-black/50 rounded"></div>
-//                   </div>
-//                   <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{h.name}</p>
-//                 </a>
-//               ))}
-//             </div>
-//           </div>
-
-//           <style>
-//             {`
-//               @keyframes scroll-logos {
-//                 0% { transform: translateX(0); }
-//                 100% { transform: translateX(-50%); }
-//               }
-//               .animate-scroll-logos {
-//                 animation: scroll-logos linear infinite;
-//               }
-//             `}
-//           </style>
-//         </div>
-
-//         {/* Main Advertisement Section */}
-//         <div
-//           className="w-full min-h-[80vh] bg-fixed bg-center bg-cover relative"
-//           style={{ backgroundImage: "url('/medical_background.jpg')" }}
-//         >
-//           <div className="absolute inset-0 bg-gradient-to-b from-teal-900/80 to-teal-800/60"></div>
-
-//           <div className="relative z-10 flex items-center justify-center h-full p-4 sm:p-6">
-//             <div className="text-center max-w-4xl p-6 sm:p-10 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-2xl shadow-2xl border border-teal-300 transform hover:scale-105 transition duration-500">
-//               <h1 className="text-3xl sm:text-6xl font-extrabold mb-6 sm:mb-8 text-yellow-400 animate-pulse drop-shadow-2xl">
-//                 {t.header}
-//               </h1>
-//               <p className="text-lg sm:text-2xl mb-6 sm:mb-8 text-white leading-loose">
-//                 {t.description}
-//                 <ul className="list-disc list-inside mt-4 sm:mt-6 space-y-3 sm:space-y-4 text-left max-w-2xl mx-auto text-base sm:text-lg">
-//                   {t.points.map((point: string, i: number) => (
-//                     <li key={i} className="hover:text-yellow-300 transition-colors">{point}</li>
-//                   ))}
-//                 </ul>
-//               </p>
-//               <button className="mt-6 sm:mt-8 px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-green-600 to-emerald-700 text-white font-extrabold text-lg sm:text-xl rounded-xl shadow-lg hover:from-green-700 hover:to-emerald-800 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl animate-bounce">
-//                 {t.button}
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default HospitalAdvertisement;
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -378,8 +6,8 @@ type Language = 'en' | 'fr';
 const HospitalAdvertisement: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState<Language>('en');
-  const animationDuration = 30;
   const navigate = useNavigate();
+  const animationDuration = 30;
 
   const hospitals = [
     {
@@ -399,30 +27,36 @@ const HospitalAdvertisement: React.FC = () => {
     },
   ];
 
-  const translations: Record<Language, any> = {
+  const translations: Record<Language, {
+    title: string;
+    header: string;
+    description: string;
+    points: string[];
+    button: string;
+  }> = {
     en: {
       title: 'Our Trusted Healthcare Partners',
-      header: 'Your Ultimate Medical Tourism Revolution!',
-      description: 'Transform your health journey in India with cutting-edge solutions:',
+      header: 'Your Journey to Better Health Starts Here',
+      description: 'Experience world-class medical care with our comprehensive healthcare solutions:',
       points: [
-        'Premium Treatments: Save up to 90% with world-class care.',
-        'Seamless Travel: One-stop bookings for travel & hospitals.',
-        'Wellness Focus: Recovery with retreats & cultural tours.',
-        '24/7 Support: Ongoing guidance from trusted professionals.',
+        'World-Class Treatments: Access premium healthcare at affordable costs.',
+        'Seamless Experience: Complete support from consultation to recovery.',
+        'Holistic Wellness: Comprehensive care with recovery and wellness programs.',
+        'Expert Guidance: 24/7 support from qualified healthcare professionals.',
       ],
-      button: 'Secure Your Free Consultation Now!',
+      button: 'Schedule Your Consultation',
     },
     fr: {
       title: 'Nos partenaires de santé de confiance',
-      header: 'Votre révolution ultime du tourisme médical !',
-      description: 'Transformez votre parcours de santé en Inde avec des solutions de pointe :',
+      header: 'Votre parcours vers une meilleure santé commence ici',
+      description: 'Découvrez des soins médicaux de classe mondiale avec nos solutions de santé complètes :',
       points: [
-        'Traitements Premium : Économisez jusqu\'à 90 % avec des soins de qualité mondiale.',
-        'Voyage sans couture : Réservations uniques pour voyages et hôpitaux.',
-        'Accent sur le bien-être : Récupération avec retraites et visites culturelles.',
-        'Support 24/7 : Accompagnement continu par des professionnels de confiance.',
+        'Traitements de classe mondiale : Accès aux soins de santé premium à des coûts abordables.',
+        'Expérience transparente : Support complet de la consultation au rétablissement.',
+        'Bien-être holistique : Soins complets avec programmes de récupération et de bien-être.',
+        'Conseil d\'expert : Support 24/7 par des professionnels de santé qualifiés.',
       ],
-      button: 'Réservez votre consultation gratuite maintenant !',
+      button: 'Planifiez votre consultation',
     },
   };
 
@@ -452,48 +86,51 @@ const HospitalAdvertisement: React.FC = () => {
     localStorage.setItem('language', language);
   }, [darkMode, language]);
 
+  const handleConsultationClick = () => {
+    navigate('/ContactUsPage');
+  };
+
   const t = translations[language];
 
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
 
-        {/* Theme and Language Toggle */}
-        <div className="fixed top-4 right-4 z-20 flex gap-3">
+        {/* Theme and Language Toggle - More subtle */}
+        <div className="fixed top-4 right-4 z-20 flex gap-2">
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="px-3 py-2 rounded bg-gray-800 text-white dark:bg-yellow-400 dark:text-black font-semibold shadow hover:scale-105 transition"
+            className="px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300"
           >
-            {darkMode ? '☀️ Light' : '🌙 Dark'}
+            {darkMode ? '☀️' : '🌙'}
           </button>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value as Language)}
-            className="px-3 py-2 rounded bg-white dark:bg-gray-700 dark:text-white font-semibold shadow"
+            className="px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300"
           >
-            <option value="en">🇺🇸 EN</option>
-            <option value="fr">🇫🇷 FR</option>
+            <option value="en">🇺🇸 EN</option>            <option value="fr">🇫🇷 FR</option>
           </select>
         </div>
 
-        {/* Logo Header */}
-        <div className="w-full bg-gradient-to-r from-green-100 to-green-200 dark:from-emerald-900 dark:to-emerald-800 p-6 sm:p-8 shadow-lg sticky top-0 z-10 overflow-hidden">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-green-800 dark:text-green-200 mb-4">
+        {/* Logo Header - More subtle and integrated */}
+        <div className="w-full bg-gradient-to-r from-green-50 to-emerald-50 dark:from-emerald-900/20 dark:to-emerald-800/20 py-6 sm:py-8 shadow-sm border-b border-green-100 dark:border-emerald-800/30">
+          <h2 className="text-xl sm:text-2xl font-semibold text-center text-green-800 dark:text-green-200 mb-6">
             {t.title}
           </h2>
-
-          <div className="relative w-full h-36 sm:h-40 overflow-hidden group">
+          <div className="relative w-full h-32 sm:h-36 overflow-hidden group">
             <div
               className="absolute flex items-center h-full animate-scroll-logos group-hover:[animation-play-state:paused]"
-              style={{ whiteSpace: 'nowrap', minWidth: '100%', animationDuration: `${animationDuration}s` }}
+              style={{ whiteSpace: 'nowrap', animationDuration: `${animationDuration}s` }}
             >
-              {[...hospitals, ...hospitals].map((h, index) => (
-                <a key={index} href={h.link} target="_blank" rel="noreferrer" className="inline-block w-[33vw] sm:w-auto px-4 text-center">
+              {/* Create multiple copies to ensure seamless loop */}
+              {[...hospitals, ...hospitals, ...hospitals, ...hospitals].map((h, index) => (
+                <a key={index} href={h.link} target="_blank" rel="noreferrer" className="inline-block flex-shrink-0 px-4 text-center min-w-[200px] sm:min-w-[250px]">
                   <div className="relative">
-                    <img src={h.logo} alt={h.name} className="h-20 sm:h-32 object-contain mx-auto transition-transform hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent hover:from-black/50 rounded"></div>
+                    <img src={h.logo} alt={h.name} className="h-16 sm:h-24 object-contain mx-auto transition-transform hover:scale-105 rounded-lg shadow-sm" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent hover:from-black/20 rounded-lg"></div>
                   </div>
-                  <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{h.name}</p>
+                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium truncate">{h.name}</p>
                 </a>
               ))}
             </div>
@@ -503,41 +140,59 @@ const HospitalAdvertisement: React.FC = () => {
             {`
               @keyframes scroll-logos {
                 0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
+                100% { transform: translateX(calc(-250px * ${hospitals.length})); }
               }
               .animate-scroll-logos {
                 animation: scroll-logos linear infinite;
               }
             `}
           </style>
-        </div>
-
-        {/* Main Advertisement Section */}
+        </div>        {/* Main Advertisement Section - Proper spacing and sizing */}
         <div
-          className="w-full min-h-[80vh] bg-fixed bg-center bg-cover relative"
+          className="w-full min-h-[75vh] bg-fixed bg-center bg-cover relative"
           style={{ backgroundImage: "url('/medical_background.jpg')" }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-teal-900/80 to-teal-800/60"></div>
+        >          {/* Overlay with subtle colors */}
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-gray-800/70"></div>
+          
+          {/* Content Container with proper spacing */}
+          <div className="relative z-10 flex items-center justify-center min-h-[75vh] px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div className="text-center max-w-5xl mx-auto">
+              {/* Main Content Card */}
+              <div className="bg-white/96 dark:bg-gray-900/96 backdrop-blur-sm rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 sm:p-8 lg:p-12 space-y-6 sm:space-y-8">
+                
+                {/* Header */}
+                <div className="space-y-4 sm:space-y-6">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 dark:text-white leading-tight">
+                    {t.header}
+                  </h1>
+                  <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-4xl mx-auto">
+                    {t.description}
+                  </p>
+                </div>
 
-          <div className="relative z-10 flex items-center justify-center h-full p-4 sm:p-6">
-            <div className="text-center max-w-4xl p-6 sm:p-10 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-2xl shadow-2xl border border-teal-300 transform hover:scale-105 transition duration-500">
-              <h1 className="text-3xl sm:text-6xl font-extrabold mb-6 sm:mb-8 text-yellow-400 animate-pulse drop-shadow-2xl">
-                {t.header}
-              </h1>
-              <p className="text-lg sm:text-2xl mb-6 sm:mb-8 text-white leading-loose">
-                {t.description}
-                <ul className="list-disc list-inside mt-4 sm:mt-6 space-y-3 sm:space-y-4 text-left max-w-2xl mx-auto text-base sm:text-lg">
-                  {t.points.map((point: string, i: number) => (
-                    <li key={i} className="hover:text-yellow-300 transition-colors">{point}</li>
-                  ))}
-                </ul>
-              </p>
-              <button
-                onClick={() => navigate('/contact-us')}
-                className="mt-6 sm:mt-8 px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-green-600 to-emerald-700 text-white font-extrabold text-lg sm:text-xl rounded-xl shadow-lg hover:from-green-700 hover:to-emerald-800 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl animate-bounce"
-              >
-                {t.button}
-              </button>
+                {/* Features List with better spacing */}
+                <div className="max-w-4xl mx-auto py-4 sm:py-6">
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left">
+                    {t.points.map((point: string, i: number) => (
+                      <li key={i} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-lg bg-gray-50/50 dark:bg-gray-800/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all duration-300">                        <span className="flex-shrink-0 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full mt-2"></span>
+                        <span className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                          {point}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Call to Action Button */}
+                <div className="pt-4 sm:pt-6">
+                  <button 
+                    onClick={handleConsultationClick}
+                    className="px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500/30 focus:ring-offset-2"
+                  >
+                    {t.button}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

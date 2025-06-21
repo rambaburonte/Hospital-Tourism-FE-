@@ -8,6 +8,7 @@ import SubAdminDashboard from './admin/subadminloginregister/getAllSubAdmins';
 
 
 import HospitalList from './pages/HospitalList';
+import SalesDashboard from './salesteam/SalesDashboard';
 
 import WorldUserHeatmap from './components/worldMap';
 // Public Pages
@@ -67,7 +68,7 @@ import HospitalDoctors from './admin/HospitalDoctors';
 import SubAdminRegister from './admin/subadminloginregister/subadminreg';
 import DiagnosticsList from './admin/viewDiagnostics';
 import SubadmLoginForm from './admin/subadminloginregister/subadmLogin';
-
+import SalesLogin from './salesteam/Login';
 import LabTests from './admin/viewdiagnolabtests';
 import Translators from './admin/viewTranslators';
 import Chefs from './admin/viewchefs';
@@ -152,6 +153,7 @@ const App: React.FC = () => (
             <Route path="/doctor-profile/:id" element={<DoctorDetails />} />
             <Route path="/chef-list" element={<ChefsList />} />
             <Route path="/spa-service-details" element={<SpaServiceDetailsPage />} />
+            <Route path="/saleslogin" element={<SalesLogin/>} />
 
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
             
@@ -240,6 +242,8 @@ const App: React.FC = () => (
             <Route path="/" element={<HospitalAdvertisement />} />
             <Route path="/contact-us" element={<ContactUsPage />} />
             {/* User Routes */}
+            {/* sales routes */}
+            <Route path="/admin/sales/dashboard" element={<SalesDashboard/>}/>
             {/* 404 Route */}
 
             <Route path="*" element={<NotFound />} />
