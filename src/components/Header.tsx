@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, Search, Phone, X, User, Plus, ShoppingCart, Heart, LogOut, LayoutDashboard } from 'lucide-react';
+import { Menu, Search, Phone, X, User, Plus, ShoppingCart, Heart, LogOut, LayoutDashboard, Languages, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -8,11 +8,22 @@ import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { BASE_URL } from '@/config/config';
 
-// Add type declaration for gtag
+// Add type declaration for gtag and Google Translate
 declare global {
   interface Window {
-    gtag: (command: string, action: string, params?: any) => void;
-    dataLayer: any[];
+    gtag: (command: string, action: string, params?: Record<string, unknown>) => void;
+    dataLayer: unknown[];
+    google?: {
+      translate: {
+        TranslateElement: new (options: { 
+          pageLanguage: string; 
+          includedLanguages?: string;
+          layout?: number;
+          autoDisplay?: boolean;
+        }, elementId: string) => void;
+      };
+    };
+    googleTranslateElementInit?: () => void;
   }
 }
 
@@ -27,21 +38,45 @@ interface UserData {
   profilePictureUrls?: string;
 }
 
+// Language options for Google Translate
+const languages = [
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'es', name: 'Spanish', flag: '🇪🇸' },
+  { code: 'fr', name: 'French', flag: '🇫🇷' },
+  { code: 'de', name: 'German', flag: '🇩🇪' },
+  { code: 'it', name: 'Italian', flag: '🇮🇹' },
+  { code: 'pt', name: 'Portuguese', flag: '🇵🇹' },
+  { code: 'ru', name: 'Russian', flag: '🇷🇺' },
+  { code: 'ja', name: 'Japanese', flag: '🇯🇵' },
+  { code: 'ko', name: 'Korean', flag: '🇰🇷' },
+  { code: 'zh', name: 'Chinese', flag: '🇨🇳' },
+  { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
+  { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
+  { code: 'bn', name: 'Bengali', flag: '🇧🇩' },
+  { code: 'ur', name: 'Urdu', flag: '🇵🇰' },
+  { code: 'th', name: 'Thai', flag: '🇹🇭' },
+  { code: 'vi', name: 'Vietnamese', flag: '🇻🇳' },
+  { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
+  { code: 'nl', name: 'Dutch', flag: '🇳🇱' },
+  { code: 'sv', name: 'Swedish', flag: '🇸🇪' },
+  { code: 'pl', name: 'Polish', flag: '🇵🇱' },
+];
+
 const Header: React.FC = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cartItemCount, setCartItemCount] = useState(0);
-  const [userName, setUserName] = useState<string | null>(null);
+  const [cartItemCount, setCartItemCount] = useState(0);  const [userName, setUserName] = useState<string | null>(null);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [translateDropdownOpen, setTranslateDropdownOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
+  const translateDropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-
   // Centralized GA tracking function
   const trackEvent = (action: string, category: string, label: string) => {
     if (typeof window.gtag === 'function') {
@@ -50,6 +85,55 @@ const Header: React.FC = () => {
         event_label: label,
       });
     }
+  };
+  // Google Translate initialization
+  useEffect(() => {
+    // Load Google Translate script
+    const loadGoogleTranslate = () => {
+      if (!document.getElementById('google-translate-script')) {
+        const script = document.createElement('script');
+        script.id = 'google-translate-script';
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    };    // Initialize Google Translate Element
+    window.googleTranslateElementInit = () => {
+      if (window.google?.translate?.TranslateElement) {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: 'en',
+            includedLanguages: languages.map(lang => lang.code).join(','),
+            autoDisplay: false
+          },
+          'google_translate_element'
+        );
+      }
+    };
+
+    loadGoogleTranslate();
+  }, []);
+  // Function to trigger translation
+  const translateToLanguage = (languageCode: string) => {
+    setTranslateDropdownOpen(false);
+    trackEvent('translate', 'Language', languageCode);
+    
+    if (languageCode === 'en') {
+      // For English, remove any translation
+      const currentUrl = window.location.href;
+      if (currentUrl.includes('#googtrans(')) {
+        window.location.href = currentUrl.split('#googtrans(')[0];
+      }
+    } else {
+      // For other languages, use Google Translate URL hash
+      const currentUrl = window.location.href.split('#googtrans(')[0];
+      window.location.href = `${currentUrl}#googtrans(en|${languageCode})`;
+    }
+    
+    // Force page reload to apply translation
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   // Handle scroll shadow
@@ -135,12 +219,14 @@ const Header: React.FC = () => {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [location.pathname]);
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (translateDropdownRef.current && !translateDropdownRef.current.contains(event.target as Node)) {
+        setTranslateDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -197,10 +283,36 @@ const Header: React.FC = () => {
 
   const handleRedirect = () => {
     navigate('/chat-bot');
-  };
-
-  return (
-    <>
+  };  return (
+    <>      {/* Hide Google Translate default styling but keep functionality */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          #google_translate_element {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+          }
+          .goog-te-banner-frame {
+            display: none !important;
+          }
+          .goog-te-menu-value {
+            display: none !important;
+          }
+          body {
+            top: 0 !important;
+          }
+          .goog-te-gadget-simple {
+            background-color: transparent !important;
+            border: none !important;
+          }
+          .goog-te-gadget-simple .goog-te-menu-value {
+            color: transparent !important;
+          }
+        `
+      }} />
+      
       <header
         className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 transition-shadow duration-300 ${
           isScrolled ? 'shadow-md' : 'shadow-sm'
@@ -212,10 +324,36 @@ const Header: React.FC = () => {
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
               <Phone className="h-4 w-4 text-green-200" />
               <a href="tel:8595114141" className="hover:text-green-200">Emergency: 8595114141</a>
-            </div>
-            <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
+            </div>            <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm items-center">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
               <span onClick={() => navigate('/health-blogs')} className="cursor-pointer hover:text-green-200">Blog</span>
+              
+              {/* Google Translate Dropdown */}
+              <div className="relative" ref={translateDropdownRef}>
+                <button
+                  onClick={() => setTranslateDropdownOpen(!translateDropdownOpen)}
+                  className="flex items-center space-x-1 cursor-pointer hover:text-green-200 transition-colors"
+                  aria-label="Select Language"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span>Translate</span>
+                </button>
+                
+                {translateDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5 max-h-60 overflow-y-auto">
+                    {languages.map((language) => (
+                      <button
+                        key={language.code}
+                        onClick={() => translateToLanguage(language.code)}
+                        className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <span className="mr-2 text-base">{language.flag}</span>
+                        <span>{language.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -382,8 +520,7 @@ const Header: React.FC = () => {
                 <X className="h-6 w-6" />
               </Button>
             </div>
-            <nav className="flex flex-col p-4 space-y-2">
-              {navItems.map(({ to, label }) => (
+            <nav className="flex flex-col p-4 space-y-2">              {navItems.map(({ to, label }) => (
                 <Link
                   key={to}
                   to={to}
@@ -393,6 +530,35 @@ const Header: React.FC = () => {
                   {label}
                 </Link>
               ))}
+              
+              {/* Mobile Translate Section */}
+              <div className="py-2">
+                <button
+                  onClick={() => setTranslateDropdownOpen(!translateDropdownOpen)}
+                  className="flex items-center w-full py-2 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-2"
+                >
+                  <Globe className="h-6 w-6 mr-2" />
+                  Translate
+                </button>
+                {translateDropdownOpen && (
+                  <div className="mt-2 max-h-40 overflow-y-auto bg-gray-50 dark:bg-gray-800 rounded-md">
+                    {languages.map((language) => (
+                      <button
+                        key={language.code}
+                        onClick={() => {
+                          translateToLanguage(language.code);
+                          setMobileMenuOpen(false);
+                        }}
+                        className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <span className="mr-2 text-base">{language.flag}</span>
+                        <span>{language.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
               {isLoggedIn ? (
                 <>
                   <Link
@@ -514,10 +680,12 @@ const Header: React.FC = () => {
               >
                 Close
               </Button>
-            </div>
-          </div>
+            </div>          </div>
         </div>
       )}
+
+      {/* Hidden Google Translate Element */}
+      <div id="google_translate_element" style={{ display: 'none' }}></div>
     </>
   );
 };
