@@ -185,12 +185,19 @@ const HospitalAdvertisement: React.FC = () => {
 
                 {/* Call to Action Button */}
                 <div className="pt-4 sm:pt-6">
-                  <button 
+                  {/* <button 
                     onClick={handleConsultationClick}
                     className="px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500/30 focus:ring-offset-2"
                   >
                     {t.button}
-                  </button>
+                  </button> */}
+                  <button
+                   onClick={handleConsultationClick}
+                   className="px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-[#499E14] hover:bg-[#3f8612] text-white font-semibold text-base sm:text-lg lg:text-xl rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#499E14]/30 focus:ring-offset-2"
+                      >
+                   {t.button}
+                   </button>
+
                 </div>
               </div>
             </div>

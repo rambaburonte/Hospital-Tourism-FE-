@@ -120,6 +120,10 @@ import Pediatrics from './pages/specialties/Pediatrics';
 import Gynecology from './pages/specialties/Gynecology';
 import Urology from './pages/specialties/Urology';
 
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsConditions from './components/TermsConditions';
+import Sitemap from './components/Sitemap';
+
 import contactus from './pages/contactus';
 const queryClient = new QueryClient();
 
@@ -194,9 +198,9 @@ const App: React.FC = () => (
             <Route path="/dashboard" element={<Userdashboard />} />
             <Route path="/PatientProfile" element={<PatientProfile />} />
             <Route path="/subadminlogin" element={<SubadmLoginForm />} />
-            <Route path="/patientlist" element={<Users />} />
+            <Route path="/admin/patientlist/users" element={<Users />} />
             <Route path="/bookingfom" element={<BookingForm />} />
-            <Route path='usercart' element={<UserCart />} />
+            <Route path='/usercart' element={<UserCart />} />
             <Route path="/wishlist" element={<Wishlist />} />
 
             <Route path="/hospitaldoctors/:id" element={< HospitalDoctor />} />
@@ -210,7 +214,9 @@ const App: React.FC = () => (
             <Route path="/tests" element={<DiagnosticsList />} />
             <Route path="/bookingcart" element={<BookingCart />} />
             <Route path="/MyOrders" element={<MyOrders />} />
-
+             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/sitemap" element={<Sitemap />} />
 
 
             {/* Admin Routes */}
