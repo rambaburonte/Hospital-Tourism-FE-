@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Adjust import path as needed
+import { BASE_URL } from '@/config/config';
 
 interface ServiceItem {
   id: number;
@@ -75,7 +76,7 @@ const PackagesDisplayPage: React.FC = () => {
 
   const fetchPackages = async () => {
     try {
-      const res = await axios.get('http://localhost:4545/admin/packege/All/packages');
+      const res = await axios.get(`${BASE_URL}/admin/packege/All/packages`);
       console.log('Fetched packages:', res.data); // Debug: Log fetched packages
       setPackages(res.data.map(pkg => ({
         ...pkg,
@@ -92,7 +93,7 @@ const PackagesDisplayPage: React.FC = () => {
 
   const fetchAllServiceItems = async () => {
     try {
-      const res = await axios.get('http://localhost:4545/admin/packege/All/service/items');
+      const res = await axios.get(`${BASE_URL}/admin/packege/All/service/items`);
       setAllServiceItems(res.data);
     } catch (error) {
       console.error('Error fetching service items:', error);
@@ -112,7 +113,7 @@ const PackagesDisplayPage: React.FC = () => {
     await Promise.all(
       Array.from(uniqueServiceItemIds).map(async (id) => {
         try {
-          const res = await axios.get(`http://localhost:4545/admin/packege/service/items/${id}`);
+          const res = await axios.get(`${BASE_URL}/admin/packege/service/items/${id}`);
           serviceItems[id] = res.data;
         } catch (error) {
           console.error(`Error fetching service item ${id}:`, error);
@@ -124,7 +125,7 @@ const PackagesDisplayPage: React.FC = () => {
 const handleFeaturedChange = async (id: number, selectedStatus: string) => {
     try {
         const res = await axios.put(
-            `http://localhost:4545/admin/packege/packages/featured/${id}`,
+            `${BASE_URL}/admin/packege/packages/featured/${id}`,
             {},
             { params: { featured: selectedStatus } }
         );
@@ -190,7 +191,7 @@ const handleUpdatePackage = async () => {
     }
 
     try {
-        const res = await axios.put(`http://localhost:4545/admin/packege/packages/${selectedPackage.id}`, {
+        const res = await axios.put(`${BASE_URL}/admin/packege/packages/${selectedPackage.id}`, {
             name: editPackage.name,
             description: editPackage.description,
             durationDays,
@@ -209,7 +210,7 @@ const handleUpdatePackage = async () => {
 
   const handleDeletePackage = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:4545/admin/packege/packages/delete/${id}`);
+      await axios.delete(`${BASE_URL}/admin/packege/packages/delete/${id}`);
       setPackages(packages.filter(pkg => pkg.id !== id));
       setNotification({ type: 'success', message: 'Package deleted successfully.' });
       closeModal();
@@ -241,7 +242,7 @@ const handleUpdatePackage = async () => {
         formData.append('imageFile', addPackage.imageFile);
       }
 
-      const res = await axios.post('http://localhost:4545/admin/packege/package', formData, {
+      const res = await axios.post(`${BASE_URL}/admin/packege/package`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log('Added package:', res.data); // Debug: Log added package

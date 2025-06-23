@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Sidebar from './sidebar'; // Adjust import path as needed
+import Sidebar from './sidebar'; 
+import { BASE_URL } from '@/config/config';
 
 interface ServiceItem {
   id: number;
@@ -50,7 +51,7 @@ const AdminPackagesPage: React.FC = () => {
 
   const fetchServiceItems = async () => {
     try {
-      const res = await axios.get('http://localhost:4545/admin/packege/All/service/items');
+      const res = await axios.get(`${BASE_URL}/admin/packege/All/service/items`);
       setServiceItems(res.data);
     } catch (error) {
       console.error('Error fetching service items:', error);
@@ -71,7 +72,7 @@ const AdminPackagesPage: React.FC = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:4545/admin/packege/service', {
+      const res = await axios.post(`${BASE_URL}/admin/packege/service`, {
         ...newServiceItem,
         price,
       });
@@ -106,7 +107,7 @@ const AdminPackagesPage: React.FC = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:4545/admin/packege/package', formData, {
+      const res = await axios.post(`${BASE_URL}/admin/packege/package`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setNewPackage({ name: '', description: '', durationDays: '', serviceItemIds: [] });
