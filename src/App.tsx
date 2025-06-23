@@ -120,6 +120,7 @@ import Pediatrics from './pages/specialties/Pediatrics';
 import Gynecology from './pages/specialties/Gynecology';
 import Urology from './pages/specialties/Urology';
 
+import GoogleTranslate from './components/GoogleTraslator.js';
 import contactus from './pages/contactus';
 const queryClient = new QueryClient();
 
@@ -170,6 +171,7 @@ const App: React.FC = () => (
             <Route path="/booking/:serviceType/:id" element={<BookingPage />} />
             
 
+            <Route path="/translator" element={<GoogleTranslate />} />
 
             <Route path="/specialties/cardiology" element={<Cardiology />} />
             <Route path="/specialties/neurology" element={<Neurology />} />

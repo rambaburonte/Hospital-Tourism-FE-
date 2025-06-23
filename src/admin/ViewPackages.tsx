@@ -294,7 +294,7 @@ const handleUpdatePackage = async () => {
             </h1>
             <button
               onClick={() => setShowAddModal(true)}
-              className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+              className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
             >
               Add Package
             </button>
@@ -318,8 +318,7 @@ const handleUpdatePackage = async () => {
             {packages.map((pkg) => (
               <div
                 key={pkg.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden relative cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => openPackageDetails(pkg)}
+                className="bg-white rounded-lg shadow-md overflow-hidden relative group hover:shadow-xl transition-shadow cursor-pointer border border-green-100 hover:border-green-400"
               >
                 <span
                   className={`absolute top-0 right-0 text-white text-xs font-bold px-2 py-1 rounded-bl ${
@@ -331,13 +330,25 @@ const handleUpdatePackage = async () => {
                 <img
                   src={pkg.imageUrl || 'https://via.placeholder.com/300x200'}
                   alt={pkg.name}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800">{pkg.name}</h3>
-                  <p className="text-gray-600 text-sm mt-1">{pkg.description}</p>
+                  <h3 className="text-lg font-semibold text-gray-800 flex items-center justify-between">
+                    {pkg.name}
+                    <button
+                      className="ml-2 bg-green-100 hover:bg-green-600 hover:text-white text-green-700 rounded-full p-2 shadow transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400"
+                      title="View / Edit Package"
+                      onClick={() => openPackageDetails(pkg)}
+                      tabIndex={0}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75A2.25 2.25 0 0117.25 22.5h-10.5A2.25 2.25 0 014.5 20.25v-.75z" />
+                      </svg>
+                    </button>
+                  </h3>
+                  <p className="text-gray-600 text-sm mt-1 line-clamp-2">{pkg.description}</p>
                   <div className="mt-2 flex justify-between items-center">
-                    <span className="text-blue-600 font-bold">${pkg.totalPrice.toFixed(2)}</span>
+                    <span className="text-green-600 font-bold">${pkg.totalPrice.toFixed(2)}</span>
                     <span className="text-gray-500 text-sm">{pkg.durationDays} Day{pkg.durationDays > 1 ? 's' : ''}</span>
                   </div>
                   <div className="mt-2">
@@ -361,7 +372,7 @@ const handleUpdatePackage = async () => {
                           checked={pkg.featured.toLowerCase() === 'yes'}
                           onChange={() => handleFeaturedChange(pkg.id, 'yes')}
                           onClick={(e) => e.stopPropagation()}
-                          className="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                          className="h-4 w-4 text-green-600 border-gray-300 focus:ring-green-500"
                         />
                         <span className="ml-2 text-sm text-gray-900">Not Featured</span>
                       </label>
@@ -373,7 +384,7 @@ const handleUpdatePackage = async () => {
                           checked={pkg.featured.toLowerCase() === 'no'}
                           onChange={() => handleFeaturedChange(pkg.id, 'no')}
                           onClick={(e) => e.stopPropagation()}
-                          className="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                          className="h-4 w-4 text-green-600 border-gray-300 focus:ring-green-500"
                         />
                         <span className="ml-2 text-sm text-gray-900">Featured</span>
                       </label>
@@ -387,30 +398,41 @@ const handleUpdatePackage = async () => {
 
         {/* Modal for Package Details and Edit */}
         {selectedPackage && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-4">{selectedPackage.name} Details</h2>
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 animate-fade-in">
+            <div className="relative bg-white rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-green-200 animate-slide-in transition-all duration-300 scale-100 hover:scale-105">
+              <button
+                className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold focus:outline-none transition-colors duration-200"
+                onClick={closeModal}
+                aria-label="Close"
+                type="button"
+                tabIndex={0}
+              >
+                ×
+              </button>
+              <h2 className="text-3xl font-extrabold mb-6 text-center text-green-700 tracking-tight drop-shadow">{selectedPackage.name} Details</h2>
               {error && (
-                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg text-center shadow animate-slide-in border border-red-200">
                   {error}
                 </div>
               )}
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div>
-                  <p className="text-gray-500 text-sm">Description:</p>
-                  <p className="text-gray-900">{selectedPackage.description}</p>
+                  <p className="text-gray-500 text-base font-semibold mb-1">Description:</p>
+                  <p className="text-gray-900 text-lg bg-gray-50 rounded-xl p-3 border border-gray-200 shadow-sm">{selectedPackage.description}</p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-gray-500 text-base font-semibold mb-1">Total Price:</p>
+                    <p className="text-green-700 text-lg font-bold bg-green-50 rounded-xl p-3 border border-green-100 shadow-sm">${selectedPackage.totalPrice.toFixed(2)}</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-500 text-base font-semibold mb-1">Duration:</p>
+                    <p className="text-gray-900 text-lg bg-gray-50 rounded-xl p-3 border border-gray-200 shadow-sm">{selectedPackage.durationDays} Day{selectedPackage.durationDays > 1 ? 's' : ''}</p>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Total Price:</p>
-                  <p className="text-gray-900">${selectedPackage.totalPrice.toFixed(2)}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Duration:</p>
-                  <p className="text-gray-900">{selectedPackage.durationDays} Day{selectedPackage.durationDays > 1 ? 's' : ''}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Services Included:</p>
-                  <ul className="list-disc pl-5 text-gray-900">
+                  <p className="text-gray-500 text-base font-semibold mb-1">Services Included:</p>
+                  <ul className="list-disc pl-6 text-gray-900 text-base bg-gray-50 rounded-xl p-3 border border-gray-200 shadow-sm">
                     {selectedPackage.serviceItems.map((item) => (
                       <li key={item.id}>
                         {serviceItemsMap[item.serviceItemId!]?.name || 'Unknown Service'} - $
@@ -420,79 +442,80 @@ const handleUpdatePackage = async () => {
                   </ul>
                 </div>
               </div>
-
               {editPackage && (
-                <div className="mt-6">
-                  <h3 className="text-xl font-semibold mb-4">Edit Package</h3>
-                  <div className="space-y-4">
+                <div className="mt-8">
+                  <h3 className="text-2xl font-bold mb-4 text-green-700">Edit Package</h3>
+                  <div className="space-y-5">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Name</label>
+                      <label className="block text-base font-semibold text-gray-700 mb-1">Name</label>
                       <input
                         type="text"
                         value={editPackage.name}
                         onChange={(e) => setEditPackage({ ...editPackage, name: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-xl border border-gray-300 shadow focus:border-green-500 focus:ring-2 focus:ring-green-200 text-lg py-3 px-4 bg-gray-50 placeholder-gray-400"
                         placeholder="Package Name"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Description</label>
+                      <label className="block text-base font-semibold text-gray-700 mb-1">Description</label>
                       <textarea
                         value={editPackage.description}
                         onChange={(e) => setEditPackage({ ...editPackage, description: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-xl border border-gray-300 shadow focus:border-green-500 focus:ring-2 focus:ring-green-200 text-lg py-3 px-4 bg-gray-50 placeholder-gray-400"
                         placeholder="Package Description"
+                        rows={3}
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Duration (Days)</label>
+                      <label className="block text-base font-semibold text-gray-700 mb-1">Duration (Days)</label>
                       <input
                         type="number"
                         value={editPackage.durationDays}
                         onChange={(e) => setEditPackage({ ...editPackage, durationDays: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-xl border border-gray-300 shadow focus:border-green-500 focus:ring-2 focus:ring-green-200 text-lg py-3 px-4 bg-gray-50 placeholder-gray-400"
                         placeholder="Duration in Days"
                         min="1"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Service Items</label>
-                      <div className="mt-2 space-y-2">
+                      <label className="block text-base font-semibold text-gray-700 mb-1">Service Items</label>
+                      <div className="mt-2 space-y-2 max-h-32 overflow-y-auto bg-gray-50 rounded-lg border border-gray-200 p-2">
                         {allServiceItems.map((item) => (
-                          <div key={item.id} className="flex items-center">
+                          <div key={item.id} className="flex items-center hover:bg-green-50 rounded px-2 py-1 transition">
                             <input
                               type="checkbox"
                               checked={editPackage.serviceItemIds.includes(item.id)}
                               onChange={() => handleServiceItemSelection(item.id, false)}
-                              className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                              className="h-5 w-5 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer mr-2"
+                              title={`Select ${item.name}`}
                             />
-                            <label className="ml-2 text-sm text-gray-900">
-                              {item.name} (${item.price.toFixed(2)})
+                            <label className="ml-2 text-base text-gray-900 cursor-pointer">
+                              {item.name} <span className="text-gray-500">(${item.price.toFixed(2)})</span>
                             </label>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <div className="mt-6 flex space-x-4">
+                  <div className="mt-8 flex space-x-4 justify-center">
                     <button
                       onClick={handleUpdatePackage}
-                      className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+                      className="bg-green-600 text-white py-2 px-8 rounded-xl hover:bg-green-700 font-bold text-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400"
                     >
                       Update Package
                     </button>
                     <button
                       onClick={() => handleDeletePackage(selectedPackage.id)}
-                      className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
+                      className="bg-red-600 text-white py-2 px-8 rounded-xl hover:bg-red-700 font-bold text-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400"
                     >
                       Delete Package
                     </button>
                     <button
                       onClick={closeModal}
-                      className="bg-gray-300 text-gray-900 py-2 px-4 rounded-md hover:bg-gray-400"
+                      className="bg-gray-200 text-gray-900 py-2 px-8 rounded-xl hover:bg-gray-300 font-bold text-lg shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
                       Cancel
                     </button>
@@ -505,90 +528,103 @@ const handleUpdatePackage = async () => {
 
         {/* Modal for Adding Package */}
         {showAddModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-4">Add New Package</h2>
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 animate-fade-in">
+            <div className="relative bg-white rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-green-200 animate-slide-in transition-all duration-300 scale-100 hover:scale-105">
+              <button
+                className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold focus:outline-none transition-colors duration-200"
+                onClick={closeModal}
+                aria-label="Close"
+                type="button"
+                tabIndex={0}
+              >
+                ×
+              </button>
+              <h2 className="text-3xl font-extrabold mb-6 text-center text-green-700 tracking-tight drop-shadow">Add New Package</h2>
               {error && (
-                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg text-center shadow animate-slide-in border border-red-200">
                   {error}
                 </div>
               )}
-              <div className="space-y-4">
+              <form onSubmit={e => { e.preventDefault(); handleAddPackage(); }} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <label className="block text-base font-semibold text-gray-700 mb-1">Name</label>
                   <input
                     type="text"
                     value={addPackage.name}
                     onChange={(e) => setAddPackage({ ...addPackage, name: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full rounded-xl border border-gray-300 shadow focus:border-green-500 focus:ring-2 focus:ring-green-200 text-lg py-3 px-4 bg-gray-50 placeholder-gray-400"
                     placeholder="Package Name"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Description</label>
+                  <label className="block text-base font-semibold text-gray-700 mb-1">Description</label>
                   <textarea
                     value={addPackage.description}
                     onChange={(e) => setAddPackage({ ...addPackage, description: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full rounded-xl border border-gray-300 shadow focus:border-green-500 focus:ring-2 focus:ring-green-200 text-lg py-3 px-4 bg-gray-50 placeholder-gray-400"
                     placeholder="Package Description"
+                    rows={3}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Duration (Days)</label>
+                  <label className="block text-base font-semibold text-gray-700 mb-1">Duration (Days)</label>
                   <input
                     type="number"
                     value={addPackage.durationDays}
                     onChange={(e) => setAddPackage({ ...addPackage, durationDays: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full rounded-xl border border-gray-300 shadow focus:border-green-500 focus:ring-2 focus:ring-green-200 text-lg py-3 px-4 bg-gray-50 placeholder-gray-400"
                     placeholder="Duration in Days"
                     min="1"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Service Items</label>
-                  <div className="mt-2 space-y-2">
+                  <label className="block text-base font-semibold text-gray-700 mb-1">Service Items</label>
+                  <div className="mt-2 space-y-2 max-h-32 overflow-y-auto bg-gray-50 rounded-lg border border-gray-200 p-2">
                     {allServiceItems.map((item) => (
-                      <div key={item.id} className="flex items-center">
+                      <div key={item.id} className="flex items-center hover:bg-green-50 rounded px-2 py-1 transition">
                         <input
                           type="checkbox"
                           checked={addPackage.serviceItemIds.includes(item.id)}
                           onChange={() => handleServiceItemSelection(item.id, true)}
-                          className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                          className="h-5 w-5 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer mr-2"
+                          title={`Select ${item.name}`}
                         />
-                        <label className="ml-2 text-sm text-gray-900">
-                          {item.name} (${item.price.toFixed(2)})
+                        <label className="ml-2 text-base text-gray-900 cursor-pointer">
+                          {item.name} <span className="text-gray-500">(${item.price.toFixed(2)})</span>
                         </label>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Image</label>
+                  <label className="block text-base font-semibold text-gray-700 mb-1">Image</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer focus:outline-none"
+                    className="mt-1 block w-full text-base text-gray-900 border border-gray-300 rounded-xl cursor-pointer focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-base file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                    title="Upload package image"
                   />
                 </div>
-              </div>
-              <div className="mt-6 flex space-x-4">
-                <button
-                  onClick={handleAddPackage}
-                  className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
-                >
-                  Add Package
-                </button>
-                <button
-                  onClick={closeModal}
-                  className="bg-gray-300 text-gray-900 py-2 px-4 rounded-md hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
+                <div className="flex space-x-4 justify-center mt-6">
+                  <button
+                    type="submit"
+                    className="bg-green-600 text-white py-2 px-8 rounded-xl hover:bg-green-700 font-bold text-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  >
+                    Add Package
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="bg-gray-200 text-gray-900 py-2 px-8 rounded-xl hover:bg-gray-300 font-bold text-lg shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

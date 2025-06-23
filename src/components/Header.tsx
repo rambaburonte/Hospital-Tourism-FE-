@@ -752,6 +752,7 @@ const Header: React.FC = () => {
             <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
               <span onClick={() => navigate('/health-blogs')} className="cursor-pointer hover:text-green-200">Blog</span>
+              <span onClick={() => navigate('/translator')} className="cursor-pointer hover:text-green-200">Translator</span>
             </div>
           </div>
         </div>
