@@ -1,5 +1,6 @@
 
 
+
 // // import React, { useState } from 'react';
 // // import { Routes, Route, useNavigate } from 'react-router-dom';
 // // import Sidebar from './sidebar';
@@ -563,9 +564,10 @@
 
 
 
+
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import Sidebar from './sidebar';
+import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 // Placeholder component
@@ -739,7 +741,7 @@ const DashboardContent: React.FC = () => {
 // Main Admin Dashboard with routes
 const AdminDashboard: React.FC = () => (
   <div className="flex">
-    <Sidebar />
+    <AdminSidebar />
     <div className="flex-1">
       <Routes>
         <Route path="/" element={<DashboardContent />} />

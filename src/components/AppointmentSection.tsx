@@ -1,4 +1,5 @@
 
+
 // import React, { useState, useEffect } from 'react';
 // import { Calendar, MapPin, Search, User, Hotel, Plane, Pill } from 'lucide-react';
 // import { Link, useNavigate } from 'react-router-dom';
@@ -2264,6 +2265,7 @@
 
 
 
+
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Search, User, Hotel, Plane, Pill } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -2625,7 +2627,7 @@ const AppointmentSection = () => {
     if ('hotelName' in item) return `/hotels/${item.hotelId}`;
     if ('travelName' in item) return `/travel/${item.travelId}`;
     if ('translatorName' in item) return `/translatorAndChefList/translators/${item.translatorID}`;
-    if ('chefName' in item) return `/translatorAndChefList/chef/${item.chefID}`;
+    if ('chefName' in item) return `/booking/chef/${item.chefID}`;
     if ('pharmacyName' in item) return `/PharmacyCategoryPage/${item.pharmacyId}`;
     return '#';
   };

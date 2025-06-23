@@ -124,10 +124,10 @@ export default function Login() {
             </button>
           </div>
           <button
-            onClick={() => navigate("/subadminlogin")}
+            onClick={() => navigate("/admin/login")}
             className="ml-2 text-sm text-green-600 hover:underline"
           >
-            Sub Admin Login
+            Admin / Sub-Admin Login
           </button>
 
             <button
