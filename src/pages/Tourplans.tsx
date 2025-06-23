@@ -224,7 +224,7 @@ const TourPlans: React.FC = () => {
 
   // Memoized filtered tour plans
   const filteredTourPlans = useMemo(() => {
-    let plans = tourPlans.filter((plan: TourPlan) => {
+    const plans = tourPlans.filter((plan: TourPlan) => {
       const matchesSearch =
         plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         plan.description.toLowerCase().includes(searchTerm.toLowerCase());
