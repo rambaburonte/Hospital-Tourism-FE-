@@ -83,6 +83,9 @@ import DoctorDetails from './admin/doctordetails';
 import AllOrders from './admin/AllOrders';
 import SalesTeamPage from './admin/salesTeam';
 import SalesTasksPage from './admin/salesTasks';
+
+import PackagesDisplayPage from './admin/ViewPackages.js';
+import AddPackages from './admin/AddPackages';
 // Corrected import name (PascalCase)
 import UpdateAllSubAdmin from './admin/subadminloginregister/alldetalupdatesubadmin';
 // Utility Components
@@ -255,7 +258,7 @@ const App: React.FC = () => (
             <Route path="/admin/AllOrders" element={<AllOrders />} />
             <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
             <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
-            <Route path="/admin/viewpackage"  element={<ViewPackges/>}/>
+            <Route path="/admin/viewpackage"  element={<PackagesDisplayPage/>}/>
             <Route path="/admin/addpackages"  element={<AddPackages/>}/>
             
             <Route path="/" element={<HospitalAdvertisement />} />
