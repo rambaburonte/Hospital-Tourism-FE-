@@ -18,7 +18,7 @@ interface Permission {
   [key: string]: string[];
 }
 
-const Sidebar: React.FC = () => {
+const AdminSidebar: React.FC = () => {
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState<Permission>({});
   const [adminUser, setAdminUser] = useState<{ role?: string }>({});
@@ -29,8 +29,6 @@ const Sidebar: React.FC = () => {
     const storedPermissions = JSON.parse(localStorage.getItem('permissions') || '{}');
     setAdminUser(storedUser);
     setPermissions(storedPermissions);
-    console.log('Admin User from localStorage:', storedUser);
-    console.log('Permissions from localStorage:', storedPermissions);
   }, []);
   const allMenuItems: MenuItem[] = [
     { name: 'Dashboard', icon: 'fas fa-home', path: '/admin/admindashboard' },
@@ -40,8 +38,8 @@ const Sidebar: React.FC = () => {
       icon: 'fas fa-user-plus',
       subItems: [
         { name: 'Add Sub-Admin', path: '/admin/subadminregister' },
-        { name: 'Edit Sub-Admin', path: '/admin/editsubadmin' },
         { name: 'View Sub-Admins', path: '/admin/viewsubadmins' },
+        { name: 'Edit Sub-Admin', path: '/admin/editsubadmin' },
         { name: 'Delete Sub-Admin', path: '/admin/deletesubadmin' },
         { name: 'Download Sub-Admins', path: '/admin/downloadsubadmins' },
       ],
@@ -94,7 +92,7 @@ const Sidebar: React.FC = () => {
       name: 'Translators',
       icon: 'fas fa-language',
       subItems: [
-        { name: 'Add Translators', path: '/admin/uploadTanslators' },
+        { name: 'Add Translators', path: '/admin/uploadTranslators' },
         { name: 'Edit Translators', path: '/admin/edittranslators' },
         { name: 'View Translators', path: '/admin/translators' },
         { name: 'Delete Translators', path: '/admin/deletetranslators' },
@@ -153,6 +151,7 @@ const Sidebar: React.FC = () => {
         { name: 'Edit Blog', path: '/admin/EditBlog' },
         { name: 'View Blogs', path: '/admin/ViewBlogs' },
         { name: 'Delete Blog', path: '/admin/DeleteBlog' },
+        { name: 'Download Blogs', path: '/admin/downloadblogs' },
         { name: 'BlogCategory', path: '/admin/ViewBlogCategory' },
       ],
     },
@@ -160,7 +159,7 @@ const Sidebar: React.FC = () => {
       name: 'Pharmacy',
       icon: 'fas fa-pills',
       subItems: [
-        { name: 'Upload Capsule', path: '/admin/addMedicine' },
+        { name: 'Add Capsule', path: '/admin/addMedicine' },
         { name: 'Edit Capsule', path: '/admin/editMedicine' },
         { name: 'View Capsule', path: '/admin/medicineList' },
         { name: 'Delete Capsule', path: '/admin/deleteMedicine' },
@@ -175,6 +174,7 @@ const Sidebar: React.FC = () => {
         { name: 'Edit Packages', path: '/admin/editpackages' },
         { name: 'View Packages', path: '/admin/viewpackage' },
         { name: 'Delete Packages', path: '/admin/deletepackages' },
+        { name: 'Download Packages', path: '/admin/downloadpackages' },
         { name: 'Booking', path: '/admin/packagebookings' },
       ],
     },
@@ -187,22 +187,20 @@ const Sidebar: React.FC = () => {
         { name: 'Add Team Member', path: '/admin/addsalesteam' },
         { name: 'Edit Team Member', path: '/admin/editsalesteam' },
         { name: 'Delete Team Member', path: '/admin/deletesalesteam' },
+        { name: 'Download Team Members', path: '/admin/downloadsalesteam' },
       ],
     },
     { name: 'BusinessLocation', icon: 'fas fa-map-marker-alt', path: '/admin/businessLocations' },
     { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
   ];
-  
+
   const getFilteredMenuItems = (): MenuItem[] => {
     if (!adminUser || !adminUser.role) {
-      console.log('No user or role found, returning empty menu');
       return [];
     }
 
-    // Check for both 'admin' and 'ADMIN' roles
     if (adminUser.role.toLowerCase() === 'admin') {
-      console.log('Admin role detected, showing all menu items');
       return allMenuItems;
     }
 
@@ -211,9 +209,8 @@ const Sidebar: React.FC = () => {
     allMenuItems.forEach((item) => {
       if (item.subItems) {
         const allowedSubItems = item.subItems.filter((subItem) => {
-          const hasPermission = permissions[item.name]?.includes(subItem.name);
-          console.log(`Checking ${item.name}.${subItem.name}: ${hasPermission}`);
-          return hasPermission;
+          // Check if the main category exists in permissions, then check sub-item
+          return permissions[item.name] && permissions[item.name].includes(subItem.name);
         });
         if (allowedSubItems.length > 0) {
           filteredItems.push({
@@ -222,15 +219,14 @@ const Sidebar: React.FC = () => {
           });
         }
       } else {
-        const permissionName = item.name === 'Add Admin' ? 'Add Admin' : item.name;
-        if (permissions[permissionName] || item.name === 'Dashboard') {
-          console.log(`Including top-level item: ${item.name}`);
+        // For top-level items, they should only appear if they have permissions
+        // Dashboard is a special case, should always be visible for any logged-in sub-admin
+        if (item.name === 'Dashboard' || permissions[item.name]) {
           filteredItems.push(item);
         }
       }
     });
 
-    console.log('Filtered menu items:', filteredItems);
     return filteredItems;
   };
 
@@ -238,18 +234,6 @@ const Sidebar: React.FC = () => {
 
   const toggleSubMenu = (name: string) => {
     setOpenMenus((prev) => ({ ...prev, [name]: !prev[name] }));
-  };
-
-  const buttonVariants = {
-    hover: {
-      scale: 1.05,
-      boxShadow: '0 0 10px rgba(22, 163, 74, 0.5)',
-      transition: { duration: 0.3 },
-    },
-    tap: {
-      scale: 0.95,
-      transition: { duration: 0.2 },
-    },
   };
 
   const handleLogout = () => {
@@ -264,62 +248,47 @@ const Sidebar: React.FC = () => {
         Admin Panel
       </div>
       <nav className="flex-1 overflow-y-auto">
-        {menuItems.length === 0 ? (
-          <div className="p-4 text-sm text-green-600">No permissions available</div>
-        ) : (
-          menuItems.map((item) => (
-            <div key={item.name} className="border-b border-green-100">
-              {item.subItems ? (
-                <>
-                  <button
-                    onClick={() => toggleSubMenu(item.name)}
-                    className="flex items-center w-full p-4 hover:bg-green-100 transition-all"
-                    aria-expanded={openMenus[item.name]}
-                    aria-controls={`submenu-${item.name}`}
-                  >
-                    <i className={`${item.icon} mr-3 text-green-600`}></i>
-                    <span className="font-medium">{item.name}</span>
-                    <i
-                      className={`fas fa-chevron-${openMenus[item.name] ? 'up' : 'down'} ml-auto text-sm text-green-500`}
-                    ></i>
-                  </button>
-                  {openMenus[item.name] && (
-                    <div
-                      id={`submenu-${item.name}`}
-                      className="pl-8 bg-white border-t border-green-100"
-                    >
-                      {item.subItems.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          to={subItem.path}
-                          className="block py-2 px-4 text-sm text-green-700 hover:bg-green-100 rounded transition"
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                item.path && (
-                  <motion.div
-                    variants={item.name === 'Add Admin' ? buttonVariants : {}}
-                    whileHover={item.name === 'Add Admin' ? 'hover' : undefined}
-                    whileTap={item.name === 'Add Admin' ? 'tap' : undefined}
-                  >
-                    <Link
-                      to={item.path}
-                      className="flex items-center p-4 hover:bg-green-100 transition-colors text-green-800"
-                    >
-                      <i className={`${item.icon} mr-3 text-green-600`}></i>
-                      <span className="font-medium">{item.name}</span>
-                    </Link>
-                  </motion.div>
-                )
-              )}
-            </div>
-          ))
-        )}
+        {menuItems.map((item) => (
+          <div key={item.name} className="border-b border-green-100">
+            {item.subItems ? (
+              <>
+                <button
+                  onClick={() => toggleSubMenu(item.name)}
+                  className="flex items-center w-full p-4 hover:bg-green-100 transition-all"
+                >
+                  <i className={`${item.icon} mr-3 text-green-600`}></i>
+                  <span className="font-medium">{item.name}</span>
+                  <i
+                    className={`fas fa-chevron-${openMenus[item.name] ? 'up' : 'down'} ml-auto text-sm text-green-500`}
+                  ></i>
+                </button>
+                {openMenus[item.name] && (
+                  <div className="pl-8 bg-white border-t border-green-100">
+                    {item.subItems.map((subItem) => (
+                      <Link
+                        key={subItem.name}
+                        to={subItem.path}
+                        className="block py-2 px-4 text-sm text-green-700 hover:bg-green-100 rounded transition"
+                      >
+                        {subItem.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              item.path && (
+                <Link
+                  to={item.path}
+                  className="flex items-center p-4 hover:bg-green-100 transition-colors text-green-800"
+                >
+                  <i className={`${item.icon} mr-3 text-green-600`}></i>
+                  <span className="font-medium">{item.name}</span>
+                </Link>
+              )
+            )}
+          </div>
+        ))}
       </nav>
       <div className="p-4 border-t border-green-100">
         <button
@@ -335,4 +304,4 @@ const Sidebar: React.FC = () => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;

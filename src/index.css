@@ -5,7 +5,7 @@
 
 /* Medical watermark background */
 body {
-  background-image: url('/SL-040820-29750-27.jpg') !important;
+  background-image: url('/bg.png') !important;
   background-repeat: repeat !important;
   background-size: 600px auto !important;
   background-attachment: fixed !important;

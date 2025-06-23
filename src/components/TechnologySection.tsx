@@ -25,8 +25,8 @@ const TechnologySection = () => {
                With advanced technology and personalized care coordination, we're making 
                quality healthcare accessible globally. Each dot represents registered users 
                in that region, showcasing our international reach and trusted network.
-             </p>
-             <Button className="bg-primary hover:bg-primary-dark text-white">
+             </p>            
+             <Button className="bg-[#499E14] hover:bg-green-500 text-white border border-[#499E14]">
                Join Our Network <ArrowRight className="ml-2 h-4 w-4" />
              </Button>
            </div>
