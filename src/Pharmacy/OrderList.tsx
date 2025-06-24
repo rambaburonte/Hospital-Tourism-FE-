@@ -57,9 +57,8 @@ const OrderList: React.FC = () => {
           <h1 className="text-xl font-bold text-gray-900">Medical Visions</h1>
         </div>
         <div className="flex space-x-8">
-          <Link to="/admin/medicineList" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">Categories</Link>
           <Link to="/admin/orders" className="text-blue-600 border-b-2 border-blue-600 text-sm font-semibold">Orders</Link>
-          <Link to="/admin/prescriptions" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">Prescriptions</Link>
+          <Link to="/admin/PrescriptionList" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">Prescriptions</Link>
           <Link to="#" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">FAQ</Link>
         </div>
       </nav>

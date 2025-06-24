@@ -115,7 +115,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from './ScrollToTop';
 import AddMedicineForm from './Pharmacy/addMadicine';
 import MedicineList from './Pharmacy/MedicineList';
-import PrescriptionList from './Pharmacy/OrderList';
+import PrescriptionList from './Pharmacy/PrescriptionList';
 import OrderList from './Pharmacy/OrderList';
 import UpdateMedicine from './Pharmacy/MadichineUpdate';
 import MedicineCatalog from './Pharmacy/UserInterface';
@@ -146,6 +146,7 @@ import GoogleTranslate from './components/GoogleTraslator.js';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import Sitemap from './components/Sitemap';
+
 
 import contactus from './pages/contactus';
 import SubadmLoginForm from './salesteam/Login';
@@ -366,7 +367,9 @@ const App: React.FC = () => (
             <Route path="/admin/editsalesteam" element={<Placeholder title="Edit Team Member" />} />
             <Route path="/admin/deletesalesteam" element={<Placeholder title="Delete Team Member" />} />
             <Route path="/admin/downloadsalesteam" element={<Placeholder title="Download Team Members" />} />
-
+              <Route path="/admin/PrescriptionList" element={<PrescriptionList />} />
+              
+              
             {/* Miscellaneous Routes */}
             <Route path="/contact-us" element={<ContactUsPage />} />
 
