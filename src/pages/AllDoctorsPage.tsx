@@ -15,7 +15,7 @@
 
 // interface Hospital {
 //   hospitalId: number;
-//   hositalName: string;
+//   hospitalName: string;
 //   hospitalDescription: string;
 //   hospitalImage: string;
 //   rating: string;
@@ -62,7 +62,7 @@
 //       setAllDoctors(doctors);
 
 //       const grouped = doctors.reduce((acc: { [key: string]: Doctor[] }, doctor) => {
-//         const hospitalName = doctor.hospital?.hositalName || 'Unknown Hospital';
+//         const hospitalName = doctor.hospital?.hospitalName || 'Unknown Hospital';
 //         if (!acc[hospitalName]) acc[hospitalName] = [];
 //         acc[hospitalName].push(doctor);
 //         return acc;
@@ -119,7 +119,7 @@
 //   }, [allDoctors]);
 
 //   const hospitals = useMemo(() => {
-//     return ['All Hospitals', ...Array.from(new Set(allDoctors.map((d) => d.hospital?.hositalName || 'Unknown Hospital')))];
+//     return ['All Hospitals', ...Array.from(new Set(allDoctors.map((d) => d.hospital?.hospitalName || 'Unknown Hospital')))];
 //   }, [allDoctors]);
 
 //   useEffect(() => {
@@ -257,7 +257,7 @@
 //             <p><strong>Specialization:</strong> {selectedDoctor.department}</p>
 //             <p><strong>Rating:</strong> {selectedDoctor.rating}</p>
 //             <p><strong>Description:</strong> {selectedDoctor.description}</p>
-//             <p><strong>Hospital:</strong> {selectedDoctor.hospital.hositalName}</p>
+//             <p><strong>Hospital:</strong> {selectedDoctor.hospital.hospitalName}</p>
 //             <p><strong>Address:</strong> {selectedDoctor.hospital.address}</p>
 //             <button onClick={closeModal} className="mt-4 text-sm text-red-600 hover:underline">Close</button>
 //           </div>
@@ -300,7 +300,7 @@
 
 // interface Hospital {
 //   hospitalId: number;
-//   hositalName: string;
+//   hospitalName: string;
 //   hospitalDescription: string;
 //   hospitalImage: string;
 //   rating: string;
@@ -348,7 +348,7 @@
 //       setAllDoctors(doctors);
 
 //       const grouped = doctors.reduce((acc: { [key: string]: Doctor[] }, doctor) => {
-//         const hospitalName = doctor.hospital?.hositalName || 'Unknown Hospital';
+//         const hospitalName = doctor.hospital?.hospitalName || 'Unknown Hospital';
 //         if (!acc[hospitalName]) acc[hospitalName] = [];
 //         acc[hospitalName].push(doctor);
 //         return acc;
@@ -405,7 +405,7 @@
 //   }, [allDoctors]);
 
 //   const hospitals = useMemo(() => {
-//     return ['All Hospitals', ...Array.from(new Set(allDoctors.map((d) => d.hospital?.hositalName || 'Unknown Hospital')))];
+//     return ['All Hospitals', ...Array.from(new Set(allDoctors.map((d) => d.hospital?.hospitalName || 'Unknown Hospital')))];
 //   }, [allDoctors]);
 
 //   useEffect(() => {
@@ -611,7 +611,7 @@
 //             <div className="space-y-3 text-sm text-gray-700">
 //               <p><strong className="font-medium">Rating:</strong> {selectedDoctor.rating} <FaStar className="inline text-yellow-500" /></p>
 //               <p><strong className="font-medium">Description:</strong> {selectedDoctor.description}</p>
-//               <p><strong className="font-medium">Hospital:</strong> {selectedDoctor.hospital.hositalName}</p>
+//               <p><strong className="font-medium">Hospital:</strong> {selectedDoctor.hospital.hospitalName}</p>
 //               <p className="flex items-start">
 //                 <strong className="font-medium">Address:</strong>
 //                 <span className="ml-1">{selectedDoctor.hospital.address}</span>
@@ -666,7 +666,7 @@ Modal.setAppElement('#root');
 
 interface Hospital {
   hospitalId: number;
-  hositalName: string;
+  hospitalName: string;
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
@@ -714,7 +714,7 @@ const AllDoctorsPage: React.FC = () => {
       setAllDoctors(doctors);
 
       const grouped = doctors.reduce((acc: { [key: string]: Doctor[] }, doctor) => {
-        const hospitalName = doctor.hospital?.hositalName || 'Unknown Hospital';
+        const hospitalName = doctor.hospital?.hospitalName || 'Unknown Hospital';
         if (!acc[hospitalName]) acc[hospitalName] = [];
         acc[hospitalName].push(doctor);
         return acc;
@@ -771,7 +771,7 @@ const AllDoctorsPage: React.FC = () => {
   }, [allDoctors]);
 
   const hospitals = useMemo(() => {
-    return ['All Hospitals', ...Array.from(new Set(allDoctors.map((d) => d.hospital?.hositalName || 'Unknown Hospital')))];
+    return ['All Hospitals', ...Array.from(new Set(allDoctors.map((d) => d.hospital?.hospitalName || 'Unknown Hospital')))];
   }, [allDoctors]);
 
   useEffect(() => {
@@ -977,7 +977,7 @@ const AllDoctorsPage: React.FC = () => {
             <div className="space-y-3 text-sm text-gray-700">
               <p><strong className="font-medium">Rating:</strong> {selectedDoctor.rating} <FaStar className="inline text-yellow-500" /></p>
               <p><strong className="font-medium">Description:</strong> {selectedDoctor.description}</p>
-              <p><strong className="font-medium">Hospital:</strong> {selectedDoctor.hospital.hositalName}</p>
+              <p><strong className="font-medium">Hospital:</strong> {selectedDoctor.hospital.hospitalName}</p>
               <p className="flex items-start">
                 <strong className="font-medium">Address:</strong>
                 <span className="ml-1">{selectedDoctor.hospital.address}</span>

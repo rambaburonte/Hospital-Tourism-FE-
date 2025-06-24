@@ -7,7 +7,7 @@ import { BASE_URL } from '@/config/config';
 
 interface Hospital {
   hospitalId: number;
-  hositalName: string;  // Note: this is spelled with one 'p', matching the backend
+  hospitalName: string;  // Fixed spelling
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
@@ -15,6 +15,7 @@ interface Hospital {
   status: string;
   hospitallocationId?: number;
   hospitallocationName?: string;
+  hospitalMap?: string;
 }
 
 const DownloadHospitals: React.FC = () => {
@@ -44,9 +45,17 @@ const DownloadHospitals: React.FC = () => {
   };
   const handleDownload = () => {
     // Convert hospitals data to CSV format
-    const headers = ['ID', 'Name', 'Location', 'Address', 'Rating', 'Status'];
+    const headers = ['ID', 'Name', 'Description', 'Location', 'Address', 'Rating', 'Status'];
     const csvData = hospitals.map((hospital) => 
-      [hospital.hospitalId, hospital.hositalName, hospital.hospitallocationName, hospital.address, hospital.rating, hospital.status].join(',')
+      [
+        hospital.hospitalId, 
+        hospital.hospitalName, 
+        hospital.hospitalDescription,
+        hospital.hospitallocationName || '', 
+        hospital.address, 
+        hospital.rating, 
+        hospital.status
+      ].join(',')
     );
     
     // Add headers to the beginning
@@ -126,7 +135,7 @@ const DownloadHospitals: React.FC = () => {
                       <div className="text-sm text-gray-900">{hospital.hospitalId}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{hospital.hositalName}</div>
+                      <div className="text-sm font-medium text-gray-900">{hospital.hospitalName}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">{hospital.hospitallocationName}</div>

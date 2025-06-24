@@ -5,11 +5,15 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 interface Hospital {
   hospitalId: number;
-  hositalName: string;
+  hospitalName: string;  // Fixed typo from hospitalName
   address: string;
   hospitalDescription: string;
   hospitalImage: string;
+  rating: string;
+  status: string;
   location?: string;
+  hospitallocationId?: number;
+  hospitallocationName?: string;
 }
 
 const HospitalList: React.FC = () => {
@@ -21,7 +25,7 @@ const HospitalList: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/hospitals`)
+      .get(`${BASE_URL}/api/hospitals/getall/hospitals`)
       .then((res) => {
         setHospitals(res.data);
         setLoading(false);
@@ -36,8 +40,7 @@ const HospitalList: React.FC = () => {
     new Set(hospitals.map((hospital) => hospital.location).filter(Boolean))
   );
 
-  const filteredHospitals = hospitals.filter((hospital) => {
-    const matchesSearch = hospital.hositalName
+  const filteredHospitals = hospitals.filter((hospital) => {    const matchesSearch = hospital.hospitalName
       .toLowerCase()
       .includes(search.toLowerCase());
     const matchesLocation =
@@ -125,13 +128,12 @@ const HospitalList: React.FC = () => {
                   className="bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition-all duration-300"
                 >
                   <img
-                    src={hospital.hospitalImage}
-                    alt={hospital.hositalName}
+                    src={hospital.hospitalImage}                    alt={hospital.hospitalName}
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-2">
-                      {hospital.hositalName}
+                      {hospital.hospitalName}
                     </h2>
                     <p className="text-sm text-gray-600 mb-2">
                       {hospital.address}

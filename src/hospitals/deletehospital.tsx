@@ -7,7 +7,7 @@ import { BASE_URL } from '@/config/config';
 
 interface Hospital {
   hospitalId: number;
-  hositalName: string;  // Note: this is spelled with one 'p', matching the backend
+  hospitalName: string;  // Note: this is spelled with one 'p', matching the backend
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
@@ -107,7 +107,7 @@ const DeleteHospital: React.FC = () => {
               <tbody className="bg-white divide-y divide-gray-200">                {hospitals.map((hospital) => (
                   <tr key={hospital.hospitalId}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{hospital.hositalName}</div>
+                      <div className="text-sm font-medium text-gray-900">{hospital.hospitalName}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">{hospital.hospitallocationName}</div>

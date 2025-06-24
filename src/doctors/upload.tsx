@@ -5,7 +5,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import { BASE_URL } from '../config/config';
 interface Hospital {
   hospitalId: number;
-  hositalName: string; // matches backend field
+  hospitalName: string; // matches backend field
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
@@ -34,7 +34,7 @@ const UploadDoctors: React.FC = () => {
         const res = await axios.get(`${BASE_URL}/api/hospitals/getall/hospitals`);
         const options = res.data.map((hospital: Hospital) => ({
           value: hospital.hospitalId,
-          label: `${hospital.hositalName} (${hospital.address})`,
+          label: `${hospital.hospitalName} (${hospital.address})`,
         }));
         setHospitals(options);
       } catch (err) {

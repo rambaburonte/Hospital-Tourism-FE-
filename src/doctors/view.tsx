@@ -229,7 +229,7 @@ const DoctorsList = () => {
       <td className="p-3">{doctor.rating}</td>
       <td className="p-3">{doctor.department}</td>
       <td className="p-3">{doctor.hospital?.address}</td>
-      <td className="p-3">{doctor.hospital?.hositalName}</td>
+      <td className="p-3">{doctor.hospital?.hospitalName}</td>
       <td className="p-3">
         <button
           onClick={() => navigate(`/doctor-profile/${doctor.id}`)}
