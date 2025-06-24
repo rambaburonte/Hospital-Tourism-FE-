@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from '@/admin/sidebar';
+import AdminSidebar from '../components/admin/AdminSidebar';
 import { Link } from 'react-router-dom';
 
 interface Order {
@@ -62,10 +62,8 @@ const OrderList: React.FC = () => {
           <Link to="/admin/prescriptions" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">Prescriptions</Link>
           <Link to="#" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">FAQ</Link>
         </div>
-      </nav>
-
-      <div className="flex flex-1">
-        <Sidebar />
+      </nav>      <div className="flex flex-1">
+        <AdminSidebar />
         <div className="flex-1 py-8 px-6 sm:px-8 lg:px-12 ml-64">
           {/* Main Content Area */}
           <div className="flex-1">
