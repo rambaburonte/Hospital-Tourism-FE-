@@ -19,11 +19,9 @@ const Footer = () => {
               />
             </h2>
             <ul className="space-y-2 mb-6">
-              <li><Link to="/about" className="text-sm hover:text-red-600 transition-colors duration-200">About Us</Link></li>
-              <li><Link to="/leadership" className="text-sm hover:text-red-600 transition-colors duration-200">Leadership</Link></li>
+              <li><Link to="/ContactUsPage" className="text-sm hover:text-red-600 transition-colors duration-200">About Us</Link></li>
               <li><Link to="/careers" className="text-sm hover:text-red-600 transition-colors duration-200">Careers</Link></li>
               <li><Link to="/ContactUsPage" className="text-sm hover:text-red-600 transition-colors duration-200">Contact Us</Link></li>
-              <li><Link to="/investor-relations" className="text-sm hover:text-red-600 transition-colors duration-200">Investor Relations</Link></li>
               <li><Link to="/media" className="text-sm hover:text-red-600 transition-colors duration-200">Media</Link></li>
             </ul>
 
@@ -56,7 +54,7 @@ const Footer = () => {
               </a>
             </div>
             <div className="space-y-4">
-              <p className="text-sm">Emergency: 1800 123 4567</p>
+              <p className="text-sm">Emergency:  8595114141</p>
               <p className="text-sm">
                 Email: <a href="mailto:Info.meditailor@gmail.com" className="hover:text-red-600 transition-colors duration-200">Info.meditailor@gmail.com</a>
               </p>
@@ -68,22 +66,22 @@ const Footer = () => {
             <h2 className="text-lg font-semibold mb-4">For Patients</h2>
             <ul className="space-y-2">
               <li>
-                <Link to="/doctors/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/doctors" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Find a Doctor
                 </Link>
               </li>
               <li>
-                <Link to="/booking" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/ContactUsPage" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Book Appointment
                 </Link>
               </li>
               <li>
-                <Link to="/health-packages" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/tours" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Health Packages
                 </Link>
               </li>
               <li>
-                <Link to="/tests/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/tests" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Lab Tests
                 </Link>
               </li>
@@ -93,15 +91,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/OurHospitals/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/HospitalList" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Hospital Information
                 </Link>
               </li>
-              <li>
-                <Link to="/international-patients" className="text-sm hover:text-red-600 transition-colors duration-200">
-                  International Patients
-                </Link>
-              </li>
+             
             </ul>
           </div>
 
@@ -115,22 +109,22 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/ServiceListingPage/spa/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/spa-service-details" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Spa Services
                 </Link>
               </li>
               <li>
-                <Link to="/ServiceListingPage/physio/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/spa-service-details" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Physiotherapy
                 </Link>
               </li>
               <li>
-                <Link to="/translatorAndChefList/translators/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/translatorList" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Translators
                 </Link>
               </li>
               <li>
-                <Link to="/medicinecatalog/list" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/medicinecatalog" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Pharmacy
                 </Link>
               </li>
@@ -152,18 +146,18 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <h2 className="text-lg font-semibold mb-4">Specialties</h2>
             <ul className="space-y-2">
-              <li><Link to="/specialties/cancer-care" className="text-sm hover:text-red-600 transition-colors duration-200">Cancer Care</Link></li>
-              <li><Link to="/specialties/cardiac-sciences" className="text-sm hover:text-red-600 transition-colors duration-200">Cardiac Sciences</Link></li>
-              <li><Link to="/specialties/neurosciences" className="text-sm hover:text-red-600 transition-colors duration-200">Neurosciences</Link></li>
-              <li><Link to="/specialties/orthopaedics" className="text-sm hover:text-red-600 transition-colors duration-200">Orthopaedics</Link></li>
-              <li><Link to="/specialties/transplants" className="text-sm hover:text-red-600 transition-colors duration-200">Transplants</Link></li>
+              <li><Link to="/specialties/oncology" className="text-sm hover:text-red-600 transition-colors duration-200">Cancer Care</Link></li>
+              <li><Link to="/specialties/cardiology" className="text-sm hover:text-red-600 transition-colors duration-200">Cardiac Sciences</Link></li>
+              <li><Link to="/specialties/neurology" className="text-sm hover:text-red-600 transition-colors duration-200">Neurosciences</Link></li>
+              <li><Link to="/specialties/orthopedics" className="text-sm hover:text-red-600 transition-colors duration-200">Orthopaedics</Link></li>
+              <li><Link to="/specialties/gynecology" className="text-sm hover:text-red-600 transition-colors duration-200">Gynecology</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-green-600 mt-10 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm">© {currentYear} Max Healthcare. All Rights Reserved.</p>
+            <p className="text-sm">© {currentYear} Meditailor. All Rights Reserved.</p>
             <p className="text-sm font-bold text-green-700 bg-green-100 px-4 py-1 rounded-lg">
               Developed by{' '}
               <a 

@@ -139,8 +139,17 @@ import Placeholder from './admin/Placeholder';
 
 
 
+
 import GoogleTranslate from './components/GoogleTraslator.js';
+
+
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsConditions from './components/TermsConditions';
+import Sitemap from './components/Sitemap';
+
 import contactus from './pages/contactus';
+import SubadmLoginForm from './salesteam/Login';
+
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -204,6 +213,11 @@ const App: React.FC = () => (
             <Route path="/register" element={<Registor />} />
             <Route path="/dashboard" element={<Userdashboard />} />
             <Route path="/PatientProfile" element={<PatientProfile />} />
+
+            <Route path="/subadminlogin" element={<SubadmLoginForm />} />
+            <Route path="/admin/patientlist/users" element={<Users />} />
+            <Route path="/bookingfom" element={<BookingForm />} />
+            <Route path='/usercart' element={<UserCart />} />
             <Route path="/patientlist" element={<Users />} />
             <Route path="/bookingfom" element={<BookingForm />} />
             <Route path="/usercart" element={<UserCart />} />
@@ -215,6 +229,9 @@ const App: React.FC = () => (
             <Route path="/medical-records" element={<MedicalRecords />} />
             <Route path="/bookingcart" element={<BookingCart />} />
             <Route path="/MyOrders" element={<MyOrders />} />
+             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/sitemap" element={<Sitemap />} />
 
             {/* User Routes */}
             <Route path="/login" element={<Login />} />
@@ -232,6 +249,7 @@ const App: React.FC = () => (
             <Route path="/medical-records" element={<MedicalRecords />} />
             <Route path="/bookingcart" element={<BookingCart />} />
             <Route path="/MyOrders" element={<MyOrders />} />
+
 
             {/* Admin & Sub-Admin Authentication */}
             <Route path="/admin/login" element={<AdminLogin />} />

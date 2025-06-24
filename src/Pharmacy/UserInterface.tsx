@@ -1179,7 +1179,7 @@ const MedicineCatalog: React.FC = () => {
                         : 'bg-green-500 hover:bg-green-600 text-white'
                     }`}
                   >
-                    {expired ? 'Not Available' : 'Shop Now'}
+                    {expired ? 'Not Available' : 'Add to Cart'}
                   </button>
                 </div>
               </div>
