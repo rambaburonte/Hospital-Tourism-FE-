@@ -6,7 +6,7 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 interface LabTest {
-  testId: number;
+  id: number; // Changed from testId to id to match backend entity
   testTitle: string;
   testDescription: string;
   testPrice: number;
@@ -24,7 +24,9 @@ const ViewLabTests: React.FC = () => {
   const fetchLabTests = async () => {
     setLoading(true);
     try {
+      console.log('Fetching lab tests from:', `${BASE_URL}/api/labtests`);
       const response = await axios.get<LabTest[]>(`${BASE_URL}/api/labtests`);
+      console.log('Lab tests response:', response.data);
       setLabTests(response.data);
     } catch (error) {
       toast({
@@ -79,6 +81,9 @@ const ViewLabTests: React.FC = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Test Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -94,7 +99,10 @@ const ViewLabTests: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredLabTests.map((test) => (
-                  <tr key={test.testId}>
+                  <tr key={test.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-blue-600">#{test.id}</div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{test.testTitle}</div>
                       <div className="text-xs text-gray-500 mt-1 line-clamp-2">{test.testDescription}</div>
@@ -106,7 +114,15 @@ const ViewLabTests: React.FC = () => {
                       <div className="text-sm text-gray-500">${test.testPrice}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{test.status || 'Active'}</div>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        test.status === 'Active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : test.status === 'Inactive'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {test.status || 'Active'}
+                      </span>
                     </td>
                   </tr>
                 ))}

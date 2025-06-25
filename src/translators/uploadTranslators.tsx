@@ -11,6 +11,13 @@ interface LocationOption {
   country: string;
 }
 
+interface Location {
+  locationId: number;
+  city: string;
+  state: string;
+  country: string;
+}
+
 const UploadTranslators: React.FC = () => {
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<LocationOption | null>(null);
@@ -28,8 +35,10 @@ const UploadTranslators: React.FC = () => {
 
   const fetchLocations = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/locations`);
-      const formatted = res.data.map((loc: any) => ({
+      console.log('Fetching locations from:', `${BASE_URL}/api/locations`);
+      const res = await axios.get<Location[]>(`${BASE_URL}/api/locations`);
+      console.log('Locations response:', res.data);
+      const formatted = res.data.map((loc: Location) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,
         city: loc.city,
@@ -39,6 +48,10 @@ const UploadTranslators: React.FC = () => {
       setLocations(formatted);
     } catch (err) {
       console.error('Error fetching locations', err);
+      if (axios.isAxiosError(err)) {
+        console.error('Error response:', err.response?.data);
+        console.error('Error status:', err.response?.status);
+      }
       setMessage('Failed to load locations');
     }
   };
@@ -75,11 +88,10 @@ const UploadTranslators: React.FC = () => {
         translatorRating: rating,
         translatorLanguages: languages,
         locationId: selectedLocation.value,
-        status: 'ACTIVE',
         image: imageFile.name,
       });
 
-      const res = await axios.post('${BASE_URL}/api/translators/add', formData, {
+      const res = await axios.post(`${BASE_URL}/api/translators/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -93,10 +105,16 @@ const UploadTranslators: React.FC = () => {
       } else {
         setMessage(`Failed to upload translator: ${res.statusText}`);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Upload error:', err);
-      const errorMessage = err.response?.data || 'An error occurred while uploading translator';
-      setMessage(errorMessage);
+      if (axios.isAxiosError(err)) {
+        console.error('Error response:', err.response?.data);
+        console.error('Error status:', err.response?.status);
+        const errorMessage = err.response?.data || 'An error occurred while uploading translator';
+        setMessage(errorMessage);
+      } else {
+        setMessage('An error occurred while uploading translator');
+      }
     }
   };
 

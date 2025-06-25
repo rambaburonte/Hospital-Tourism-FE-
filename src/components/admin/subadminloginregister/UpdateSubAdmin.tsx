@@ -4,10 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { BASE_URL } from '@/config/config';
-import Sidebar from '../AdminSidebar';
+import AdminSidebar from '../AdminSidebar';
 
 interface SubAdmin {
-    id: number;
+    id?: number;
+    adminId?: number;
     adminName: string;
     adminEmail: string;
     employeeId?: string;
@@ -84,7 +85,7 @@ const categoryVariants = {
 };
 
 const UpdateSubAdmin = () => {
-    const { employeeId } = useParams<{ employeeId: string }>();
+    const { adminId } = useParams<{ adminId: string }>();
     const navigate = useNavigate();
     const [subAdmin, setSubAdmin] = useState<SubAdmin>({
         id: 0,
@@ -108,14 +109,16 @@ const UpdateSubAdmin = () => {
         }, {} as Record<string, boolean>)
     );    useEffect(() => {
         const fetchSubAdmin = async () => {
-            if (!employeeId) {
-                setError('No sub-admin Employee ID provided');
+            if (!adminId) {
+                setError('No sub-admin ID provided');
                 setLoading(false);
-                toast.error('No sub-admin Employee ID provided');
+                toast.error('No sub-admin ID provided');
                 return;
-            }            try {
-                console.log('Fetching sub-admin with Employee ID:', employeeId);
-                const response = await axios.get(`${BASE_URL}/admin/get-subadmin-by-employee/${employeeId}`, {
+            }
+
+            try {
+                console.log('Fetching sub-admin with Admin ID:', adminId);
+                const response = await axios.get(`${BASE_URL}/sub/admin/get-subadmin/${adminId}`, {
                     timeout: 10000 // 10 second timeout
                 });
                 console.log('Fetched sub-admin data:', response.data);
@@ -163,7 +166,7 @@ const UpdateSubAdmin = () => {
         };
 
         fetchSubAdmin();
-    }, [employeeId]);
+    }, [adminId]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -283,7 +286,7 @@ const UpdateSubAdmin = () => {
         setError('');
         
         try {
-            const response = await axios.put(`${BASE_URL}/admin/update-subadmin/${subAdmin.id}`, {
+            const response = await axios.put(`${BASE_URL}/sub/admin/subadmin/update/${subAdmin.id || subAdmin.adminId}`, {
                 adminName: subAdmin.adminName,
                 adminEmail: subAdmin.adminEmail,
                 employeeId: subAdmin.employeeId,
@@ -314,12 +317,12 @@ const UpdateSubAdmin = () => {
     };    if (loading) {
         return (
             <div className="min-h-screen bg-green-50 flex">
-                <Sidebar />
-                <div className="flex-1 p-6 flex items-center justify-center">
+                <AdminSidebar />
+                <div className="flex-1 ml-64 p-6 flex items-center justify-center">
                     <div className="text-center">
                         <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
                         <p className="mt-4 text-green-700 font-medium">Loading sub-admin details...</p>
-                        <p className="mt-2 text-sm text-gray-500">Employee ID: {employeeId || 'Not provided'}</p>
+                        <p className="mt-2 text-sm text-gray-500">Admin ID: {adminId || 'Not provided'}</p>
                     </div>
                 </div>
             </div>
@@ -329,8 +332,8 @@ const UpdateSubAdmin = () => {
     if (error) {
         return (
             <div className="min-h-screen bg-green-50 flex">
-                <Sidebar />
-                <div className="flex-1 p-6 flex items-center justify-center">
+                <AdminSidebar />
+                <div className="flex-1 ml-64 p-6 flex items-center justify-center">
                     <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg border border-red-200 p-6 text-center">
                         <div className="text-red-500 text-6xl mb-4">
                             <i className="fas fa-exclamation-triangle"></i>
@@ -361,8 +364,8 @@ const UpdateSubAdmin = () => {
 
     return (
         <div className="min-h-screen bg-green-50 flex">
-            <Sidebar />
-            <div className="flex-1 p-6">
+            <AdminSidebar />
+            <div className="flex-1 ml-64 p-6">
                 <Toaster position="top-right" />
                 <motion.div
                     className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border border-green-100"

@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
+
 interface SpaService {
   serviceName: string;
   serviceDescription: string;
   serviceImage: string;
-  rating: string;
-  price: string;
+  rating: number;
+  price: number;
 }
 
 const SpaServicesPage: React.FC = () => {
@@ -28,6 +29,18 @@ const SpaServicesPage: React.FC = () => {
           console.error('Failed to fetch spa services:', err);
           setLoading(false);
         });
+    } else {
+      // If no ID is provided, fetch all spa services
+      axios
+        .get(`${BASE_URL}/spaServices/getAll/spaServices`)
+        .then((res) => {
+          setServices(res.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch all spa services:', err);
+          setLoading(false);
+        });
     }
   }, [id]);
 
@@ -38,7 +51,7 @@ const SpaServicesPage: React.FC = () => {
       {/* Main content with margin to prevent sidebar overlap */}
       <div className="ml-64 p-6 bg-gray-100 min-h-screen w-full">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
-          Spa Services for Spa Center ID: {id}
+          {id ? `Spa Services for Spa Center ID: ${id}` : 'All Spa Services'}
         </h1>
 
         {loading ? (

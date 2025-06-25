@@ -22,7 +22,7 @@ const DeleteSubAdmin: React.FC = () => {
   const fetchSubAdmins = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/admin/get-all-subadmins`);
+      const response = await axios.get(`${BASE_URL}/sub/admin/get-all-subadmins`);
       setSubAdmins(response.data);
     } catch (error) {
       toast({
@@ -48,7 +48,7 @@ const DeleteSubAdmin: React.FC = () => {
     
     setDeleting(true);
     try {
-      await axios.delete(`${BASE_URL}/admin/delete-subadmin/${id}`);
+      await axios.delete(`${BASE_URL}/sub/admin/delete-subadmin/${id}`);
       
       toast({
         title: 'Success',

@@ -8,12 +8,12 @@ interface Translator {
   translatorName: string;
   translatorDescription: string;
   translatorImage: string;
-  translatorRating: number;
+  translatorRating: string; // Changed from number to string to match entity
   translatorLanguages: string;
-  status: string;
-  price: number;
-  translatorLocIdInteger: number;
-  translatorAddress: string;
+  status?: string;
+  price?: number;
+  translatorLocIdInteger?: number;
+  translatorAddress?: string;
 }
 
 const EditTranslators: React.FC = () => {
@@ -36,15 +36,18 @@ const EditTranslators: React.FC = () => {
   }, [id]);
   const fetchTranslator = async (translatorId: string) => {
     try {
+      console.log('Fetching translator from:', `${BASE_URL}/api/translators/getone/${translatorId}`);
       const response = await fetch(`${BASE_URL}/api/translators/getone/${translatorId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch translator');
       }
       const data = await response.json();
+      console.log('Translator response:', data);
       setTranslator(data);
       setFormData(data);
       setShowEditForm(true);
     } catch (err) {
+      console.error('Error fetching translator:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -53,13 +56,16 @@ const EditTranslators: React.FC = () => {
 
   const fetchAllTranslators = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/translators/getall`);
+      console.log('Fetching translators from:', `${BASE_URL}/api/translators/getAll/traslators`);
+      const response = await fetch(`${BASE_URL}/api/translators/getAll/traslators`);
       if (!response.ok) {
         throw new Error('Failed to fetch translators');
       }
       const data = await response.json();
+      console.log('Translators response:', data);
       setTranslators(data);
     } catch (err) {
+      console.error('Error fetching translators:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -86,6 +92,9 @@ const EditTranslators: React.FC = () => {
 
     try {
       const translatorId = id || translator?.translatorID;
+      console.log('Updating translator ID:', translatorId);
+      console.log('Update payload:', formData);
+      
       const response = await fetch(`${BASE_URL}/api/translators/update-translator/${translatorId}`, {
         method: 'PUT',
         headers: {
@@ -95,8 +104,12 @@ const EditTranslators: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update translator');
+        const errorData = await response.text();
+        throw new Error(`Failed to update translator: ${errorData}`);
       }
+
+      const updatedData = await response.json();
+      console.log('Update response:', updatedData);
 
       navigate('/admin/translators');
     } catch (err) {

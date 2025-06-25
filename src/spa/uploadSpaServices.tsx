@@ -71,9 +71,19 @@ const UploadSpaService: React.FC = () => {
       formData.append('spaCenterId', selectedSpa.value.toString());
       formData.append('image', imageFile);
 
+      console.log('Uploading spa service with data:', {
+        serviceName: name,
+        description: description,
+        spaPrice: parsedPrice,
+        spaCenterId: selectedSpa.value,
+        imageFileName: imageFile.name
+      });
+
       const res = await axios.post(`${BASE_URL}/spaServices/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+
+      console.log('Upload response:', res.data);
 
       if (res.status === 200 || res.status === 201) {
         setMessage('Spa service uploaded successfully!');
@@ -85,9 +95,16 @@ const UploadSpaService: React.FC = () => {
       } else {
         setMessage('Failed to upload service');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Upload failed:', err);
-      setMessage(err?.response?.data || 'Server error during upload');
+      let errorMessage = 'Server error during upload';
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (typeof err === 'object' && err !== null && 'response' in err) {
+        const axiosError = err as { response?: { data?: string } };
+        errorMessage = axiosError.response?.data || errorMessage;
+      }
+      setMessage(errorMessage);
     }
   };
 

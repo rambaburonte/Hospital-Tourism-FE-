@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from '../admin/sidebar';
+import AdminSidebar from "@/components/admin/AdminSidebar";
 import { BASE_URL } from '@/config/config';
 interface Location {
   locationId: number;
@@ -62,7 +62,7 @@ const UploadPhysio: React.FC = () => {
 
   return (
     <>
-    <Sidebar/>
+    <AdminSidebar/>
     <div className="p-6 max-w-2xl mx-auto bg-white shadow-md rounded-xl">
       <h2 className="text-2xl font-bold mb-4">Upload Physio</h2>
       <form onSubmit={handleSubmit} className="space-y-4">

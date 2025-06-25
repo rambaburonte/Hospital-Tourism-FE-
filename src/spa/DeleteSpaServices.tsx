@@ -25,13 +25,14 @@ const DeleteSpaServices: React.FC = () => {
 
   const fetchSpaServices = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/spaServices/getAllServicesss`);
+      const response = await fetch(`${BASE_URL}/spaServices/getAll/spaServices`);
       if (!response.ok) {
         throw new Error('Failed to fetch spa services');
       }
       const data = await response.json();
       setSpaServices(data);
     } catch (err) {
+      console.error('Error fetching spa services:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -43,7 +44,7 @@ const DeleteSpaServices: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${BASE_URL}/spaServices/soft-delete/${id}`, {
+      const response = await fetch(`${BASE_URL}/spaServices/updateSpaService/${id}`, {
         method: 'PUT',
       });
 
@@ -54,6 +55,7 @@ const DeleteSpaServices: React.FC = () => {
       // Refresh the list
       await fetchSpaServices();
     } catch (err) {
+      console.error('Error deleting spa service:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setDeleting(null);
@@ -76,6 +78,7 @@ const DeleteSpaServices: React.FC = () => {
       // Refresh the list
       await fetchSpaServices();
     } catch (err) {
+      console.error('Error activating spa service:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setDeleting(null);

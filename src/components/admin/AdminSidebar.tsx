@@ -33,22 +33,17 @@ const AdminSidebar: React.FC = () => {
     const storedUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
     const storedPermissions = JSON.parse(localStorage.getItem('permissions') || '[]');
     
-    console.log('AdminSidebar: Stored admin user:', storedUser);
-    console.log('AdminSidebar: Stored permissions:', storedPermissions);
-    
     // Ensure permissions are included in the user object
     const userWithPermissions = {
       ...storedUser,
       permissions: storedUser.permissions || storedPermissions || []
     };
     
-    console.log('AdminSidebar: Final user object with permissions:', userWithPermissions);
     setAdminUser(userWithPermissions);
   }, []);
 
   const getFilteredMenuItems = (): MenuItem[] => {
     if (!adminUser || !adminUser.role) {
-      console.log('No admin user or role found');
       return [];
     }
 
@@ -177,8 +172,11 @@ const AdminSidebar: React.FC = () => {
           { name: 'Edit Blog', path: '/admin/EditBlog' },
           { name: 'View Blogs', path: '/admin/ViewBlogs' },
           { name: 'Delete Blog', path: '/admin/DeleteBlog' },
-          { name: 'Download Blogs', path: '/admin/downloadblogs' },
-          { name: 'BlogCategory', path: '/admin/ViewBlogCategory' },
+          { name: 'Download Blogs', path: '/admin/DownloadBlogs' },
+          { name: 'Add Blog Category', path: '/admin/AddBlogCategory' },
+          { name: 'Edit Blog Category', path: '/admin/EditBlogCategory' },
+          { name: 'Delete Blog Category', path: '/admin/DeleteBlogCategory' },
+          { name: 'View Blog Categories', path: '/admin/ViewBlogCategory' },
         ],
       },
       {
@@ -198,7 +196,7 @@ const AdminSidebar: React.FC = () => {
         subItems: [
           { name: 'Add Packages', path: '/admin/addpackages' },
           { name: 'Edit Packages', path: '/admin/editpackages' },
-          { name: 'View Packages', path: '/admin/viewpackage' },
+          { name: 'View Packages', path: '/admin/viewpackages' },
           { name: 'Delete Packages', path: '/admin/deletepackages' },
           { name: 'Download Packages', path: '/admin/downloadpackages' },
           { name: 'Booking', path: '/admin/packagebookings' },
@@ -219,8 +217,7 @@ const AdminSidebar: React.FC = () => {
       { name: 'BusinessLocation', icon: 'fas fa-map-marker-alt', path: '/admin/businessLocations' },
       { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
       { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
-    ];    console.log('Filtering menu items for role:', adminUser.role);
-    console.log('Available permissions:', adminUser.permissions);
+    ];
 
     // Normalize role to lowercase for consistent comparison
     const userRole = adminUser.role?.toLowerCase();
@@ -233,21 +230,19 @@ const AdminSidebar: React.FC = () => {
     const userPermissions = adminUser.permissions || [];
     const filteredItems: MenuItem[] = [];
 
-    allMenuItems.forEach((item) => {      // Skip Sub-Admin management for sub-admins
+    allMenuItems.forEach((item) => {
+      // Skip Sub-Admin management for sub-admins
       if (item.name === 'Sub-Admin' && userRole === 'subadmin') {
-        console.log('Skipping Sub-Admin menu for sub-admin user');
         return;
       }
 
       if (item.subItems) {
         const allowedSubItems = item.subItems.filter((subItem) => {
           const hasPermission = userPermissions.includes(subItem.name);
-          console.log(`Checking permission for ${subItem.name}:`, hasPermission);
           return hasPermission;
         });
         
         if (allowedSubItems.length > 0) {
-          console.log(`Adding ${item.name} with ${allowedSubItems.length} sub-items`);
           filteredItems.push({
             ...item,
             subItems: allowedSubItems,
@@ -264,7 +259,6 @@ const AdminSidebar: React.FC = () => {
       }
     });
 
-    console.log('Filtered menu items:', filteredItems);
     return filteredItems;
   };
 
@@ -273,9 +267,9 @@ const AdminSidebar: React.FC = () => {
   const toggleSubMenu = (name: string) => {
     setOpenMenus((prev) => ({ ...prev, [name]: !prev[name] }));
   };
+  
   const handleLogout = () => {
     localStorage.removeItem('adminUser');
-    console.log('Logging out admin user');
     navigate('/login');
   };
 

@@ -92,12 +92,10 @@ const SalesTasksPage: React.FC = () => {
   const [followUpHistory, setFollowUpHistory] = useState<SalesFollowUp[]>([]);
 
   useEffect(() => {
-    console.log('Component mounted, fetching tasks...');
     fetchTasks();
   }, []);
 
   useEffect(() => {
-    console.log('Search query changed:', searchQuery, 'Tasks:', tasks.length);
     const lowerQuery = searchQuery.toLowerCase();
     const filtered = tasks.filter(
       (task) =>
@@ -105,7 +103,6 @@ const SalesTasksPage: React.FC = () => {
         task.doctors?.name.toLowerCase().includes(lowerQuery) 
         // task.userMobile?.toLowerCase().includes(lowerQuery)
     );
-    console.log('Filtered tasks:', filtered.length);
     setFilteredTasks(filtered);
   }, [searchQuery, tasks]);
 
@@ -124,7 +121,6 @@ const SalesTasksPage: React.FC = () => {
         return;
       }
 
-      console.log('Fetching tasks for salesId:', salesId);
       const response = await axios.get(`${BASE_URL}/api/bookings/followups/sales/${salesId}`, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -145,7 +141,6 @@ const SalesTasksPage: React.FC = () => {
         }
       });
       const bookings = Array.from(bookingsMap.values());
-      console.log('Fetched bookings:', bookings.length);
       setTasks(bookings);
       setFilteredTasks(bookings);
 
@@ -167,7 +162,6 @@ const SalesTasksPage: React.FC = () => {
 
   const fetchFollowUpHistory = async (bookingId: number) => {
     try {
-      console.log('Fetching follow-up history for bookingId:', bookingId);
       const response = await axios.get(`${BASE_URL}/api/bookings/followups/booking/${bookingId}`, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -193,10 +187,8 @@ const SalesTasksPage: React.FC = () => {
         .sort((a: SalesFollowUp, b: SalesFollowUp) =>
           new Date(b.followUpDate).getTime() - new Date(a.followUpDate).getTime()
         );
-      console.log('Follow-up history fetched:', history.length);
       setFollowUpHistory(history);
     } catch (err) {
-      console.error('Error fetching follow-up history:', err);
       setFollowUpHistory([]);
     }
   };
@@ -301,10 +293,8 @@ const SalesTasksPage: React.FC = () => {
     window.location.href = '/login';
   };
 
-  console.log('Rendering SalesTasksPage', { loading, error, tasks: tasks.length, filteredTasks: filteredTasks.length });
-
   return (
-    <div className="w-full min-h-screen bg-gray-100 p-6">
+    <div className="w-full min-h-screen bg-gray-100 p-6">;
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-blue-800">My Assigned Tasks</h1>
         <div className="flex space-x-3">

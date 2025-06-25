@@ -19,31 +19,63 @@ const EditChefs: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [chef, setChef] = useState<Chef | null>(null);
+  const [chefs, setChefs] = useState<Chef[]>([]);
   const [formData, setFormData] = useState<Partial<Chef>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showEditForm, setShowEditForm] = useState(false);
 
   useEffect(() => {
     if (id) {
       fetchChef(id);
+    } else {
+      fetchAllChefs();
     }
   }, [id]);
 
   const fetchChef = async (chefId: string) => {
     try {
+      console.log('Fetching chef from:', `${BASE_URL}/api/chefs/chef-By/Id/${chefId}`);
       const response = await fetch(`${BASE_URL}/api/chefs/chef-By/Id/${chefId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch chef');
       }
       const data = await response.json();
+      console.log('Chef response:', data);
       setChef(data);
       setFormData(data);
+      setShowEditForm(true);
     } catch (err) {
+      console.error('Error fetching chef:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchAllChefs = async () => {
+    try {
+      console.log('Fetching chefs from:', `${BASE_URL}/api/chefs`);
+      const response = await fetch(`${BASE_URL}/api/chefs`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch chefs');
+      }
+      const data = await response.json();
+      console.log('Chefs response:', data);
+      setChefs(data);
+    } catch (err) {
+      console.error('Error fetching chefs:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectChefForEdit = (selectedChef: Chef) => {
+    setChef(selectedChef);
+    setFormData(selectedChef);
+    setShowEditForm(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -60,7 +92,11 @@ const EditChefs: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${BASE_URL}/api/chefs/update-chef/${id}`, {
+      const chefId = id || chef?.chefID;
+      console.log('Updating chef ID:', chefId);
+      console.log('Update payload:', formData);
+      
+      const response = await fetch(`${BASE_URL}/api/chefs/update-chef/${chefId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -69,11 +105,16 @@ const EditChefs: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update chef');
+        const errorData = await response.text();
+        throw new Error(`Failed to update chef: ${errorData}`);
       }
+
+      const updatedData = await response.json();
+      console.log('Update response:', updatedData);
 
       navigate('/admin/ChefList');
     } catch (err) {
+      console.error('Error updating chef:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setSaving(false);
@@ -107,129 +148,223 @@ const EditChefs: React.FC = () => {
       <AdminSidebar />
       <div className="ml-64 p-6 bg-gray-100 min-h-screen w-full">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Edit Chef</h1>
-          
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
+          {!showEditForm ? (
+            // Show chef list for selection
+            <>
+              <h1 className="text-2xl font-bold text-gray-800 mb-6">Select Chef to Edit</h1>
+              
+              {error && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                  {error}
+                </div>
+              )}
+
+              <div className="overflow-x-auto">
+                <table className="min-w-full table-auto">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {chefs.map((chefItem) => (
+                      <tr key={chefItem.chefID} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            {chefItem.chefImage && (
+                              <img
+                                className="h-10 w-10 rounded-full mr-3"
+                                src={chefItem.chefImage}
+                                alt={chefItem.chefName}
+                              />
+                            )}
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{chefItem.chefName}</div>
+                              <div className="text-sm text-gray-500">ID: {chefItem.chefID}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {chefItem.experience}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {chefItem.chefRating}/5
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            chefItem.status === 'Active' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {chefItem.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          ${chefItem.price}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                            onClick={() => selectChefForEdit(chefItem)}
+                            className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700"
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {chefs.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  No chefs found.
+                </div>
+              )}
+            </>
+          ) : (
+            // Show edit form
+            <>
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-2xl font-bold text-gray-800">Edit Chef</h1>
+                {!id && (
+                  <button
+                    onClick={() => setShowEditForm(false)}
+                    className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+                  >
+                    Back to List
+                  </button>
+                )}
+              </div>
+              
+              {error && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    name="chefName"
+                    value={formData.chefName || ''}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Description</label>
+                  <textarea
+                    name="chefDescription"
+                    value={formData.chefDescription || ''}
+                    onChange={handleChange}
+                    rows={3}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Image URL</label>
+                  <input
+                    type="url"
+                    name="chefImage"
+                    value={formData.chefImage || ''}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Rating</label>
+                  <input
+                    type="number"
+                    name="chefRating"
+                    value={formData.chefRating || ''}
+                    onChange={handleChange}
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Experience</label>
+                  <input
+                    type="text"
+                    name="experience"
+                    value={formData.experience || ''}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Cooking Styles</label>
+                  <input
+                    type="text"
+                    name="styles"
+                    value={formData.styles || ''}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={formData.price || ''}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.01"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Status</label>
+                  <select
+                    name="status"
+                    value={formData.status || 'Active'}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {saving ? 'Saving...' : 'Update Chef'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/admin/ChefList')}
+                    className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </>
           )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                name="chefName"
-                value={formData.chefName || ''}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
-                name="chefDescription"
-                value={formData.chefDescription || ''}
-                onChange={handleChange}
-                rows={3}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Image URL</label>
-              <input
-                type="url"
-                name="chefImage"
-                value={formData.chefImage || ''}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Rating</label>
-              <input
-                type="number"
-                name="chefRating"
-                value={formData.chefRating || ''}
-                onChange={handleChange}
-                min="0"
-                max="5"
-                step="0.1"
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Experience</label>
-              <input
-                type="text"
-                name="experience"
-                value={formData.experience || ''}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Cooking Styles</label>
-              <input
-                type="text"
-                name="styles"
-                value={formData.styles || ''}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Price</label>
-              <input
-                type="number"
-                name="price"
-                value={formData.price || ''}
-                onChange={handleChange}
-                min="0"
-                step="0.01"
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Status</label>
-              <select
-                name="status"
-                value={formData.status || 'Active'}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                disabled={saving}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-              >
-                {saving ? 'Saving...' : 'Update Chef'}
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate('/admin/ChefList')}
-                className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>

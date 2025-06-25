@@ -7,7 +7,7 @@ interface Spa {
   spaId: number;
   spaName: string;
   spaDescription: string;
-  rating: number;
+  rating: string;
   address: string;
   spaImage?: string;
   status?: string;
@@ -63,7 +63,7 @@ const SpaCentersList: React.FC = () => {
 
                   <button
                     onClick={() => handleView(spa.spaId)}
-                    className="mt-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mt-4"
+                    className="mt-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                   >
                     View Details
                   </button>

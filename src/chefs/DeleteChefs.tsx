@@ -26,13 +26,16 @@ const DeleteChefs: React.FC = () => {
 
   const fetchChefs = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/chefs/all-chefs`);
+      console.log('Fetching chefs from:', `${BASE_URL}/api/chefs`);
+      const response = await fetch(`${BASE_URL}/api/chefs`);
       if (!response.ok) {
         throw new Error('Failed to fetch chefs');
       }
       const data = await response.json();
+      console.log('Chefs response:', data);
       setChefs(data);
     } catch (err) {
+      console.error('Error fetching chefs:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

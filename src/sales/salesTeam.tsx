@@ -100,9 +100,11 @@ const SalesTeamPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Fetching sales team from:', `${BASE_URL}/api/bookings/all`);
       const response = await axios.get(`${BASE_URL}/api/bookings/all`, {
         headers: { 'Content-Type': 'application/json' },
       });
+      console.log('Sales team response:', response.data);
       setSalesTeam(response.data);
       setFilteredSalesTeam(response.data);
     } catch (err: unknown) {
