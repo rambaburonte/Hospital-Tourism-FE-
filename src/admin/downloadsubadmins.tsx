@@ -26,7 +26,7 @@ const DownloadSubAdmins: React.FC = () => {
   const fetchSubAdmins = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/admin/get-all-subadmins`);
+      const response = await axios.get(`${BASE_URL}/sub/admin/get-all-subadmins`);
       setSubAdmins(response.data);
     } catch (error) {
       toast({

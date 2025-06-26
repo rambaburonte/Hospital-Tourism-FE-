@@ -8,6 +8,11 @@ interface DiagnosticsOption {
   value: number;
 }
 
+interface Diagnostics {
+  diognosticsId: number;
+  diognosticsName: string;
+}
+
 const UploadLabTests: React.FC = () => {
   const [diagnosticsOptions, setDiagnosticsOptions] = useState<DiagnosticsOption[]>([]);
   const [selectedDiagnostics, setSelectedDiagnostics] = useState<DiagnosticsOption | null>(null);
@@ -25,14 +30,20 @@ const UploadLabTests: React.FC = () => {
 
   const fetchDiagnostics = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/diagnostics`);
-      const formatted = res.data.map((d: any) => ({
+      console.log('Fetching diagnostics from:', `${BASE_URL}/api/diagnostics`);
+      const res = await axios.get<Diagnostics[]>(`${BASE_URL}/api/diagnostics`);
+      console.log('Diagnostics response:', res.data);
+      const formatted = res.data.map((d: Diagnostics) => ({
         value: d.diognosticsId,
         label: d.diognosticsName,
       }));
       setDiagnosticsOptions(formatted);
     } catch (err) {
       console.error('Failed to fetch diagnostics', err);
+      if (axios.isAxiosError(err)) {
+        console.error('Error response:', err.response?.data);
+        console.error('Error status:', err.response?.status);
+      }
     }
   };
 
@@ -45,14 +56,18 @@ const UploadLabTests: React.FC = () => {
     }
 
     try {
-      const res = await axios.post(`${BASE_URL}/api/labtests/add`, {
+      const payload = {
         testTitle: title,
         testDescription: description,
         testPrice: parseFloat(price),
         testDepartment: department,
         testImage: image,
         diognosticsId: selectedDiagnostics.value,
-      });
+      };
+      
+      console.log('Uploading lab test with payload:', payload);
+      const res = await axios.post(`${BASE_URL}/api/labtests/add`, payload);
+      console.log('Upload response:', res.data);
 
       if (res.status === 200 || res.status === 201) {
         setMessage('Lab test uploaded successfully!');
@@ -62,7 +77,13 @@ const UploadLabTests: React.FC = () => {
       }
     } catch (err) {
       console.error('Upload error', err);
-      setMessage('An error occurred while uploading lab test');
+      if (axios.isAxiosError(err)) {
+        console.error('Error response:', err.response?.data);
+        console.error('Error status:', err.response?.status);
+        setMessage(`Error: ${err.response?.data?.message || 'Failed to upload lab test'}`);
+      } else {
+        setMessage('An error occurred while uploading lab test');
+      }
     }
   };
 

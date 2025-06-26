@@ -9,16 +9,19 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 interface SubAdmin {
-  id: number;
-  name: string;
-  email: string;
+  id?: number;
+  adminId?: number;
+  adminName: string;
+  adminEmail: string;
   role: string;
+  status?: string;
 }
 
 const EditSubAdmin: React.FC = () => {
   const [subAdmins, setSubAdmins] = useState<SubAdmin[]>([]);
   const [selectedAdmin, setSelectedAdmin] = useState<SubAdmin | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,16 +31,28 @@ const EditSubAdmin: React.FC = () => {
   const { toast } = useToast();
   const fetchSubAdmins = async () => {
     setLoading(true);
+    setError(null);
     try {
-      const response = await axios.get<SubAdmin[]>(`${BASE_URL}/api/admin/all-subadmins`);
-      setSubAdmins(response.data);
+      // Try multiple endpoints to find the correct one
+      let response;
+      try {
+        response = await axios.get<SubAdmin[]>(`${BASE_URL}/sub/admin/get-all-subadmins`);
+      } catch (error) {
+        // Try alternative endpoint
+        response = await axios.get<SubAdmin[]>(`${BASE_URL}/sub/admin/get-all`);
+      }
+      
+      console.log('API Response:', response.data); // Debug log
+      setSubAdmins(response.data || []);
     } catch (error) {
+      console.error('Error fetching sub-admins:', error);
+      const errorMessage = error?.response?.data?.message || 'Failed to fetch sub-admins. Please check if the backend is running.';
+      setError(errorMessage);
       toast({
-        title: 'Error',
-        description: 'Failed to fetch sub-admins',
+        title: 'Error Loading Sub-Admins',
+        description: errorMessage,
         variant: 'destructive',
       });
-      console.error('Error fetching sub-admins:', error);
     } finally {
       setLoading(false);
     }
@@ -50,8 +65,8 @@ const EditSubAdmin: React.FC = () => {
   const handleSelectAdmin = (admin: SubAdmin) => {
     setSelectedAdmin(admin);
     setFormData({
-      name: admin.name,
-      email: admin.email,
+      name: admin.adminName,
+      email: admin.adminEmail,
     });
   };
 
@@ -64,8 +79,17 @@ const EditSubAdmin: React.FC = () => {
     e.preventDefault();
     if (!selectedAdmin) return;
     
-    setLoading(true);    try {
-      await axios.put(`${BASE_URL}/api/admin/update-subadmin/${selectedAdmin.id}`, formData);
+    setLoading(true);
+    try {
+      const adminId = selectedAdmin.id || selectedAdmin.adminId;
+      const payload = {
+        adminName: formData.name,
+        adminEmail: formData.email,
+      };
+      
+      console.log('Updating admin:', adminId, 'with data:', payload); // Debug log
+      
+      await axios.put(`${BASE_URL}/sub/admin/subadmin/update/${adminId}`, payload);
       
       toast({
         title: 'Success',
@@ -76,12 +100,12 @@ const EditSubAdmin: React.FC = () => {
       setSelectedAdmin(null);
       setFormData({ name: '', email: '' });
     } catch (error) {
+      console.error('Error updating sub-admin:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update sub-admin',
+        description: error?.response?.data?.message || 'Failed to update sub-admin',
         variant: 'destructive',
       });
-      console.error('Error updating sub-admin:', error);
     } finally {
       setLoading(false);
     }
@@ -99,22 +123,43 @@ const EditSubAdmin: React.FC = () => {
             
             {loading && <p>Loading sub-admins...</p>}
             
-            {!loading && subAdmins.length === 0 && (
-              <p className="text-gray-500">No sub-admins available.</p>
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <h3 className="text-lg font-medium text-red-800 mb-2">Error Loading Sub-Admins</h3>
+                <p className="text-red-600 mb-4">{error}</p>
+                <div className="flex gap-2">
+                  <Button onClick={fetchSubAdmins} size="sm" variant="outline">
+                    Retry
+                  </Button>
+                  <Button onClick={() => navigate('/admin/viewsubadmins')} size="sm" variant="outline">
+                    Back to Sub-Admins List
+                  </Button>
+                </div>
+              </div>
             )}
             
-            {!loading && subAdmins.length > 0 && (
+            {!loading && !error && subAdmins.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-gray-500 mb-4">No sub-admins available.</p>
+                <Button onClick={() => navigate('/admin/subadminregister')} size="sm">
+                  Add New Sub-Admin
+                </Button>
+              </div>
+            )}
+            
+            {!loading && !error && subAdmins.length > 0 && (
               <div className="max-h-96 overflow-y-auto">
                 {subAdmins.map(admin => (
                   <div 
-                    key={admin.id}
+                    key={admin.id || admin.adminId}
                     className={`p-4 mb-2 border rounded-md cursor-pointer hover:bg-gray-50 ${
-                      selectedAdmin?.id === admin.id ? 'bg-green-50 border-green-300' : ''
+                      (selectedAdmin?.id || selectedAdmin?.adminId) === (admin.id || admin.adminId) ? 'bg-green-50 border-green-300' : ''
                     }`}
                     onClick={() => handleSelectAdmin(admin)}
                   >
-                    <p className="font-medium">{admin.name}</p>
-                    <p className="text-sm text-gray-600">{admin.email}</p>
+                    <p className="font-medium">{admin.adminName}</p>
+                    <p className="text-sm text-gray-600">{admin.adminEmail}</p>
+                    <p className="text-xs text-gray-400">ID: {admin.id || admin.adminId}</p>
                   </div>
                 ))}
               </div>

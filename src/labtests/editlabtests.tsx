@@ -9,13 +9,13 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 interface LabTest {
-  testId: number;
+  id: number; // Changed from testId to id to match backend entity
   testTitle: string;
   testDescription: string;
   testPrice: number;
   testDepartment: string;
   testImage: string;
-  status?: string;
+  status?: string; // Changed from Status to lowercase status
 }
 
 const EditLabTests: React.FC = () => {
@@ -34,7 +34,9 @@ const EditLabTests: React.FC = () => {
   const fetchLabTests = async () => {
     setLoading(true);
     try {
+      console.log('Fetching lab tests from:', `${BASE_URL}/api/labtests`);
       const response = await axios.get<LabTest[]>(`${BASE_URL}/api/labtests`);
+      console.log('Lab tests response:', response.data);
       setLabTests(response.data);
     } catch (error) {
       toast({
@@ -54,6 +56,8 @@ const EditLabTests: React.FC = () => {
   }, []);
 
   const handleSelectLabTest = (labTest: LabTest) => {
+    console.log('Selected lab test:', labTest);
+    console.log('Lab test ID:', labTest.id);
     setSelectedLabTest(labTest);
     setFormData({
       testTitle: labTest.testTitle,
@@ -77,7 +81,22 @@ const EditLabTests: React.FC = () => {
     
     setLoading(true);
     try {
-      await axios.put(`${BASE_URL}/api/labtests/update/${selectedLabTest.testId}`, formData);
+      // Create the update payload to match backend expectations
+      const updatePayload = {
+        id: selectedLabTest.id,
+        testTitle: formData.testTitle,
+        testDescription: formData.testDescription,
+        testPrice: formData.testPrice,
+        testDepartment: formData.testDepartment,
+        testImage: selectedLabTest.testImage, // Keep existing image
+        status: selectedLabTest.status || 'Active'
+      };
+      
+      console.log('Updating lab test ID:', selectedLabTest.id);
+      console.log('Update payload:', updatePayload);
+      
+      const response = await axios.put(`${BASE_URL}/api/labtests/update/${selectedLabTest.id}`, updatePayload);
+      console.log('Update response:', response.data);
       
       toast({
         title: 'Success',
@@ -99,6 +118,10 @@ const EditLabTests: React.FC = () => {
         variant: 'destructive',
       });
       console.error('Error updating lab test:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+      }
     } finally {
       setLoading(false);
     }
@@ -123,20 +146,30 @@ const EditLabTests: React.FC = () => {
               <div className="space-y-4 max-h-[500px] overflow-y-auto">
                 {labTests.map((labTest) => (
                   <div 
-                    key={labTest.testId}
+                    key={labTest.id}
                     className={`p-4 border rounded-md cursor-pointer transition-all ${
-                      selectedLabTest?.testId === labTest.testId 
+                      selectedLabTest?.id === labTest.id 
                         ? 'border-blue-500 bg-blue-50' 
                         : 'hover:border-gray-400'
                     }`}
                     onClick={() => handleSelectLabTest(labTest)}
                   >
                     <h3 className="font-medium text-lg">{labTest.testTitle}</h3>
+                    <p className="text-xs text-blue-600">ID: {labTest.id}</p>
                     <p className="text-sm text-gray-600 mt-1 line-clamp-2">{labTest.testDescription}</p>
                     <div className="flex justify-between mt-2 text-sm text-gray-500">
                       <span>Price: ${labTest.testPrice}</span>
                       <span>Department: {labTest.testDepartment}</span>
                     </div>
+                    {labTest.status && (
+                      <div className="mt-1">
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          labTest.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {labTest.status}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

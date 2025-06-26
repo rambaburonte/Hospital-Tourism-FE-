@@ -7,12 +7,12 @@ interface Translator {
   translatorName: string;
   translatorDescription: string;
   translatorImage: string;
-  translatorRating: number;
+  translatorRating: string; // Changed from number to string to match entity
   translatorLanguages: string;
-  status: string;
-  price: number;
-  translatorLocIdInteger: number;
-  translatorAddress: string;
+  status?: string;
+  price?: number;
+  translatorLocIdInteger?: number;
+  translatorAddress?: string;
 }
 
 const DownloadTranslators: React.FC = () => {
@@ -27,13 +27,16 @@ const DownloadTranslators: React.FC = () => {
 
   const fetchTranslators = async () => {
     try {
+      console.log('Fetching translators from:', `${BASE_URL}/api/translators/getAll/traslators`);
       const response = await fetch(`${BASE_URL}/api/translators/getAll/traslators`);
       if (!response.ok) {
         throw new Error('Failed to fetch translators');
       }
       const data = await response.json();
+      console.log('Translators response:', data);
       setTranslators(data);
     } catch (err) {
+      console.error('Error fetching translators:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

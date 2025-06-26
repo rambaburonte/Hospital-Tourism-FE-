@@ -6,7 +6,7 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 interface LabTest {
-  testId: number;
+  id: number; // Changed from testId to id to match backend entity
   testTitle: string;
   testDescription: string;
   testPrice: number;
@@ -24,7 +24,9 @@ const DeleteLabTests: React.FC = () => {
   const fetchLabTests = async () => {
     setLoading(true);
     try {
+      console.log('Fetching lab tests from:', `${BASE_URL}/api/labtests`);
       const response = await axios.get<LabTest[]>(`${BASE_URL}/api/labtests`);
+      console.log('Lab tests response:', response.data);
       setLabTests(response.data);
     } catch (error) {
       toast({
@@ -44,18 +46,19 @@ const DeleteLabTests: React.FC = () => {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this lab test? This action cannot be undone.')) {
+    if (!window.confirm('Are you sure you want to soft delete this lab test? It will be marked as inactive.')) {
       return;
     }
     
     setDeleting(true);
     try {
+      console.log('Soft deleting lab test ID:', id);
       // Using the soft-delete endpoint as found in the LabtestsController
       await axios.put(`${BASE_URL}/api/labtests/soft-delete/${id}`);
       
       toast({
         title: 'Success',
-        description: 'Lab test deleted successfully',
+        description: 'Lab test marked as inactive successfully',
       });
       
       // Refresh the list
@@ -67,6 +70,44 @@ const DeleteLabTests: React.FC = () => {
         variant: 'destructive',
       });
       console.error('Error deleting lab test:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+      }
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleActivate = async (id: number) => {
+    if (!window.confirm('Are you sure you want to activate this lab test?')) {
+      return;
+    }
+    
+    setDeleting(true);
+    try {
+      console.log('Activating lab test ID:', id);
+      // Using the activate endpoint as found in the LabtestsController
+      await axios.put(`${BASE_URL}/api/labtests/activate/${id}`);
+      
+      toast({
+        title: 'Success',
+        description: 'Lab test activated successfully',
+      });
+      
+      // Refresh the list
+      fetchLabTests();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to activate lab test',
+        variant: 'destructive',
+      });
+      console.error('Error activating lab test:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+      }
     } finally {
       setDeleting(false);
     }
@@ -106,9 +147,10 @@ const DeleteLabTests: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {labTests.map((test) => (
-                  <tr key={test.testId}>
+                  <tr key={test.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{test.testTitle}</div>
+                      <div className="text-xs text-blue-600 mt-1">ID: {test.id}</div>
                       <div className="text-xs text-gray-500 mt-1 line-clamp-2">{test.testDescription}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -118,17 +160,37 @@ const DeleteLabTests: React.FC = () => {
                       <div className="text-sm text-gray-500">${test.testPrice}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{test.status || 'Active'}</div>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        test.status === 'Active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : test.status === 'Inactive'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {test.status || 'Active'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Button
-                        onClick={() => handleDelete(test.testId)}
-                        variant="destructive"
-                        size="sm"
-                        disabled={deleting}
-                      >
-                        {deleting ? 'Deleting...' : 'Delete'}
-                      </Button>
+                      {test.status === 'Inactive' ? (
+                        <Button
+                          onClick={() => handleActivate(test.id)}
+                          variant="outline"
+                          size="sm"
+                          disabled={deleting}
+                          className="text-green-600 hover:text-green-800"
+                        >
+                          {deleting ? 'Activating...' : 'Activate'}
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => handleDelete(test.id)}
+                          variant="destructive"
+                          size="sm"
+                          disabled={deleting}
+                        >
+                          {deleting ? 'Deleting...' : 'Soft Delete'}
+                        </Button>
+                      )}
                     </td>
                   </tr>
                 ))}

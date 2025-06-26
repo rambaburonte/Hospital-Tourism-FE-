@@ -18,31 +18,63 @@ const EditSpaServices: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [spaService, setSpaService] = useState<SpaService | null>(null);
+  const [spaServices, setSpaServices] = useState<SpaService[]>([]);
   const [formData, setFormData] = useState<Partial<SpaService>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showEditForm, setShowEditForm] = useState(false);
 
   useEffect(() => {
     if (id) {
       fetchSpaService(id);
+    } else {
+      fetchAllSpaServices();
     }
   }, [id]);
 
   const fetchSpaService = async (spaServiceId: string) => {
     try {
-      const response = await fetch(`${BASE_URL}/spaServices/getoneRecordById/${spaServiceId}`);
+      console.log('Fetching spa service from:', `${BASE_URL}/spaServices/getSpaService/${spaServiceId}`);
+      const response = await fetch(`${BASE_URL}/spaServices/getSpaService/${spaServiceId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch spa service');
       }
       const data = await response.json();
+      console.log('Spa service response:', data);
       setSpaService(data);
       setFormData(data);
+      setShowEditForm(true);
     } catch (err) {
+      console.error('Error fetching spa service:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchAllSpaServices = async () => {
+    try {
+      console.log('Fetching spa services from:', `${BASE_URL}/spaServices/getAll/spaServices`);
+      const response = await fetch(`${BASE_URL}/spaServices/getAll/spaServices`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch spa services');
+      }
+      const data = await response.json();
+      console.log('Spa services response:', data);
+      setSpaServices(data);
+    } catch (err) {
+      console.error('Error fetching spa services:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectSpaServiceForEdit = (selectedSpaService: SpaService) => {
+    setSpaService(selectedSpaService);
+    setFormData(selectedSpaService);
+    setShowEditForm(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -59,7 +91,11 @@ const EditSpaServices: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${BASE_URL}/spaServices/updateSpaService/${id}`, {
+      const spaServiceId = id || spaService?.serviceId;
+      console.log('Updating spa service ID:', spaServiceId);
+      console.log('Update payload:', formData);
+      
+      const response = await fetch(`${BASE_URL}/spaServices/update-spaService/${spaServiceId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -68,11 +104,16 @@ const EditSpaServices: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update spa service');
+        const errorData = await response.text();
+        throw new Error(`Failed to update spa service: ${errorData}`);
       }
+
+      const updatedData = await response.json();
+      console.log('Update response:', updatedData);
 
       navigate('/admin/viewspaservices');
     } catch (err) {
+      console.error('Error updating spa service:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setSaving(false);

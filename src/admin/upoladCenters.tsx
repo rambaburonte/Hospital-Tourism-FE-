@@ -60,23 +60,33 @@ const SpaUploadPage: React.FC = () => {
     spaData.append('name', formData.spaName);
     spaData.append('description', formData.spaDescription);
     spaData.append('rating', formData.rating);
+    spaData.append('address', formData.address);
     spaData.append('locationId', formData.locationId);
     spaData.append('image', imageFile);
 
+    console.log('Uploading spa center with data:', {
+      name: formData.spaName,
+      description: formData.spaDescription,
+      rating: formData.rating,
+      address: formData.address,
+      locationId: formData.locationId,
+      imageFileName: imageFile.name
+    });
+
     try {
-      await axios.post(`${BASE_URL}/spaCenter/upload`, spaData, {
+      const response = await axios.post(`${BASE_URL}/spaCenter/upload`, spaData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      console.log('Upload response:', response.data);
       alert('Spa center uploaded successfully!');
       setFormData({
         spaName: '',
         spaDescription: '',
-        address:'',
+        address: '',
         rating: '',
         locationId: ''
-
       });
       setImageFile(null);
     } catch (error) {

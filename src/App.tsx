@@ -47,11 +47,7 @@ import DiagnosticsList from './pages/Diagnostics';
 
 // Corrected import name (PascalCase)
 // Utility Components
-import MedicineList from './Pharmacy/MedicineList';
-import PrescriptionList from './Pharmacy/PrescriptionList';
-import OrderList from './Pharmacy/OrderList';
-import UpdateMedicine from './Pharmacy/MadichineUpdate';
-import MedicineCatalog from './Pharmacy/UserInterface';
+// import MedicineCatalog from './Pharmacy/UserInterface'; // Duplicate import removed
 // import UpdateChef from './admin/UpdateChef'; // Removed due to duplicate identifier
 /* import ViewBlog from './admin/ViewBlog'; // Removed due to duplicate identifier */
 import MedicalRecords from './components/madicalrecordsOfUser.js';
@@ -104,8 +100,13 @@ import DownloadSubAdmins from './admin/downloadsubadmins';
 import UploadCenters from './admin/upoladCenters';
 import LabTests from './admin/viewdiagnolabtests';
 import AllOrders from './admin/AllOrders';
-import PackagesDisplayPage from './admin/ViewPackages.js';
-import AddPackages from './admin/AddPackages';
+// Package Management Components
+import AddPackages from './admin/packages/AddPackages';
+import ViewPackages from './admin/packages/ViewPackages';
+import EditPackages from './admin/packages/EditPackages';
+import DeletePackages from './admin/packages/DeletePackages';
+import DownloadPackages from './admin/packages/DownloadPackages';
+import BookingPackages from './admin/packages/BookingPackages';
 import DownloadDiagnostics from './admin/downloaddiagnostics';
 import Uploaddoctors from './doctors/upload.js';
 import ViewDoctors from './doctors/view.js';
@@ -175,28 +176,53 @@ import DownloadSpaServices from './spa/DownloadSpaServices';
 // Pharmacy Module
 import UserCart from './Pharmacy/UserCart';
 import AddMedicineForm from './Pharmacy/addMadicine';
+
 // import MedicineList from './Pharmacy/MedicineList'; // Duplicate import removed
 // import UpdateMedicine from './Pharmacy/MadichineUpdate'; // Duplicate import removed
 // import MedicineCatalog from './Pharmacy/UserInterface'; // Duplicate import removed
 // import PrescriptionList from './Pharmacy/PrescriptionList'; // Duplicate import removed
 // import OrderList from './Pharmacy/OrderList'; // Duplicate import removed
+
+import MedicineList from './Pharmacy/MedicineList';
+import UpdateMedicine from './Pharmacy/MadichineUpdate';
+import EditMedicine from './Pharmacy/EditMedicine';
+import DeleteMedicine from './Pharmacy/DeleteMedicine';
+import DownloadMedicines from './Pharmacy/DownloadMedicines';
+import PrescriptionList from './Pharmacy/PrescriptionList';
+import OrderList from './Pharmacy/OrderList';
+import MedicineCatalog from './Pharmacy/UserInterface';
+
+
 // Sales Module
 import SalesDashboard from './sales/SalesDashboard.js';
 import SalesLogin from './sales/Login.js';
 import SalesTeamPage from './sales/salesTeam';
 import SalesTasksPage from './sales/salesTasks';
+import AddSalesTeam from './sales/AddSalesTeam';
+import EditSalesTeam from './sales/EditSalesTeam';
+import DeleteSalesTeam from './sales/DeleteSalesTeam';
+import DownloadSalesTeam from './sales/DownloadSalesTeam';
 
 // Blogs Module
-import ViewBlogCategory from './blogs/ViewBlogCategory.js';
-import ViewBlogs from './blogs/ViewBlogs.js';
-import ViewBlog from './blogs/ViewBlog.js';
+import ViewBlogCategory from './blogs/ViewBlogCategory';
+import ViewBlogs from './blogs/ViewBlogs';
+import ViewBlog from './blogs/ViewBlog';
+import AddBlog from './blogs/AddBlog';
+import EditBlog from './blogs/EditBlog';
+import DeleteBlog from './blogs/DeleteBlog';
+import DownloadBlogs from './blogs/DownloadBlogs';
+import AddBlogCategory from './blogs/AddBlogCategory';
+import EditBlogCategory from './blogs/EditBlogCategory';
+import DeleteBlogCategory from './blogs/DeleteBlogCategory';
 
 
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/subadmin');
+  const isAdminRoute = location.pathname.startsWith('/admin') || 
+                       location.pathname.startsWith('/subadmin') || 
+                       location.pathname.startsWith('/patientlist');
 
   return (
     <>
@@ -297,7 +323,7 @@ const App: React.FC = () => (
 
             {/* Sub-Admin Management Routes */}
             <Route path="/admin/viewsubadmins" element={<ViewSubAdmins />} />
-            <Route path="/admin/update-subadmin/:employeeId" element={<UpdateSubAdmin />} />
+            <Route path="/admin/update-subadmin/:adminId" element={<UpdateSubAdmin />} />
             <Route path="/admin/update-subadminAllData/:adminId" element={<UpdateAllSubAdmin />} />
             <Route path="/admin/editsubadmin" element={<UpdateSubAdmin />} />
             <Route path="/admin/deletesubadmin" element={<DeleteSubAdmin />} />
@@ -345,7 +371,9 @@ const App: React.FC = () => (
             {/* Chef Management Routes */}
             <Route path="/admin/uploadchefs" element={<UploadChefs />} />
             <Route path="/admin/chefs" element={<Chefs />} />
+            <Route path="/admin/ChefList" element={<Chefs />} />
             <Route path="/update-chef/:chefID" element={<UpdateChef />} />
+            <Route path="/admin/editchefs" element={<EditChefs />} />
             <Route path="/admin/editchefs/:id" element={<EditChefs />} />
             <Route path="/admin/deletechefs" element={<DeleteChefs />} />
             <Route path="/admin/downloadchefs" element={<DownloadChefs />} />
@@ -353,6 +381,7 @@ const App: React.FC = () => (
             {/* Physio Management Routes */}
             <Route path="/admin/uploadPhysios" element={<UploadPhysios />} />
             <Route path="/admin/Physios" element={<Physios />} />
+            <Route path="/admin/editphysios" element={<EditPhysios />} />
             <Route path="/admin/editphysios/:id" element={<EditPhysios />} />
             <Route path="/admin/deletephysios" element={<DeletePhysios />} />
             <Route path="/admin/downloadphysios" element={<DownloadPhysios />} />
@@ -360,6 +389,7 @@ const App: React.FC = () => (
             {/* Spa Center Management Routes */}
             <Route path="/admin/uploadCenters" element={<UploadCenters />} />
             <Route path="/admin/viewcenters" element={<Centers />} />
+            <Route path="/admin/editspacenters" element={<EditSpaCenters />} />
             <Route path="/admin/editspacenters/:id" element={<EditSpaCenters />} />
             <Route path="/admin/deletespacenters" element={<DeleteSpaCenters />} />
             <Route path="/admin/downloadspacenters" element={<DownloadSpaCenters />} />
@@ -368,6 +398,7 @@ const App: React.FC = () => (
             <Route path="/admin/uploadspaServices" element={<UploadSpaService />} />
             <Route path="/admin/spaservices/:id" element={<SpaService />} />
             <Route path="/admin/viewspaservices" element={<SpaService />} />
+            <Route path="/admin/editspaservices" element={<EditSpaServices />} />
             <Route path="/admin/editspaservices/:id" element={<EditSpaServices />} />
             <Route path="/admin/deletespaservices" element={<DeleteSpaServices />} />
             <Route path="/admin/downloadspaservices" element={<DownloadSpaServices />} />
@@ -376,38 +407,51 @@ const App: React.FC = () => (
             <Route path="/admin/addMedicine" element={<AddMedicineForm />} />
             <Route path="/admin/medicineList" element={<MedicineList />} />
             <Route path="/admin/updateMedicine/:id" element={<UpdateMedicine />} />
+            <Route path="/admin/editMedicine" element={<EditMedicine />} />
+            <Route path="/admin/editMedicine/:id" element={<EditMedicine />} />
+            <Route path="/admin/deleteMedicine" element={<DeleteMedicine />} />
+            <Route path="/admin/deleteMedicine/:id" element={<DeleteMedicine />} />
+            <Route path="/admin/downloadMedicines" element={<DownloadMedicines />} />
             <Route path="/admin/orders" element={<OrderList />} />
             <Route path="/admin/prescriptions" element={<PrescriptionList />} />
             <Route path="/admin/AllOrders" element={<AllOrders />} />
-            <Route path="/admin/editMedicine" element={<Placeholder title="Edit Medicine" />} />
-            <Route path="/admin/deleteMedicine" element={<Placeholder title="Delete Medicine" />} />
-            <Route path="/admin/downloadMedicines" element={<Placeholder title="Download Medicines" />} />
 
             {/* Package Management Routes */}
-            <Route path="/admin/viewpackage" element={<PackagesDisplayPage />} />
+            <Route path="/admin/viewpackage" element={<ViewPackages />} />
+            <Route path="/admin/viewpackages" element={<ViewPackages />} />
             <Route path="/admin/addpackages" element={<AddPackages />} />
-            <Route path="/admin/editpackages" element={<Placeholder title="Edit Packages" />} />
-            <Route path="/admin/deletepackages" element={<Placeholder title="Delete Packages" />} />
-            <Route path="/admin/downloadpackages" element={<Placeholder title="Download Packages" />} />
-            <Route path="/admin/packagebookings" element={<Placeholder title="Package Bookings" />} />
+            <Route path="/admin/editpackages" element={<EditPackages />} />
+            <Route path="/admin/editpackages/:id" element={<EditPackages />} />
+            <Route path="/admin/deletepackages" element={<DeletePackages />} />
+            <Route path="/admin/downloadpackages" element={<DownloadPackages />} />
+            <Route path="/admin/packagebookings" element={<BookingPackages />} />
 
             {/* Blog Management Routes */}
             <Route path="/admin/ViewBlogCategory" element={<ViewBlogCategory />} />
             <Route path="/admin/ViewBlogs" element={<ViewBlogs />} />
             <Route path="/admin/ViewBlog/:id" element={<ViewBlog />} />
-            <Route path="/admin/AddBlog" element={<Placeholder title="Add Blog" />} />
-            <Route path="/admin/EditBlog" element={<Placeholder title="Edit Blog" />} />
-            <Route path="/admin/DeleteBlog" element={<Placeholder title="Delete Blog" />} />
-            <Route path="/admin/downloadblogs" element={<Placeholder title="Download Blogs" />} />
+            <Route path="/admin/AddBlog" element={<AddBlog />} />
+            <Route path="/admin/EditBlog" element={<EditBlog />} />
+            <Route path="/admin/EditBlog/:id" element={<EditBlog />} />
+            <Route path="/admin/DeleteBlog" element={<DeleteBlog />} />
+            <Route path="/admin/DownloadBlogs" element={<DownloadBlogs />} />
+            
+            {/* Blog Category Management Routes */}
+            <Route path="/admin/AddBlogCategory" element={<AddBlogCategory />} />
+            <Route path="/admin/EditBlogCategory" element={<EditBlogCategory />} />
+            <Route path="/admin/EditBlogCategory/:id" element={<EditBlogCategory />} />
+            <Route path="/admin/DeleteBlogCategory" element={<DeleteBlogCategory />} />
 
             {/* Sales Team Management Routes */}
             <Route path="/admin/salesTeam" element={<SalesTeamPage />} />
             <Route path="/admin/salesTasks" element={<SalesTasksPage />} />
             <Route path="/admin/sales/dashboard" element={<SalesDashboard />} />
-            <Route path="/admin/addsalesteam" element={<Placeholder title="Add Team Member" />} />
-            <Route path="/admin/editsalesteam" element={<Placeholder title="Edit Team Member" />} />
-            <Route path="/admin/deletesalesteam" element={<Placeholder title="Delete Team Member" />} />
-            <Route path="/admin/downloadsalesteam" element={<Placeholder title="Download Team Members" />} />
+            <Route path="/admin/addsalesteam" element={<AddSalesTeam />} />
+            <Route path="/admin/editsalesteam" element={<EditSalesTeam />} />
+            <Route path="/admin/editsalesteam/:id" element={<EditSalesTeam />} />
+            <Route path="/admin/deletesalesteam" element={<DeleteSalesTeam />} />
+            <Route path="/admin/deletesalesteam/:id" element={<DeleteSalesTeam />} />
+            <Route path="/admin/downloadsalesteam" element={<DownloadSalesTeam />} />
 
               <Route path="/admin/PrescriptionList" element={<PrescriptionList />} />
               

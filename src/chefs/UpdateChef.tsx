@@ -80,17 +80,26 @@ const UpdateChef: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await fetch(`${BASE_URL}/api/chefs/${chefID}`, {
+      console.log('Updating chef ID:', chefID);
+      console.log('Update payload:', formData);
+      
+      const response = await fetch(`${BASE_URL}/api/chefs/update-chef/${chefID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        throw new Error('Failed to update chef');
+        const errorData = await response.text();
+        throw new Error(`Failed to update chef: ${errorData}`);
       }
+      
+      const updatedData = await response.json();
+      console.log('Update response:', updatedData);
+      
       alert('Chef updated successfully');
       navigate(-1); // Redirect to previous page
     } catch (err) {
+      console.error('Error updating chef:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };

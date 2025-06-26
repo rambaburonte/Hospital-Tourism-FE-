@@ -7,12 +7,12 @@ interface Translator {
   translatorName: string;
   translatorDescription: string;
   translatorImage: string;
-  translatorRating: number;
+  translatorRating: string; // Changed from number to string to match entity
   translatorLanguages: string;
-  status: string;
-  price: number;
-  translatorLocIdInteger: number;
-  translatorAddress: string;
+  status?: string;
+  price?: number;
+  translatorLocIdInteger?: number;
+  translatorAddress?: string;
 }
 
 const DeleteTranslators: React.FC = () => {
@@ -27,13 +27,16 @@ const DeleteTranslators: React.FC = () => {
 
   const fetchTranslators = async () => {
     try {
+      console.log('Fetching translators from:', `${BASE_URL}/api/translators/getAll/traslators`);
       const response = await fetch(`${BASE_URL}/api/translators/getAll/traslators`);
       if (!response.ok) {
         throw new Error('Failed to fetch translators');
       }
       const data = await response.json();
+      console.log('Translators response:', data);
       setTranslators(data);
     } catch (err) {
+      console.error('Error fetching translators:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -41,21 +44,29 @@ const DeleteTranslators: React.FC = () => {
   };
 
   const handleSoftDelete = async (id: number) => {
+    if (!window.confirm('Are you sure you want to soft delete this translator? It will be marked as inactive.')) {
+      return;
+    }
+
     setDeleting(id);
     setError(null);
 
     try {
+      console.log('Soft deleting translator ID:', id);
       const response = await fetch(`${BASE_URL}/api/translators/translators/soft-delete/${id}`, {
         method: 'PUT',
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete translator');
+        const errorData = await response.text();
+        throw new Error(`Failed to delete translator: ${errorData}`);
       }
 
+      console.log('Translator soft deleted successfully');
       // Refresh the list
       await fetchTranslators();
     } catch (err) {
+      console.error('Error deleting translator:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setDeleting(null);
@@ -63,21 +74,29 @@ const DeleteTranslators: React.FC = () => {
   };
 
   const handleActivate = async (id: number) => {
+    if (!window.confirm('Are you sure you want to activate this translator?')) {
+      return;
+    }
+
     setDeleting(id);
     setError(null);
 
     try {
+      console.log('Activating translator ID:', id);
       const response = await fetch(`${BASE_URL}/api/translators/activate/${id}`, {
         method: 'PUT',
       });
 
       if (!response.ok) {
-        throw new Error('Failed to activate translator');
+        const errorData = await response.text();
+        throw new Error(`Failed to activate translator: ${errorData}`);
       }
 
+      console.log('Translator activated successfully');
       // Refresh the list
       await fetchTranslators();
     } catch (err) {
+      console.error('Error activating translator:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setDeleting(null);

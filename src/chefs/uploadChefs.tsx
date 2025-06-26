@@ -3,6 +3,13 @@ import axios from 'axios';
 import Select from 'react-select';
 import Sidebar from '../admin/sidebar';  // Assuming Sidebar is exported as a named export
 import { BASE_URL } from '@/config/config';
+interface Location {
+  locationId: number;
+  city: string;
+  state: string;
+  country: string;
+}
+
 interface LocationOption {
   label: string;
   value: number;
@@ -31,7 +38,7 @@ const UploadChefs: React.FC = () => {
   const fetchLocations = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/locations`);
-      const formatted = res.data.map((loc: any) => ({
+      const formatted = res.data.map((loc: Location) => ({
         value: loc.locationId,
         label: `${loc.city}, ${loc.state}, ${loc.country}`,
         city: loc.city,
@@ -60,27 +67,38 @@ const UploadChefs: React.FC = () => {
     setMessage('');
 
     try {
-      const res = await axios.post(`${BASE_URL}/api/chefs/add/${selectedLocation.value}`, {
+      console.log('Uploading chef to:', `${BASE_URL}/api/chefs/add/${selectedLocation.value}`);
+      const payload = {
         chefName: name,
         chefDescription: description,
         chefImage: image,
         chefRating: rating,
         experience,
         styles,
-        Status: status,
+        status: status, // Fixed: was "Status" 
         price: parseFloat(price),
         locationId: selectedLocation.value,
-      });
+      };
+      console.log('Upload payload:', payload);
+      
+      const res = await axios.post(`${BASE_URL}/api/chefs/add/${selectedLocation.value}`, payload);
 
+      console.log('Upload response:', res.data);
       if (res.status === 200 || res.status === 201) {
         setMessage('Chef uploaded successfully!');
         handleReset();
       } else {
         setMessage('Failed to upload chef');
       }
-    } catch (err: any) {
-      console.error(err);
-      setMessage(err.response?.data?.message || 'An error occurred while uploading chef');
+    } catch (err) {
+      console.error('Upload error:', err);
+      if (err instanceof Error) {
+        setMessage(err.message || 'An error occurred while uploading chef');
+      } else if (axios.isAxiosError(err)) {
+        setMessage(err.response?.data?.message || 'An error occurred while uploading chef');
+      } else {
+        setMessage('An error occurred while uploading chef');
+      }
     } finally {
       setIsLoading(false);
     }

@@ -6,7 +6,7 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 interface LabTest {
-  testId: number;
+  id: number; // Changed from testId to id to match backend entity
   testTitle: string;
   testDescription: string;
   testPrice: number;
@@ -28,7 +28,9 @@ const DownloadLabTests: React.FC = () => {
   const fetchLabTests = async () => {
     setLoading(true);
     try {
+      console.log('Fetching lab tests from:', `${BASE_URL}/api/labtests`);
       const response = await axios.get<LabTest[]>(`${BASE_URL}/api/labtests`);
+      console.log('Lab tests response:', response.data);
       setLabTests(response.data);
     } catch (error) {
       toast({
@@ -43,13 +45,22 @@ const DownloadLabTests: React.FC = () => {
   };
 
   const handleDownload = () => {
+    if (labTests.length === 0) {
+      toast({
+        title: 'Warning',
+        description: 'No lab tests data to download',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     // Convert lab tests data to CSV format
     const headers = ['ID', 'Title', 'Description', 'Department', 'Price', 'Status'];
     const csvData = labTests.map((test) => 
       [
-        test.testId, 
-        test.testTitle, 
-        test.testDescription, 
+        test.id, // Changed from testId to id
+        `"${test.testTitle}"`, // Wrap in quotes in case title contains commas
+        `"${test.testDescription}"`, // Wrap in quotes in case description contains commas
         test.testDepartment, 
         test.testPrice,
         test.status || 'Active'
@@ -68,7 +79,7 @@ const DownloadLabTests: React.FC = () => {
     // Create a link element
     const link = document.createElement('a');
     link.href = csvUrl;
-    link.setAttribute('download', 'labtests.csv');
+    link.setAttribute('download', `labtests_${new Date().toISOString().split('T')[0]}.csv`);
     
     // Append the link to the body
     document.body.appendChild(link);
@@ -129,9 +140,9 @@ const DownloadLabTests: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {labTests.map((test) => (
-                  <tr key={test.testId}>
+                  <tr key={test.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{test.testId}</div>
+                      <div className="text-sm font-medium text-blue-600">#{test.id}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{test.testTitle}</div>
@@ -144,7 +155,15 @@ const DownloadLabTests: React.FC = () => {
                       <div className="text-sm text-gray-500">${test.testPrice}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{test.status || 'Active'}</div>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        test.status === 'Active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : test.status === 'Inactive'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {test.status || 'Active'}
+                      </span>
                     </td>
                   </tr>
                 ))}

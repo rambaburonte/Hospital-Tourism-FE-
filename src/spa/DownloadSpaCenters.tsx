@@ -7,7 +7,7 @@ interface SpaCenter {
   spaName: string;
   spaDescription: string;
   spaImage: string;
-  rating: number;
+  rating: string;
   address: string;
   locationId: number;
   status: string;
@@ -32,6 +32,7 @@ const DownloadSpaCenters: React.FC = () => {
       const data = await response.json();
       setSpaCenters(data);
     } catch (err) {
+      console.error('Error fetching spa centers:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

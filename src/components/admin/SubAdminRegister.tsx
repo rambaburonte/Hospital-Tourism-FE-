@@ -233,7 +233,7 @@ const SubAdminRegister = () => {
   return (
     <div className="min-h-screen bg-green-50 flex">
       <Sidebar />
-      <div className="flex-1 p-6 flex items-center justify-center">
+      <div className="flex-1 ml-64 p-6 flex items-center justify-center">
         <Toaster position="top-right" />
         <motion.div
           className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg border border-green-100"

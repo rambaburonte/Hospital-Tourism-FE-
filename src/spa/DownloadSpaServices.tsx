@@ -25,13 +25,14 @@ const DownloadSpaServices: React.FC = () => {
 
   const fetchSpaServices = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/spaServices/getAllServicesss`);
+      const response = await fetch(`${BASE_URL}/spaServices/getAll/spaServices`);
       if (!response.ok) {
         throw new Error('Failed to fetch spa services');
       }
       const data = await response.json();
       setSpaServices(data);
     } catch (err) {
+      console.error('Error fetching spa services:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

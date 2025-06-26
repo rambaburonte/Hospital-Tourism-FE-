@@ -33,22 +33,17 @@ const AdminSidebar: React.FC = () => {
     const storedUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
     const storedPermissions = JSON.parse(localStorage.getItem('permissions') || '[]');
     
-    console.log('AdminSidebar: Stored admin user:', storedUser);
-    console.log('AdminSidebar: Stored permissions:', storedPermissions);
-    
     // Ensure permissions are included in the user object
     const userWithPermissions = {
       ...storedUser,
       permissions: storedUser.permissions || storedPermissions || []
     };
     
-    console.log('AdminSidebar: Final user object with permissions:', userWithPermissions);
     setAdminUser(userWithPermissions);
   }, []);
 
   const getFilteredMenuItems = (): MenuItem[] => {
     if (!adminUser || !adminUser.role) {
-      console.log('No admin user or role found');
       return [];
     }
 
@@ -58,7 +53,7 @@ const AdminSidebar: React.FC = () => {
         icon: 'fas fa-home', 
         path: adminUser.role?.toLowerCase() === 'admin' ? '/admin/admindashboard' : '/subadmin/dashboard'
       },
-      { name: 'Users', icon: 'fas fa-users', path: '/patientlist' },
+      { name: 'Users', icon: 'fas fa-users', path: '/admin/patientlist/users' },
       {
         name: 'Sub-Admin',
         icon: 'fas fa-user-plus',
@@ -177,8 +172,11 @@ const AdminSidebar: React.FC = () => {
           { name: 'Edit Blog', path: '/admin/EditBlog' },
           { name: 'View Blogs', path: '/admin/ViewBlogs' },
           { name: 'Delete Blog', path: '/admin/DeleteBlog' },
-          { name: 'Download Blogs', path: '/admin/downloadblogs' },
-          { name: 'BlogCategory', path: '/admin/ViewBlogCategory' },
+          { name: 'Download Blogs', path: '/admin/DownloadBlogs' },
+          { name: 'Add Blog Category', path: '/admin/AddBlogCategory' },
+          { name: 'Edit Blog Category', path: '/admin/EditBlogCategory' },
+          { name: 'Delete Blog Category', path: '/admin/DeleteBlogCategory' },
+          { name: 'View Blog Categories', path: '/admin/ViewBlogCategory' },
         ],
       },
       {
@@ -198,7 +196,7 @@ const AdminSidebar: React.FC = () => {
         subItems: [
           { name: 'Add Packages', path: '/admin/addpackages' },
           { name: 'Edit Packages', path: '/admin/editpackages' },
-          { name: 'View Packages', path: '/admin/viewpackage' },
+          { name: 'View Packages', path: '/admin/viewpackages' },
           { name: 'Delete Packages', path: '/admin/deletepackages' },
           { name: 'Download Packages', path: '/admin/downloadpackages' },
           { name: 'Booking', path: '/admin/packagebookings' },
@@ -219,8 +217,7 @@ const AdminSidebar: React.FC = () => {
       { name: 'BusinessLocation', icon: 'fas fa-map-marker-alt', path: '/admin/businessLocations' },
       { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
       { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
-    ];    console.log('Filtering menu items for role:', adminUser.role);
-    console.log('Available permissions:', adminUser.permissions);
+    ];
 
     // Normalize role to lowercase for consistent comparison
     const userRole = adminUser.role?.toLowerCase();
@@ -233,21 +230,19 @@ const AdminSidebar: React.FC = () => {
     const userPermissions = adminUser.permissions || [];
     const filteredItems: MenuItem[] = [];
 
-    allMenuItems.forEach((item) => {      // Skip Sub-Admin management for sub-admins
+    allMenuItems.forEach((item) => {
+      // Skip Sub-Admin management for sub-admins
       if (item.name === 'Sub-Admin' && userRole === 'subadmin') {
-        console.log('Skipping Sub-Admin menu for sub-admin user');
         return;
       }
 
       if (item.subItems) {
         const allowedSubItems = item.subItems.filter((subItem) => {
           const hasPermission = userPermissions.includes(subItem.name);
-          console.log(`Checking permission for ${subItem.name}:`, hasPermission);
           return hasPermission;
         });
         
         if (allowedSubItems.length > 0) {
-          console.log(`Adding ${item.name} with ${allowedSubItems.length} sub-items`);
           filteredItems.push({
             ...item,
             subItems: allowedSubItems,
@@ -264,7 +259,6 @@ const AdminSidebar: React.FC = () => {
       }
     });
 
-    console.log('Filtered menu items:', filteredItems);
     return filteredItems;
   };
 
@@ -273,74 +267,141 @@ const AdminSidebar: React.FC = () => {
   const toggleSubMenu = (name: string) => {
     setOpenMenus((prev) => ({ ...prev, [name]: !prev[name] }));
   };
+  
   const handleLogout = () => {
     localStorage.removeItem('adminUser');
-    console.log('Logging out admin user');
     navigate('/login');
   };
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-green-50 text-green-800 border-r border-green-100 shadow-sm flex flex-col">
-      <div className="p-6 border-b border-green-100">
+    <div className="fixed top-0 left-0 h-screen w-64 bg-white text-gray-800 shadow-lg border-r border-gray-200 flex flex-col z-50">
+      {/* Header */}
+      <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
         <Link 
           to={adminUser.role?.toLowerCase() === 'admin' ? '/admin/admindashboard' : '/subadmin/dashboard'}
-          className="text-2xl font-bold text-green-700 hover:text-green-800 transition-colors"
+          className="block group"
         >
-          {adminUser.role?.toLowerCase() === 'admin' ? 'Admin Panel' : 'Sub-Admin Panel'}
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+              <i className="fas fa-hospital text-white text-lg"></i>
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                {adminUser.role?.toLowerCase() === 'admin' ? 'Admin Panel' : 'Sub-Admin Panel'}
+              </h1>
+              <p className="text-xs text-gray-500">Hospital Management</p>
+            </div>
+          </div>
         </Link>
       </div>
-      <nav className="flex-1 overflow-y-auto">
-        {menuItems.map((item) => (
-          <div key={item.name} className="border-b border-green-100">
+
+      {/* User Info */}
+      <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+            <span className="text-sm font-semibold text-white">
+              {adminUser.adminName?.charAt(0)?.toUpperCase() || adminUser.adminEmail?.charAt(0)?.toUpperCase() || 'A'}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-800 truncate">
+              {adminUser.adminName || adminUser.adminEmail || 'Admin User'}
+            </p>
+            <p className="text-xs text-gray-500 capitalize">
+              {adminUser.role || 'Administrator'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        {menuItems.map((item, index) => (
+          <motion.div 
+            key={item.name} 
+            className="mb-1"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+          >
             {item.subItems ? (
               <>
                 <button
                   onClick={() => toggleSubMenu(item.name)}
-                  className="flex items-center w-full p-4 hover:bg-green-100 transition-all"
+                  className="flex items-center w-full px-6 py-3 text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 group"
                 >
-                  <i className={`${item.icon} mr-3 text-green-600`}></i>
-                  <span className="font-medium">{item.name}</span>
-                  <i
-                    className={`fas fa-chevron-${openMenus[item.name] ? 'up' : 'down'} ml-auto text-sm text-green-500`}
-                  ></i>
+                  <i className={`${item.icon} text-sm mr-3 text-gray-600 group-hover:text-blue-600`}></i>
+                  <span className="font-medium flex-1 text-left">{item.name}</span>
+                  <motion.i
+                    className={`fas fa-chevron-down text-xs transition-all duration-200 ${openMenus[item.name] ? 'text-blue-600' : 'text-gray-400'}`}
+                    animate={{ rotate: openMenus[item.name] ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  />
                 </button>
-                {openMenus[item.name] && (
-                  <div className="pl-8 bg-white border-t border-green-100">
-                    {item.subItems.map((subItem) => (
-                      <Link
+                <motion.div 
+                  initial={false}
+                  animate={{ 
+                    height: openMenus[item.name] ? 'auto' : 0,
+                    opacity: openMenus[item.name] ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className=" pr-6 py-1 bg-gray-50 border-l-2 border-blue-200 ml-6">
+                    {item.subItems.map((subItem, subIndex) => (
+                      <motion.div
                         key={subItem.name}
-                        to={subItem.path}
-                        className="block py-2 px-4 text-sm text-green-700 hover:bg-green-100 rounded transition"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: subIndex * 0.05 }}
                       >
-                        {subItem.name}
-                      </Link>
+                        <Link
+                          to={subItem.path}
+                          className="block py-2 px-4 text-sm text-gray-600 hover:text-gray-900 hover:bg-blue-100 rounded-lg transition-all duration-200 group"
+                        >
+                          <div className="flex items-center">
+                            <div className="w-1.5 h-1.5 bg-gray-400 group-hover:bg-blue-600 rounded-full mr-3 transition-colors duration-200"></div>
+                            {subItem.name}
+                          </div>
+                        </Link>
+                      </motion.div>
                     ))}
                   </div>
-                )}
+                </motion.div>
               </>
             ) : (
               item.path && (
                 <Link
                   to={item.path}
-                  className="flex items-center p-4 hover:bg-green-100 transition-colors text-green-800"
+                  className="flex items-center px-6 py-3 text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 group"
                 >
-                  <i className={`${item.icon} mr-3 text-green-600`}></i>
+                  <i className={`${item.icon} text-sm mr-3 text-gray-600 group-hover:text-blue-600`}></i>
                   <span className="font-medium">{item.name}</span>
                 </Link>
               )
             )}
-          </div>
+          </motion.div>
         ))}
       </nav>
-      <div className="p-4 border-t border-green-100">
+
+      {/* Footer */}
+      <div className="p-6 border-t border-gray-200 bg-gray-50">
         <button
           onClick={handleLogout}
-          className="flex items-center text-red-600 hover:text-red-800 transition-colors"
+          className="flex items-center w-full text-gray-600 hover:text-red-600 transition-all duration-200 group"
           aria-label="Logout"
         >
-          <i className="fas fa-sign-out-alt mr-3"></i>
+          <i className="fas fa-sign-out-alt text-sm mr-3 group-hover:text-red-600"></i>
           <span className="font-medium">Logout</span>
+          <i className="fas fa-arrow-right ml-auto text-xs opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200"></i>
         </button>
+        
+        {/* Version Info */}
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <p className="text-xs text-gray-400 text-center">
+            Hospital Tourism v2.0
+          </p>
+        </div>
       </div>
     </div>
   );

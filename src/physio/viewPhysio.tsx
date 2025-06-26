@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Sidebar from '../admin/sidebar'; // Adjust path as needed
+import AdminSidebar from '@/components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
+interface PhysioResponse {
+  physioId: number;
+  physioName: string;
+  physioDescription: string;
+  physioImage: string;
+  rating: string;
+  address: string;
+  price: string;
+}
+
 interface Physio {
   physioId: number;
   physioName: string;
@@ -17,9 +27,10 @@ const PhysioList: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/physio`)
+    axios.get(`${BASE_URL}/physio/getall/pysios`)
       .then(res => {
-        const onlyPhysios = res.data.map((item: any) => ({
+        console.log('Physios response:', res.data);
+        const onlyPhysios = res.data.map((item: PhysioResponse) => ({
           physioId: item.physioId,
           physioName: item.physioName,
           physioDescription: item.physioDescription,
@@ -39,7 +50,7 @@ const PhysioList: React.FC = () => {
 
   return (
     <div className="flex">
-      <Sidebar />
+      <AdminSidebar />
       <div className="flex-1 ml-64 p-6 bg-gray-100 min-h-screen">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Physiotherapy Centers</h1>
 

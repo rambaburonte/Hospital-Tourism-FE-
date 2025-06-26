@@ -7,7 +7,7 @@ interface SpaCenter {
   spaName: string;
   spaDescription: string;
   spaImage: string;
-  rating: number;
+  rating: string;
   address: string;
   locationId: number;
   status: string;
@@ -32,6 +32,7 @@ const DeleteSpaCenters: React.FC = () => {
       const data = await response.json();
       setSpaCenters(data);
     } catch (err) {
+      console.error('Error fetching spa centers:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -48,13 +49,15 @@ const DeleteSpaCenters: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete spa center');
+        const errorText = await response.text();
+        throw new Error(`Failed to delete spa center: ${errorText}`);
       }
 
       // Refresh the list
       await fetchSpaCenters();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Error deleting spa center:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred - Note: Delete endpoint may not be implemented yet');
     } finally {
       setDeleting(null);
     }
@@ -70,13 +73,15 @@ const DeleteSpaCenters: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to activate spa center');
+        const errorText = await response.text();
+        throw new Error(`Failed to activate spa center: ${errorText}`);
       }
 
       // Refresh the list
       await fetchSpaCenters();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Error activating spa center:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred - Note: Activate endpoint may not be implemented yet');
     } finally {
       setDeleting(null);
     }
