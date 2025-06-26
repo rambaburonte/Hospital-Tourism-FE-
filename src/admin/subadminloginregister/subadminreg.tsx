@@ -1,13 +1,38 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-// import { BASE_URL } from '@/config/config';
+import { BASE_URL } from '@/config/config';
 import Sidebar from '../sidebar';
+
+// Type definitions
+interface FormData {
+  adminName: string;
+  adminEmail: string;
+  adminPassword: string;
+  employeeId: string;
+  permissions: string[];
+}
+
+interface FormErrors {
+  adminName?: string;
+  adminEmail?: string;
+  adminPassword?: string;
+  employeeId?: string;
+  permissions?: string;
+}
+
+interface SelectAllState {
+  [key: string]: boolean;
+}
+
+interface PermissionCategory {
+  name: string;
+  permissions: string[];
+}
 // Permission categories and their actions
-const permissionCategories = [
+const permissionCategories: PermissionCategory[] = [
   {
     name: 'Doctors',
     permissions: ['Add Doctor', 'Edit Doctor', 'View Doctors', 'Delete Doctor', 'Download Doctors'],
@@ -92,25 +117,25 @@ const categoryVariants = {
 
 const SubAdminRegister = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     adminName: '',
     adminEmail: '',
     adminPassword: '',
     employeeId: '',
     permissions: [],
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectAllState, setSelectAllState] = useState(
+  const [selectAllState, setSelectAllState] = useState<SelectAllState>(
     permissionCategories.reduce((acc, category) => {
       acc[category.name] = false;
       return acc;
-    }, {})
+    }, {} as SelectAllState)
   );
 
-  const validateForm = () => {
-    const newErrors = {};
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
     if (!formData.adminName || formData.adminName.length < 2) {
       newErrors.adminName = 'Name must be at least 2 characters';
     }
@@ -129,8 +154,7 @@ const SubAdminRegister = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: '' }));
@@ -163,7 +187,7 @@ const SubAdminRegister = () => {
     }
   };
 
-  const handleSelectAll = (category) => {
+  const handleSelectAll = (category: PermissionCategory) => {
     const newSelectAllState = !selectAllState[category.name];
     setSelectAllState((prev) => ({
       ...prev,
@@ -191,16 +215,26 @@ const SubAdminRegister = () => {
     setErrors((prev) => ({ ...prev, permissions: '' }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
       toast.error('Please fix the form errors');
       return;
-    }
+    }    setIsLoading(true);    try {
+      console.log('Submitting sub-admin registration:', {
+        adminName: formData.adminName,
+        adminEmail: formData.adminEmail,
+        employeeId: formData.employeeId,
+        permissions: formData.permissions,
+        permissionCount: formData.permissions.length
+      });
 
-    setIsLoading(true);
-    try {
-      const response = await axios.post('${BASE_URL}/admin/register', formData);
+      const response = await axios.post(`${BASE_URL}/admin/register`, {
+        ...formData,
+        role: 'subadmin' // Ensure the role is set correctly
+      });
+      
+      console.log('Registration response:', response.data);
       toast.success(response.data.message || 'Sub-Admin registered successfully!');
       setFormData({
         adminName: '',
@@ -208,33 +242,51 @@ const SubAdminRegister = () => {
         adminPassword: '',
         employeeId: '',
         permissions: [],
-      });
-      setSelectAllState(
+      });      setSelectAllState(
         permissionCategories.reduce((acc, category) => {
           acc[category.name] = false;
           return acc;
-        }, {})
+        }, {} as SelectAllState)
       );
-      setTimeout(() => navigate('/admin/admindashboard'), 1500);
-    } catch (error) {
-      const errorMsg = error.response?.data?.error || 'Registration failed. Please try again.';
-      toast.error(errorMsg);
+      setErrors({});
+      setTimeout(() => navigate('/admin/admindashboard'), 1500);    } catch (error) {
+      console.error('Registration error:', error);
+      if (axios.isAxiosError(error)) {
+        const errorMsg = error.response?.data?.error || 
+                        error.response?.data?.message || 
+                        error.response?.data ||
+                        'Registration failed. Please try again.';
+        toast.error(typeof errorMsg === 'string' ? errorMsg : 'Registration failed. Please try again.');
+      } else {
+        toast.error('Network error. Please check your connection and try again.');
+      }
     } finally {
       setIsLoading(false);
     }
-  };
-
-  return (
-    <div className="min-h-screen bg-green-50 flex items-center justify-center p-6">
-       <Sidebar />
-      <Toaster position="top-right" />
-      <motion.div
-        className="w-full max-w-lg bg-green-50/80 backdrop-blur-sm p-8 rounded-lg shadow-lg border border-green-100"
-        variants={formVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">Register Sub-Admin</h2>
+  };  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex">
+      <Sidebar />
+      <div className="flex-1 flex items-center justify-center p-6 ml-64">
+        <Toaster 
+          position="top-right" 
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#10B981',
+              color: 'white',
+            },
+          }}
+        />
+        <motion.div
+          className="w-full max-w-2xl bg-white backdrop-blur-sm p-8 rounded-xl shadow-xl border border-green-200"
+          variants={formVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-green-700 mb-2">Register Sub-Admin</h2>
+            <p className="text-green-600">Create a new sub-administrator account with specific permissions</p>
+          </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Admin Name */}
           <div>
@@ -322,45 +374,50 @@ const SubAdminRegister = () => {
             {errors.employeeId && (
               <p className="mt-1 text-sm text-red-600">{errors.employeeId}</p>
             )}
-          </div>
-
-          {/* Permissions */}
+          </div>          {/* Permissions */}
           <div>
-            <label className="block text-sm font-medium text-green-700 mb-3">Permissions</label>
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+            <label className="block text-sm font-medium text-green-700 mb-4">
+              Permissions <span className="text-red-500">*</span>
+              <span className="text-xs text-gray-500 ml-2">
+                ({formData.permissions.length} permission{formData.permissions.length !== 1 ? 's' : ''} selected)
+              </span>
+            </label>
+            <div className="space-y-4 max-h-80 overflow-y-auto border border-green-200 rounded-lg p-4 bg-green-50/30">
               {permissionCategories.map((category, index) => (
                 <motion.div
                   key={category.name}
-                  className="bg-green-100/50 backdrop-blur-sm p-4 rounded-md border border-green-200"
+                  className="bg-white p-4 rounded-lg border border-green-200 shadow-sm"
                   custom={index}
                   variants={categoryVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-green-700 font-semibold">{category.name}</h3>
-                    <label className="flex items-center space-x-2">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-green-700 font-semibold text-lg">{category.name}</h3>
+                    <label className="flex items-center space-x-2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={selectAllState[category.name]}
                         onChange={() => handleSelectAll(category)}
-                        className="h-4 w-4 text-green-600 border-green-200 rounded focus:ring-green-500"
+                        className="h-5 w-5 text-green-600 border-green-300 rounded focus:ring-green-500"
                         aria-label={`Select all ${category.name} permissions`}
                       />
-                      <span className="text-sm text-green-700">Select All</span>
+                      <span className="text-sm font-medium text-green-700">Select All</span>
                     </label>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {category.permissions.map((permission) => (
-                      <label key={permission} className="flex items-center space-x-2">
+                      <label key={permission} className="flex items-center space-x-2 cursor-pointer group">
                         <input
                           type="checkbox"
                           checked={formData.permissions.includes(permission)}
                           onChange={() => handlePermissionChange(permission)}
-                          className="h-4 w-4 text-green-600 border-green-200 rounded focus:ring-green-500"
+                          className="h-4 w-4 text-green-600 border-green-300 rounded focus:ring-green-500"
                           aria-label={`Select ${permission} permission`}
                         />
-                        <span className="text-sm text-green-700">{permission}</span>
+                        <span className="text-sm text-green-700 group-hover:text-green-800 transition-colors">
+                          {permission}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -368,7 +425,12 @@ const SubAdminRegister = () => {
               ))}
             </div>
             {errors.permissions && (
-              <p className="mt-1 text-sm text-red-600">{errors.permissions}</p>
+              <p className="mt-2 text-sm text-red-600 flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {errors.permissions}
+              </p>
             )}
           </div>
 
@@ -395,10 +457,10 @@ const SubAdminRegister = () => {
             ) : (
               <i className="fas fa-user-plus mr-2"></i>
             )}
-            {isLoading ? 'Registering...' : 'Register Sub-Admin'}
-          </motion.button>
+            {isLoading ? 'Registering...' : 'Register Sub-Admin'}          </motion.button>
         </form>
       </motion.div>
+      </div>
     </div>
   );
 };

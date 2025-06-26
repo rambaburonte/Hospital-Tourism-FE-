@@ -1,3 +1,4 @@
+
 // import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { motion, AnimatePresence } from 'framer-motion';
@@ -569,20 +570,20 @@ const SubadmLoginForm: React.FC = () => {
     setErrorMsg('');
     setLoading(true);
 
-    try {
-      if (email === 'major@gmail.com' && password === 'major@123') {
+    try {      if (email === 'major@gmail.com' && password === 'major@123') {
         // Super-admin login
+        const mappedPermissions = mapPermissions(allPermissions);
         const superAdminData = {
           adminId: 1,
           adminName: 'Major',
           adminEmail: 'major@gmail.com',
           employeeId: 'admin001',
-          role: 'ADMIN',
+          role: 'admin',
+          permissions: mappedPermissions, // Include permissions in the main user object
         };
-        const mappedPermissions = mapPermissions(allPermissions);
 
         localStorage.setItem('adminUser', JSON.stringify(superAdminData));
-        localStorage.setItem('permissions', JSON.stringify(mappedPermissions));
+        localStorage.setItem('permissions', JSON.stringify(mappedPermissions)); // Keep for backward compatibility
         console.log('Stored super-admin user:', superAdminData);
         console.log('Stored permissions:', mappedPermissions);
         navigate('/admin/admindashboard');
@@ -595,16 +596,16 @@ const SubadmLoginForm: React.FC = () => {
 
         if (response.status === 200 && response.data) {
           const data: LoginResponse = response.data;
-          const mappedPermissions = mapPermissions(data.permissions);
-          const userData = {
+          const mappedPermissions = mapPermissions(data.permissions);          const userData = {
             adminId: data.adminId,
             adminName: data.adminName,
             adminEmail: data.adminEmail,
             employeeId: data.employeeId,
-            role: data.role || (data.permissions.length > 0 ? 'SUBADMIN' : 'ADMIN'),
+            role: data.role || (data.permissions.length > 0 ? 'subadmin' : 'admin'),
+            permissions: mappedPermissions, // Include permissions in the main user object
           };
           localStorage.setItem('adminUser', JSON.stringify(userData));
-          localStorage.setItem('permissions', JSON.stringify(mappedPermissions));
+          localStorage.setItem('permissions', JSON.stringify(mappedPermissions)); // Keep for backward compatibility
           console.log('Stored adminUser:', userData);
           console.log('Stored permissions:', mappedPermissions);
           navigate('/admin/admindashboard');

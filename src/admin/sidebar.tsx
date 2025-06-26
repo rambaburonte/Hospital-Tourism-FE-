@@ -79,14 +79,6 @@ const Sidebar: React.FC = () => {
       ],
     },
     {
-      name: 'Chef',
-      icon: 'fas fa-briefcase-medical',
-      subItems: [
-        { name: 'Add-Chef', path: '/admin/uploadchefs' },
-        { name: 'view-Chefs', path: '/admin/ChefList' },
-      ],
-    },
-    {
       name: 'Lab Tests',
       icon: 'fas fa-vial',
       subItems: [
@@ -200,10 +192,9 @@ const Sidebar: React.FC = () => {
 
 
     { name: 'Pharmacy Orders', icon: 'fas fa-shopping-cart', path: '/admin/orders' },
-    { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
     { name: 'Service Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
 
-    { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
+    // { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
     { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
 
   ];

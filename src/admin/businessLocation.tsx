@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Sidebar from '@/admin/sidebar';
+import AdminSidebar from '../components/admin/AdminSidebar';
 import { Country, State, City } from 'country-state-city';
 import { BASE_URL } from '@/config/config';
 interface Option {
@@ -73,10 +73,9 @@ export default function LocationUploadPage() {
       setMessage('Failed to upload location');
     }
   };
-
   return (
     <>
-      <Sidebar />
+      <AdminSidebar />
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <div className="bg-white p-6 rounded-xl shadow-lg max-w-md w-full">
           <h2 className="text-2xl font-bold mb-4 text-center">Upload Business Location</h2>

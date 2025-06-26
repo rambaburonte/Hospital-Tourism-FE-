@@ -5,7 +5,7 @@ import { BASE_URL } from "@/config/config";
 
 interface Hospital {
   hospitalId: number;
-  hositalName: string;
+  hospitalName: string;
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
@@ -57,7 +57,7 @@ const HospitalDoctors: React.FC = () => {
         <>
           {hospital && (
             <div className="mb-8 text-center">
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{hospital.hositalName}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{hospital.hospitalName}</h1>
               <p className="text-gray-600 dark:text-gray-300">{hospital.hospitalDescription}</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{hospital.address}</p>
             </div>

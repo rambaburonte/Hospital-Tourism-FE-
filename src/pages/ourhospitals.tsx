@@ -3,16 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "@/config/config";
 
-
-
-
 interface Hospital {
   hospitalId: number;
-  hositalName: string;
+  hospitalName: string;
   hospitalDescription: string;
   hospitalImage: string;
   rating: string;
   address: string;
+  hospitalMap?: string;
 }
 
 const HospitalList: React.FC = () => {
@@ -26,7 +24,7 @@ const HospitalList: React.FC = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await axios.get<Hospital[]>(`${BASE_URL}/api/hospitals`);
+        const response = await axios.get<Hospital[]>(`${BASE_URL}/api/hospitals/getall/hospitals`);
         setHospitals(response.data);
       } catch (err) {
         setError("Failed to load hospitals.");
@@ -53,7 +51,7 @@ const HospitalList: React.FC = () => {
   const filteredHospitals = useMemo(() => {
     return hospitals.filter((hospital) => {
       const matchesSearch =
-        hospital.hositalName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        hospital.hospitalName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         hospital.address.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesCity =
@@ -135,7 +133,7 @@ const HospitalList: React.FC = () => {
               >
                 <img
                   src={hospital.hospitalImage || "https://via.placeholder.com/300x200?text=Hospital+Image"}
-                  alt={hospital.hositalName}
+                  alt={hospital.hospitalName}
                   className="w-full h-48 object-cover cursor-pointer"
                   onError={(e) => {
                     e.currentTarget.src = "https://via.placeholder.com/300x200?text=Hospital+Image";
@@ -143,7 +141,7 @@ const HospitalList: React.FC = () => {
                 />
                 <div className="p-6">
                   <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                    {hospital.hositalName}
+                    {hospital.hospitalName}
                   </h2>
                   <p className="text-gray-600 dark:text-gray-300 mb-2">{hospital.hospitalDescription}</p>
                   <p className="text-gray-600 dark:text-gray-300 mb-4">

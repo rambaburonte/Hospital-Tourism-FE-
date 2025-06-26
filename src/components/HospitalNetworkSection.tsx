@@ -22,7 +22,7 @@ const HospitalNetworkSection = () => {
         // Map API data to match component expectations
         const formattedHospitals = data.map(hospital => ({
           id: hospital.hospitalId,
-          name: hospital.hositalName,
+          name: hospital.hospitalName,
           image: hospital.hospitalImage,
           rating: parseFloat(hospital.rating),
           location: hospital.address.split(',').slice(-3, -1).join(',').trim() || 'Unknown', // Extract city from address
