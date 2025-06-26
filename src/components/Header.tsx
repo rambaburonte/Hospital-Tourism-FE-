@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, Search, Phone, X, User, Plus, ShoppingCart, Heart, LogOut, LayoutDashboard, Languages, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -327,7 +328,7 @@ const Header: React.FC = () => {
             </div>            <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm items-center">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
               <span onClick={() => navigate('/health-blogs')} className="cursor-pointer hover:text-green-200">Blog</span>
-              <span onClick={() => navigate('/translator')} className="cursor-pointer hover:text-green-200">Translator</span>
+             
 
               
               {/* Google Translate Dropdown */}
@@ -362,8 +363,9 @@ const Header: React.FC = () => {
         </div>
 
         {/* Main Header */}
-        <div className="container mx-auto py-4 px-4 sm:px-6 flex justify-between items-center bg-white dark:bg-gray-900">
-          <div className="flex items-center space-x-6">
+        
+          <div className="container mx-auto py-1 px-4 sm:px-6 flex justify-between items-center bg-white dark:bg-gray-900">
+            <div className="flex items-center space-x-6">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
               <img src="/maditailr/maditailarLogo.png" alt="MAX Logo" className="h-20 w-25" />

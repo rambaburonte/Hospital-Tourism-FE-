@@ -254,13 +254,13 @@ const UserGlobe: React.FC<UserGlobeProps> = ({ className }) => {
       </button>
 
       {/* Rotation Toggle */}
-      <button
+      {/* <button
         onClick={() => setIsRotating(!isRotating)}
         className="absolute top-16 right-4 bg-white border border-gray-200 rounded-lg p-2 shadow-md hover:bg-gray-100 transition-colors duration-200"
         aria-label="Toggle rotation"
       >
         {isRotating ? '⏸️' : '▶️'}
-      </button>      {/* Tooltip for Hovered Country */}
+      </button>      Tooltip for Hovered Country */}
       {hoveredCountry && (
         <div
           className="absolute bg-white border border-gray-200 rounded-lg p-2 shadow-lg text-sm text-gray-800 transform -translate-x-1/2"

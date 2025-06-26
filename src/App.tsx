@@ -215,7 +215,7 @@ import AddBlogCategory from './blogs/AddBlogCategory';
 import EditBlogCategory from './blogs/EditBlogCategory';
 import DeleteBlogCategory from './blogs/DeleteBlogCategory';
 
-
+import HospitalResults from './components/HospitalResults';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -455,6 +455,7 @@ const App: React.FC = () => (
 
               <Route path="/admin/PrescriptionList" element={<PrescriptionList />} />
               
+                   <Route path="/hospitals/:location" element={<HospitalResults />} />
               
             {/* Miscellaneous Routes */}
             <Route path="/contact-us" element={<ContactUsPage />} />

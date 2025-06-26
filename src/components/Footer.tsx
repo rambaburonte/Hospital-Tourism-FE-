@@ -19,10 +19,10 @@ const Footer = () => {
               />
             </h2>
             <ul className="space-y-2 mb-6">
-              <li><Link to="/ContactUsPage" className="text-sm hover:text-red-600 transition-colors duration-200">About Us</Link></li>
+              <li><Link to="/about" className="text-sm hover:text-red-600 transition-colors duration-200">About Us</Link></li>
               <li><Link to="/careers" className="text-sm hover:text-red-600 transition-colors duration-200">Careers</Link></li>
               <li><Link to="/ContactUsPage" className="text-sm hover:text-red-600 transition-colors duration-200">Contact Us</Link></li>
-              <li><Link to="/media" className="text-sm hover:text-red-600 transition-colors duration-200">Media</Link></li>
+              
             </ul>
 
             <h2 className="text-lg font-semibold mb-4">Connect</h2>
@@ -85,11 +85,7 @@ const Footer = () => {
                   Lab Tests
                 </Link>
               </li>
-              <li>
-                <Link to="/patient-stories" className="text-sm hover:text-red-600 transition-colors duration-200">
-                  Patient Stories
-                </Link>
-              </li>
+             
               <li>
                 <Link to="/HospitalList" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Hospital Information
@@ -109,12 +105,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/spa-service-details" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/ServiceListingPage" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Spa Services
                 </Link>
               </li>
               <li>
-                <Link to="/spa-service-details" className="text-sm hover:text-red-600 transition-colors duration-200">
+                <Link to="/ServiceListingPage" className="text-sm hover:text-red-600 transition-colors duration-200">
                   Physiotherapy
                 </Link>
               </li>
@@ -135,7 +131,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <h2 className="text-lg font-semibold mb-4">Our Hospitals</h2>
             <ul className="space-y-2">
-              <li><Link to="/hospitals/delhi-ncr" className="text-sm hover:text-red-600 transition-colors duration-200">Delhi NCR</Link></li>
+              <li><Link to="/hospitals/delhi" className="text-sm hover:text-red-600 transition-colors duration-200">Delhi</Link></li>
               <li><Link to="/hospitals/mumbai" className="text-sm hover:text-red-600 transition-colors duration-200">Mumbai</Link></li>
               <li><Link to="/hospitals/punjab" className="text-sm hover:text-red-600 transition-colors duration-200">Punjab</Link></li>
               <li><Link to="/hospitals/uttarakhand" className="text-sm hover:text-red-600 transition-colors duration-200">Uttarakhand</Link></li>
