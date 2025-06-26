@@ -1,8 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Star } from 'lucide-react';
 import { BASE_URL } from '@/config/config';
 type ServiceType = 'chef' | 'labtest' | 'doctor' | 'spa' | 'translator' | 'physio' | 'hospital' | 'hotel' | 'travel' | 'pharmacy';
+
+interface ApiOrderResponse {
+  bookingId?: number;
+  bookingDate?: string;
+  bookingAmount?: number;
+  bookingStatus?: string;
+  bookingType?: ServiceType;
+  bookingStartTime?: string;
+  bookingEndTime?: string;
+  paymentMode?: string;
+  paymentStatus?: string;
+  userName?: string;
+  chefName?: string;
+  chefId?: number;
+  doctorName?: string;
+  doctorId?: number;
+  labtestName?: string;
+  labtestId?: number;
+  spaName?: string;
+  spaId?: number;
+  translatorName?: string;
+  translatorId?: number;
+  physioName?: string;
+  physioId?: number;
+  hospitalName?: string;
+  hospitalId?: number;
+  hotelName?: string;
+  hotelId?: number;
+  travelName?: string;
+  travelId?: number;
+  pharmacyName?: string;
+  pharmacyId?: number;
+  remarks?: string | null;
+  additionalRemarks?: string | null;
+  orderNumber?: string;
+  serviceName?: string;
+  serviceImageUrl?: string;
+  items?: Array<{
+    productId?: number;
+    id?: number;
+    productName?: string;
+    serviceName?: string;
+    productImage?: string;
+    serviceImageUrl?: string;
+    price?: number;
+    bookingAmount?: number;
+    quantity?: number;
+  }>;
+}
 
 interface OrderItem {
   productId: number;
@@ -195,13 +244,7 @@ const MyOrders: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchOrders();
-    }
-  }, [user]);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -210,9 +253,53 @@ const MyOrders: React.FC = () => {
       });
 
       console.log('MyOrders.tsx: Fetched orders data:', response.data);
+      console.log('MyOrders.tsx: Response data type:', typeof response.data);
+      console.log('MyOrders.tsx: Is array?', Array.isArray(response.data));
+      console.log('MyOrders.tsx: Response keys:', response.data && typeof response.data === 'object' ? Object.keys(response.data) : 'N/A');
+
+      // Validate response data
+      let ordersData = response.data;
+      
+      // Handle different response formats
+      if (!Array.isArray(ordersData)) {
+        // If data is wrapped in an object, try to extract the array
+        if (ordersData && typeof ordersData === 'object') {
+          // Check common array property names
+          if (Array.isArray(ordersData.orders)) {
+            ordersData = ordersData.orders;
+          } else if (Array.isArray(ordersData.data)) {
+            ordersData = ordersData.data;
+          } else if (Array.isArray(ordersData.bookings)) {
+            ordersData = ordersData.bookings;
+          } else if (Array.isArray(ordersData.results)) {
+            ordersData = ordersData.results;
+          } else {
+            // If it's a single object, wrap it in an array
+            ordersData = [ordersData];
+          }
+        } else {
+          // If data is null, undefined, or not an object/array
+          console.warn('MyOrders.tsx: Invalid data format received:', ordersData);
+          ordersData = [];
+        }
+      }
+
+      // Ensure we have an array to work with
+      if (!Array.isArray(ordersData)) {
+        console.error('MyOrders.tsx: Unable to extract array from response:', response.data);
+        setError('Invalid data format received from server');
+        return;
+      }
+
+      // If no orders found
+      if (ordersData.length === 0) {
+        console.log('MyOrders.tsx: No orders found for user');
+        setOrders([]);
+        return;
+      }
 
       // Transform API data to match Order interface
-      const transformedOrders: Order[] = response.data.map((order: any) => {
+      const transformedOrders: Order[] = ordersData.map((order: ApiOrderResponse) => {
         const bookingDate = new Date(order.bookingDate);
         // Determine productName based on bookingType
         let productName = 'Unknown Service';
@@ -261,12 +348,12 @@ const MyOrders: React.FC = () => {
 
         return {
           id: (order.bookingId || '').toString(),
-          status: order.bookingStatus || 'Pending',
+          status: (order.bookingStatus || 'Pending') as Order['status'],
           date: bookingDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
           time: bookingDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
           orderNumber: order.orderNumber || `ORD${order.bookingId || 'UNKNOWN'}`,
           total: order.bookingAmount || 0,
-          items: items.map((item: any) => ({
+          items: items.map((item: NonNullable<ApiOrderResponse['items']>[0]) => ({
             productId: item.productId || item.id || order.bookingId || 0,
             productName: item.productName || item.serviceName || productName,
             productImage: item.productImage || item.serviceImageUrl || 'https://placehold.co/60x60?text=No+Image',
@@ -310,14 +397,25 @@ const MyOrders: React.FC = () => {
       });
 
       setOrders(transformedOrders);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('MyOrders.tsx: Error fetching orders:', err);
-      const errorMessage = err.response?.data?.message || 'Failed to fetch orders. Please try again later.';
+      const isAxiosError = (error: unknown): error is { response?: { data?: { message?: string } } } => {
+        return typeof error === 'object' && error !== null && 'response' in error;
+      };
+      
+      const errorMessage = isAxiosError(err) && err.response?.data?.message || 
+                          (err instanceof Error ? err.message : 'Failed to fetch orders. Please try again later.');
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchOrders();
+    }
+  }, [user?.id, fetchOrders]);
 
   const filteredOrders = orders.filter((order) =>
     selectedTab === 'All' ? true : order.status === selectedTab
