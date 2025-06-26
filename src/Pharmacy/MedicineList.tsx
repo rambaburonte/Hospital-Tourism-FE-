@@ -143,7 +143,7 @@ const MedicineList: React.FC = () => {
         </div>
         <div className="flex space-x-6">
           <Link to="/admin/orders" className="text-gray-600 hover:text-gray-800 text-sm">Orders</Link>
-          <Link to="/admin/prescriptions" className="text-gray-600 hover:text-gray-800 text-sm">Prescriptions</Link>
+          <Link to="/admin/PrescriptionList" className="text-gray-600 hover:text-gray-800 text-sm">Prescriptions</Link>
           <Link to="#" className="text-gray-600 hover:text-gray-800 text-sm">FAQ</Link>
         </div>
       </nav>      <div className="flex flex-1">

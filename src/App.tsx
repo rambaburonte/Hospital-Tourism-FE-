@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
@@ -17,8 +18,6 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import Sitemap from './components/Sitemap';
 import WorldUserHeatmap from './components/worldMap';
-import MedicalRecords from './components/madicalrecordsOfUser.js';
-import HospitalAdvertisement from './components/Advertisement.js';
 import PharmacyCategoryPage from './components/pharmaMedicine';
 import BookingPage from './components/bookingsingleservice';
 
@@ -45,7 +44,17 @@ import Wishlist from './pages/Wishlist';
 import MyOrders from './pages/MyOrders';
 import DiagnosticsList from './pages/Diagnostics';
 
+
+// Corrected import name (PascalCase)
+// Utility Components
+// import MedicineCatalog from './Pharmacy/UserInterface'; // Duplicate import removed
+// import UpdateChef from './admin/UpdateChef'; // Removed due to duplicate identifier
+/* import ViewBlog from './admin/ViewBlog'; // Removed due to duplicate identifier */
+import MedicalRecords from './components/madicalrecordsOfUser.js';
+import HospitalAdvertisement from './components/Advertisement.js';
+
 // Specialty Pages
+
 import Cardiology from './pages/specialties/Cardiology';
 import Neurology from './pages/specialties/Neurology';
 import Orthopedics from './pages/specialties/Orthopedics';
@@ -99,8 +108,6 @@ import DeletePackages from './admin/packages/DeletePackages';
 import DownloadPackages from './admin/packages/DownloadPackages';
 import BookingPackages from './admin/packages/BookingPackages';
 import DownloadDiagnostics from './admin/downloaddiagnostics';
-
-// Doctors Module
 import Uploaddoctors from './doctors/upload.js';
 import ViewDoctors from './doctors/view.js';
 import DoctorDetails from './doctors/details.js';
@@ -128,7 +135,7 @@ import ViewLabTests from './labtests/viewlabtests.js';
 import EditLabTests from './labtests/editlabtests.js';
 import DeleteLabTests from './labtests/deletelabtests.js';
 import DownloadLabTests from './labtests/downloadlabtests.js';
-
+ 
 // Translators Module
 import UploadTranslators from './translators/uploadTranslators';
 import Translators from './translators/viewTranslators.js';
@@ -143,6 +150,10 @@ import UpdateChef from './chefs/UpdateChef.js';
 import EditChefs from './chefs/EditChefs';
 import DeleteChefs from './chefs/DeleteChefs';
 import DownloadChefs from './chefs/DownloadChefs';
+
+
+
+import contactus from './pages/contactus';
 
 // Physio Module
 import UploadPhysios from './physio/uploadPhysio.js';
@@ -165,14 +176,22 @@ import DownloadSpaServices from './spa/DownloadSpaServices';
 // Pharmacy Module
 import UserCart from './Pharmacy/UserCart';
 import AddMedicineForm from './Pharmacy/addMadicine';
+
+// import MedicineList from './Pharmacy/MedicineList'; // Duplicate import removed
+// import UpdateMedicine from './Pharmacy/MadichineUpdate'; // Duplicate import removed
+// import MedicineCatalog from './Pharmacy/UserInterface'; // Duplicate import removed
+// import PrescriptionList from './Pharmacy/PrescriptionList'; // Duplicate import removed
+// import OrderList from './Pharmacy/OrderList'; // Duplicate import removed
+
 import MedicineList from './Pharmacy/MedicineList';
 import UpdateMedicine from './Pharmacy/MadichineUpdate';
 import EditMedicine from './Pharmacy/EditMedicine';
 import DeleteMedicine from './Pharmacy/DeleteMedicine';
 import DownloadMedicines from './Pharmacy/DownloadMedicines';
-import MedicineCatalog from './Pharmacy/UserInterface';
-import PrescriptionList from './Pharmacy/OrderList';
+import PrescriptionList from './Pharmacy/PrescriptionList';
 import OrderList from './Pharmacy/OrderList';
+import MedicineCatalog from './Pharmacy/UserInterface';
+
 
 // Sales Module
 import SalesDashboard from './sales/SalesDashboard.js';
@@ -195,6 +214,7 @@ import DownloadBlogs from './blogs/DownloadBlogs';
 import AddBlogCategory from './blogs/AddBlogCategory';
 import EditBlogCategory from './blogs/EditBlogCategory';
 import DeleteBlogCategory from './blogs/DeleteBlogCategory';
+
 
 const queryClient = new QueryClient();
 
@@ -432,6 +452,14 @@ const App: React.FC = () => (
             <Route path="/admin/deletesalesteam" element={<DeleteSalesTeam />} />
             <Route path="/admin/deletesalesteam/:id" element={<DeleteSalesTeam />} />
             <Route path="/admin/downloadsalesteam" element={<DownloadSalesTeam />} />
+
+              <Route path="/admin/PrescriptionList" element={<PrescriptionList />} />
+              
+              
+            {/* Miscellaneous Routes */}
+            <Route path="/contact-us" element={<ContactUsPage />} />
+
+
 
             {/* 404 Route - Must be last */}
             <Route path="*" element={<NotFound />} />

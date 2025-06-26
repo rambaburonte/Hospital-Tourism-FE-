@@ -112,9 +112,8 @@ const PrescriptionList: React.FC = () => {
           <h1 className="text-xl font-bold text-gray-900">Medical Visions</h1>
         </div>
         <div className="flex space-x-8">
-          <Link to="/admin/medicineList" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">Categories</Link>
           <Link to="#" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">Orders</Link>
-          <Link to="/admin/prescriptions" className="text-blue-600 border-b-2 border-blue-600 text-sm font-semibold">Prescriptions</Link>
+          <Link to="/admin/PrescriptionList" className="text-blue-600 border-b-2 border-blue-600 text-sm font-semibold">Prescriptions</Link>
           <Link to="#" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-200">FAQ</Link>
         </div>
       </nav>      <div className="flex flex-1">
