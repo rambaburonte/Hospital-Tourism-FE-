@@ -4,7 +4,11 @@
 
 //  export const BASE_URL = 'https://meditailor.infororg.com';
 
+
  export const BASE_URL = 'http://localhost:4545';
+
+  //export const BASE_URL = 'http://localhost:4545';
+
 
 
 
@@ -14,7 +18,7 @@ export const API_ENDPOINTS = {
   DIAGNOSTICS: `${BASE_URL}/api/diagnostics`,
   PHYSIO: `${BASE_URL}/physio/getall/pysios`,
   SPA: `${BASE_URL}/spaServices/getAll/spaServices`,
-  HOSPITALS: `${BASE_URL}/api/hospitals/getall/hospitals`,
+  HOSPITALS: `${BASE_URL}/api/hospitals/getall/hospitals/active`,
   HOTELS: `${BASE_URL}/api/hotels/getall/hotels`,
   TRAVEL: `${BASE_URL}/api/travel`,
   TRANSLATORS: `${BASE_URL}/api/translators/getAll/traslators`,
