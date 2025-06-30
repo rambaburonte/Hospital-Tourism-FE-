@@ -217,6 +217,11 @@ const AdminSidebar: React.FC = () => {
       { name: 'BusinessLocation', icon: 'fas fa-map-marker-alt', path: '/admin/businessLocations' },
       { name: 'Orders', icon: 'fas fa-shopping-cart', path: '/admin/AllOrders' },
       { name: 'Settings', icon: 'fas fa-cog', path: '/admin/settings' },
+      {
+        name: 'Emergency Contacts',
+        icon: 'fas fa-exclamation-triangle',
+        path: '/admin/emergency',
+      },
     ];
 
     // Normalize role to lowercase for consistent comparison

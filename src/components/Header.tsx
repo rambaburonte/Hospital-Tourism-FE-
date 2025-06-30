@@ -2,6 +2,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, Search, Phone, X, User, Plus, ShoppingCart, Heart, LogOut, LayoutDashboard, Languages, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+// import { Whatsapp } from "lucide-react"; // Remove this line, as lucide-react does not export Whatsapp
+
+// Add a simple WhatsApp SVG icon component
+const Whatsapp: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    width="1em"
+    height="1em"
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.031-.967-.273-.099-.472-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.571-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.363.71.306 1.263.489 1.695.626.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.288.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 6.403h-.001a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374A9.86 9.86 0 012.1 12.045c0-5.444 4.425-9.87 9.87-9.87 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.883 6.979c-.003 5.444-4.428 9.869-9.872 9.869zm8.413-18.282A11.815 11.815 0 0011.97 0C5.373 0 0 5.373 0 11.972c0 2.112.552 4.174 1.601 5.981L.057 23.925a1.001 1.001 0 001.225 1.225l5.951-1.548a11.93 11.93 0 005.736 1.463h.005c6.597 0 11.97-5.373 11.97-11.972 0-3.193-1.246-6.197-3.513-8.464z" />
+  </svg>
+);
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -323,9 +337,16 @@ const Header: React.FC = () => {
         <div className="bg-[#499E14] py-2 px-4 sm:px-6 text-white dark:bg-[#3a7e10]">
           <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
-              <Phone className="h-4 w-4 text-green-200" />
-              <a href="tel:8595114141" className="hover:text-green-200">Emergency: 8595114141</a>
-            </div>            <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm items-center">
+              <>
+                <Phone className="h-4 w-4 text-green-200" />
+                <a href="tel:8595114141" className="hover:text-green-200">Emergency: 8595114141</a>
+                <Whatsapp className="h-4 w-4 text-green-200" />
+                <a href="https://wa.me/8595114141" target="_blank" rel="noopener noreferrer" className="hover:text-green-200">
+                  WhatsApp
+                </a>
+              </>
+            </div>            
+            <div className="mt-2 sm:mt-0 flex space-x-4 text-xs sm:text-sm items-center">
               <span onClick={() => navigate('/ContactUsPage')} className="cursor-pointer hover:text-green-200">Contact Us</span>
               <span onClick={() => navigate('/health-blogs')} className="cursor-pointer hover:text-green-200">Blog</span>
              

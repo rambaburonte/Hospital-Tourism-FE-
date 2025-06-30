@@ -13,6 +13,7 @@ import Footer from '@/components/Footer';
 import VideoSection from '@/components/Videos';
 import { useLocation } from 'react-router-dom';
 import HospitalAdvertisement from '@/components/Advertisement';
+import EmergencyContacts from '@/components/EmergencyContacts';
 
 const Watermark = () => {
   return (
@@ -57,6 +58,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative">
+      <EmergencyContacts />
       <Watermark />
       <main className="flex-grow relative z-10">
         <HeroBanner />

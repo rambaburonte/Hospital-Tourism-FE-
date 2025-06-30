@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
@@ -216,6 +215,7 @@ import EditBlogCategory from './blogs/EditBlogCategory';
 import DeleteBlogCategory from './blogs/DeleteBlogCategory';
 
 import HospitalResults from './components/HospitalResults';
+import EmergencyPage from './admin/EmergencyPage';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -453,6 +453,9 @@ const App: React.FC = () => (
             <Route path="/admin/deletesalesteam/:id" element={<DeleteSalesTeam />} />
             <Route path="/admin/downloadsalesteam" element={<DownloadSalesTeam />} />
 
+            <Route path="/emergency" element={<EmergencyPage />} />
+            <Route path="/admin/emergency" element={<EmergencyPage />} />
+            
               <Route path="/admin/PrescriptionList" element={<PrescriptionList />} />
               
                    <Route path="/hospitals/:location" element={<HospitalResults />} />
