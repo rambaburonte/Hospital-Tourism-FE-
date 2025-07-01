@@ -222,6 +222,11 @@ const AdminSidebar: React.FC = () => {
         icon: 'fas fa-exclamation-triangle',
         path: '/admin/emergency',
       },
+      {
+        name: 'Coupons',
+        icon: 'fas fa-ticket-alt',
+        path: '/admin/coupons',
+      },
     ];
 
     // Normalize role to lowercase for consistent comparison

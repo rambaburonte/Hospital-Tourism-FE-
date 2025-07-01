@@ -505,7 +505,7 @@ const BookingPage = () => {
                 </p>
               )}
               {basePrice > 0 && serviceType !== "doctor" && (
-                <p className="text-sm text-blue-600">Daily Rate: ₹{basePrice} (10% off for additional days)</p>
+                <p className="text-sm text-blue-600">Daily Rate: ₹{basePrice}</p>
               )}
             </div>            <button
               type="submit"

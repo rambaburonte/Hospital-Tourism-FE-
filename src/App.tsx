@@ -216,6 +216,8 @@ import DeleteBlogCategory from './blogs/DeleteBlogCategory';
 
 import HospitalResults from './components/HospitalResults';
 import EmergencyPage from './admin/EmergencyPage';
+
+import CouponsPage from './admin/CouponsPage';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -453,8 +455,9 @@ const App: React.FC = () => (
             <Route path="/admin/deletesalesteam/:id" element={<DeleteSalesTeam />} />
             <Route path="/admin/downloadsalesteam" element={<DownloadSalesTeam />} />
 
-            <Route path="/emergency" element={<EmergencyPage />} />
             <Route path="/admin/emergency" element={<EmergencyPage />} />
+
+            <Route path="/admin/coupons" element={<CouponsPage />} />
             
               <Route path="/admin/PrescriptionList" element={<PrescriptionList />} />
               
