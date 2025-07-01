@@ -50,7 +50,7 @@ interface UserData {
   userName?: string;
   email?: string;
   userEmail?: string;
-  profilePictureUrls?: string;
+  profilePictureUrls?: string | string[];
 }
 
 // Language options for Google Translate
@@ -193,7 +193,11 @@ const Header: React.FC = () => {
 
       if (loggedIn) {
         setUserName(userData.name || userData.userName || 'User');
-        setProfilePicture(userData.profilePictureUrls || null);
+        // Handle profilePictureUrls which can be either a string or an array of strings
+        const profilePictureUrl = Array.isArray(userData.profilePictureUrls) 
+          ? userData.profilePictureUrls[0] 
+          : userData.profilePictureUrls;
+        setProfilePicture(profilePictureUrl || null);
         // Fetch cart count
         axios.get(`${BASE_URL}/api/AddToCart/count/${userData.id || userData.userId}`)
           .then(response => {

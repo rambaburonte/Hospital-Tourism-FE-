@@ -66,9 +66,18 @@ const TourPlans: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [bookingStatus, setBookingStatus] = useState<BookingStatus>({});
+  const [expandedInclusions, setExpandedInclusions] = useState<Record<number, boolean>>({});
+
+  // Toggle function for inclusions
+  const toggleInclusions = (planId: number) => {
+    setExpandedInclusions(prev => ({
+      ...prev,
+      [planId]: !prev[planId]
+    }));
+  };
 
   // Map serviceItemIds to inclusion names
-  const serviceItemMap: Record<number, string> = {
+  const serviceItemMap = useMemo(() => ({
     1: 'Spa Therapy',
     2: 'Yoga Sessions',
     152: 'Doctor Consultation',
@@ -79,7 +88,7 @@ const TourPlans: React.FC = () => {
     303: 'Translator Services',
     304: 'Chef-Prepared Meals',
     307: 'Physiotherapy',
-  };
+  }), []);
 
   // Map service items to categories
   const getCategoryFromInclusions = (inclusions: string[]): string => {
@@ -139,7 +148,7 @@ const TourPlans: React.FC = () => {
     };
 
     fetchTourPlans();
-  }, []);
+  }, [serviceItemMap]);
 
   // Handle booking action
   const handleBookPackage = async (packageId: number) => {
@@ -403,17 +412,28 @@ const filteredTourPlans = useMemo(() => {
                         </div>
                         <h4 className="text-lg font-semibold text-gray-800 line-clamp-1">{plan.name}</h4>
                       </div>
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {plan.inclusions.map((inclusion, i) => (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                        {(expandedInclusions[plan.id] ? plan.inclusions : plan.inclusions.slice(0, 5)).map((inclusion, i) => (
                           <span
-                            key={i}
-                            className="inline-block bg-[#E6F3DA] text-[#499E14] text-xs px-2 py-1 rounded-full hover:bg-[#D1E8B7] transition-all duration-200 cursor-default"
-                            title={inclusion}
+                          key={i}
+                          className="inline-block bg-[#E6F3DA] text-[#499E14] text-xs px-2 py-1 rounded-full hover:bg-[#D1E8B7] transition-all duration-200 cursor-default"
+                          title={inclusion}
                           >
-                            {inclusion}
+                          {inclusion}
                           </span>
                         ))}
-                      </div>
+                        {plan.inclusions.length > 5 && (
+                          <button
+                          className="inline-block bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded-full hover:bg-gray-200 transition-all duration-200"
+                          onClick={() => toggleInclusions(plan.id)}
+                          >
+                          {expandedInclusions[plan.id] 
+                            ? 'Show less' 
+                            : `+${plan.inclusions.length - 5} more`
+                          }
+                          </button>
+                        )}
+                        </div>
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">{plan.description}</p>
                       <p className="text-gray-800 text-base font-semibold">Price: ${plan.price}</p>
                       <p className="text-gray-600 text-sm mb-4">Duration: {plan.durationDays} days</p>
@@ -445,7 +465,7 @@ const filteredTourPlans = useMemo(() => {
           </div>
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         @keyframes slide-up {
           from {
             opacity: 0;
