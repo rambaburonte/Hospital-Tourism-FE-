@@ -102,50 +102,50 @@ const MedicineCatalog: React.FC = () => {
     <div className="min-h-screen bg-gray-100 font-sans">
       <br />
       {/* Navbar */}
-      <nav className="bg-white py-5 px-6 flex justify-between items-center shadow-md">
+      <nav className="bg-white py-5 px-6 flex justify-between items-center shadow-md fixed top-28 left-0 right-0 z-40">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold text-green-800 bg-green-100 px-3 py-1 rounded hover:text-green-700 transition-colors duration-200">
-            Pharmacy
+        Pharmacy
           </h1>
         </div>
         <div className="flex items-center space-x-6">
           <div className="flex space-x-6">
-            <span
-              className="text-gray-700 hover:text-green-600 cursor-pointer font-medium transition-colors duration-200"
-              aria-label="View all categories"
-            >
-              All Categories
-            </span>
-            <span
-              className="text-gray-700 hover:text-green-600 cursor-pointer font-medium transition-colors duration-200"
-              aria-label="Search products"
-            >
-              Search
-            </span>
+        <span
+          className="text-gray-700 hover:text-green-600 cursor-pointer font-medium transition-colors duration-200"
+          aria-label="View all categories"
+        >
+          All Categories
+        </span>
+        <span
+          className="text-gray-700 hover:text-green-600 cursor-pointer font-medium transition-colors duration-200"
+          aria-label="Search products"
+        >
+          Search
+        </span>
           </div>
           <div className="relative">
-            <input
-              type="text"
-              placeholder="Search medicines or products..."
-              className="border border-gray-300 px-4 py-2 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-400 transition-all duration-200"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search medicines or products"
-            />
-            <span className="absolute right-3 top-2.5 text-gray-500">🔍</span>
+        <input
+          type="text"
+          placeholder="Search medicines or products..."
+          className="border border-gray-300 px-4 py-2 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-400 transition-all duration-200"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Search medicines or products"
+        />
+        <span className="absolute right-3 top-2.5 text-gray-500">🔍</span>
           </div>
           <span
-            onClick={() => navigate('/usercart')}
-            className="text-sm cursor-pointer flex items-center text-gray-700 hover:text-green-600 transition-colors duration-200 relative"
-            title="Go to Cart"
-            aria-label="Go to cart"
+        onClick={() => navigate('/usercart')}
+        className="text-sm cursor-pointer flex items-center text-gray-700 hover:text-green-600 transition-colors duration-200 relative"
+        title="Go to Cart"
+        aria-label="Go to cart"
           >
-            🛒 <span className="ml-1 font-medium">{cartCount}</span>
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
+        🛒 <span className="ml-1 font-medium">{cartCount}</span>
+        {cartCount > 0 && (
+          <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+            {cartCount}
+          </span>
+        )}
           </span>
         </div>
       </nav>
