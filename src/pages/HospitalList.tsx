@@ -2,31 +2,86 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from '@/config/config';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Hospital {
-  hospitalId: number;
-  hospitalName: string;
-  hospitalDescription: string;
-  hospitalImage: string;
-  rating: string;
-  address: string;
-  hospitalMap?: string; // Optional map URL
+  id: string;
+  name: string;
+  description: string;
+  city: string;
+  state: string;
+  country: string;
+  status: string;
+}
+
+interface Location {
+  id: string;
+  city: string;
+  state: string;
+  country: string;
 }
 
 const HospitalList: React.FC = () => {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [filteredHospitals, setFilteredHospitals] = useState<Hospital[]>([]);
+  const [filters, setFilters] = useState({
+    city: "",
+    state: "",
+    country: "",
+  });
+
+  // Get unique values for filters from locations API
+  const uniqueLocations = {
+    cities: [...new Set(locations.map(l => l.city))].sort(),
+    states: [...new Set(locations.map(l => l.state))].sort(),
+    countries: [...new Set(locations.map(l => l.country))].sort(),
+  };
+
+  // Filter hospitals based on selected filters
+  useEffect(() => {
+    let filtered = [...hospitals];
+    
+    if (filters.city) {
+      filtered = filtered.filter(h => h.city === filters.city);
+    }
+    if (filters.state) {
+      filtered = filtered.filter(h => h.state === filters.state);
+    }
+    if (filters.country) {
+      filtered = filtered.filter(h => h.country === filters.country);
+    }
+
+    setFilteredHospitals(filtered);
+  }, [hospitals, filters]);
 
   useEffect(() => {
-    const fetchHospitals = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/hospitals/getall/hospitals`);
-        if (!response.ok) {
+        // Fetch hospitals
+        const hospitalsResponse = await fetch(`${BASE_URL}/api/hospitals/getall/hospitals`);
+        if (!hospitalsResponse.ok) {
           throw new Error('Failed to fetch hospitals');
         }
-        const data: Hospital[] = await response.json();
-        setHospitals(data);
+        const hospitalsData: Hospital[] = await hospitalsResponse.json();
+        setHospitals(hospitalsData);
+
+        // Fetch locations
+        const locationsResponse = await fetch(`${BASE_URL}/api/locations/getall`);
+        if (!locationsResponse.ok) {
+          throw new Error('Failed to fetch locations');
+        }
+        const locationsData: Location[] = await locationsResponse.json();
+        setLocations(locationsData);
+
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -34,8 +89,16 @@ const HospitalList: React.FC = () => {
       }
     };
 
-    fetchHospitals();
+    fetchData();
   }, []);
+
+  const handleFilterChange = (field: keyof typeof filters, value: string) => {
+    setFilters(prev => ({ ...prev, [field]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({ city: "", state: "", country: "" });
+  };
 
   if (loading) {
     return (
@@ -75,61 +138,115 @@ const HospitalList: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-      <main className="flex-grow p-6 sm:p-8 lg:p-12">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Our Hospitals</h1>
-          <p className="text-lg text-gray-600 mb-8">
-            Discover our network of world-class hospitals across India, offering top-tier medical care.
-          </p>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto py-8">
+        <h1 className="text-4xl font-bold mb-8 text-center">Our Hospitals</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {hospitals.map((hospital) => (
-              <div
-                key={hospital.hospitalId}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              >
-                <div className="aspect-w-16 aspect-h-9">
-                  <img
-                    src={hospital.hospitalImage}
-                    alt={hospital.hospitalName}
-                    className="w-full h-64 object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
-                    {hospital.hospitalName}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    {hospital.address}
-                  </p>
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center">
-                      <span className="text-yellow-400 mr-1">★</span>
-                      <span className="text-gray-600 dark:text-gray-300">{hospital.rating}</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    {hospital.hospitalDescription}
-                  </p>
-                  {hospital.hospitalMap && (
-                    <div className="aspect-w-16 aspect-h-9">
-                      <iframe
-                        src={hospital.hospitalMap}
-                        className="w-full h-48 border-0"
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title={`Map of ${hospital.hospitalName}`}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Filters */}
+        <div className="flex flex-wrap gap-4 mb-6 justify-center">
+          <Select
+            value={filters.city}
+            onValueChange={(value) => handleFilterChange("city", value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by City" />
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueLocations.cities.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.state}
+            onValueChange={(value) => handleFilterChange("state", value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by State" />
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueLocations.states.map((state) => (
+                <SelectItem key={state} value={state}>
+                  {state}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.country}
+            onValueChange={(value) => handleFilterChange("country", value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by Country" />
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueLocations.countries.map((country) => (
+                <SelectItem key={country} value={country}>
+                  {country}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Button
+            variant="outline"
+            onClick={clearFilters}
+            disabled={!filters.city && !filters.state && !filters.country}
+          >
+            Clear Filters
+          </Button>
         </div>
-      </main>
+
+        {/* Hospital Cards */}
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <>
+            {filteredHospitals.length === 0 ? (
+              <motion.div
+                className="flex flex-col items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-lg text-muted-foreground text-center">
+                  No hospitals found matching the selected filters.
+                </p>
+              </motion.div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <AnimatePresence>
+                  {filteredHospitals.map((hospital) => (
+                    <motion.div
+                      key={hospital.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="bg-card rounded-lg shadow-lg overflow-hidden"
+                    >
+                      <div className="p-6">
+                        <h3 className="text-xl font-bold mb-2">{hospital.name}</h3>
+                        <p className="text-muted-foreground mb-4">{hospital.description}</p>
+                        <div className="flex flex-col gap-2">
+                          <p className="text-sm"><span className="font-semibold">Location:</span> {hospital.city}, {hospital.state}, {hospital.country}</p>
+                          <p className="text-sm"><span className="font-semibold">Status:</span> {hospital.status}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

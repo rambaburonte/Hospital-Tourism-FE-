@@ -21,6 +21,7 @@ const EditPhysios: React.FC = () => {
   const [physio, setPhysio] = useState<Physio | null>(null);
   const [physios, setPhysios] = useState<Physio[]>([]);
   const [formData, setFormData] = useState<Partial<Physio>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +76,7 @@ const EditPhysios: React.FC = () => {
   const selectPhysioForEdit = (selectedPhysio: Physio) => {
     setPhysio(selectedPhysio);
     setFormData(selectedPhysio);
+    setImageFile(null); // Reset image file
     setShowEditForm(true);
   };
 
@@ -94,14 +96,23 @@ const EditPhysios: React.FC = () => {
     try {
       const physioId = id || physio?.physioId;
       console.log('Updating physio ID:', physioId);
-      console.log('Update payload:', formData);
+      
+      const updateData = new FormData();
+      if (formData.physioName) updateData.append('physioName', formData.physioName);
+      if (formData.physioDescription) updateData.append('physioDescription', formData.physioDescription);
+      if (formData.rating) updateData.append('rating', formData.rating.toString());
+      if (formData.address) updateData.append('address', formData.address);
+      if (formData.price) updateData.append('price', formData.price.toString());
+      if (formData.status) updateData.append('status', formData.status);
+      if (formData.locationId) updateData.append('locationId', formData.locationId.toString());
+      
+      if (imageFile) {
+        updateData.append('physioImage', imageFile);
+      }
       
       const response = await fetch(`${BASE_URL}/physio/update-physio/${physioId}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: updateData,
       });
 
       if (!response.ok) {
@@ -274,14 +285,18 @@ const EditPhysios: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Image URL</label>
+              <label className="block text-sm font-medium text-gray-700">Update Image (optional)</label>
               <input
-                type="url"
-                name="physioImage"
-                value={formData.physioImage || ''}
-                onChange={handleChange}
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                 className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
               />
+              {physio?.physioImage && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Current image: {physio.physioImage}
+                </p>
+              )}
             </div>
 
             <div>

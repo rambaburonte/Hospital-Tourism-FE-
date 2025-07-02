@@ -298,6 +298,8 @@ const Header: React.FC = () => {
     { to: '/specialities', label: 'Specialties' },
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
+    { to: '/hotels', label: 'Hotels' },
+    { to: '/travel', label: 'Travel' },
   ];
 
   const handleRedirect = () => {
@@ -368,7 +370,7 @@ const Header: React.FC = () => {
                 </button>
                 
                 {translateDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5 max-h-60 overflow-y-auto z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5 max-h-60 overflow-y-auto">
                     {languages.map((language) => (
                       <button
                         key={language.code}

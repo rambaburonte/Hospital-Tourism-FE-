@@ -10,7 +10,6 @@ interface MedicineData {
   medicineQuantity: string;
   medicineExpiryDate: string;
   medicineManufacturer: string;
-  medicineImage: string;
   medicineCategory: string;
 }
 
@@ -38,12 +37,12 @@ const initialMedicineState: MedicineData = {
   medicineQuantity: '',
   medicineExpiryDate: '',
   medicineManufacturer: '',
-  medicineImage: '',
   medicineCategory: '',
 };
 
 const AddMedicineForm: React.FC = () => {
   const [medicine, setMedicine] = useState<MedicineData>(initialMedicineState);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -89,27 +88,26 @@ const AddMedicineForm: React.FC = () => {
       setIsLoading(false);
       return;
     }
-    if (medicine.medicineImage && !/^https?:\/\/.+\..+/.test(medicine.medicineImage)) {
-      setError('Please enter a valid image URL.');
-      setIsLoading(false);
-      return;
-    }
 
-    // Prepare data for API, converting types to match expected request body
-    const requestBody = {
-      ...medicine,
-      medicinePrice: price,
-      medicineQuantity: quantity,
-      medicineExpiryDate: medicine.medicineExpiryDate
-        ? `${medicine.medicineExpiryDate}T00:00:00`
-        : '',
-    };
+    // Prepare FormData for API
+    const formData = new FormData();
+    formData.append('medicineName', medicine.medicineName);
+    formData.append('medicineType', medicine.medicineType);
+    formData.append('medicineDescription', medicine.medicineDescription);
+    formData.append('medicinePrice', price.toString());
+    formData.append('medicineQuantity', quantity.toString());
+    formData.append('medicineExpiryDate', medicine.medicineExpiryDate ? `${medicine.medicineExpiryDate}T00:00:00` : '');
+    formData.append('medicineManufacturer', medicine.medicineManufacturer);
+    formData.append('medicineCategory', medicine.medicineCategory);
+    
+    if (imageFile) {
+      formData.append('medicineImage', imageFile);
+    }
 
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -120,6 +118,7 @@ const AddMedicineForm: React.FC = () => {
       const result = await response.json();
       setSuccessMessage(result.message || 'Medicine added successfully!');
       setMedicine(initialMedicineState);
+      setImageFile(null);
       window.scrollTo(0, 0);
     } catch (err) {
       setError((err as Error).message || 'Unknown error occurred.');
@@ -320,17 +319,15 @@ const AddMedicineForm: React.FC = () => {
 
                 <div>
                   <label htmlFor="medicineImage" className={labelClasses}>
-                    Image URL (Optional)
+                    Medicine Image (Optional)
                   </label>
                   <input
-                    type="url"
-                    name="medicineImage"
-                    value={medicine.medicineImage}
-                    onChange={handleChange}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                     className={inputClasses}
-                    placeholder="https://example.com/image.jpg"
                   />
-                  <p className="text-xs text-gray-500">Link to the medicine image.</p>
+                  <p className="text-xs text-gray-500">Upload an image of the medicine.</p>
                 </div>
               </div>
             </fieldset>

@@ -11,10 +11,10 @@ interface Location {
 
 const UploadPhysio: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     physioName: "",
     physioDescription: "",
-    physioImage: "",
     rating: "",
     address: "",
     price: "",
@@ -35,24 +35,36 @@ const UploadPhysio: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      ...formData,
-      locationId: parseInt(formData.locationId, 10),
-    };
+    
+    const submitData = new FormData();
+    submitData.append('physioName', formData.physioName);
+    submitData.append('physioDescription', formData.physioDescription);
+    submitData.append('rating', formData.rating);
+    submitData.append('address', formData.address);
+    submitData.append('price', formData.price);
+    submitData.append('locationId', formData.locationId);
+    
+    if (imageFile) {
+      submitData.append('physioImage', imageFile);
+    }
 
     axios
-      .post(`${BASE_URL}/physio/save-Physio`, payload)
+      .post(`${BASE_URL}/physio/save-Physio`, submitData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then(() => {
         alert("Physio uploaded successfully!");
         setFormData({
           physioName: "",
           physioDescription: "",
-          physioImage: "",
           rating: "",
           address: "",
           price: "",
           locationId: "",
         });
+        setImageFile(null);
       })
       .catch((error) => {
         console.error("Upload failed:", error);
@@ -99,11 +111,9 @@ const UploadPhysio: React.FC = () => {
           required
         />
         <input
-          type="text"
-          name="physioImage"
-          placeholder="Image URL"
-          value={formData.physioImage}
-          onChange={handleChange}
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImageFile(e.target.files?.[0] || null)}
           className="w-full p-2 border rounded"
           required
         />

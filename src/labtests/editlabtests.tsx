@@ -9,34 +9,37 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import { BASE_URL } from '@/config/config';
 
 interface LabTest {
-  id: number; // Changed from testId to id to match backend entity
+  id: number;
   testTitle: string;
   testDescription: string;
   testPrice: number;
   testDepartment: string;
   testImage: string;
-  status?: string; // Changed from Status to lowercase status
+  status?: string;
 }
 
 const EditLabTests: React.FC = () => {
   const [labTests, setLabTests] = useState<LabTest[]>([]);
   const [selectedLabTest, setSelectedLabTest] = useState<LabTest | null>(null);
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     testTitle: '',
     testDescription: '',
     testPrice: 0,
     testDepartment: ''
   });
-  
+
   const { toast } = useToast();
+
+  // Helper to get image URL (adjust as per your backend's image serving)
+  const getImageUrl = (img: string) =>
+    img?.startsWith('http') ? img : `${BASE_URL}/uploads/${img}`;
 
   const fetchLabTests = async () => {
     setLoading(true);
     try {
-      console.log('Fetching lab tests from:', `${BASE_URL}/api/labtests`);
       const response = await axios.get<LabTest[]>(`${BASE_URL}/api/labtests`);
-      console.log('Lab tests response:', response.data);
       setLabTests(response.data);
     } catch (error) {
       toast({
@@ -44,7 +47,6 @@ const EditLabTests: React.FC = () => {
         description: 'Failed to fetch lab tests',
         variant: 'destructive',
       });
-      console.error('Error fetching lab tests:', error);
     } finally {
       setLoading(false);
     }
@@ -56,9 +58,8 @@ const EditLabTests: React.FC = () => {
   }, []);
 
   const handleSelectLabTest = (labTest: LabTest) => {
-    console.log('Selected lab test:', labTest);
-    console.log('Lab test ID:', labTest.id);
     setSelectedLabTest(labTest);
+    setImageFile(null);
     setFormData({
       testTitle: labTest.testTitle,
       testDescription: labTest.testDescription,
@@ -69,45 +70,46 @@ const EditLabTests: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ 
-      ...prev, 
-      [name]: name === 'testPrice' ? parseFloat(value) || 0 : value 
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'testPrice' ? parseFloat(value) || 0 : value
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedLabTest) return;
-    
+
     setLoading(true);
     try {
-      // Create the update payload to match backend expectations
-      const updatePayload = {
-        id: selectedLabTest.id,
-        testTitle: formData.testTitle,
-        testDescription: formData.testDescription,
-        testPrice: formData.testPrice,
-        testDepartment: formData.testDepartment,
-        testImage: selectedLabTest.testImage, // Keep existing image
-        status: selectedLabTest.status || 'Active'
-      };
-      
-      console.log('Updating lab test ID:', selectedLabTest.id);
-      console.log('Update payload:', updatePayload);
-      
-      const response = await axios.put(`${BASE_URL}/api/labtests/update/${selectedLabTest.id}`, updatePayload);
-      console.log('Update response:', response.data);
-      
+      const updateData = new FormData();
+      updateData.append('testTitle', formData.testTitle);
+      updateData.append('testDescription', formData.testDescription);
+      updateData.append('testPrice', formData.testPrice.toString());
+      updateData.append('testDepartment', formData.testDepartment);
+      updateData.append('status', selectedLabTest.status || 'Active');
+
+      if (imageFile) {
+        updateData.append('testImage', imageFile);
+      }
+
+      await axios.put(`${BASE_URL}/api/labtests/update/${selectedLabTest.id}`, updateData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       toast({
         title: 'Success',
         description: 'Lab test updated successfully',
       });
-      
+
       fetchLabTests();
       setSelectedLabTest(null);
-      setFormData({ 
-        testTitle: '', 
-        testDescription: '', 
+      setImageFile(null);
+      setFormData({
+        testTitle: '',
+        testDescription: '',
         testPrice: 0,
         testDepartment: ''
       });
@@ -117,11 +119,6 @@ const EditLabTests: React.FC = () => {
         description: 'Failed to update lab test',
         variant: 'destructive',
       });
-      console.error('Error updating lab test:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Error response:', error.response?.data);
-        console.error('Error status:', error.response?.status);
-      }
     } finally {
       setLoading(false);
     }
@@ -132,12 +129,10 @@ const EditLabTests: React.FC = () => {
       <AdminSidebar />
       <div className="flex-1 p-8 ml-64 overflow-auto">
         <h1 className="text-3xl font-bold mb-6">Edit Lab Test</h1>
-        
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Lab Tests List */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">Select a Lab Test</h2>
-            
             {loading && !selectedLabTest ? (
               <p>Loading lab tests...</p>
             ) : labTests.length === 0 ? (
@@ -145,11 +140,11 @@ const EditLabTests: React.FC = () => {
             ) : (
               <div className="space-y-4 max-h-[500px] overflow-y-auto">
                 {labTests.map((labTest) => (
-                  <div 
+                  <div
                     key={labTest.id}
                     className={`p-4 border rounded-md cursor-pointer transition-all ${
-                      selectedLabTest?.id === labTest.id 
-                        ? 'border-blue-500 bg-blue-50' 
+                      selectedLabTest?.id === labTest.id
+                        ? 'border-blue-500 bg-blue-50'
                         : 'hover:border-gray-400'
                     }`}
                     onClick={() => handleSelectLabTest(labTest)}
@@ -175,18 +170,16 @@ const EditLabTests: React.FC = () => {
               </div>
             )}
           </div>
-          
           {/* Edit Form */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">
               {selectedLabTest ? `Edit: ${selectedLabTest.testTitle}` : 'Select a lab test to edit'}
             </h2>
-            
             {selectedLabTest ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="testTitle">Title</Label>
-                  <Input 
+                  <Input
                     id="testTitle"
                     name="testTitle"
                     value={formData.testTitle}
@@ -195,10 +188,9 @@ const EditLabTests: React.FC = () => {
                     required
                   />
                 </div>
-                
                 <div>
                   <Label htmlFor="testDescription">Description</Label>
-                  <Textarea 
+                  <Textarea
                     id="testDescription"
                     name="testDescription"
                     value={formData.testDescription}
@@ -207,13 +199,12 @@ const EditLabTests: React.FC = () => {
                     required
                   />
                 </div>
-                
                 <div>
                   <Label htmlFor="testPrice">Price ($)</Label>
-                  <Input 
+                  <Input
                     id="testPrice"
                     name="testPrice"
-                    type="number" 
+                    type="number"
                     value={formData.testPrice}
                     onChange={handleInputChange}
                     className="mt-1"
@@ -222,10 +213,9 @@ const EditLabTests: React.FC = () => {
                     required
                   />
                 </div>
-                
                 <div>
                   <Label htmlFor="testDepartment">Department</Label>
-                  <Input 
+                  <Input
                     id="testDepartment"
                     name="testDepartment"
                     value={formData.testDepartment}
@@ -234,13 +224,47 @@ const EditLabTests: React.FC = () => {
                     required
                   />
                 </div>
-                
+                <div>
+                  <Label htmlFor="testImage">Update Image (optional)</Label>
+                  <Input
+                    id="testImage"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                    className="mt-1"
+                  />
+                  <div className="flex items-center space-x-4 mt-2">
+                    {/* Show current image */}
+                    {selectedLabTest?.testImage && !imageFile && (
+                      <div>
+                        <p className="text-sm text-gray-500 mb-1">Current image:</p>
+                        <img
+                          src={getImageUrl(selectedLabTest.testImage)}
+                          alt="Current"
+                          className="w-24 h-24 object-cover rounded border"
+                        />
+                      </div>
+                    )}
+                    {/* Show preview of new image if selected */}
+                    {imageFile && (
+                      <div>
+                        <p className="text-sm text-gray-500 mb-1">New image preview:</p>
+                        <img
+                          src={URL.createObjectURL(imageFile)}
+                          alt="Preview"
+                          className="w-24 h-24 object-cover rounded border"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="flex justify-end space-x-3 pt-4">
-                  <Button 
-                    type="button" 
+                  <Button
+                    type="button"
                     variant="outline"
                     onClick={() => {
                       setSelectedLabTest(null);
+                      setImageFile(null);
                       setFormData({
                         testTitle: '',
                         testDescription: '',

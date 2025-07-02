@@ -22,6 +22,7 @@ const EditDiagnostics: React.FC = () => {
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const [selectedDiagnostic, setSelectedDiagnostic] = useState<Diagnostic | null>(null);
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     diognosticsName: '',
     diognosticsDescription: '',
@@ -55,6 +56,7 @@ const EditDiagnostics: React.FC = () => {
 
   const handleSelectDiagnostic = (diagnostic: Diagnostic) => {
     setSelectedDiagnostic(diagnostic);
+    setImageFile(null); // Reset image file
     setFormData({
       diognosticsName: diagnostic.diognosticsName,
       diognosticsDescription: diagnostic.diognosticsDescription,
@@ -74,7 +76,21 @@ const EditDiagnostics: React.FC = () => {
     
     setLoading(true);
     try {
-      await axios.put(`${BASE_URL}/api/diagnostics/update/${selectedDiagnostic.diognosticsId}`, formData);
+      const updateData = new FormData();
+      updateData.append('diognosticsName', formData.diognosticsName);
+      updateData.append('diognosticsDescription', formData.diognosticsDescription);
+      updateData.append('diognosticsrating', formData.diognosticsrating);
+      updateData.append('diognosticsaddress', formData.diognosticsaddress);
+      
+      if (imageFile) {
+        updateData.append('imageFile', imageFile);
+      }
+
+      await axios.put(`${BASE_URL}/api/diagnostics/update/${selectedDiagnostic.diognosticsId}`, updateData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       
       toast({
         title: 'Success',
@@ -83,6 +99,7 @@ const EditDiagnostics: React.FC = () => {
       
       fetchDiagnostics();
       setSelectedDiagnostic(null);
+      setImageFile(null);
       setFormData({ 
         diognosticsName: '', 
         diognosticsDescription: '', 
@@ -196,6 +213,22 @@ const EditDiagnostics: React.FC = () => {
                     required
                   />
                 </div>
+
+                <div>
+                  <Label htmlFor="imageFile">Update Image (optional)</Label>
+                  <Input 
+                    id="imageFile"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                    className="mt-1"
+                  />
+                  {selectedDiagnostic?.diognosticsImage && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Current image: {selectedDiagnostic.diognosticsImage}
+                    </p>
+                  )}
+                </div>
                 
                 <div className="flex justify-end space-x-3 pt-4">
                   <Button 
@@ -203,6 +236,7 @@ const EditDiagnostics: React.FC = () => {
                     variant="outline"
                     onClick={() => {
                       setSelectedDiagnostic(null);
+                      setImageFile(null);
                       setFormData({
                         diognosticsName: '',
                         diognosticsDescription: '',

@@ -1,206 +1,7 @@
-
-// import React, { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { BASE_URL } from '@/config/config';
-// interface Chef {
-//   chefID: number;
-//   chefName: string;
-//   chefDescription: string;
-//   chefImage: string;
-//   chefRating: string;
-//   experience: string;
-//   styles: string;
-//   price: number;
-//   locationId: number | null;
-//   location: string | null;
-//   status: string | null;
-// }
-
-// const ChefsList: React.FC = () => {
-//   const [chefs, setChefs] = useState<Chef[]>([]);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const fetchChefs = async () => {
-//       try {
-//         const response = await fetch(`${BASE_URL}/api/chefs`);
-//         const data = await response.json();
-//         setChefs(data);
-//       } catch (error) {
-//         console.error('Error fetching chefs:', error);
-//       }
-//     };
-
-//     fetchChefs();
-//   }, []);
-
-//   const handleBookClick = (chefID: number) => {
-//     navigate(`/chef/${chefID}`);
-//   };
-
-//   return (
-//     <div className="container mx-auto p-4">
-//       <h1 className="text-3xl font-bold mb-6 text-center">Our Chefs</h1>
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//         {chefs.map((chef) => (
-//           <div
-//             key={chef.chefID}
-//             className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-//           >
-//             <img
-//               src={chef.chefImage}
-//               alt={chef.chefName}
-//               className="w-full h-48 object-cover"
-//               onError={(e) => {
-//                 e.currentTarget.src = 'https://via.placeholder.com/300';
-//               }}
-//             />
-//             <div className="p-4">
-//               <h2 className="text-xl font-semibold mb-2">{chef.chefName}</h2>
-//               <p className="text-gray-600 mb-2">{chef.chefDescription}</p>
-//               <p className="text-sm text-gray-500 mb-1">
-//                 <span className="font-medium">Rating:</span> {chef.chefRating} ⭐
-//               </p>
-//               <p className="text-sm text-gray-500 mb-1">
-//                 <span className="font-medium">Experience:</span> {chef.experience}
-//               </p>
-//               <p className="text-sm text-gray-500 mb-1">
-//                 <span className="font-medium">Styles:</span> {chef.styles}
-//               </p>
-//               <p className="text-sm text-gray-500 mb-4">
-//                 <span className="font-medium">Price:</span> ${chef.price.toFixed(2)}
-//               </p>
-//               <button
-//                 onClick={() => handleBookClick(chef.chefID)}
-//                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
-//               >
-//                 Book Here
-//               </button>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChefsList;
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { BASE_URL } from '@/config/config';
-
-// interface Chef {
-//   chefID: number;
-//   chefName: string;
-//   chefDescription: string;
-//   chefImage: string;
-//   chefRating: string;
-//   experience: string;
-//   styles: string;
-//   price: number;
-//   locationId: number | null;
-//   location: string | null;
-//   status: string | null;
-// }
-
-// const ChefsList: React.FC = () => {
-//   const [chefs, setChefs] = useState<Chef[]>([]);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const fetchChefs = async () => {
-//       try {
-//         const response = await fetch(`${BASE_URL}/api/chefs`);
-//         const data = await response.json();
-//         setChefs(data);
-//       } catch (error) {
-//         console.error('Error fetching chefs:', error);
-//       }
-//     };
-
-//     fetchChefs();
-//   }, []);
-
-//   const handleBookClick = (chefID: number) => {
-//     navigate(`/booking/chef/${chefID}`);
-//   };
-
-//   return (
-//     <div className="container mx-auto p-4">
-//       <h1 className="text-3xl font-bold mb-6 text-center">Our Chefs</h1>
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//         {chefs.map((chef) => (
-//           <div
-//             key={chef.chefID}
-//             className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-//           >
-//             <img
-//               src={chef.chefImage}
-//               alt={chef.chefName}
-//               className="w-full h-48 object-cover"
-//               onError={(e) => {
-//                 e.currentTarget.src = 'https://via.placeholder.com/300';
-//               }}
-//             />
-//             <div className="p-4">
-//               <h2 className="text-xl font-semibold mb-2">{chef.chefName}</h2>
-//               <p className="text-gray-600 mb-2">{chef.chefDescription}</p>
-//               <p className="text-sm text-gray-500 mb-1">
-//                 <span className="font-medium">Rating:</span> {chef.chefRating} ⭐
-//               </p>
-//               <p className="text-sm text-gray-500 mb-1">
-//                 <span className="font-medium">Experience:</span> {chef.experience}
-//               </p>
-//               <p className="text-sm text-gray-500 mb-1">
-//                 <span className="font-medium">Styles:</span> {chef.styles}
-//               </p>
-//               <p className="text-sm text-gray-500 mb-4">
-//                 <span className="font-medium">Price:</span> ${chef.price.toFixed(2)}
-//               </p>
-//               <button
-//                 onClick={() => handleBookClick(chef.chefID)}
-//                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
-//               >
-//                 Add To Cart
-//               </button>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChefsList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
-import { Globe, Mail, Phone, Briefcase, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { BASE_URL } from '@/config/config';
+import { Search } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -208,218 +9,299 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { BASE_URL } from '@/config/config';
+
+interface Location {
+  id: string;
+  city: string;
+  state: string;
+  country: string;
+}
+
+interface LocationFilters {
+  city: string;
+  state: string;
+  country: string;
+}
 
 interface Chef {
-  id: number;
-  name: string;
-  description: string;
-  avatar: string;
-  rating: number;
-  experience: {
-    years: string;
-    specialization: string;
-  };
+  chefID: number;
+  chefName: string;
+  chefDescription: string;
+  chefImage: string;
+  chefRating: string;
+  experience: string;
   styles: string[];
   price: number;
-  location: string | null;
-  email: string;
-  phone: string;
+  location: LocationFilters;
+  status: string | null;
 }
 
 const ChefsList: React.FC = () => {
   const [chefs, setChefs] = useState<Chef[]>([]);
-  const [selectedStyle, setSelectedStyle] = useState('All');
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [locationFilters, setLocationFilters] = useState<LocationFilters>({
+    city: '',
+    state: '',
+    country: '',
+  });
+  const [styleFilter, setStyleFilter] = useState('');
   const navigate = useNavigate();
 
+  // Get unique locations from locations API and styles from chefs
+  const uniqueValues = useMemo(
+    () => ({
+      cities: [...new Set(locations.map((l) => l.city))].sort(),
+      states: [...new Set(locations.map((l) => l.state))].sort(),
+      countries: [...new Set(locations.map((l) => l.country))].sort(),
+      styles: [...new Set(chefs.flatMap((chef) => chef.styles))].sort(),
+    }),
+    [chefs, locations]
+  );
+
   useEffect(() => {
-    const fetchChefs = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/chefs`);
-        const data = await response.json();
-        const formatted = data.map((chef: any) => ({
-          id: chef.chefID,
-          name: chef.chefName,
-          description: chef.chefDescription,
-          avatar: chef.chefImage,
-          rating: parseFloat(chef.chefRating) || 0,
-          experience: {
-            years: chef.experience,
-            specialization: chef.styles.split(',')[0]?.trim() || 'General Cuisine',
+        // Fetch chefs
+        const chefsResponse = await fetch(`${BASE_URL}/api/chefs`);
+        const chefsData = await chefsResponse.json();
+        
+        // Fetch locations
+        const locationsResponse = await fetch(`${BASE_URL}/api/locations/getall`);
+        const locationsData = await locationsResponse.json();
+        setLocations(locationsData);
+        
+        // Transform the chef data to match our interface
+        interface RawChef {
+          chefID: number;
+          chefName: string;
+          chefDescription: string;
+          chefImage: string;
+          chefRating: string;
+          experience: string;
+          styles: string | string[];
+          price: number;
+          city?: string;
+          state?: string;
+          country?: string;
+          status: string | null;
+        }
+        const formattedData: Chef[] = chefsData.map((chef: RawChef) => ({
+          ...chef,
+          styles: Array.isArray(chef.styles)
+            ? chef.styles
+            : chef.styles.split(',').map((s: string) => s.trim()),
+          location: {
+            city: chef.city || 'Unknown',
+            state: chef.state || 'Unknown',
+            country: chef.country || 'Unknown',
           },
-          styles: chef.styles.split(',').map((style: string) => style.trim()),
-          price: chef.price,
-          location: chef.location || 'N/A',
-          email: 'N/A',
-          phone: 'N/A',
         }));
-        setChefs(formatted);
+        setChefs(formattedData);
       } catch (error) {
-        console.error('Error fetching chefs:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchChefs();
+    fetchData();
   }, []);
 
-  const filteredChefs =
-    selectedStyle === 'All'
-      ? chefs
-      : chefs.filter((chef) => chef.styles.includes(selectedStyle));
-
-  const styles = ['All', ...new Set(chefs.flatMap((chef) => chef.styles))].sort();
-
-  const handleAddToCart = (chefId: number) => {
-    navigate(`/booking/chef/${chefId}`);
+  const handleLocationFilterChange = (field: keyof LocationFilters, value: string) => {
+    setLocationFilters((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
-  const renderStars = (rating: number) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <Star
-          key={i}
-          className={`h-4 w-4 ${
-            i <= Math.round(rating)
-              ? 'text-yellow-400 fill-yellow-400'
-              : 'text-gray-300'
-          }`}
-        />
-      );
-    }
-    return stars;
+  const clearFilters = () => {
+    setLocationFilters({
+      city: '',
+      state: '',
+      country: '',
+    });
+    setSearchQuery('');
+    setStyleFilter('');
+  };
+
+  const filteredChefs = useMemo(() => {
+    return chefs.filter((chef) => {
+      const matchesSearch =
+        chef.chefName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        chef.chefDescription.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesLocation =
+        (!locationFilters.city || chef.location.city === locationFilters.city) &&
+        (!locationFilters.state || chef.location.state === locationFilters.state) &&
+        (!locationFilters.country || chef.location.country === locationFilters.country);
+      const matchesStyle =
+        !styleFilter || chef.styles.some((style) => style.toLowerCase().includes(styleFilter.toLowerCase()));
+
+      return matchesSearch && matchesLocation && matchesStyle;
+    });
+  }, [chefs, searchQuery, locationFilters, styleFilter]);
+
+  const handleBookClick = (chefID: number) => {
+    navigate(`/booking/chef/${chefID}`);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f0f8e8] to-gray-100 py-12 px-6 sm:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-[#3a7e10] mb-10 tracking-tight">
-          Meet Our Expert Chefs
+        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          Our Expert Chefs
         </h1>
 
-        <div className="mb-8 flex justify-center">
-          <Select
-            onValueChange={setSelectedStyle}
-            defaultValue="All"
-            aria-label="Filter by culinary style"
-          >
-            <SelectTrigger className="w-full sm:w-64 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all focus:ring-2 focus:ring-[#499E14]">
-              <SelectValue placeholder="Select Culinary Style" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl shadow-lg bg-white">
-              {styles.map((style) => (
-                <SelectItem
-                  key={style}
-                  value={style}
-                  className="hover:bg-[#f0f8e8]"
-                >
-                  {style}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {/* Search input */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search chefs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredChefs.map((chef, index) => (
-            <Card
-              key={chef.id}
-              className="shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-2xl transform hover:-translate-y-1"
-              style={{
-                animation: `fadeIn 0.3s ease-in ${index * 0.1}s both`,
-              }}
+            {/* Location filters */}
+            <Select
+              value={locationFilters.city}
+              onValueChange={(value) => handleLocationFilterChange('city', value)}
             >
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-4">
-                  <img
-                    src={chef.avatar}
-                    alt={`${chef.name} avatar`}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-[#e6f4e0]"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/150';
-                    }}
-                  />
-                  <div>
-                    <h2 className="text-lg font-semibold text-[#3a7e10]">
-                      {chef.name}
-                    </h2>
-                    <p className="text-sm text-gray-600">{chef.location}</p>
-                    <div className="flex ITEMS-center gap-1 mt-1">
-                      {renderStars(chef.rating)}
-                      <span className="text-sm text-gray-500 ml-2">
-                        ({chef.rating.toFixed(1)})
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by City" />
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueValues.cities.map((city) => (
+                  <SelectItem key={city} value={city}>
+                    {city}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-                <div className="text-sm text-gray-700 flex flex-col gap-3">
-                  <p className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-[#499E14]" />
-                    {chef.styles.join(', ')}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Briefcase className="h-4 w-4 text-[#499E14]" />
-                    {chef.experience.years}
-                    <span className="ml-2 inline-block bg-[#e6f4e0] text-[#3a7e10] text-xs px-2 py-1 rounded-full">
-                      {chef.experience.specialization}
-                    </span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-[#499E14]" />
-                    {chef.email}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-[#499E14]" />
-                    {chef.phone}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="font-medium">Price:</span> ${chef.price.toFixed(2)}
-                  </p>
-                </div>
+            <Select
+              value={locationFilters.state}
+              onValueChange={(value) => handleLocationFilterChange('state', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by State" />
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueValues.states.map((state) => (
+                  <SelectItem key={state} value={state}>
+                    {state}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="default"
-                        size="lg"
-                        className="w-full bg-[#499E14] text-white hover:bg-[#3a7e10] transition-all rounded-lg"
-                        aria-label={`Book ${chef.name}`}
-                        onClick={() => handleAddToCart(chef.id)}
-                      >
-                        Add To Cart
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Book {chef.name} for culinary services</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </CardContent>
-            </Card>
-          ))}
+            <Select
+              value={locationFilters.country}
+              onValueChange={(value) => handleLocationFilterChange('country', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by Country" />
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueValues.countries.map((country) => (
+                  <SelectItem key={country} value={country}>
+                    {country}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-wrap gap-4 items-center justify-between">
+            {/* Cuisine style filter */}
+            <Select value={styleFilter || 'all'} onValueChange={(value) => setStyleFilter(value === 'all' ? '' : value)}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Filter by Cuisine Style" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Styles</SelectItem>
+                {uniqueValues.styles.map((style) => (
+                  <SelectItem key={style} value={style}>
+                    {style}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Clear filters button */}
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+              disabled={
+                !searchQuery &&
+                !styleFilter &&
+                !locationFilters.city &&
+                !locationFilters.state &&
+                !locationFilters.country
+              }
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
-      </div>
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+        {filteredChefs.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500 text-lg">
+              No chefs found matching your criteria.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredChefs.map((chef) => (
+              <div
+                key={chef.chefID}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
+                <img
+                  src={chef.chefImage}
+                  alt={chef.chefName}
+                  className="w-full h-64 object-cover"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    e.currentTarget.src = 'https://via.placeholder.com/150';
+                  }}
+                />
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                    {chef.chefName}
+                  </h2>
+                  <p className="text-gray-600 mb-4">{chef.chefDescription}</p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">Location:</span> {chef.location.city}, {chef.location.state}, {chef.location.country}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">Experience:</span> {chef.experience}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">Cuisine Styles:</span> {chef.styles.join(', ')}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">Rating:</span> {chef.chefRating} ⭐
+                    </p>
+                    <p className="text-green-600 font-semibold">
+                      Starting from ${chef.price}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleBookClick(chef.chefID)}
+                    className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Book Now
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

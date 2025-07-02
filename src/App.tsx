@@ -42,7 +42,8 @@ import BookingCart from './pages/BookingCart';
 import Wishlist from './pages/Wishlist';
 import MyOrders from './pages/MyOrders';
 import DiagnosticsList from './pages/Diagnostics';
-
+import HotelList from './pages/hotels/HotelList';
+import TravelList from './pages/travel/TravelList';
 
 // Corrected import name (PascalCase)
 // Utility Components
@@ -252,6 +253,8 @@ const App: React.FC = () => (
             <Route path="/ContactUsPage" element={<ContactUsPage />} />
             <Route path="/contact-us" element={<ContactUsPage />} />
             <Route path="/HospitalList" element={<HospitalList />} />
+            <Route path="/hotels" element={<HotelList />} />
+            <Route path="/travel" element={<TravelList />} />
             <Route path="/PharmacyCategoryPage" element={<PharmacyCategoryPage />} />
             <Route path="/translatorList" element={<TranslatorList />} />
             <Route path="/ServiceListingPage" element={<ServiceListingPage />} />

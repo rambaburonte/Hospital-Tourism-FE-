@@ -42,6 +42,25 @@ const MedicineCatalog: React.FC = () => {
     }
   }, []);
 
+  // Add this new useEffect to fetch cart count when user is available
+  useEffect(() => {
+    if (user) {
+      fetchCartCount();
+    }
+  }, [user]);
+
+  // Add this function to fetch cart count
+  const fetchCartCount = () => {
+    if (!user) return;
+    
+    axios
+      .get(`${BASE_URL}/cart-item/user/cart/quantity/${user.id}`)
+      .then((res) => {
+        setCartCount(res.data);
+      })
+      .catch((err) => console.error('Error fetching cart count:', err));
+  };
+
   useEffect(() => {
     axios
       .get<Medicine[]>(`${BASE_URL}/cart-item/user/capsules-user`)
@@ -51,6 +70,7 @@ const MedicineCatalog: React.FC = () => {
       .catch((err) => console.error('Error fetching medicines:', err));
   }, []);
 
+  // Update the addToCart function to refresh cart count after adding
   const addToCart = (medicineId: number, qty: number) => {
     if (!user) {
       alert('Please login to add items to cart.');
@@ -58,7 +78,10 @@ const MedicineCatalog: React.FC = () => {
     }
     axios
       .post(`${BASE_URL}/cart-item/user/cart/add?userId=${user.id}&madicineid=${medicineId}&qty=${qty}`)
-      .then(() => setCartCount((prev) => prev + 1))
+      .then(() => {
+        fetchCartCount(); // Fetch updated cart count instead of incrementing
+        alert('Added to cart successfully');
+      })
       .catch((err) => console.error('Add to cart failed:', err));
   };
 

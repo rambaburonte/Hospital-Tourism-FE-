@@ -21,6 +21,7 @@ const EditChefs: React.FC = () => {
   const [chef, setChef] = useState<Chef | null>(null);
   const [chefs, setChefs] = useState<Chef[]>([]);
   const [formData, setFormData] = useState<Partial<Chef>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +76,7 @@ const EditChefs: React.FC = () => {
   const selectChefForEdit = (selectedChef: Chef) => {
     setChef(selectedChef);
     setFormData(selectedChef);
+    setImageFile(null); // Reset image file
     setShowEditForm(true);
   };
 
@@ -94,14 +96,23 @@ const EditChefs: React.FC = () => {
     try {
       const chefId = id || chef?.chefID;
       console.log('Updating chef ID:', chefId);
-      console.log('Update payload:', formData);
+      
+      const updateData = new FormData();
+      if (formData.chefName) updateData.append('chefName', formData.chefName);
+      if (formData.chefDescription) updateData.append('chefDescription', formData.chefDescription);
+      if (formData.chefRating) updateData.append('chefRating', formData.chefRating.toString());
+      if (formData.experience) updateData.append('experience', formData.experience);
+      if (formData.styles) updateData.append('styles', formData.styles);
+      if (formData.status) updateData.append('status', formData.status);
+      if (formData.price) updateData.append('price', formData.price.toString());
+      
+      if (imageFile) {
+        updateData.append('chefImage', imageFile);
+      }
       
       const response = await fetch(`${BASE_URL}/api/chefs/update-chef/${chefId}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: updateData,
       });
 
       if (!response.ok) {
@@ -274,14 +285,18 @@ const EditChefs: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Image URL</label>
+                  <label className="block text-sm font-medium text-gray-700">Update Image (optional)</label>
                   <input
-                    type="url"
-                    name="chefImage"
-                    value={formData.chefImage || ''}
-                    onChange={handleChange}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
                   />
+                  {chef?.chefImage && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Current image: {chef.chefImage}
+                    </p>
+                  )}
                 </div>
 
                 <div>

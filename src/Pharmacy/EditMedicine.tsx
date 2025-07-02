@@ -38,6 +38,7 @@ const EditMedicine: React.FC = () => {
   const [medicine, setMedicine] = useState<Medicine | null>(null);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [formData, setFormData] = useState<Partial<Medicine>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,6 +89,7 @@ const EditMedicine: React.FC = () => {
   const selectMedicineForEdit = (selectedMedicine: Medicine) => {
     setMedicine(selectedMedicine);
     setFormData(selectedMedicine);
+    setImageFile(null); // Reset image file
     setShowEditForm(true);
   };
 
@@ -106,13 +108,24 @@ const EditMedicine: React.FC = () => {
 
     try {
       const medicineId = id || medicine?.madicineid;
+      
+      const updateData = new FormData();
+      if (formData.medicineName) updateData.append('medicineName', formData.medicineName);
+      if (formData.medicineType) updateData.append('medicineType', formData.medicineType);
+      if (formData.medicineDescription) updateData.append('medicineDescription', formData.medicineDescription);
+      if (formData.medicinePrice) updateData.append('medicinePrice', formData.medicinePrice.toString());
+      if (formData.medicineQuantity) updateData.append('medicineQuantity', formData.medicineQuantity.toString());
+      if (formData.medicineExpiryDate) updateData.append('medicineExpiryDate', formData.medicineExpiryDate);
+      if (formData.medicineManufacturer) updateData.append('medicineManufacturer', formData.medicineManufacturer);
+      if (formData.medicineCategory) updateData.append('medicineCategory', formData.medicineCategory);
+      
+      if (imageFile) {
+        updateData.append('medicineImage', imageFile);
+      }
 
       const response = await fetch(`${BASE_URL}/pharmacy/updateMadicine/${medicineId}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: updateData,
       });
 
       if (!response.ok) {
@@ -355,22 +368,17 @@ const EditMedicine: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Image URL</label>
+                  <label className="block text-sm font-medium text-gray-700">Update Image (optional)</label>
                   <input
-                    type="url"
-                    name="medicineImage"
-                    value={formData.medicineImage || ''}
-                    onChange={handleChange}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
                   />
-                  {formData.medicineImage && (
-                    <div className="mt-2">
-                      <img
-                        src={formData.medicineImage}
-                        alt="Medicine preview"
-                        className="h-20 w-20 object-cover rounded"
-                      />
-                    </div>
+                  {medicine?.medicineImage && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Current image: {medicine.medicineImage}
+                    </p>
                   )}
                 </div>
 

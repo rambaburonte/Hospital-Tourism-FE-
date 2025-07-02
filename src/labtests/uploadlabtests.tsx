@@ -21,7 +21,7 @@ const UploadLabTests: React.FC = () => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [department, setDepartment] = useState('');
-  const [image, setImage] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -50,31 +50,52 @@ const UploadLabTests: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedDiagnostics || !title || !description || !price || !department || !image) {
+    if (!selectedDiagnostics || !title || !description || !price || !department || !imageFile) {
       setMessage('All fields are required');
       return;
     }
 
     try {
-      const payload = {
-        testTitle: title,
-        testDescription: description,
-        testPrice: parseFloat(price),
-        testDepartment: department,
-        testImage: image,
-        diognosticsId: selectedDiagnostics.value,
+      // Convert image file to base64
+      const reader = new FileReader();
+      
+      const uploadLabTest = async (imageData: string) => {
+        const payload = {
+          testTitle: title,
+          testDescription: description,
+          testPrice: parseFloat(price),
+          testDepartment: department,
+          testImage: imageData,
+          diognosticsId: selectedDiagnostics.value,
+        };
+        
+        console.log('Uploading lab test with payload');
+        const res = await axios.post(`${BASE_URL}/api/labtests/add`, payload, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('Upload response:', res.data);
+
+        if (res.status === 200 || res.status === 201) {
+          setMessage('Lab test uploaded successfully!');
+          handleReset();
+        } else {
+          setMessage('Failed to upload lab test');
+        }
       };
       
-      console.log('Uploading lab test with payload:', payload);
-      const res = await axios.post(`${BASE_URL}/api/labtests/add`, payload);
-      console.log('Upload response:', res.data);
-
-      if (res.status === 200 || res.status === 201) {
-        setMessage('Lab test uploaded successfully!');
-        handleReset();
-      } else {
-        setMessage('Failed to upload lab test');
-      }
+      reader.onload = () => {
+        const base64Image = reader.result as string;
+        uploadLabTest(base64Image);
+      };
+      
+      reader.onerror = () => {
+        setMessage('Error reading image file');
+      };
+      
+      reader.readAsDataURL(imageFile);
+      
     } catch (err) {
       console.error('Upload error', err);
       if (axios.isAxiosError(err)) {
@@ -93,7 +114,7 @@ const UploadLabTests: React.FC = () => {
     setDescription('');
     setPrice('');
     setDepartment('');
-    setImage('');
+    setImageFile(null);
     setMessage('');
   };
 
@@ -165,11 +186,11 @@ const UploadLabTests: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">Image URL</label>
+                    <label className="block font-medium text-gray-700 mb-1">Image Upload</label>
                     <input
-                      type="url"
-                      value={image}
-                      onChange={(e) => setImage(e.target.value)}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                       className="w-full border border-gray-300 rounded px-4 py-2"
                       required
                     />
