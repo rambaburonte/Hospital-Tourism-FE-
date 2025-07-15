@@ -17,7 +17,7 @@ const specialtiesList = [
 const SpecialtiesSection = () => {
   const navigate = useNavigate();
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="relative py-16 px-6 flex justify-center items-center bg-gradient-to-br from-gray-100/50 to-gray-50">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 text-center">Specialties & Procedures</h2>
         <div className="w-24 h-1 bg-[#499E14] mx-auto mb-10"></div>

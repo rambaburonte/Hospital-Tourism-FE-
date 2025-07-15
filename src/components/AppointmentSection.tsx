@@ -689,7 +689,7 @@ const AppointmentSection = () => {
   }, [selectedService, serviceData]);
 
   return (
-    <section className="bg-gray-100 py-12">
+  <section className="relative py-12 px-6 flex justify-center items-center bg-gradient-to-br from-white/40 to-white/10">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">

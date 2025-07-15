@@ -5,9 +5,9 @@
 
 /* Medical watermark background */
 body {
-  background-image: url('/bg.png') !important;
-  background-repeat: repeat !important;
-  background-size: 600px auto !important;
+  background-image: url('/lovable-uploads/logd.png') !important;
+  background-repeat:no-repeat !important;
+  background-size: cover !important;
   background-attachment: fixed !important;
   position: relative !important;
 }
