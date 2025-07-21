@@ -4,7 +4,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-
+import VerifySuccess from './config/verify-success.js';
 // Layout Components
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -67,6 +67,7 @@ import Urology from './pages/specialties/Urology';
 // User Authentication & Dashboard
 import Login from './components/userspage/login';
 import Registor from './components/userspage/registor';
+
 import Userdashboard from './components/userspage/userboard';
 import PatientProfile from './components/userspage/userprofile';
 import UserDocuments from './components/userspage/UserDocuments';
@@ -285,6 +286,9 @@ const App: React.FC = () => (
             {/* User Authentication Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registor />} />
+            <Route path="/verify-success" element={<VerifySuccess />} />
+
+            {/* User Profile & Dashboard */}
 
             {/* User Dashboard & Profile Routes */}
             <Route path="/dashboard" element={<Userdashboard />} />

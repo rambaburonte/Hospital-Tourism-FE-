@@ -693,7 +693,7 @@ const Header: React.FC = () => {
             </button>
 
             <h2 id="popup-title" className="text-3xl sm:text-4xl font-bold text-white dark:text-gray-100 text-center mb-3">
-              Your Journey to Wellness Begins with MAX!
+              Your Journey to Wellness Begins with Meditailor!
             </h2>
             <p id="popup-desc" className="text-white dark:text-gray-200 text-center mb-6 text-base sm:text-lg">
               World-Class Healthcare Awaits You
