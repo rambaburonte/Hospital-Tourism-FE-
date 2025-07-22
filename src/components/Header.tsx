@@ -298,8 +298,7 @@ const Header: React.FC = () => {
     { to: '/specialities', label: 'Specialties' },
     { to: '/about', label: 'About Us' },
     { to: '/tours', label: 'Packages' },
-    { to: '/hotels', label: 'Hotels' },
-    { to: '/travel', label: 'Travel' },
+    
   ];
 
   const handleRedirect = () => {

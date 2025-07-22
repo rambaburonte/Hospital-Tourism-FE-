@@ -1,3 +1,8 @@
+
+
+
+
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from 'lucide-react';
@@ -74,8 +79,8 @@ const HealthBlogsSection: React.FC = () => {
     navigate('/health-blogs');
   };
 
-  if (loading) return <div className="text-center py-12">Loading blogs…</div>;
-  if (error) return <div className="text-red-500 text-center py-12">Error: {error}</div>;
+  if (loading) return <div className="text-center py-5">Loading blogs…</div>;
+  if (error) return <div className="text-red-500 text-center py-5">Error: {error}</div>;
 
   return (
     <section className="py-12">
@@ -98,9 +103,9 @@ const HealthBlogsSection: React.FC = () => {
               [...blogs, ...blogs].map((blog, index) => ( // Duplicate blogs for seamless scrolling
                 <Card
                   key={`${blog.blogId}-${index}`}
-                  className="flex-none w-64 border-0 shadow-md blog-card bg-slate-50 shadow-sm"
+                  className="flex-none w-64 shadow-md blog-card bg-slate-50 shadow-sm"
                 >
-                  <div className="relative h-36">
+                  <div className="relative h-36 overflow-hidden rounded-t-lg">
                     <img
                       src={blog.coverImage.trim()}
                       alt={blog.title}
