@@ -345,9 +345,9 @@ const Header: React.FC = () => {
             <div className="flex items-center space-x-2 text-xs sm:text-sm">
               <>
                 <Phone className="h-4 w-4 text-green-200" />
-                <a href="tel:8595114141" className="hover:text-green-200">Emergency: 8595114141</a>
+                <a href="tel:918595114141" className="hover:text-green-200">Emergency:+91 8595114141</a>
                 <Whatsapp className="h-4 w-4 text-green-200" />
-                <a href="https://wa.me/8595114141" target="_blank" rel="noopener noreferrer" className="hover:text-green-200">
+                <a href="https://wa.me/918595114141" target="_blank" rel="noopener noreferrer" className="hover:text-green-200">
                   WhatsApp
                 </a>
               </>

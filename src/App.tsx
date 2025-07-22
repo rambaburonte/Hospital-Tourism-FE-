@@ -220,6 +220,7 @@ import HospitalResults from './components/HospitalResults';
 import EmergencyPage from './admin/EmergencyPage';
 
 import CouponsPage from './admin/CouponsPage';
+import HospitalLocationList from './pages/HospitalList';
 const queryClient = new QueryClient();
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -304,6 +305,7 @@ const App: React.FC = () => (
             <Route path="/viewservices/:id" element={<SpaServices />} />
             <Route path="/tests" element={<Diagnostics />} />
             <Route path="/viewtests/:id" element={<Labtests />} />
+            
 
             {/* Admin & Sub-Admin Authentication */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -353,6 +355,7 @@ const App: React.FC = () => (
             <Route path="/admin/edithospital" element={<EditHospital />} />
             <Route path="/admin/deletehospital" element={<DeleteHospital />} />
             <Route path="/admin/downloadhospitals" element={<DownloadHospitals />} />
+           
 
             {/* Diagnostics Management Routes */}
             <Route path="/admin/uploadDiagnostics" element={<Uploaddiagnostics />} />

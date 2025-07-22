@@ -30,6 +30,7 @@
 
 // export default VerifySuccess;
 // src/pages/VerifySuccess.tsx
+
 import React from "react";
 import { Link } from "react-router-dom";
 

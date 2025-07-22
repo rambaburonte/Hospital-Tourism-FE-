@@ -744,33 +744,45 @@ const AppointmentSection = () => {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mt-6">
-                  {Object.keys(serviceRoutes).map((service) => (
-                    <button
-                      key={service}
-                      onClick={() => handleServiceClick(service)}
-                      className={`border border-gray-200 rounded-xl bg-white shadow-sm p-4 hover:shadow-md transition-colors ${
-                        selectedService === service ? 'border-blue-400 bg-blue-50' : ''
-                      }`}
-                      aria-label={`Select ${service}`}
-                    >
-                      <div className="flex flex-col items-center">
-                        <div className="mb-3 p-3 bg-gray-100 rounded-full shadow-sm">
-                          {service === 'Find a Doctor' && <User style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Book a Test' && <Calendar style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Spa' && <FaSpa style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Physiotherapy' && <TbPhysotherapist style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Locate Hospital' && <MapPin style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Hotel & GuestHouse Booking' && <Hotel style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Travel Booking' && <Plane style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Translators' && <PaperAirplaneIcon style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Chefs' && <FaUtensils style={{ color: '#499E14' }} className="h-6 w-6" />}
-                          {service === 'Pharmacy' && <Pill style={{ color: '#499E14' }} className="h-6 w-6" />}
-                        </div>
-                        <p className="text-sm font-medium text-gray-700 text-center">{service}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
+  {Object.keys(serviceRoutes).map((service) => (
+    <button
+      key={service}
+      onClick={() => handleServiceClick(service)}
+      className={`relative border border-gray-200 rounded-2xl bg-white/80 shadow-md p-4 backdrop-blur-md transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:bg-white/60 focus:ring-2 focus:ring-blue-200 ${
+        selectedService === service
+          ? 'border-blue-400 bg-blue-50 backdrop-blur-lg shadow-lg'
+          : ''
+      }`}
+      aria-label={`Select ${service}`}
+      style={{ WebkitBackdropFilter: 'blur(4px)' }} // Glassmorphism
+    >
+      {/* Subtle animated ring on selection */}
+      {selectedService === service && (
+        <span className="absolute inset-0 rounded-2xl ring-2 ring-blue-200 animate-pulse pointer-events-none"></span>
+      )}
+
+      <div className="flex flex-col items-center">
+        <div className="mb-3 p-3 bg-gray-100 rounded-full shadow-md transition-transform duration-200 group-hover:scale-110">
+          {/* ICONS (retain the current color!) */}
+          {service === 'Find a Doctor' && <User style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Book a Test' && <Calendar style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Spa' && <FaSpa style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Physiotherapy' && <TbPhysotherapist style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Locate Hospital' && <MapPin style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Hotel & GuestHouse Booking' && <Hotel style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Travel Booking' && <Plane style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Translators' && <PaperAirplaneIcon style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Chefs' && <FaUtensils style={{ color: '#499E14' }} className="h-6 w-6" />}
+          {service === 'Pharmacy' && <Pill style={{ color: '#499E14' }} className="h-6 w-6" />}
+        </div>
+        <p className="text-sm font-semibold text-gray-800 tracking-wide text-center">
+          {service}
+        </p>
+      </div>
+    </button>
+  ))}
+</div>
+
 
                 {selectedService && (
                   <div className="mt-10">
@@ -863,11 +875,13 @@ const AppointmentSection = () => {
 
                                     return (
                                       <div
-                                        key={index}
-                                        className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5 overflow-hidden"
-                                      >
-                                        <div className="absolute top-2 right-2 z-10">
-                                          <WishlistButton
+  key={index}
+  className="relative group bg-gradient-to-br from-white via-slate-50 to-slate-200 p-6 rounded-2xl border border-slate-100 shadow-md hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 flex flex-col"
+>
+  {/* Wishlist floating button */}
+  <div className="absolute top-4 right-4 z-10">
+   
+      <WishlistButton
                                             serviceId={serviceId}
                                             serviceType={getServiceType(item)}
                                             serviceName={name}
@@ -875,27 +889,41 @@ const AppointmentSection = () => {
                                             description={description}
                                             serviceImageUrl={image}
                                           />
-                                        </div>
-                                        <Link to={getDetailRoute(item)} className="block">
-                                          <img
-                                            src={image}
-                                            alt={name}
-                                            className="w-full h-32 object-cover rounded-md mb-2"
-                                            loading="lazy"
-                                          />
-                                          <h4 className="text-md font-semibold text-gray-800 mb-1 truncate">{name}</h4>
-                                          <p className="text-gray-600 text-xs mb-1 truncate">{details}</p>
-                                          <p className="text-gray-500 text-xs line-clamp-2">{description}</p>
-                                        </Link>
-                                        <Link
-                                          to={getBookingRoute(item)}
-                                          style={{ backgroundColor: '#499E14' }}
-                                          className="mt-2 block text-white font-medium py-1.5 px-3 rounded-lg shadow-sm text-center hover:bg-[#3A7C10] transition"
-                                          aria-label={`Book ${name}`}
-                                        >
-                                          Book now
-                                        </Link>
-                                      </div>
+    /
+  </div>
+
+  <Link to={getDetailRoute(item)} className="block group">
+    {/* Image with fallback bg, aspect ratio */}
+    <div className="w-full aspect-[4/3] bg-slate-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center border-2 border-slate-200 group-hover:border-indigo-400 transition-colors duration-300">
+      <img
+        src={image}
+        alt={name}
+        className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+      />
+    </div>
+
+    {/* Title + Promotion Badge */}
+    <div className="flex items-center justify-between mb-1">
+      <h4 className="text-xl font-semibold text-slate-800 truncate group-hover:text-indigo-600 transition-colors duration-150">
+        {name}
+      </h4>
+      {/* Add badges or price here if needed */}
+    </div>
+    <p className="text-slate-500 text-sm mb-1 font-medium truncate">{details}</p>
+    <p className="text-slate-600 text-[15px] mb-2 line-clamp-2 min-h-[40px]">{description}</p>
+  </Link>
+
+  {/* CTA Action Button */}
+  <Link
+    to={getBookingRoute(item)}
+    className="mt-auto block w-full bg-[#499E14] hover:bg-[#3A7C10] text-white font-semibold py-2 px-4 rounded-xl shadow-md text-center transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+    aria-label={`Book ${name}`}
+  >
+    Book now
+  </Link>
+</div>
+
                                     );
                                   })}
                             </div>
