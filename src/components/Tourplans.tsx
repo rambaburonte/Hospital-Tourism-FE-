@@ -377,8 +377,6 @@
 
 
 
-
-
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plane, Clock, Heart, ArrowRight } from 'lucide-react';
@@ -749,7 +747,7 @@ const TopTourPlans: React.FC = () => {
                 </div>
                 <p className="text-gray-800 text-xs sm:text-sm line-clamp-2 mb-2">{plan.description}</p>
                 <div className="flex justify-between items-center mb-10">
-                  <p className="text-gray-800 text-sm font-semibold">${plan.price}</p>
+                  {/* <p className="text-gray-800 text-sm font-semibold">${plan.price}</p> */}
                   <p className="text-gray-800 text-xs">{plan.durationDays} days</p>
                 </div>
                 <button
@@ -798,3 +796,5 @@ const TopTourPlans: React.FC = () => {
 };
 
 export default TopTourPlans;
+
+

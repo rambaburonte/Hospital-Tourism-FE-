@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '@/config/config';
 import { Phone } from 'lucide-react';
-
+ 
 interface EmergencyContact {
   emergencyContactId: number;
   cityOrStateName: string;

@@ -72,7 +72,7 @@ const Index = () => {
         {/* <PatientStorySection /> */}
         <HospitalAdvertisement />
         <TopTourPlans />
-        {/* <VideoSection /> */}
+        <VideoSection />
         <HealthBlogsSection />
         <AwardsSection />
       </main>
