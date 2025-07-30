@@ -41,8 +41,9 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' && componentTagger(),
     legacy({
-      targets: ['defaults', 'not IE 11'], // ✅ iOS support
-    }),
+  targets: ['defaults', 'not IE 11'],
+  additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+}),
   ].filter(Boolean),
   resolve: {
     alias: {

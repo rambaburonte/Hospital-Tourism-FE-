@@ -88,6 +88,17 @@ const AdminSidebar: React.FC = () => {
         ],
       },
       {
+        name: 'Testimonials',
+        icon: 'fas fa-hospital',
+        subItems: [
+          { name: 'Add Testimonial', path: '/admin/uploadTestimonial' },
+          { name: 'Edit Testimonial', path: '/admin/editTestimonial' },
+          { name: 'View Testimonials', path: '/admin/viewTestimonials' },
+          { name: 'Delete Testimonial', path: '/admin/deleteTestimonial' },
+          { name: 'Download Testimonials', path: '/admin/downloadTestimonials' },
+        ],
+      },
+      {
         name: 'Diagnostics',
         icon: 'fas fa-stethoscope',
         subItems: [
