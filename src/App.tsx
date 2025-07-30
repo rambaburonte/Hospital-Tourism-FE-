@@ -67,6 +67,7 @@ import Urology from './pages/specialties/Urology';
 // User Authentication & Dashboard
 import Login from './components/userspage/login';
 import Registor from './components/userspage/registor';
+import ForgotPassword from './components/userspage/forgotpassword';
 
 import Userdashboard from './components/userspage/userboard';
 import PatientProfile from './components/userspage/userprofile';
@@ -101,6 +102,11 @@ import DownloadSubAdmins from './admin/downloadsubadmins';
 import UploadCenters from './admin/upoladCenters';
 import LabTests from './admin/viewdiagnolabtests';
 import AllOrders from './admin/AllOrders';
+import UploadTestimonials from './admin/uploadtestimonials';
+import EditTestimonials from './admin/Edittestimonials';
+import ViewTestimonials from './admin/Viewtestimonials.js';
+import DeleteTestimonials from './admin/Deletetestimonials.js';
+import DownloadTestimonials from './admin/Downloadtestimonials.js';
 // Package Management Components
 import AddPackages from './admin/packages/AddPackages';
 import ViewPackages from './admin/packages/ViewPackages';
@@ -288,6 +294,9 @@ const App: React.FC = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registor />} />
             <Route path="/verify-success" element={<VerifySuccess />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            
+            {/* Advertisement */}
 
             {/* User Profile & Dashboard */}
 
@@ -331,6 +340,14 @@ const App: React.FC = () => (
             <Route path="/admin/businessLocations" element={<Uploadloacation />} />
             <Route path="/admin/viewLocations" element={<ViewLocations />} />
             <Route path="/admin/settings" element={<Placeholder title="Settings" />} />
+            <Route path="/admin/UploadTestimonials" element={<UploadTestimonials />} />
+            <Route path="/admin/EditTestimonials" element={<EditTestimonials />} />
+            <Route path="/admin/ViewTestimonials" element={<ViewTestimonials />} />
+            <Route path="/admin/DeleteTestimonials" element={<DeleteTestimonials />} />
+            <Route path="/admin/DownloadTestimonials" element={<DownloadTestimonials />} />
+
+            {/* Admin Placeholder Routes */}
+
 
             {/* Sub-Admin Management Routes */}
             <Route path="/admin/viewsubadmins" element={<ViewSubAdmins />} />
