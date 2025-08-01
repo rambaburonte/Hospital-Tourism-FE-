@@ -5,7 +5,7 @@
 
 /* Medical watermark background */
 body {
-  background-image: url('/lovable-uploads/logd.png') !important;
+  /* background-image: url('/lovable-uploads/logd.png') !important; */
   background-repeat:no-repeat !important;
   background-size: cover !important;
   background-attachment: fixed !important;

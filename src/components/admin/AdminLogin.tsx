@@ -146,7 +146,8 @@ const AdminLogin = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                timeout: 10000
+                timeout: 10000,
+                withCredentials: true, // ✅ Add this line
             });
 
             const admin = response.data;

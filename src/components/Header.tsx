@@ -540,7 +540,7 @@ const Header: React.FC = () => {
           <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col">
             <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
               <Link to="/" className="flex items-center space-x-2" onClick={() => setMobileMenuOpen(false)}>
-                <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">MAX</span>
+                <span className="text-2xl font-bold text-[#499E14] dark:text-[#5ab81a]">Meditailor</span>
               </Link>
               <Button
                 variant="ghost"

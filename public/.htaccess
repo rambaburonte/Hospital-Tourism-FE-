@@ -1,0 +1,14 @@
+Options -MultiViews
+
+#  Enable Rewrite Engine
+RewriteEngine On
+
+#  Don't rewrite requests for real files/folders
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+#  Ignore API calls — do not redirect them to index.html
+RewriteCond %{REQUEST_URI} !^/api/
+
+#  Redirect all other requests to index.html for React Router
+RewriteRule ^ index.html [L]
